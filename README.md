@@ -2,6 +2,8 @@
 
 An open-source web app I built to supplement my daughters' math curriculum with printable practice sheets for grades 1–3.
 
+![Catalog](screenshots/catalog.png)
+
 ## What's Inside
 
 - **Multiplication** — times tables & grid practice
@@ -11,6 +13,10 @@ An open-source web app I built to supplement my daughters' math curriculum with 
 - **Patterns** — number sequences & series
 
 Each worksheet is randomized and printable. Settings persist between sessions so you can pick up where you left off.
+
+|                  Multiplication                   |                 Add & Subtract                  |
+| :-----------------------------------------------: | :---------------------------------------------: |
+| ![Multiplication](screenshots/multiplication.png) | ![Add & Subtract](screenshots/add-subtract.png) |
 
 ## Getting Started
 
@@ -25,4 +31,4 @@ Built with React + Vite.
 
 ## License
 
-Open source — feel free to use, modify, and share.
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) — free to use and adapt for non-commercial purposes with attribution.

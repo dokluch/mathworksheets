@@ -253,8 +253,16 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 0 12px 10px;
+    padding: 4px 0 10px;
     scroll-snap-type: x mandatory;
+  }
+
+  /* Spacers to preserve side padding inside the scroll container */
+  .catalog-grid--compact::before,
+  .catalog-grid--compact::after {
+    content: '';
+    flex-shrink: 0;
+    width: 12px;
   }
 
   .catalog-grid--compact::-webkit-scrollbar {
