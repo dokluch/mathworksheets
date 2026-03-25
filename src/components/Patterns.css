@@ -1,0 +1,66 @@
+/* ── Pattern rows ── */
+.pattern-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pattern-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.pattern-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  min-width: 2em;
+  text-align: right;
+}
+
+.pattern-seq {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.pattern-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
+.pattern-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  min-width: 1.5em;
+  text-align: center;
+}
+
+.pattern-comma {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  color: var(--color-text-muted);
+  margin-right: 8px;
+}
+
+.ws-instructions {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* ── Print styles ── */
+@media print {
+  .pattern-row {
+    border-bottom-color: #ddd;
+  }
+}

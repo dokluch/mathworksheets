@@ -1,0 +1,285 @@
+/* ── Shared controls ── */
+.tool-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.controls {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.control-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.control-row:last-child {
+  margin-bottom: 0;
+}
+
+.control-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.range-sep {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+.num-input {
+  width: 72px;
+  padding: 7px 10px;
+  border: 1px solid var(--color-border-dark);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 14px;
+  text-align: center;
+  color: var(--color-text);
+  background: white;
+}
+
+.num-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.slider {
+  width: 160px;
+  accent-color: var(--color-primary);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: pointer;
+  padding-top: 6px;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+}
+
+/* ── Toggle button group ── */
+.btn-group {
+  display: flex;
+  gap: 0;
+}
+
+.btn-toggle {
+  padding: 7px 14px;
+  border: 1px solid var(--color-border-dark);
+  background: white;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.btn-toggle:first-child {
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.btn-toggle:last-child {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.btn-toggle:not(:first-child) {
+  border-left: none;
+}
+
+.btn-toggle:hover {
+  background: #f8fafc;
+}
+
+.btn-toggle.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-toggle.active + .btn-toggle {
+  border-left: 1px solid var(--color-primary);
+}
+
+/* ── Action buttons ── */
+.control-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btn {
+  padding: 9px 20px;
+  border: none;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--color-text);
+  border: 1px solid var(--color-border-dark);
+}
+
+.btn-secondary:hover {
+  background: #f8fafc;
+}
+
+/* ── Worksheet (print-ready) ── */
+.worksheet {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  box-shadow: var(--shadow-md);
+}
+
+.worksheet-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.ws-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.ws-meta {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-left: 8px;
+}
+
+/* ── Problem grid ── */
+.problem-grid {
+  display: grid;
+  gap: 6px 24px;
+}
+
+.problem-item {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.problem-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.problem-text .val {
+  font-variant-numeric: tabular-nums;
+  min-width: 1.2em;
+  text-align: center;
+}
+
+.problem-text .op {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.blank-slot {
+  display: inline-block;
+  width: 48px;
+  height: 28px;
+  border-bottom: 2.5px solid var(--color-primary);
+  border-radius: 0;
+  vertical-align: bottom;
+  background: linear-gradient(to top, rgba(37, 99, 235, 0.04), transparent);
+}
+
+/* ── Print styles ── */
+@media print {
+  .worksheet {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0.4in 0.5in;
+    width: 100%;
+  }
+
+  .worksheet-header {
+    border-bottom-color: #999;
+  }
+
+  .problem-item {
+    border-bottom-color: #ddd;
+  }
+
+  .problem-text {
+    font-size: 15px;
+  }
+
+  .blank-slot {
+    border-bottom-color: #666;
+    background: none;
+  }
+}
+
+@page {
+  size: letter landscape;
+  margin: 0.3in;
+}

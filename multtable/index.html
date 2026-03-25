@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Table Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Multiplication Table Generator</h1>
+    <form id="controls">
+        <label for="start">Start Number:</label>
+        <input type="number" id="start" value="1" min="1" max="20">
+        
+        <label for="end">End Number:</label>
+        <input type="number" id="end" value="10" min="2" max="50">
+        
+        <label for="diagonal">Fill Main Diagonal:</label>
+        <input type="checkbox" id="diagonal">
+        
+        <label for="percent">Random Fill Percentage:</label>
+        <input type="range" id="percent" min="0" max="100" value="0" step="5">
+        <span id="percent-val">0%</span>
+        
+        <button type="button" id="generate">Generate Table</button>
+    </form>
+    
+    <div id="table-container"></div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
