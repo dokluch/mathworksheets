@@ -156,7 +156,7 @@ export default function Patterns() {
         <div className="control-row">
           <label className="control-label">
             Difficulty
-            <div className="btn-group">
+            <div className="btn-group" role="group" aria-label="Difficulty">
               {LEVELS.map(l => (
                 <button
                   key={l.value}

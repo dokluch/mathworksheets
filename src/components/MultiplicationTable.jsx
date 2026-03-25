@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { IconTable, IconPrinter, IconRefresh } from '@tabler/icons-react'
+import { IconPrinter, IconRefresh } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import './MultiplicationTable.css'
 
@@ -66,6 +66,7 @@ export default function MultiplicationTable() {
                 max={20}
                 onChange={e => setStart(Math.max(1, parseInt(e.target.value) || 1))}
                 className="num-input"
+                aria-label="Range start"
               />
               <span className="range-sep">to</span>
               <input
@@ -75,6 +76,7 @@ export default function MultiplicationTable() {
                 max={50}
                 onChange={e => setEnd(Math.max(2, parseInt(e.target.value) || 2))}
                 className="num-input"
+                aria-label="Range end"
               />
             </div>
           </label>
@@ -117,7 +119,7 @@ export default function MultiplicationTable() {
       </div>
 
       {tableData && (
-        <div className="mult-table-wrap print-area">
+        <div className="mult-table-wrap print-area" tabIndex={0} role="region" aria-label="Multiplication table">
           <table className="mult-table">
             <thead>
               <tr>

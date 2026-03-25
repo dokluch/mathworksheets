@@ -138,7 +138,7 @@ export default function Comparison() {
         <div className="control-row">
           <label className="control-label">
             Range
-            <div className="btn-group">
+            <div className="btn-group" role="group" aria-label="Range">
               {PRESETS.map(p => (
                 <button
                   key={p.max}
@@ -153,7 +153,7 @@ export default function Comparison() {
 
           <label className="control-label">
             Columns
-            <div className="btn-group">
+            <div className="btn-group" role="group" aria-label="Columns">
               {[2, 3, 4].map(c => (
                 <button
                   key={c}

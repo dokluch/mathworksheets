@@ -54,13 +54,35 @@ function renderProblem(p) {
   return <>{expr} <span className="op">=</span> {res}</>
 }
 
+function renderStackedProblem(p) {
+  const aDisplay = p.blankPos === 0 ? <Blank /> : <span className="val">{p.a}</span>
+  const bDisplay = p.blankPos === 1 ? <Blank /> : <span className="val">{p.b}</span>
+  const resDisplay = p.blankPos === 2 ? <Blank /> : <span className="val">{p.result}</span>
+
+  return (
+    <div className="stacked-problem">
+      <div className="stacked-row stacked-top">{aDisplay}</div>
+      <div className="stacked-row stacked-mid">
+        <span className="op">{p.op}</span>{bDisplay}
+      </div>
+      <div className="stacked-line" />
+      <div className="stacked-row stacked-bottom">{resDisplay}</div>
+    </div>
+  )
+}
+
 export default function AddSubtract() {
   const [ops, setOps] = usePersistedState('addsub', 'ops', 'both')
   const [maxVal, setMaxVal] = usePersistedState('addsub', 'maxVal', 100)
   const [columns, setColumns] = usePersistedState('addsub', 'columns', 3)
+  const [layout, setLayout] = usePersistedState('addsub', 'layout', 'inline')
   const [seed, setSeed] = useState(0)
 
-  const problemCount = columns === 2 ? 20 : columns === 3 ? 30 : 40
+  const stackedCounts = { 2: 14, 3: 18, 4: 24 }
+  const inlineCounts = { 2: 20, 3: 30, 4: 40 }
+  const problemCount = layout === 'stacked'
+    ? (stackedCounts[columns] || 18)
+    : (inlineCounts[columns] || 30)
 
   const problems = useMemo(() => {
     void seed // depend on seed for re-randomization
@@ -77,7 +99,7 @@ export default function AddSubtract() {
         <div className="control-row">
           <label className="control-label">
             Operation
-            <div className="btn-group">
+            <div className="btn-group" role="group" aria-label="Operation">
               {[
                 { value: 'add', label: '+' },
                 { value: 'sub', label: '−' },
@@ -96,7 +118,7 @@ export default function AddSubtract() {
 
           <label className="control-label">
             Limit
-            <div className="btn-group">
+            <div className="btn-group" role="group" aria-label="Limit">
               {PRESETS.map(p => (
                 <button
                   key={p.max}
@@ -112,6 +134,24 @@ export default function AddSubtract() {
 
         <div className="control-row">
           <label className="control-label">
+            Layout
+            <div className="btn-group">
+              {[
+                { value: 'inline', label: 'Inline' },
+                { value: 'stacked', label: 'Stacked' },
+              ].map(l => (
+                <button
+                  key={l.value}
+                  className={`btn-toggle ${layout === l.value ? 'active' : ''}`}
+                  onClick={() => setLayout(l.value)}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
+          </label>
+
+          <label className="control-label">
             Columns
             <div className="btn-group">
               {[2, 3, 4].map(c => (
@@ -125,7 +165,6 @@ export default function AddSubtract() {
               ))}
             </div>
           </label>
-
         </div>
 
         <div className="control-actions">
@@ -153,12 +192,15 @@ export default function AddSubtract() {
           </div>
 
           <div
-            className="problem-grid"
+            className={`problem-grid ${layout === 'stacked' ? 'stacked-grid' : ''}`}
             style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
           >
             {problems.map((p, i) => (
-              <div key={i} className="problem-item">
-                <span className="problem-text">{renderProblem(p)}</span>
+              <div key={i} className={`problem-item ${layout === 'stacked' ? 'problem-item-stacked' : ''}`}>
+                {layout === 'stacked'
+                  ? renderStackedProblem(p)
+                  : <span className="problem-text">{renderProblem(p)}</span>
+                }
               </div>
             ))}
           </div>

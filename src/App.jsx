@@ -1,4 +1,4 @@
-import { IconGrid3x3, IconPlusMinus, IconRuler2, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft } from '@tabler/icons-react'
+import { IconGrid3x3, IconPlusMinus, IconRuler2, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconBrandGithub } from '@tabler/icons-react'
 import { usePersistedState } from './hooks/usePersistedState'
 import './App.css'
 import MultiplicationTable from './components/MultiplicationTable'
@@ -32,15 +32,42 @@ export default function App() {
   return (
     <div className={`app ${activeSheet ? 'has-active' : 'catalog-only'}`}>
       {/* ── Catalog / Sidebar ── */}
-      <aside className={`catalog no-print ${activeSheet ? 'catalog--sidebar' : 'catalog--full'}`}>
-        <header className="catalog-header">
-          {activeSheet && (
+      {activeSheet ? (
+        <aside className="catalog no-print catalog--sidebar">
+          <header className="catalog-header">
             <button className="back-btn" onClick={() => setActiveSheet(null)}>
               <IconArrowLeft size={18} stroke={2} />
               <span className="back-btn-label">All sheets</span>
             </button>
-          )}
-          {!activeSheet && (
+          </header>
+
+          <nav className="catalog-grid catalog-grid--compact" role="tablist" aria-label="Worksheet types">
+            {WORKSHEETS.map(ws => (
+              <button
+                key={ws.id}
+                role="tab"
+                aria-selected={activeSheet === ws.id}
+                className={`catalog-card ${activeSheet === ws.id ? 'catalog-card--active' : ''}`}
+                onClick={() => setActiveSheet(ws.id)}
+                style={{ '--card-color': ws.color }}
+              >
+                <span className="catalog-card-icon">
+                  <ws.Icon size={20} stroke={1.6} />
+                </span>
+                <span className="catalog-card-text">
+                  <span className="catalog-card-label">{ws.label}</span>
+                </span>
+              </button>
+            ))}
+          </nav>
+
+          <a className="github-link github-link--sidebar" href="https://github.com/dokluch/mathworksheets" target="_blank" rel="noopener noreferrer" aria-label="Source on GitHub">
+            <IconBrandGithub size={16} stroke={1.5} />
+          </a>
+        </aside>
+      ) : (
+        <main className="catalog no-print catalog--full">
+          <header className="catalog-header">
             <div className="catalog-brand">
               <h1 className="catalog-title">
                 <IconRuler2 size={28} stroke={2} />
@@ -48,32 +75,37 @@ export default function App() {
               </h1>
               <p className="catalog-subtitle">Printable practice sheets for grades 1–3</p>
             </div>
-          )}
-        </header>
+          </header>
 
-        <nav className={`catalog-grid ${activeSheet ? 'catalog-grid--compact' : ''}`}>
-          {WORKSHEETS.map(ws => (
-            <button
-              key={ws.id}
-              className={`catalog-card ${activeSheet === ws.id ? 'catalog-card--active' : ''}`}
-              onClick={() => setActiveSheet(ws.id)}
-              style={{ '--card-color': ws.color }}
-            >
-              <span className="catalog-card-icon">
-                <ws.Icon size={activeSheet ? 20 : 32} stroke={1.6} />
-              </span>
-              <span className="catalog-card-text">
-                <span className="catalog-card-label">{ws.label}</span>
-                {!activeSheet && <span className="catalog-card-desc">{ws.desc}</span>}
-              </span>
-            </button>
-          ))}
-        </nav>
-      </aside>
+          <nav className="catalog-grid" aria-label="Worksheet types">
+            {WORKSHEETS.map(ws => (
+              <button
+                key={ws.id}
+                className="catalog-card"
+                onClick={() => setActiveSheet(ws.id)}
+                style={{ '--card-color': ws.color }}
+              >
+                <span className="catalog-card-icon">
+                  <ws.Icon size={32} stroke={1.6} />
+                </span>
+                <span className="catalog-card-text">
+                  <span className="catalog-card-label">{ws.label}</span>
+                  <span className="catalog-card-desc">{ws.desc}</span>
+                </span>
+              </button>
+            ))}
+          </nav>
+
+          <a className="github-link" href="https://github.com/dokluch/mathworksheets" target="_blank" rel="noopener noreferrer">
+            <IconBrandGithub size={16} stroke={1.5} />
+            Source on GitHub
+          </a>
+        </main>
+      )}
 
       {/* ── Worksheet Content ── */}
       {ActiveComponent && (
-        <main className="worksheet-main">
+        <main className="worksheet-main" role="tabpanel" aria-label={activeInfo?.label}>
           <div className="worksheet-topbar no-print">
             <h2 className="worksheet-title" style={{ color: activeInfo?.color }}>
               {activeInfo && <activeInfo.Icon size={22} stroke={1.8} />}

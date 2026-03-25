@@ -273,6 +273,7 @@
     flex-direction: row;
     flex-shrink: 0;
     padding: 8px 14px;
+    min-height: 44px;
     border-radius: 20px;
     border: 1.5px solid var(--color-border);
     gap: 8px;
@@ -393,6 +394,39 @@
 @media (max-width: 380px) {
   .catalog-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* =============================================
+   GITHUB LINK
+   ============================================= */
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 6px 12px 24px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: color 0.15s;
+}
+
+.github-link:hover {
+  color: var(--color-text);
+}
+
+.github-link--sidebar {
+  margin: auto 0 4px;
+  padding: 8px;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .github-link--sidebar {
+    display: none;
   }
 }
 

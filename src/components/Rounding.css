@@ -9,7 +9,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px 0;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--color-border-light);
   font-family: 'JetBrains Mono', monospace;
   font-size: 16px;
   font-weight: 500;

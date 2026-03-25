@@ -53,7 +53,7 @@ export default function Rounding() {
         <div className="control-row">
           <label className="control-label">
             Round to
-            <div className="btn-group">
+            <div className="btn-group" role="group" aria-label="Round to">
               {PLACES.map(p => (
                 <button
                   key={p.value}
@@ -68,7 +68,7 @@ export default function Rounding() {
 
           <label className="control-label">
             Columns
-            <div className="btn-group">
+            <div className="btn-group" role="group" aria-label="Columns">
               {[2, 3, 4].map(c => (
                 <button
                   key={c}
