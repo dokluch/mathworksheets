@@ -768,3 +768,89 @@
     animation: none;
   }
 }
+
+/* ── Numeric keypad ── */
+.eq-numpad {
+  /* Key size adapts to remaining viewport height (above content ≈ 400px) */
+  --_key: clamp(48px, calc((100dvh - 400px) / 5), 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 12px auto 0;
+  padding: 10px;
+  background: #f0f2f5;
+  border-radius: 14px;
+  width: fit-content;
+}
+
+.eq-numpad-digits {
+  display: grid;
+  grid-template-columns: repeat(3, var(--_key));
+  gap: 8px;
+}
+
+.eq-numpad-key {
+  aspect-ratio: 1;
+  font-size: clamp(20px, calc(var(--_key) * 0.38), 32px);
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--color-text, #1e293b);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  transition: background 0.1s, transform 0.08s, box-shadow 0.1s;
+}
+
+.eq-numpad-key:active {
+  background: #e8eaed;
+  transform: scale(0.94);
+  box-shadow: 0 0 1px rgba(0,0,0,0.1);
+}
+
+.eq-numpad-key--muted {
+  background: #e4e7eb;
+  font-size: clamp(16px, calc(var(--_key) * 0.3), 26px);
+  box-shadow: none;
+}
+.eq-numpad-key--muted:active {
+  background: #d1d5db;
+}
+
+.eq-numpad-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(var(--_key) * 3 + 16px);
+  height: calc(var(--_key) * 0.55);
+  min-height: 36px;
+  margin-top: 8px;
+  font-size: clamp(14px, calc(var(--_key) * 0.22), 20px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary, #2563eb);
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s, transform 0.08s, opacity 0.15s;
+}
+.eq-numpad-action:active:not(:disabled) {
+  background: #1d4ed8;
+  transform: scale(0.97);
+}
+.eq-numpad-action:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.eq-numpad-action--next {
+  background: var(--color-success, #16a34a);
+}
+.eq-numpad-action--next:active {
+  background: #15803d;
+}

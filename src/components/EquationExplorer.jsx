@@ -90,15 +90,6 @@ function displaySign(term, isFirst) {
 function NumberLine({ problem }) {
   const { a, b, op, result, range = 10 } = problem
 
-  // For range=10 show every tick, for 100 show every 10, for 1000 show every 100
-  const tickStep = range <= 10 ? 1 : range <= 100 ? 10 : 100
-  const tickCount = range / tickStep + 1
-  const W = Math.max(440, tickCount * 38), H = 100
-  const pad = 30
-  const lineY = 60
-  const usable = W - pad * 2
-  const pxPerUnit = usable / range
-
   // Build jump steps: decompose into place-value jumps for range >= 100
   const color = op === '+' ? 'var(--color-accent-green)' : 'var(--color-accent-red)'
   const colorAlt = op === '+' ? 'var(--color-accent-purple)' : 'var(--color-accent-orange)'
@@ -127,36 +118,72 @@ function NumberLine({ problem }) {
     })
   } else {
     const label = op === '+' ? `+${b}` : `−${b}`
-    jumps.push({ from: op === '+' ? a : a, to: result, label, color, arrowId, delay: 0.2 })
+    jumps.push({ from: a, to: result, label, color, arrowId, delay: 0.2 })
   }
 
-  const fontSize = range >= 1000 ? 9 : range >= 100 ? 10 : 12
+  // Determine visible window: for range=10 show full 0-10,
+  // for larger ranges zoom into the relevant region
+  let viewMin, viewMax, tickStep
+  if (range <= 10) {
+    viewMin = 0
+    viewMax = 10
+    tickStep = 1
+  } else {
+    const allVals = [a, result]
+    jumps.forEach(j => { allVals.push(j.from, j.to) })
+    const lo = Math.min(...allVals)
+    const hi = Math.max(...allVals)
+    const span = hi - lo
+    const padAmt = Math.max(Math.ceil(span * 0.25), range >= 1000 ? 50 : 5)
+
+    if (range >= 1000) {
+      viewMin = Math.max(0, Math.floor((lo - padAmt) / 50) * 50)
+      viewMax = Math.min(range, Math.ceil((hi + padAmt) / 50) * 50)
+      tickStep = viewMax - viewMin > 500 ? 100 : 50
+    } else {
+      viewMin = Math.max(0, Math.floor((lo - padAmt) / 5) * 5)
+      viewMax = Math.min(range, Math.ceil((hi + padAmt) / 5) * 5)
+      tickStep = viewMax - viewMin > 50 ? 10 : 5
+    }
+  }
+
+  const viewSpan = viewMax - viewMin
+  const tickCount = Math.floor(viewSpan / tickStep) + 1
+  const W = Math.max(400, tickCount * 42)
+  const H = jumps.length > 1 ? 115 : 100
+  const pad = 34
+  const lineY = jumps.length > 1 ? 80 : 66
+  const usable = W - pad * 2
+  const pxPerUnit = usable / viewSpan
+
+  const fontSize = range >= 1000 ? 10 : 12
 
   return (
     <div className="eq-numline">
       <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} aria-label={`Number line showing ${a} ${op} ${b} = ${result}`}>
         <line x1={pad} y1={lineY} x2={W - pad} y2={lineY} stroke="var(--color-border-dark)" strokeWidth="2" />
         {Array.from({ length: tickCount }, (_, i) => {
-          const val = i * tickStep
-          const x = pad + val * pxPerUnit
+          const val = viewMin + i * tickStep
+          const x = pad + (val - viewMin) * pxPerUnit
           return (
             <g key={i}>
               <line x1={x} y1={lineY - 6} x2={x} y2={lineY + 6} stroke="var(--color-border-dark)" strokeWidth="1.5" />
-              <text x={x} y={lineY + 22} textAnchor="middle" fontSize={fontSize} fontWeight="600" fill="var(--color-text-muted)" fontFamily="'JetBrains Mono', monospace">
+              <text x={x} y={lineY + 20} textAnchor="middle" fontSize={fontSize} fontWeight="600" fill="var(--color-text-muted)" fontFamily="'JetBrains Mono', monospace">
                 {val}
               </text>
             </g>
           )
         })}
-        {/* Jump arcs */}
+        {/* Jump arcs — first jump tallest, subsequent ones shorter */}
         {jumps.map((j, idx) => {
-          const jx1 = pad + j.from * pxPerUnit
-          const jx2 = pad + j.to * pxPerUnit
+          const jx1 = pad + (j.from - viewMin) * pxPerUnit
+          const jx2 = pad + (j.to - viewMin) * pxPerUnit
           const jMidX = (jx1 + jx2) / 2
-          const arcH = Math.min(30, Math.abs(jx2 - jx1) * 0.4)
-          // Stagger arcs vertically when there are multiple
-          const vOff = jumps.length > 1 ? idx * 6 : 0
-          const arcPath = `M ${jx1} ${lineY} Q ${jMidX} ${lineY - arcH - 10 - vOff} ${jx2} ${lineY}`
+          const span = Math.abs(jx2 - jx1)
+          const baseArcH = Math.max(22, Math.min(38, span * 0.35))
+          // First jump is tallest; subsequent arcs are shorter so labels don't overlap
+          const arcH = baseArcH + (jumps.length - 1 - idx) * 18
+          const arcPath = `M ${jx1} ${lineY} Q ${jMidX} ${lineY - arcH - 8} ${jx2} ${lineY}`
           return (
             <g key={idx}>
               <path
@@ -166,16 +193,16 @@ function NumberLine({ problem }) {
                 strokeWidth="2.5"
                 strokeLinecap="round"
                 markerEnd={`url(#arrow-${j.arrowId})`}
-                strokeDasharray="200"
-                strokeDashoffset="200"
+                strokeDasharray="300"
+                strokeDashoffset="300"
                 style={{ animation: `drawArc 0.6s ease forwards ${j.delay}s` }}
               />
-              <text x={jMidX} y={lineY - arcH - 14 - vOff} textAnchor="middle" fontSize="13" fontWeight="700" fill={j.color} fontFamily="'JetBrains Mono', monospace"
+              <text x={jMidX} y={lineY - arcH - 12} textAnchor="middle" fontSize="14" fontWeight="700" fill={j.color} fontFamily="'JetBrains Mono', monospace"
                 style={{ opacity: 0, animation: `fadeIn 0.3s ease forwards ${j.delay + 0.3}s` }}>
                 {j.label}
               </text>
-              <circle cx={jx1} cy={lineY} r="4.5" fill={j.color} />
-              <circle cx={jx2} cy={lineY} r="4.5" fill={j.color} />
+              <circle cx={jx1} cy={lineY} r="5" fill={j.color} />
+              <circle cx={jx2} cy={lineY} r="5" fill={j.color} />
             </g>
           )
         })}
@@ -341,6 +368,7 @@ export default function EquationExplorer() {
   const [ops, setOps] = usePersistedState('eqexplore', 'ops', 'both')
   const [range, setRange] = usePersistedState('eqexplore', 'range', 10)
   const [seed, setSeed] = useState(0)
+  const [isTouchDevice] = useState(() => typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0)
   const [answer, setAnswer] = useState('')
   const [status, setStatus] = useState('solving') // solving | correct | wrong
   const [terms, setTerms] = useState([]) // signed term positions
@@ -436,6 +464,22 @@ export default function EquationExplorer() {
       if (status === 'wrong') setStatus('solving')
     }
   }, [status, range])
+
+  const handleNumpadDigit = useCallback((digit) => {
+    if (status === 'correct') return
+    const maxDigits = range >= 1000 ? 4 : range >= 100 ? 3 : 2
+    setAnswer(prev => {
+      const next = prev + digit
+      return next.length <= maxDigits ? next : prev
+    })
+    if (status === 'wrong') setStatus('solving')
+  }, [status, range])
+
+  const handleNumpadBackspace = useCallback(() => {
+    if (status === 'correct') return
+    setAnswer(prev => prev.slice(0, -1))
+    if (status === 'wrong') setStatus('solving')
+  }, [status])
 
   // ── Drag logic ──
 
@@ -589,12 +633,13 @@ export default function EquationExplorer() {
             <input
               ref={inputRef}
               type="text"
-              inputMode="numeric"
+              inputMode={isTouchDevice ? 'none' : 'numeric'}
               pattern="[0-9]*"
               className={`eq-blank${sizeClass}${status === 'correct' ? ' eq-blank--correct' : ''}${status === 'wrong' ? ' eq-blank--wrong' : ''}`}
               value={status === 'correct' ? correctAnswer : answer}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
+              readOnly={isTouchDevice}
               disabled={status === 'correct'}
               aria-label="Your answer"
               autoComplete="off"
@@ -680,18 +725,42 @@ export default function EquationExplorer() {
         <button className="eq-reset-link" onClick={handleResetForm}>Reset equation</button>
       )}
 
-      {/* Actions */}
-      <div className="eq-actions">
-        {status === 'correct' ? (
-          <button className="eq-btn eq-btn--next" onClick={handleNextProblem}>
-            Next <IconArrowRight size={18} />
+      {/* Actions — hidden when numpad is visible */}
+      {!isTouchDevice && (
+        <div className="eq-actions">
+          {status === 'correct' ? (
+            <button className="eq-btn eq-btn--next" onClick={handleNextProblem}>
+              Next <IconArrowRight size={18} />
+            </button>
+          ) : (
+            <button className="eq-btn eq-btn--check" onClick={handleCheck} disabled={!answer}>
+              <IconCheck size={18} /> Check
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* On-screen numeric keypad for touch devices */}
+      {isTouchDevice && (
+        <div className="eq-numpad" role="group" aria-label="Numeric keypad">
+          <div className="eq-numpad-digits">
+            {[1,2,3,4,5,6,7,8,9].map(d => (
+              <button key={d} className="eq-numpad-key" onClick={() => handleNumpadDigit(String(d))} type="button">{d}</button>
+            ))}
+            <button className="eq-numpad-key eq-numpad-key--muted" onClick={handleNumpadBackspace} type="button" aria-label="Backspace">⌫</button>
+            <button className="eq-numpad-key" onClick={() => handleNumpadDigit('0')} type="button">0</button>
+            <button className="eq-numpad-key eq-numpad-key--muted" onClick={() => setAnswer('')} type="button" aria-label="Clear">C</button>
+          </div>
+          <button
+            className={`eq-numpad-action${status === 'correct' ? ' eq-numpad-action--next' : ''}`}
+            onClick={status === 'correct' ? handleNextProblem : handleCheck}
+            disabled={status !== 'correct' && !answer}
+            type="button"
+          >
+            {status === 'correct' ? <><span>Next</span> <IconArrowRight size={20} /></> : <><IconCheck size={20} /> <span>Check</span></>}
           </button>
-        ) : (
-          <button className="eq-btn eq-btn--check" onClick={handleCheck} disabled={!answer}>
-            <IconCheck size={18} /> Check
-          </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Feedback */}
       <div className="eq-feedback" aria-live="polite">
