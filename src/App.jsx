@@ -1,4 +1,4 @@
-import { IconGrid3x3, IconPlusMinus, IconRuler2, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconBrandGithub } from '@tabler/icons-react'
+import { IconGrid3x3, IconPlusMinus, IconRuler2, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconBrandGithub, IconEqual } from '@tabler/icons-react'
 import { usePersistedState } from './hooks/usePersistedState'
 import './App.css'
 import MultiplicationTable from './components/MultiplicationTable'
@@ -6,6 +6,7 @@ import AddSubtract from './components/AddSubtract'
 import Comparison from './components/Comparison'
 import Rounding from './components/Rounding'
 import Patterns from './components/Patterns'
+import EquationExplorer from './components/EquationExplorer'
 
 const WORKSHEETS = [
   { id: 'multiply', label: 'Multiplication', desc: 'Times tables & grid practice', Icon: IconGrid3x3, color: '#2563eb' },
@@ -13,6 +14,7 @@ const WORKSHEETS = [
   { id: 'compare', label: 'Comparison', desc: 'Greater than, less than, equal', Icon: IconArrowsLeftRight, color: '#d97706' },
   { id: 'rounding', label: 'Rounding', desc: 'Round to nearest 10, 100, 1000', Icon: IconTargetArrow, color: '#dc2626' },
   { id: 'patterns', label: 'Patterns', desc: 'Number sequences & series', Icon: IconTrendingUp, color: '#7c3aed' },
+  { id: 'eqexplore', label: 'Equation Explorer', desc: 'Solve equations interactively', Icon: IconEqual, color: '#0891b2' },
 ]
 
 const COMPONENTS = {
@@ -21,6 +23,7 @@ const COMPONENTS = {
   compare: Comparison,
   rounding: Rounding,
   patterns: Patterns,
+  eqexplore: EquationExplorer,
 }
 
 export default function App() {

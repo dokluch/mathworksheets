@@ -1,0 +1,770 @@
+/* =============================================
+   EQUATION EXPLORER — Interactive equation solver
+   ============================================= */
+
+.eq-explorer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 0 40px;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow-x: hidden;
+}
+
+/* ── Controls ── */
+.eq-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* ── Streak ── */
+.eq-streak {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 28px;
+  transition: color 0.2s;
+}
+
+.eq-streak--active {
+  color: #e67e22;
+}
+
+.eq-streak-num {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.eq-streak-num--bump {
+  transform: scale(1.35);
+}
+
+/* ── Equation board ── */
+.eq-board {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px 16px;
+  min-height: 120px;
+  width: 100%;
+  position: relative;
+}
+
+/* ── Term tile (number or operator) ── */
+.eq-term {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--color-text);
+  position: relative;
+  font-variant-numeric: tabular-nums;
+}
+
+.eq-tile {
+  min-width: 60px;
+  height: 64px;
+  padding: 0 14px;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.eq-tile--draggable {
+  cursor: grab;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.eq-tile--draggable:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.eq-tile--dragging {
+  cursor: grabbing;
+  box-shadow: 0 8px 25px -4px rgba(0,0,0,0.18);
+  z-index: 10;
+  border-color: var(--color-primary);
+  position: relative;
+  transition: none !important;
+}
+
+.eq-tile--ghost {
+  opacity: 0.25;
+  border-style: dashed;
+}
+
+.eq-tile--zero {
+  opacity: 0.4;
+  border-style: dashed;
+  cursor: default;
+}
+
+/* ── Operator sign between/beside terms ── */
+.eq-op {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  min-width: 28px;
+  text-align: center;
+  position: relative;
+}
+
+.eq-op-symbol {
+  display: inline-block;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.15s ease;
+}
+
+.eq-op-symbol--exit {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.eq-op-symbol--enter {
+  animation: signAppear 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes signAppear {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.eq-equals {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-border-dark);
+  padding: 0 4px;
+}
+
+/* ── Blank (input) ── */
+.eq-blank-wrap {
+  position: relative;
+}
+
+.eq-blank {
+  width: 72px;
+  height: 64px;
+  border: 2.5px dashed var(--color-primary);
+  border-radius: 12px;
+  background: var(--color-primary-faint);
+  font-family: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace;
+  font-size: 36px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.eq-blank:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--color-primary-light);
+  background: white;
+}
+
+/* Wider inputs for 3- and 4-digit numbers */
+.eq-blank--med {
+  width: 90px;
+}
+
+.eq-blank--wide {
+  width: 110px;
+}
+
+.eq-tile--med {
+  min-width: 76px;
+}
+
+.eq-tile--wide {
+  min-width: 94px;
+}
+
+.eq-blank--correct {
+  border-color: var(--color-accent-green);
+  background: rgba(5, 150, 105, 0.08);
+  color: var(--color-accent-green);
+  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
+}
+
+.eq-blank--wrong {
+  animation: shake 0.4s ease;
+  border-color: var(--color-accent-red);
+  background: rgba(220, 38, 38, 0.06);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
+}
+
+/* ── Check / Next buttons ── */
+.eq-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.eq-btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.eq-btn--check {
+  background: var(--color-primary);
+  color: white;
+}
+
+.eq-btn--check:hover {
+  background: var(--color-primary-hover);
+}
+
+.eq-btn--check:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.eq-btn--next {
+  background: var(--color-accent-green);
+  color: white;
+}
+
+.eq-btn--next:hover {
+  background: #047857;
+}
+
+.eq-btn--skip {
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 20px;
+}
+
+.eq-btn--skip:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+/* ── Reset rearrangement link ── */
+.eq-reset-link {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  padding: 8px 12px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.eq-reset-link:hover {
+  color: var(--color-text);
+}
+
+/* ── Drop zone highlight ── */
+.eq-side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 14px;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.eq-side--highlight {
+  background: var(--color-primary-faint);
+}
+
+/* ── Celebration confetti ── */
+.eq-celebration {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.eq-confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: confettiBurst 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes confettiBurst {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--cx), var(--cy)) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* ── Correct checkmark ── */
+.eq-checkmark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-accent-green);
+  color: white;
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ── Feedback message ── */
+.eq-feedback {
+  font-size: 15px;
+  font-weight: 600;
+  min-height: 24px;
+  text-align: center;
+}
+
+.eq-feedback--correct {
+  color: var(--color-accent-green);
+}
+
+.eq-feedback--wrong {
+  color: var(--color-accent-red);
+}
+
+/* ── Drag hint ── */
+.eq-hint {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-align: center;
+  opacity: 0.7;
+  padding: 0 16px;
+  margin: 0;
+}
+
+/* =============================================
+   EXPLANATION PANEL
+   ============================================= */
+
+.eq-explain {
+  width: 100%;
+  overflow: hidden;
+  animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.eq-explain-inner {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.eq-explain-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+
+.eq-explain-tab {
+  flex: 1;
+  padding: 8px 16px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.eq-explain-tab:hover {
+  background: var(--color-surface-hover);
+}
+
+.eq-explain-tab--active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.eq-explain-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* ── Number Line ── */
+.eq-numline {
+  width: 100%;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.eq-numline svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Ten Frame ── */
+.eq-tenframe {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+}
+
+.eq-tenframe-grid {
+  display: grid;
+  gap: 6px;
+  max-width: 280px;
+  width: 100%;
+}
+
+.eq-tenframe-dot {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+  max-width: 48px;
+}
+
+.eq-tenframe-dot--sm {
+  border-width: 1.5px;
+  max-width: 20px;
+}
+
+.eq-tenframe-dot--filled {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: scale(1);
+}
+
+.eq-tenframe-dot--add {
+  background: var(--color-accent-green);
+  border-color: var(--color-accent-green);
+  animation: dotAppear 0.3s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
+.eq-tenframe-dot--remove {
+  animation: dotRemove 0.3s ease forwards;
+}
+
+@keyframes dotAppear {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes dotRemove {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(0.4); opacity: 0.2; }
+}
+
+.eq-tenframe-dot--removed {
+  transform: scale(0.4);
+  opacity: 0.2;
+  background: var(--color-accent-red);
+  border-color: var(--color-accent-red);
+}
+
+.eq-tenframe-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.eq-tenframe-label span {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* ── Bar visualization (1000 range) ── */
+.eq-bar {
+  width: 100%;
+  max-width: 320px;
+}
+
+.eq-bar-track {
+  position: relative;
+  height: 28px;
+  background: var(--color-border-light);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.eq-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 6px;
+}
+
+.eq-bar-fill--base {
+  background: var(--color-primary);
+  opacity: 0.25;
+}
+
+.eq-bar-fill--add {
+  background: var(--color-accent-green);
+  opacity: 0.7;
+}
+
+.eq-bar-fill--sub {
+  background: var(--color-accent-red);
+  opacity: 0.7;
+}
+
+.eq-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Explain footer ── */
+.eq-explain-footer {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.eq-btn--gotit {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-dark);
+  padding: 8px 24px;
+  font-size: 14px;
+}
+
+.eq-btn--gotit:hover {
+  background: var(--color-surface-hover);
+}
+
+.eq-btn--replay {
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 13px;
+  padding: 6px 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+
+.eq-btn--replay:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
+@media (max-width: 768px) {
+  .eq-explorer {
+    gap: 16px;
+  }
+
+  .eq-controls {
+    gap: 8px;
+  }
+
+  .eq-board {
+    gap: 4px;
+    padding: 24px 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .eq-term {
+    font-size: 32px;
+  }
+
+  .eq-tile {
+    min-width: 52px;
+    height: 56px;
+    padding: 0 10px;
+    border-radius: 10px;
+  }
+
+  .eq-blank {
+    width: 62px;
+    height: 56px;
+    font-size: 32px;
+    border-radius: 10px;
+  }
+
+  .eq-op {
+    font-size: 24px;
+    min-width: 22px;
+  }
+
+  .eq-equals {
+    font-size: 28px;
+  }
+
+  .eq-btn {
+    padding: 12px 22px;
+    font-size: 15px;
+    min-height: 44px;
+  }
+
+  .eq-explain-inner {
+    padding: 16px;
+  }
+
+  .eq-tenframe-grid {
+    max-width: 220px;
+    gap: 5px;
+  }
+
+  .eq-explain-tab {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .eq-btn--replay,
+  .eq-btn--gotit {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 380px) {
+  .eq-term {
+    font-size: 28px;
+  }
+
+  .eq-tile {
+    min-width: 46px;
+    height: 50px;
+    padding: 0 8px;
+  }
+
+  .eq-blank {
+    width: 54px;
+    height: 50px;
+    font-size: 28px;
+  }
+
+  .eq-op {
+    font-size: 22px;
+    min-width: 18px;
+  }
+
+  .eq-equals {
+    font-size: 24px;
+  }
+
+  .eq-side {
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .eq-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .eq-controls .btn-group {
+    width: 100%;
+  }
+
+  .eq-controls .btn-toggle {
+    flex: 1;
+    min-height: 44px;
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .eq-confetti,
+  .eq-checkmark,
+  .eq-op-symbol--enter,
+  .eq-tenframe-dot--add,
+  .eq-tenframe-dot--remove {
+    animation: none;
+  }
+
+  .eq-explain {
+    animation: none;
+  }
+
+  .eq-blank--wrong {
+    animation: none;
+  }
+}
