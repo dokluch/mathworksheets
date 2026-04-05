@@ -309,11 +309,35 @@
   padding: 8px;
   border-radius: 14px;
   transition: background 0.2s;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .eq-side--highlight {
   background: var(--color-primary-faint);
+}
+
+/* Drop preview ghost */
+.eq-drop-ghost {
+  width: 44px;
+  height: 44px;
+  border: 2.5px dashed var(--color-primary, #2563eb);
+  border-radius: 10px;
+  background: var(--color-primary-faint, rgba(37, 99, 235, 0.06));
+  animation: eq-ghost-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes eq-ghost-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Draggable blank wrapper */
+.eq-blank-wrap--draggable {
+  cursor: grab;
+  touch-action: none;
 }
 
 /* ── Celebration confetti ── */
@@ -645,8 +669,7 @@
   .eq-board {
     gap: 4px;
     padding: 24px 4px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    flex-wrap: wrap;
   }
 
   .eq-term {

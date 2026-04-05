@@ -53,13 +53,16 @@ function buildInitialTerms(problem) {
   ]
 }
 
-/** Flip a term to the other side (sign inverts) */
+/** Flip a term to the other side (sign inverts), move to end of target side */
 function flipTerm(terms, termId) {
-  return terms.map(t =>
-    t.id === termId
-      ? { ...t, side: t.side === 'left' ? 'right' : 'left', sign: t.sign === '+' ? '-' : '+' }
-      : t
-  )
+  const term = terms.find(t => t.id === termId)
+  if (!term) return terms
+  const flipped = { ...term, side: term.side === 'left' ? 'right' : 'left', sign: term.sign === '+' ? '-' : '+' }
+  const rest = terms.filter(t => t.id !== termId)
+  // Insert at the end: find last term on the target side
+  const lastTargetIdx = rest.reduce((acc, t, i) => t.side === flipped.side ? i : acc, -1)
+  const insertAt = lastTargetIdx + 1
+  return [...rest.slice(0, insertAt), flipped, ...rest.slice(insertAt)]
 }
 
 /** Move a term to a different index in the array (reorder within same side) */
@@ -378,7 +381,8 @@ export default function EquationExplorer() {
   const [explainTab, setExplainTab] = useState('numline')
   const [replayKey, setReplayKey] = useState(0)
   const [showCelebration, setShowCelebration] = useState(false)
-  const [signAnimId, setSignAnimId] = useState(null) // id of term whose sign is animating
+  const [signAnimId, setSignAnimId] = useState(null)
+  const [dropPreview, setDropPreview] = useState(null) // 'left' | 'right' | null // id of term whose sign is animating
 
   const inputRef = useRef(null)
   const equalsRef = useRef(null)
@@ -524,12 +528,13 @@ export default function EquationExplorer() {
       const startedLeft = d.startX < eqCenter
       const nowOnOtherSide = startedLeft ? termCenter > eqCenter : termCenter < eqCenter
 
-      // Highlight the target side
+      // Highlight the target side and show drop preview
       const sides = boardRef.current.querySelectorAll('.eq-side')
       sides.forEach((side, i) => {
         const isTarget = startedLeft ? i === 1 : i === 0
         side.classList.toggle('eq-side--highlight', isTarget && nowOnOtherSide)
       })
+      setDropPreview(nowOnOtherSide ? (startedLeft ? 'right' : 'left') : null)
     }
   }, [])
 
@@ -541,7 +546,8 @@ export default function EquationExplorer() {
     d.el.classList.remove('eq-tile--dragging')
     d.el.style.transform = ''
 
-    // Remove highlights
+    // Remove highlights and drop preview
+    setDropPreview(null)
     if (boardRef.current) {
       boardRef.current.querySelectorAll('.eq-side').forEach(s => {
         s.classList.remove('eq-side--highlight')
@@ -608,7 +614,7 @@ export default function EquationExplorer() {
 
   // ── Render helpers ──
 
-  function renderSide(sideTerms) {
+  function renderSide(sideTerms, sideName) {
     if (sideTerms.length === 0) {
       return <div className="eq-term eq-tile eq-tile--zero">0</div>
     }
@@ -628,8 +634,21 @@ export default function EquationExplorer() {
       // Render the term itself
       if (term.isBlank) {
         const sizeClass = range >= 1000 ? ' eq-blank--wide' : range >= 100 ? ' eq-blank--med' : ''
+        const isDraggable = status === 'solving'
         elements.push(
-          <div key={`blank-${term.id}`} className="eq-term eq-blank-wrap" role="presentation" data-term-id={term.id}>
+          <div
+            key={`blank-${term.id}`}
+            className={`eq-term eq-blank-wrap${isDraggable ? ' eq-blank-wrap--draggable' : ''}`}
+            role="presentation"
+            data-term-id={term.id}
+            onPointerDown={isDraggable ? (e) => {
+              // Don't start drag if tapping inside the input
+              if (e.target.tagName === 'INPUT') return
+              handlePointerDown(e, term.id)
+            } : undefined}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+          >
             <input
               ref={inputRef}
               type="text"
@@ -672,6 +691,12 @@ export default function EquationExplorer() {
         )
       }
     })
+    // Show drop preview ghost at end of target side
+    if (dropPreview === sideName) {
+      elements.push(
+        <div key="drop-ghost" className="eq-term eq-drop-ghost" aria-hidden="true" />
+      )
+    }
     return elements
   }
 
@@ -703,13 +728,13 @@ export default function EquationExplorer() {
       {/* Equation board */}
       <div className="eq-board" ref={boardRef} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp}>
         <div className="eq-side">
-          {renderSide(display.left)}
+          {renderSide(display.left, 'left')}
         </div>
 
         <div className="eq-term eq-equals" ref={equalsRef}>=</div>
 
         <div className="eq-side">
-          {renderSide(display.right)}
+          {renderSide(display.right, 'right')}
         </div>
 
         {showCelebration && <Celebration />}
