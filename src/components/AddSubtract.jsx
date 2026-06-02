@@ -10,15 +10,26 @@ const PRESETS = [
   { label: 'Within 1000', max: 1000 },
 ]
 
+const SIXTY_SEVEN_ANSWER = 67
+
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-function generateProblem(ops, maxVal) {
+function getOpList(ops) {
   const opList = []
   if (ops === 'add' || ops === 'both') opList.push('+')
   if (ops === 'sub' || ops === 'both') opList.push('-')
-  const op = opList[Math.floor(Math.random() * opList.length)]
+  return opList
+}
+
+function chooseOp(ops) {
+  const opList = getOpList(ops)
+  return opList[Math.floor(Math.random() * opList.length)]
+}
+
+function generateProblem(ops, maxVal) {
+  const op = chooseOp(ops)
 
   let a, b, result
   if (op === '+') {
@@ -36,6 +47,62 @@ function generateProblem(ops, maxVal) {
 
   // Randomly choose format: normal (a op b = result) or reversed (result = a op b)
   const reversed = Math.random() < 0.3
+
+  return { a, b, op, result, blankPos, reversed }
+}
+
+function getBlankAnswer(problem) {
+  if (problem.blankPos === 0) return problem.a
+  if (problem.blankPos === 1) return problem.b
+  return problem.result
+}
+
+function generateProblemAvoidingAnswer(answer, ops, maxVal) {
+  for (let attempt = 0; attempt < 20; attempt++) {
+    const problem = generateProblem(ops, maxVal)
+    if (getBlankAnswer(problem) !== answer) return problem
+  }
+
+  return generateProblemWithAnswer(answer === 2 ? 3 : 2, ops, maxVal)
+}
+
+function generateProblemWithAnswer(answer, ops, maxVal) {
+  const op = chooseOp(ops)
+  const blankPos = Math.floor(Math.random() * 3)
+  const reversed = Math.random() < 0.3
+  const effectiveMax = Math.max(maxVal, answer + 1)
+
+  let a, b, result
+
+  if (op === '+') {
+    if (blankPos === 0) {
+      a = answer
+      result = randInt(answer + 1, effectiveMax)
+      b = result - a
+    } else if (blankPos === 1) {
+      b = answer
+      result = randInt(answer + 1, effectiveMax)
+      a = result - b
+    } else {
+      result = answer
+      a = randInt(1, answer - 1)
+      b = result - a
+    }
+  } else {
+    if (blankPos === 0) {
+      a = answer
+      b = randInt(1, answer - 1)
+      result = a - b
+    } else if (blankPos === 1) {
+      b = answer
+      a = randInt(answer + 1, effectiveMax)
+      result = a - b
+    } else {
+      result = answer
+      a = randInt(answer + 1, effectiveMax)
+      b = a - result
+    }
+  }
 
   return { a, b, op, result, blankPos, reversed }
 }
@@ -76,6 +143,7 @@ export default function AddSubtract() {
   const [maxVal, setMaxVal] = usePersistedState('addsub', 'maxVal', 100)
   const [columns, setColumns] = usePersistedState('addsub', 'columns', 3)
   const [layout, setLayout] = usePersistedState('addsub', 'layout', 'inline')
+  const [sixtySevenMode, setSixtySevenMode] = usePersistedState('addsub', 'sixtySevenMode', true)
   const [seed, setSeed] = useState(0)
 
   const stackedCounts = { 2: 14, 3: 18, 4: 24 }
@@ -86,12 +154,24 @@ export default function AddSubtract() {
 
   const problems = useMemo(() => {
     void seed // depend on seed for re-randomization
+    const useSixtySevenMode = sixtySevenMode && (columns === 2 || columns === 3)
     const items = []
     for (let i = 0; i < problemCount; i++) {
-      items.push(generateProblem(ops, maxVal))
+      items.push(
+        useSixtySevenMode
+          ? generateProblemAvoidingAnswer(SIXTY_SEVEN_ANSWER, ops, maxVal)
+          : generateProblem(ops, maxVal)
+      )
+    }
+    if (useSixtySevenMode) {
+      const rows = Math.floor(problemCount / columns)
+      for (let column = 0; column < columns; column++) {
+        const row = randInt(0, rows - 1)
+        items[row * columns + column] = generateProblemWithAnswer(SIXTY_SEVEN_ANSWER, ops, maxVal)
+      }
     }
     return items
-  }, [ops, maxVal, problemCount, seed])
+  }, [ops, maxVal, columns, problemCount, seed, sixtySevenMode])
 
   return (
     <div className="tool-panel">
@@ -164,6 +244,15 @@ export default function AddSubtract() {
                 </button>
               ))}
             </div>
+          </label>
+
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={sixtySevenMode}
+              onChange={event => setSixtySevenMode(event.target.checked)}
+            />
+            67 mode
           </label>
         </div>
 
