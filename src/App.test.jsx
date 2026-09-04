@@ -15,6 +15,7 @@ beforeEach(() => {
   cleanup()
   localStorage.clear()
   window.history.replaceState(null, '', '/')
+  window.scrollTo = vi.fn()
   trackEvent.mockClear()
 })
 
@@ -58,6 +59,62 @@ describe('App', () => {
     fireEvent.click(screen.getByRole('link', { name: /All sheets/ }))
     expect(window.location.pathname).toBe('/')
     expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+  })
+
+  it('shows a footer with About, Privacy, Terms and GitHub links that is never printed', () => {
+    render(<App />)
+    const footer = screen.getByRole('contentinfo')
+    expect(footer.className).toContain('no-print')
+    for (const [name, href] of [['About', '/about'], ['Privacy', '/privacy'], ['Terms', '/terms']]) {
+      expect(screen.getByRole('link', { name }).getAttribute('href')).toBe(href)
+    }
+    expect(screen.getByRole('link', { name: /GitHub/ }).getAttribute('href')).toContain('github.com/dokluch')
+    expect(footer.textContent).toContain('Superposition Labs Inc.')
+  })
+
+  it('clicking a footer link opens the static page in-app and keeps the remembered worksheet', () => {
+    localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'patterns' } }))
+    window.history.replaceState(null, '', '/worksheets/patterns')
+    render(<App />)
+    fireEvent.click(screen.getByRole('link', { name: 'Privacy' }))
+    expect(window.location.pathname).toBe('/privacy')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Privacy Policy')
+    expect(screen.queryByRole('tabpanel')).toBeNull()
+    expect(screen.getByRole('main').className).toContain('static-page')
+    expect(JSON.parse(localStorage.getItem('mathsheets')).app.activeTab).toBe('patterns')
+    expect(window.scrollTo).toHaveBeenCalled()
+  })
+
+  it('opens the static page named in the URL and routes its internal links in-app', () => {
+    localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'rounding' } }))
+    window.history.replaceState(null, '', '/about')
+    render(<App />)
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('About MathSheets')
+    expect(window.location.pathname).toBe('/about')
+    // In-page link to the Terms page
+    fireEvent.click(screen.getByRole('main').querySelector('a[href="/terms"]'))
+    expect(window.location.pathname).toBe('/terms')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Terms of Service')
+    // Breadcrumb back home restores the remembered worksheet
+    fireEvent.click(screen.getByRole('main').querySelector('nav[aria-label="Breadcrumb"] a[href="/"]'))
+    expect(window.location.pathname).toBe('/')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+  })
+
+  it('renders /developers in-app instead of bouncing to the catalog', () => {
+    window.history.replaceState(null, '', '/developers')
+    render(<App />)
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('MathSheets Developer Resources')
+    expect(window.location.pathname).toBe('/developers')
+  })
+
+  it('the worksheet sidebar carries the compact footer links', () => {
+    window.history.replaceState(null, '', '/worksheets/rounding')
+    render(<App />)
+    const footer = screen.getByRole('contentinfo')
+    expect(footer.className).toContain('site-footer--sidebar')
+    expect(screen.getByRole('link', { name: 'Privacy' }).getAttribute('href')).toBe('/privacy')
+    expect(footer.textContent).not.toContain('Superposition')
   })
 
   it('tracks print_worksheet with the sheet id and its settings on beforeprint', () => {

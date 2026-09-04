@@ -1,20 +1,22 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { injectRoute, homeRoute } from './src/seo/render.js'
+import { injectRoute, homeRoute, findRoute } from './src/seo/render.js'
 
 /**
- * Injects the home page's <head> metadata and crawlable static content into
- * index.html (dev server and build). scripts/prerender.mjs reuses the same
- * renderer to derive every other route after the build.
+ * Injects <head> metadata and crawlable static content into index.html: the
+ * requested route on the dev server, the home page at build time.
+ * scripts/prerender.mjs reuses the same renderer to derive every other route
+ * after the build.
  */
 export function seoHtml() {
   return {
     name: 'mathsheets-seo-html',
     transformIndexHtml: {
       order: 'pre',
-      handler(html) {
-        return injectRoute(html, homeRoute())
+      handler(html, ctx) {
+        const requested = ctx?.originalUrl ? findRoute(new URL(ctx.originalUrl, 'http://localhost').pathname) : null
+        return injectRoute(html, requested || homeRoute())
       },
     },
   }

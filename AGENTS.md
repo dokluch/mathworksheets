@@ -24,9 +24,10 @@ Node 24, npm 11. No TypeScript.
 ## Layout
 
 - `src/worksheets.js` — **the catalog**: id, slug, label, descriptions, grades, skills, settings, color. Everything SEO-related derives from it.
-- `src/App.jsx` — catalog UI + worksheet switcher. `ICONS` and `COMPONENTS` maps keyed by worksheet id.
+- `src/pages.js` — static pages (About `/about`, Privacy `/privacy`, Terms `/terms`): title, description, `updated`, sections of paragraphs/items with `[label](url)` links. HTML, Markdown twin, sitemap, llms.txt and the React view all derive from it; operator/contact constants live in `src/seo/site.js`.
+- `src/App.jsx` — catalog UI + worksheet switcher. `ICONS` and `COMPONENTS` maps keyed by worksheet id. Renders `components/StaticPage.jsx` (innerHTML from `staticBody()` in `render.js`) for `/about`, `/privacy`, `/terms`, `/developers`, and `components/SiteFooter.jsx` (`.no-print`) on the catalog, static pages and, in compact form, the worksheet sidebar.
 - `src/components/*.jsx` — one component per worksheet; each has Regenerate (`setSeed`) and Print (`window.print()`) buttons and uses `usePersistedState(tabId, key, default)` for settings (localStorage key `mathsheets`).
-- `src/hooks/useRoute.js` — tiny history router: `/worksheets/<slug>`; `/` restores the remembered sheet via `replaceState`.
+- `src/hooks/useRoute.js` — tiny history router returning `[activeSheet, navigate, activePage]`: `/worksheets/<slug>` selects a sheet, `/about`, `/privacy`, `/terms`, `/developers` select a static page, `/` restores the remembered sheet via `replaceState`. `navigate()` takes a worksheet id, a site path or `null`.
 - `src/seo/site.js` — brand, `SITE_URL` (`VITE_SITE_URL` env), author, license.
 - `src/seo/render.js` — pure string renderers: `<head>` metadata + JSON-LD, crawlable static HTML, Markdown twins, llms.txt, sitemap, robots, catalog JSON, 404 bodies, `buildSiteFiles()`.
 - `src/seo/negotiate.js` — RFC 9110 `Accept` negotiation (q-values, specificity).
@@ -44,12 +45,19 @@ Node 24, npm 11. No TypeScript.
 4. `npm run og -- <slug>` to generate its `public/og/<slug>.png` preview (a test fails while it is missing).
 5. `npm test && npm run lint && npm run build`. Static pages, Markdown, sitemap, llms.txt and `worksheets.json` regenerate automatically.
 
+## Adding a static page
+
+1. Append an entry to `src/pages.js` (unique `slug`, `title`, `navLabel`, `description`, `updated` as `YYYY-MM-DD`, sections).
+2. Nothing else: `findRoute()`/`routes()` pick it up, so the HTML, Markdown twin, sitemap, llms.txt "Optional" entry, 404 links, footer link and React view follow. Static pages share the home `og:image`.
+3. Bump `updated` whenever the text changes (it is the JSON-LD `dateModified` and the "Last updated" line).
+
 ## Invariants (tests enforce these)
 
 - Home HTML without JavaScript has ≥ 500 characters of text, exactly one `<h1>`, sequential heading levels, and a link to every worksheet.
 - `llms.txt` follows llmstxt.org: `# MathSheets`, a `>` blockquote, then `## Worksheets`, `## Developers`, `## Optional` lists of `- [title](absolute url): notes`.
-- Every page URL has a `.md` twin and is listed once in `sitemap.xml`.
-- Every page has a committed 1200×630 PNG under `public/og/` that its `og:image` points to.
+- Every page URL has a `.md` twin and is listed once in `sitemap.xml`; `llms.txt` lists every static page under `## Optional`.
+- Every page (static HTML and React) carries the site footer linking About, Privacy, Terms and GitHub; the footer is `.no-print`.
+- Every worksheet, the home and developers pages have a committed 1200×630 PNG under `public/og/` that their `og:image` points to; static pages reuse `home.png`.
 - Unknown extensionless paths return HTTP 404 with a Markdown body (HTML for browsers).
 - `npm run lint` and `npm test` stay green; keep existing visual design and print behaviour.
 

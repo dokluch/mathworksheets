@@ -59,6 +59,64 @@ describe('useRoute', () => {
     expect(document.querySelector('link[rel="alternate"]').getAttribute('href')).toMatch(/\/worksheets\/rounding\.md$/)
   })
 
+  it('shows a static page named in the URL without rewriting it, even with a remembered sheet', () => {
+    setPath('/privacy')
+    const { result } = renderHook(() => useRoute('rounding'))
+    const [sheet, , page] = result.current
+    expect(sheet).toBeNull()
+    expect(page.kind).toBe('page')
+    expect(page.page.slug).toBe('privacy')
+    expect(window.location.pathname).toBe('/privacy')
+    expect(document.title).toBe('Privacy Policy · MathSheets')
+    expect(document.querySelector('link[rel="canonical"]').getAttribute('href')).toMatch(/\/privacy$/)
+    expect(document.querySelector('link[rel="alternate"]').getAttribute('href')).toMatch(/\/privacy\.md$/)
+    expect(trackPageView).toHaveBeenCalledWith('/privacy', 'Privacy Policy · MathSheets')
+  })
+
+  it('treats /developers as a static page too', () => {
+    setPath('/developers/')
+    const { result } = renderHook(() => useRoute(null))
+    expect(result.current[2].kind).toBe('developers')
+    expect(window.location.pathname).toBe('/developers/')
+    expect(document.title).toBe('Developer Resources · MathSheets')
+  })
+
+  it('falls back to the catalog (and rewrites the URL) for an unknown path', () => {
+    setPath('/nope')
+    const { result } = renderHook(() => useRoute(null))
+    expect(result.current[0]).toBeNull()
+    expect(result.current[2]).toBeNull()
+    expect(window.location.pathname).toBe('/')
+  })
+
+  it('navigate accepts page paths, worksheet ids and null, and popstate resolves pages', () => {
+    const { result } = renderHook(() => useRoute(null))
+    act(() => result.current[1]('/about'))
+    expect(result.current[2].page.slug).toBe('about')
+    expect(result.current[0]).toBeNull()
+    expect(window.location.pathname).toBe('/about')
+    expect(trackPageView).toHaveBeenLastCalledWith('/about', 'About MathSheets · MathSheets')
+
+    act(() => result.current[1]('multiply'))
+    expect(result.current[0]).toBe('multiply')
+    expect(result.current[2]).toBeNull()
+
+    act(() => result.current[1](null))
+    expect(result.current[0]).toBeNull()
+    expect(window.location.pathname).toBe('/')
+
+    act(() => {
+      setPath('/terms')
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    })
+    expect(result.current[2].page.slug).toBe('terms')
+
+    // Navigating to the current page again is a no-op (no duplicate page view).
+    const calls = trackPageView.mock.calls.length
+    act(() => result.current[1]('/terms'))
+    expect(trackPageView.mock.calls.length).toBe(calls)
+  })
+
   it('ignores an unknown remembered sheet id', () => {
     const { result } = renderHook(() => useRoute('does-not-exist'))
     expect(result.current[0]).toBeNull()

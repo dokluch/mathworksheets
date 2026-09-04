@@ -1,11 +1,13 @@
 import { useEffect, useCallback } from 'react'
-import { IconGrid3x3, IconPlusMinus, IconRuler2, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconBrandGithub, IconEqual, IconColumns3, IconCalculator } from '@tabler/icons-react'
+import { IconGrid3x3, IconPlusMinus, IconRuler2, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator } from '@tabler/icons-react'
 import { usePersistedState, getPersistedTab } from './hooks/usePersistedState'
 import { useRoute, sheetIdToPath } from './hooks/useRoute'
 import { trackEvent, settingsToParams } from './lib/analytics'
 import { WORKSHEETS as CATALOG } from './worksheets'
-import { BRAND, GITHUB_URL } from './seo/site'
+import { BRAND } from './seo/site'
 import './App.css'
+import SiteFooter from './components/SiteFooter'
+import StaticPage from './components/StaticPage'
 import MultiplicationTable from './components/MultiplicationTable'
 import AddSubtract from './components/AddSubtract'
 import Comparison from './components/Comparison'
@@ -42,12 +44,13 @@ const COMPONENTS = {
 
 export default function App() {
   const [persistedSheet, setPersistedSheet] = usePersistedState('app', 'activeTab', null)
-  const [activeSheet, navigate] = useRoute(persistedSheet)
+  const [activeSheet, navigate, activePage] = useRoute(persistedSheet)
 
-  // Keep "pick up where you left off" working across sessions.
+  // Keep "pick up where you left off" working across sessions. Reading a
+  // static page (About, Privacy, …) must not forget the remembered sheet.
   useEffect(() => {
-    setPersistedSheet(activeSheet)
-  }, [activeSheet, setPersistedSheet])
+    if (!activePage) setPersistedSheet(activeSheet)
+  }, [activeSheet, activePage, setPersistedSheet])
 
   // One listener catches both the Print button and Cmd/Ctrl+P.
   useEffect(() => {
@@ -78,8 +81,13 @@ export default function App() {
 
   return (
     <div className={`app ${activeSheet ? 'has-active' : 'catalog-only'}`}>
-      {/* ── Catalog / Sidebar ── */}
-      {activeSheet ? (
+      {/* ── Static page (About, Privacy, Terms, Developers) ── */}
+      {activePage ? (
+        <>
+          <StaticPage route={activePage} navigate={navigate} />
+          <SiteFooter navigate={navigate} />
+        </>
+      ) : activeSheet ? (
         <aside className="catalog no-print catalog--sidebar">
           <header className="catalog-header">
             <a className="back-btn" href="/" onClick={(e) => { e.preventDefault(); navigate(null) }}>
@@ -108,9 +116,7 @@ export default function App() {
             ))}
           </nav>
 
-          <a className="github-link github-link--sidebar" href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="Source on GitHub">
-            <IconBrandGithub size={16} stroke={1.5} />
-          </a>
+          <SiteFooter navigate={navigate} variant="sidebar" />
         </aside>
       ) : (
         <main className="catalog no-print catalog--full">
@@ -143,12 +149,9 @@ export default function App() {
             ))}
           </nav>
 
-          <a className="github-link" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-            <IconBrandGithub size={16} stroke={1.5} />
-            Source on GitHub
-          </a>
         </main>
       )}
+      {!activeSheet && !activePage && <SiteFooter navigate={navigate} />}
 
       {/* ── Worksheet Content ── */}
       {ActiveComponent && (

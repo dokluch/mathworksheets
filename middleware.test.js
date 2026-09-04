@@ -57,6 +57,8 @@ describe('known routes', () => {
     expect(res.headers.get('x-rewrite-to')).toBe(`${BASE}/index.md`)
     res = middleware(req('/developers/', 'text/markdown;q=0.9, text/html;q=0.1'))
     expect(res.headers.get('x-rewrite-to')).toBe(`${BASE}/developers.md`)
+    res = middleware(req('/privacy', 'text/markdown'))
+    expect(res.headers.get('x-rewrite-to')).toBe(`${BASE}/privacy.md`)
   })
 
   it('q-values are honoured', () => {

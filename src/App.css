@@ -398,35 +398,68 @@
 }
 
 /* =============================================
-   GITHUB LINK
+   SITE FOOTER (About · Privacy · Terms · GitHub)
    ============================================= */
 
-.github-link {
-  display: inline-flex;
+.site-footer {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 6px;
-  margin-top: auto;
-  padding: 6px 12px 24px;
+  padding: 20px 16px 28px;
   font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.site-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px 14px;
+}
+
+.site-footer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 4px;
   color: var(--color-text-muted);
   text-decoration: none;
   border-radius: var(--radius);
   transition: color 0.15s;
 }
 
-.github-link:hover {
+.site-footer-links a:hover {
   color: var(--color-text);
 }
 
-.github-link--sidebar {
-  margin: auto 0 4px;
-  padding: 8px;
-  justify-content: center;
+.site-footer-legal {
+  text-align: center;
+  font-size: 12px;
+}
+
+.site-footer-legal a {
+  color: inherit;
+}
+
+/* Compact form at the bottom of the worksheet sidebar */
+.site-footer--sidebar {
+  margin-top: auto;
+  padding: 12px 8px 4px;
+  font-size: 12px;
+}
+
+.site-footer--sidebar .site-footer-links {
+  gap: 0 8px;
 }
 
 @media (max-width: 768px) {
-  .github-link--sidebar {
+  .site-footer--sidebar {
     display: none;
+  }
+  .site-footer-links a {
+    min-height: 44px;
+    padding: 6px 8px;
   }
 }
 
@@ -457,25 +490,48 @@ a.back-btn {
   text-decoration: none;
 }
 
-/* No-JS fallback content (removed before React mounts) */
-#static-content .static-intro,
-#static-content h2,
-#static-content ol,
-#static-content ul,
-#static-content nav[aria-label="Breadcrumb"],
-#static-content > main > p {
+/* Static pages (About, Privacy, Terms, Developers) and the no-JS fallback
+   content share this typography; React renders the same HTML string. */
+.static-page .static-intro,
+.static-page h2,
+.static-page ol,
+.static-page ul,
+.static-page nav[aria-label="Breadcrumb"],
+.static-page > p {
   width: 100%;
   max-width: 680px;
   color: var(--color-text-muted);
   line-height: 1.6;
 }
 
-#static-content h2 {
+.static-page nav[aria-label="Breadcrumb"] {
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.static-page h2 {
   color: var(--color-text);
   font-size: 18px;
   margin: 28px 0 8px;
 }
 
-#static-content .catalog-grid {
+.static-page > p {
+  margin-bottom: 12px;
+}
+
+.static-page ol,
+.static-page ul {
+  padding-left: 20px;
+}
+
+.static-page li {
+  margin: 4px 0;
+}
+
+.static-page a {
+  color: var(--color-primary);
+}
+
+.static-page .catalog-grid {
   margin-top: 8px;
 }

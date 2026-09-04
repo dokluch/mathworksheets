@@ -8,6 +8,7 @@
  * Exits 1 if any check fails. Read-only: only GET requests.
  */
 import { WORKSHEETS } from '../src/worksheets.js'
+import { PAGES } from '../src/pages.js'
 
 const base = (process.argv[2] || process.env.SITE_URL || 'https://mathworksheets-eight.vercel.app').replace(/\/+$/, '')
 
@@ -72,6 +73,7 @@ async function main() {
   record('GET / has exactly one <h1>', (home.text.match(/<h1\b/gi) || []).length === 1)
   record('GET / heading levels are sequential', headingsSequential(home.text))
   record('GET / has canonical + JSON-LD', /rel="canonical"/.test(home.text) && /application\/ld\+json/.test(home.text))
+  record('GET / has the site footer linking every static page', /class="site-footer/.test(home.text) && PAGES.every(p => home.text.includes(`href="/${p.slug}"`)))
   record('GET / HTML has Vary: Accept', /accept/i.test(home.headers.get('vary') || ''), `Vary: ${home.headers.get('vary')}`)
   record('GET / HTML has Link rel=alternate markdown', /rel="alternate"/.test(home.headers.get('link') || ''), `Link: ${home.headers.get('link')}`)
   await checkOgImage('/', home.text)
@@ -103,6 +105,10 @@ async function main() {
     ['/developers', /Developer Resources/],
     ['/favicon.svg', /^<svg/],
     ['/developers.md', /^# MathSheets Developer Resources/],
+    ...PAGES.flatMap(p => [
+      [`/${p.slug}`, new RegExp(`<title>${p.title} · MathSheets</title>`)],
+      [`/${p.slug}.md`, new RegExp(`^# ${p.title}`)],
+    ]),
     ['/sitemap.xml', /<urlset/],
     ['/robots.txt', /Sitemap: /],
   ]) {

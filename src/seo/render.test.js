@@ -1,9 +1,11 @@
 import { describe, it, expect } from 'vitest'
 import { WORKSHEETS } from '../worksheets.js'
-import { SITE_URL, BRAND } from './site.js'
+import { PAGES } from '../pages.js'
+import { SITE_URL, BRAND, OPERATOR, CONTACT_EMAIL, OG_IMAGE_PATH } from './site.js'
 import {
-  routes, findRoute, normalizePath, homeRoute, worksheetRoute, developersRoute,
-  renderHead, renderStaticContent, injectRoute, structuredData, pageTitle,
+  routes, findRoute, normalizePath, homeRoute, worksheetRoute, developersRoute, pageRoute,
+  renderHead, renderStaticContent, staticBody, footerHtml, siteFooterLinks, injectRoute, structuredData, pageTitle,
+  ogImagePath, inlineHtml, inlineMarkdown,
   renderMarkdown, renderLlmsTxt, renderLlmsFullTxt, renderSitemap, renderRobots,
   renderCatalogJson, renderNotFoundMarkdown, renderNotFoundHtml, buildSiteFiles,
 } from './render.js'
@@ -55,18 +57,37 @@ describe('catalog invariants', () => {
 })
 
 describe('routes', () => {
-  it('lists home, every worksheet and developers', () => {
+  it('lists home, every worksheet, developers and every static page', () => {
     const r = routes()
-    expect(r.length).toBe(WORKSHEETS.length + 2)
+    expect(r.length).toBe(WORKSHEETS.length + 2 + PAGES.length)
     expect(r[0].path).toBe('/')
-    expect(r.at(-1).path).toBe('/developers')
+    expect(r.map(x => x.path)).toContain('/developers')
+    expect(r.slice(-PAGES.length).map(x => x.path)).toEqual(['/about', '/privacy', '/terms'])
     expect(r.map(x => x.md)).toContain('/worksheets/multiplication.md')
+    expect(r.map(x => x.md)).toContain('/privacy.md')
+    expect(new Set(r.map(x => x.path)).size).toBe(r.length)
+  })
+
+  it('static pages have the fields the renderer needs', () => {
+    for (const p of PAGES) {
+      expect(p.slug).toMatch(/^[a-z0-9-]+$/)
+      expect(p.updated).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+      expect(new Date(p.updated).getTime()).toBeLessThanOrEqual(Date.now())
+      expect(p.description.length).toBeGreaterThan(40)
+      expect(p.sections.length).toBeGreaterThan(2)
+      for (const s of p.sections) expect((s.paragraphs?.length || 0) + (s.items?.length || 0)).toBeGreaterThan(0)
+    }
+    expect(PAGES.map(p => p.slug)).not.toContain('developers')
   })
 
   it('findRoute resolves known paths and rejects unknown ones', () => {
     expect(findRoute('/').kind).toBe('home')
     expect(findRoute('/index.html').kind).toBe('home')
     expect(findRoute('/developers/').kind).toBe('developers')
+    expect(findRoute('/about').kind).toBe('page')
+    expect(findRoute('/privacy/').page.slug).toBe('privacy')
+    expect(findRoute('/terms').path).toBe('/terms')
+    expect(findRoute('/privacy.md')).toBeNull()
     expect(findRoute('/worksheets/rounding').worksheet.id).toBe('rounding')
     expect(findRoute('/worksheets/rounding/').worksheet.id).toBe('rounding')
     expect(findRoute('/worksheets/nope')).toBeNull()
@@ -108,6 +129,25 @@ describe('renderHead', () => {
     expect(bc.itemListElement[1].item).toBe(`${SITE_URL}/worksheets/multiplication`)
   })
 
+  it('static pages get a WebPage with dateModified, breadcrumbs and the home OG image', () => {
+    for (const page of PAGES) {
+      const route = pageRoute(page)
+      const head = renderHead(route)
+      expect(pageTitle(route)).toBe(`${page.title} · ${BRAND}`)
+      expect(head).toContain(`<title>${page.title} · ${BRAND}</title>`)
+      expect(head).toContain(`<link rel="canonical" href="${SITE_URL}/${page.slug}" />`)
+      expect(head).toContain(`type="text/markdown" href="${SITE_URL}/${page.slug}.md"`)
+      expect(ogImagePath(route)).toBe(OG_IMAGE_PATH)
+      expect(head).toContain(`<meta property="og:image" content="${SITE_URL}${OG_IMAGE_PATH}" />`)
+      const sd = structuredData(route)
+      const wp = sd['@graph'].find(n => n['@type'] === 'WebPage')
+      expect(wp.dateModified).toBe(page.updated)
+      expect(wp.url).toBe(`${SITE_URL}/${page.slug}`)
+      const bc = sd['@graph'].find(n => n['@type'] === 'BreadcrumbList')
+      expect(bc.itemListElement.map(i => i.name)).toEqual([BRAND, page.navLabel])
+    }
+  })
+
   it('escapes HTML in attributes and never breaks out of the JSON-LD script', () => {
     const head = renderHead(developersRoute())
     expect(head).not.toMatch(/content="[^"]*<[^"]*"/)
@@ -147,6 +187,46 @@ describe('renderStaticContent', () => {
     expect(html).toContain('href="/worksheets.json"')
     expect(html).toContain('github.com/dokluch/mathworksheets')
     assertSequential(headingLevels(html))
+    expect(html).toContain(`<main class="catalog catalog--full static-page">\n      ${staticBody(developersRoute())}`)
+  })
+
+  it('each static page has one H1, sequential headings, a breadcrumb, its sections and the operator', () => {
+    for (const page of PAGES) {
+      const html = renderStaticContent(pageRoute(page))
+      expect((html.match(/<h1\b/g) || []).length).toBe(1)
+      expect(html).toContain(`<h1 class="catalog-title">${page.title}</h1>`)
+      assertSequential(headingLevels(html))
+      expect(textOf(html).length).toBeGreaterThanOrEqual(600)
+      expect(html).toContain(`<nav aria-label="Breadcrumb"><a href="/">${BRAND}</a>`)
+      expect(html).toContain('Last updated September 4, 2026')
+      for (const s of page.sections) expect(html).toContain(`<h2>${s.heading}</h2>`)
+      expect(textOf(html)).toContain(OPERATOR)
+      expect(html).toContain(`href="mailto:${CONTACT_EMAIL}"`)
+      expect(html).not.toContain('](')
+    }
+    expect(renderStaticContent(pageRoute(PAGES[0]))).toContain('href="/privacy"')
+  })
+
+  it('every kind of page carries the site footer with links to the static pages and GitHub', () => {
+    for (const route of routes()) {
+      const html = renderStaticContent(route)
+      expect(html.startsWith('<div id="static-content">')).toBe(true)
+      expect(html).toContain('<footer class="site-footer no-print">')
+      for (const p of PAGES) expect(html).toContain(`href="/${p.slug}"`)
+      expect(html).toContain('href="https://github.com/dokluch/mathworksheets"')
+      expect(html).toContain(OPERATOR)
+      expect(html).toContain('creativecommons.org/licenses/by-nc/4.0/')
+    }
+    expect(siteFooterLinks().map(l => l.label)).toEqual(['About', 'Privacy', 'Terms', 'GitHub'])
+    expect(footerHtml({ year: 2030 })).toContain('© 2030 ')
+    expect(headingLevels(footerHtml())).toEqual([])
+  })
+
+  it('inline helpers escape HTML and turn [label](url) into links', () => {
+    expect(inlineHtml('a <b> & [Docs](/developers) or [X](https://x.test/p)'))
+      .toBe('a &lt;b&gt; &amp; <a href="/developers">Docs</a> or <a href="https://x.test/p" rel="noopener">X</a>')
+    expect(inlineMarkdown('[Docs](/developers) and [X](https://x.test/p)'))
+      .toBe(`[Docs](${SITE_URL}/developers) and [X](https://x.test/p)`)
   })
 })
 
@@ -181,6 +261,19 @@ describe('markdown twins', () => {
       expect((md.match(/^# /gm) || []).length).toBe(1)
       expect(md).toContain(`](${SITE_URL}/`)
       expect(md).not.toContain('](/')
+    }
+  })
+
+  it('static page markdown carries the sections, the date and links to the other pages', () => {
+    for (const page of PAGES) {
+      const md = renderMarkdown(pageRoute(page))
+      expect(md.startsWith(`# ${page.title}\n\n> `)).toBe(true)
+      expect(md).toContain('**Last updated:** September 4, 2026')
+      for (const s of page.sections) expect(md).toContain(`\n## ${s.heading}\n`)
+      expect(md).toContain(OPERATOR)
+      expect(md).toContain(`mailto:${CONTACT_EMAIL}`)
+      expect(md).toContain(`${SITE_URL}/index.md`)
+      for (const other of PAGES.filter(p => p !== page)) expect(md).toContain(`](${SITE_URL}/${other.slug}.md)`)
     }
   })
 
@@ -220,6 +313,11 @@ describe('llms.txt (llmstxt.org format)', () => {
     expect(txt).toContain(`${SITE_URL}/llms-full.txt`)
     expect(txt).toContain(`${SITE_URL}/worksheets.json`)
   })
+
+  it('files the static pages under Optional', () => {
+    const optional = txt.split(/^## Optional/m)[1]
+    for (const p of PAGES) expect(optional).toContain(`- [${p.title}](${SITE_URL}/${p.slug}.md): `)
+  })
 })
 
 describe('llms-full.txt', () => {
@@ -243,6 +341,7 @@ describe('sitemap / robots / catalog', () => {
     expect(new Set(locs).size).toBe(locs.length)
     expect(xml).toContain('<lastmod>2026-09-04</lastmod>')
     expect(xml).not.toContain('.md</loc>')
+    expect(xml).toMatch(new RegExp(`<loc>${SITE_URL}/privacy</loc>\\s*<lastmod>[^<]+</lastmod>\\s*<changefreq>monthly</changefreq>\\s*<priority>0.3</priority>`))
   })
 
   it('robots allows everyone, names AI crawlers and points at the sitemap', () => {
@@ -268,6 +367,7 @@ describe('sitemap / robots / catalog', () => {
       interactive: false,
     })
     expect(json.worksheets.find(w => w.id === 'eqexplore').printable).toBe(false)
+    expect(json.pages).toEqual({ about: `${SITE_URL}/about`, privacy: `${SITE_URL}/privacy`, terms: `${SITE_URL}/terms` })
   })
 })
 
@@ -280,6 +380,7 @@ describe('404 bodies', () => {
     expect(md).toContain(`${SITE_URL}/sitemap.xml`)
     expect(md).toContain(`${SITE_URL}/llms.txt`)
     expect(md).toContain(`${SITE_URL}/worksheets/multiplication`)
+    expect(md).toContain(`[Privacy Policy](${SITE_URL}/privacy)`)
   })
 
   it('html 404 is a standalone noindex document with the same links and escapes the path', () => {
@@ -298,6 +399,7 @@ describe('buildSiteFiles', () => {
     const names = Object.keys(files)
     expect(names).toEqual(expect.arrayContaining([
       'index.html', 'index.md', 'developers.html', 'developers.md',
+      'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md',
       'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', '404.html',
       ...WORKSHEETS.flatMap(w => [`worksheets/${w.slug}.html`, `worksheets/${w.slug}.md`]),
     ]))

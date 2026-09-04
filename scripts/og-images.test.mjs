@@ -4,12 +4,14 @@ import { resolve } from 'node:path'
 import { ogTargets, renderCard, previewSelector, OUT_DIR, ICONS } from './og-images.mjs'
 import { WORKSHEETS } from '../src/worksheets.js'
 import { routes, ogImagePath } from '../src/seo/render.js'
+import { OG_IMAGE_PATH } from '../src/seo/site.js'
 
 describe('scripts/og-images.mjs', () => {
-  it('has one target per route, mapped to the path renderHead links to', () => {
+  it('has one target per route (static pages share the home card), mapped to the path renderHead links to', () => {
     const targets = ogTargets()
     expect(targets.length).toBe(WORKSHEETS.length + 2)
-    for (const route of routes()) {
+    for (const route of routes().filter(r => r.kind === 'page')) expect(ogImagePath(route)).toBe(OG_IMAGE_PATH)
+    for (const route of routes().filter(r => r.kind !== 'page')) {
       const t = targets.find(x => x.route.path === route.path)
       expect(t, route.path).toBeTruthy()
       expect('/' + t.file).toBe(ogImagePath(route))
