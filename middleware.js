@@ -17,11 +17,12 @@ import { negotiate } from './src/seo/negotiate.js'
 import { findRoute, normalizePath, renderNotFoundMarkdown, renderNotFoundHtml } from './src/seo/render.js'
 import { absoluteUrl } from './src/seo/site.js'
 
-export const MATCHER = '/((?!assets/|.*\\..*).*)'
-
+// Vercel statically evaluates this export: keep the matcher an inline literal.
 export const config = {
-  matcher: [MATCHER],
+  matcher: ['/((?!assets/|.*\\..*).*)'],
 }
+
+export const MATCHER = config.matcher[0]
 
 const MARKDOWN = 'text/markdown; charset=utf-8'
 const HTML = 'text/html; charset=utf-8'
