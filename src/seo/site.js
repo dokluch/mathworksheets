@@ -18,7 +18,7 @@ export const AUTHOR = { name: 'dokluch', url: 'https://github.com/dokluch' }
 export const GITHUB_URL = 'https://github.com/dokluch/mathworksheets'
 export const LICENSE_URL = 'https://creativecommons.org/licenses/by-nc/4.0/'
 export const LICENSE_NAME = 'CC BY-NC 4.0'
-export const OG_IMAGE_PATH = '/og-image.jpg'
+export const OG_IMAGE_PATH = '/og/home.png'
 export const THEME_COLOR = '#2563eb'
 
 export function absoluteUrl(path = '/') {

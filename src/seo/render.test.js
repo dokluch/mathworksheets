@@ -82,7 +82,7 @@ describe('renderHead', () => {
     expect(head).toContain(`<title>${BRAND} – Printable Math Worksheets for Grades 1–3</title>`)
     expect(head).toContain(`<link rel="canonical" href="${SITE_URL}/" />`)
     expect(head).toContain(`<meta property="og:url" content="${SITE_URL}/" />`)
-    expect(head).toContain(`<meta property="og:image" content="${SITE_URL}/og-image.jpg" />`)
+    expect(head).toContain(`<meta property="og:image" content="${SITE_URL}/og/home.png" />`)
     expect(head).toContain(`<meta property="og:site_name" content="${BRAND}" />`)
     expect(head).toContain(`type="text/markdown" href="${SITE_URL}/index.md"`)
     expect(head).toContain('<meta name="robots" content="index, follow')
@@ -120,7 +120,8 @@ describe('renderStaticContent', () => {
     const html = renderStaticContent(homeRoute())
     expect(textOf(html).length).toBeGreaterThanOrEqual(500)
     expect((html.match(/<h1\b/g) || []).length).toBe(1)
-    expect(html).toContain(`<h1 class="catalog-title">${BRAND} – Printable Math Worksheets for Grades 1–3</h1>`)
+    // The H1 carries the brand icon (inline SVG, aria-hidden) followed by the brand text.
+    expect(html).toMatch(new RegExp(`<h1 class="catalog-title"><svg [^>]*aria-hidden="true"[^>]*>[\\s\\S]*?</svg>${BRAND} – Printable Math Worksheets for Grades 1–3</h1>`))
     assertSequential(headingLevels(html))
     for (const ws of WORKSHEETS) expect(html).toContain(`href="/worksheets/${ws.slug}"`)
     expect(html).toContain('href="/llms.txt"')

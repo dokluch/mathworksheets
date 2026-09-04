@@ -16,7 +16,8 @@ randomized math worksheets for grades 1–3 client-side. Live site: https://math
 | `npm test` | Vitest (unit + jsdom component tests) |
 | `npm run lint` | ESLint (must be clean) |
 | `npm run build` | `vite build` then `scripts/prerender.mjs` writes per-route HTML, Markdown twins, `llms.txt`, `llms-full.txt`, `sitemap.xml`, `robots.txt`, `worksheets.json`, `404.html` into `dist/` |
-| `npm run verify:live -- <url>` | Post-deploy smoke test of every public SEO/agent surface |
+| `npm run verify:live -- <url>` | Post-deploy smoke test of every public SEO/agent surface (including each page's `og:image`) |
+| `npm run og` | Regenerate `public/og/*.png` Open Graph previews from the running app with Playwright (`npm run og -- <slug>` for one page; needs `npx playwright install chromium` once) |
 
 Node 24, npm 11. No TypeScript.
 
@@ -33,19 +34,22 @@ Node 24, npm 11. No TypeScript.
 - `src/lib/analytics.js` — GA4 via gtag with Consent Mode v2 (denied by default); no-op unless `VITE_GA_MEASUREMENT_ID` is set.
 - `vite.config.js` — `seoHtml()` plugin injects home metadata/static content between the `<!-- seo:head -->` / `<!-- seo:content -->` markers in `index.html`; also holds the Vitest config.
 - `scripts/prerender.mjs`, `scripts/verify-live.mjs` — build and verification scripts.
+- `scripts/og-images.mjs` — screenshots every page's preview element in headless Chromium and composes the 1200×630 `public/og/<slug>.png` cards (`ogImagePath()` in `render.js` links to them). Images are committed, not built on Vercel; `Math.random` is seeded per page so reruns are reproducible.
 
 ## Adding a worksheet
 
 1. Append an entry to `src/worksheets.js` (unique `id` and `slug`, `longDesc` ≥ 80 chars, at least one skill and one setting).
 2. Create `src/components/<Name>.jsx` (+ `.css`), using `usePersistedState('<id>', …)` for settings and calling `trackEvent('regenerate_worksheet', { worksheet_id: '<id>' })` in the Regenerate handler.
 3. Register it in `COMPONENTS` and `ICONS` in `src/App.jsx`.
-4. `npm test && npm run lint && npm run build`. Static pages, Markdown, sitemap, llms.txt and `worksheets.json` regenerate automatically.
+4. `npm run og -- <slug>` to generate its `public/og/<slug>.png` preview (a test fails while it is missing).
+5. `npm test && npm run lint && npm run build`. Static pages, Markdown, sitemap, llms.txt and `worksheets.json` regenerate automatically.
 
 ## Invariants (tests enforce these)
 
 - Home HTML without JavaScript has ≥ 500 characters of text, exactly one `<h1>`, sequential heading levels, and a link to every worksheet.
 - `llms.txt` follows llmstxt.org: `# MathSheets`, a `>` blockquote, then `## Worksheets`, `## Developers`, `## Optional` lists of `- [title](absolute url): notes`.
 - Every page URL has a `.md` twin and is listed once in `sitemap.xml`.
+- Every page has a committed 1200×630 PNG under `public/og/` that its `og:image` points to.
 - Unknown extensionless paths return HTTP 404 with a Markdown body (HTML for browsers).
 - `npm run lint` and `npm test` stay green; keep existing visual design and print behaviour.
 

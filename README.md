@@ -31,6 +31,7 @@ npm run dev      # http://localhost:5176
 npm test         # vitest
 npm run lint
 npm run build    # vite build + scripts/prerender.mjs (static pages, Markdown, sitemap, llms.txt …)
+npm run og       # regenerate public/og/*.png social previews with Playwright (npx playwright install chromium once)
 ```
 
 Optional environment (see `.env.example`): `VITE_GA_MEASUREMENT_ID` enables GA4 (Consent Mode v2, cookieless by default); `VITE_SITE_URL` sets the canonical origin.

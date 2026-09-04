@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "verify:live": "node scripts/verify-live.mjs",
-    "serve:local": "node scripts/serve-local.mjs"
+    "serve:local": "node scripts/serve-local.mjs",
+    "og": "node scripts/og-images.mjs"
   },
   "dependencies": {
     "@tabler/icons-react": "^3.40.0",
@@ -31,6 +32,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
     "jsdom": "^30.0.1",
+    "playwright": "^1.62.1",
     "vite": "^8.0.1",
     "vitest": "^5.0.0"
   }

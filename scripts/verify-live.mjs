@@ -23,6 +23,25 @@ async function get(path, headers = {}) {
   return { status: res.status, headers: res.headers, text }
 }
 
+/** GET a binary asset; returns status, content-type and the first bytes. */
+async function head(path) {
+  const res = await fetch(base + path, { redirect: 'manual' })
+  const buf = new Uint8Array(await res.arrayBuffer())
+  return { status: res.status, type: res.headers.get('content-type') || '', bytes: buf }
+}
+
+function isPng(bytes) {
+  return bytes.length > 8 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47
+}
+
+async function checkOgImage(pagePath, html) {
+  const m = html.match(/<meta property="og:image" content="(https?:\/\/[^"]+)"/)
+  if (!m) return record(`${pagePath} has an absolute og:image`, false, 'missing')
+  const path = new URL(m[1]).pathname
+  const img = await head(path)
+  record(`GET ${path} (og:image of ${pagePath}) → 200 image/png`, img.status === 200 && /^image\/png/.test(img.type) && isPng(img.bytes), `${img.status} ${img.type} ${img.bytes.length}B`)
+}
+
 function textLength(html) {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, '')
@@ -55,6 +74,7 @@ async function main() {
   record('GET / has canonical + JSON-LD', /rel="canonical"/.test(home.text) && /application\/ld\+json/.test(home.text))
   record('GET / HTML has Vary: Accept', /accept/i.test(home.headers.get('vary') || ''), `Vary: ${home.headers.get('vary')}`)
   record('GET / HTML has Link rel=alternate markdown', /rel="alternate"/.test(home.headers.get('link') || ''), `Link: ${home.headers.get('link')}`)
+  await checkOgImage('/', home.text)
 
   // 2. Markdown negotiation
   const md = await get('/', { accept: 'text/markdown' })
@@ -70,6 +90,7 @@ async function main() {
     const p = `/worksheets/${ws.slug}`
     const r = await get(p, { accept: 'text/html' })
     record(`GET ${p} → 200 with title`, r.status === 200 && r.text.includes(`${ws.label} Worksheets`), String(r.status))
+    await checkOgImage(p, r.text)
     const m = await get(`${p}.md`)
     record(`GET ${p}.md → 200 text/markdown`, m.status === 200 && /^text\/markdown/.test(m.headers.get('content-type') || ''), `${m.status} ${m.headers.get('content-type')}`)
   }
@@ -80,12 +101,17 @@ async function main() {
     ['/llms-full.txt', /^# MathSheets/],
     ['/index.md', /^# MathSheets/],
     ['/developers', /Developer Resources/],
+    ['/favicon.svg', /^<svg/],
     ['/developers.md', /^# MathSheets Developer Resources/],
     ['/sitemap.xml', /<urlset/],
     ['/robots.txt', /Sitemap: /],
   ]) {
     const r = await get(path)
     record(`GET ${path} → 200 and looks right`, r.status === 200 && re.test(r.text.trimStart()), String(r.status))
+  }
+  for (const path of ['/og/developers.png', '/favicon.png', '/apple-touch-icon.png']) {
+    const img = await head(path)
+    record(`GET ${path} → 200 image/png`, img.status === 200 && /^image\/png/.test(img.type) && isPng(img.bytes), `${img.status} ${img.type}`)
   }
   const cat = await get('/worksheets.json')
   let catOk = false
