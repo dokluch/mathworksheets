@@ -101,3 +101,117 @@
     background: none;
   }
 }
+
+/* ── Notebook layout ──
+   Driven by useNotebookGrid(): every box below is a whole number of squares
+   (--nb-sq), so digits sit dead centre in the background squares and the
+   rules fall exactly on grid lines, on screen and in print. */
+.worksheet.colarith-notebook {
+  --nb-sq: var(--nb-sq-screen);
+  --nb-gap: var(--nb-gap-screen);
+  --nb-offset: var(--nb-offset-screen);
+  --notebook-grid-size: var(--nb-sq);
+  padding: var(--nb-sq);
+  overflow-x: auto;
+}
+
+/* Solid band over the top of the sheet (top padding + 2 squares) so the title is not drawn over squares. */
+.colarith-notebook .worksheet-header {
+  display: flex;
+  align-items: center;
+  height: calc(3 * var(--nb-sq));
+  margin: calc(-1 * var(--nb-sq)) calc(-1 * var(--nb-sq)) var(--nb-sq);
+  padding: 0 var(--nb-sq);
+  border-bottom-width: 2px;
+  background: var(--color-surface);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.colarith-notebook .colarith-grid {
+  grid-template-columns: repeat(var(--nb-cols), calc(var(--nb-cell-w) * var(--nb-sq)));
+  column-gap: calc(var(--nb-gap) * var(--nb-sq));
+  row-gap: var(--nb-sq);
+  justify-content: start;
+  margin-left: calc(var(--nb-offset) * var(--nb-sq));
+}
+
+/* One spare square above each problem for carries; the grid itself separates problems. */
+.colarith-notebook .colarith-item {
+  height: calc((var(--nb-rows) + 1) * var(--nb-sq));
+  min-height: 0;
+  padding: 0;
+  border: none;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.colarith-notebook .colarith-problem {
+  --colarith-cell-size: var(--nb-sq);
+  --colarith-cell-gap: 0px;
+  min-width: 0;
+  font-size: calc(var(--nb-sq) * 0.77);
+}
+
+.colarith-notebook .colarith-row {
+  height: var(--nb-sq);
+  min-height: 0;
+}
+
+.colarith-notebook .colarith-op {
+  width: var(--nb-sq);
+  height: var(--nb-sq);
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--nb-sq) * 0.9);
+}
+
+/* Rules take no vertical space: they are painted over the grid line between two rows. */
+.colarith-notebook .colarith-line {
+  position: relative;
+  height: 0;
+  margin: 0;
+  border: none;
+}
+
+.colarith-notebook .colarith-line::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 2px;
+  background: var(--color-text);
+}
+
+.colarith-notebook .colarith-blank {
+  width: calc(var(--nb-sq) - 6px);
+  height: calc(var(--nb-sq) - 6px);
+}
+
+@media (max-width: 768px) {
+  .colarith-notebook .worksheet-header {
+    height: calc(4 * var(--nb-sq));
+  }
+}
+
+@media print {
+  .worksheet.colarith-notebook {
+    --nb-sq: var(--nb-sq-print);
+    --nb-gap: var(--nb-gap-print);
+    --nb-offset: var(--nb-offset-print);
+    padding: var(--nb-sq);
+    overflow: visible;
+  }
+
+  .colarith-notebook .worksheet-header {
+    height: calc(3 * var(--nb-sq));
+    background: #fff;
+  }
+
+  .colarith-notebook .colarith-line::before {
+    background: #333;
+  }
+}

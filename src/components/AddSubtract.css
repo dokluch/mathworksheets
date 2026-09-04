@@ -189,23 +189,31 @@
   box-shadow: var(--shadow-md);
 }
 
+/*
+ * Squared "notebook" background. Each tile is exactly --notebook-grid-size
+ * wide and tall, with a 1px rule along its right and bottom edge, anchored
+ * at the padding box so content laid out in whole squares lands in the cells.
+ */
 .notebook-grid-bg {
   background-color: var(--color-surface);
   background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
-      var(--notebook-grid-line-color) calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
-      var(--notebook-grid-line-color) var(--notebook-grid-size)
+    linear-gradient(
+      to right,
+      transparent calc(100% - var(--notebook-grid-line-width)),
+      var(--notebook-grid-line-color) calc(100% - var(--notebook-grid-line-width))
     ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
-      var(--notebook-grid-line-color) calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
-      var(--notebook-grid-line-color) var(--notebook-grid-size)
+    linear-gradient(
+      to bottom,
+      transparent calc(100% - var(--notebook-grid-line-width)),
+      var(--notebook-grid-line-color) calc(100% - var(--notebook-grid-line-width))
     );
+  background-size: var(--notebook-grid-size) var(--notebook-grid-size);
+  background-origin: padding-box;
+  background-position: 0 0;
+  background-repeat: repeat;
+  /* Browsers drop backgrounds when printing unless told otherwise. */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .worksheet-header {
@@ -341,19 +349,15 @@
 
   .notebook-grid-bg {
     background-image:
-      repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
-        var(--notebook-grid-line-color-print) calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
-        var(--notebook-grid-line-color-print) var(--notebook-grid-size)
+      linear-gradient(
+        to right,
+        transparent calc(100% - var(--notebook-grid-line-width)),
+        var(--notebook-grid-line-color-print) calc(100% - var(--notebook-grid-line-width))
       ),
-      repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
-        var(--notebook-grid-line-color-print) calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
-        var(--notebook-grid-line-color-print) var(--notebook-grid-size)
+      linear-gradient(
+        to bottom,
+        transparent calc(100% - var(--notebook-grid-line-width)),
+        var(--notebook-grid-line-color-print) calc(100% - var(--notebook-grid-line-width))
       );
   }
 

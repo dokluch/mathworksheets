@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
+import { useNotebookGrid } from '../hooks/useNotebookGrid'
 import { trackEvent } from '../lib/analytics'
 import './ColumnAddition.css'
 
@@ -66,9 +67,8 @@ function renderDigitRow({ value, width, className = '', shift = 0, blank = false
   )
 }
 
-function renderProblem(problem) {
-  const width = String(problem.sum).length
-
+// Every problem uses digits + 1 columns (room for a final carry) so columns line up on the grid.
+function renderProblem(problem, width) {
   return (
     <div className="colarith-problem" aria-label={`${problem.a} + ${problem.b}`}>
       <div className="colarith-row">
@@ -98,6 +98,9 @@ export default function ColumnAddition() {
   const [seed, setSeed] = useState(0)
 
   const problemCount = columns === 2 ? 16 : columns === 3 ? 21 : 28
+  const width = digits + 1
+  // Rows: two addends and the sum.
+  const [sheetRef, sheetStyle] = useNotebookGrid({ columns, cellsWide: width + 1, rows: 3 })
 
   const problems = useMemo(() => {
     void seed
@@ -165,8 +168,9 @@ export default function ColumnAddition() {
       </div>
 
       <div
-        className={`worksheet notebook-grid-bg print-area cols-${columns}`}
-        style={{ '--notebook-grid-size': '26px' }}
+        ref={sheetRef}
+        className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${columns}`}
+        style={sheetStyle}
       >
         <div className="worksheet-header">
           <div className="ws-title">
@@ -177,13 +181,10 @@ export default function ColumnAddition() {
           </div>
         </div>
 
-        <div
-          className="colarith-grid"
-          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-        >
+        <div className="colarith-grid">
           {problems.map((problem, idx) => (
             <div key={idx} className="colarith-item">
-              {renderProblem(problem)}
+              {renderProblem(problem, width)}
             </div>
           ))}
         </div>

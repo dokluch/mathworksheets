@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
+import { useNotebookGrid } from '../hooks/useNotebookGrid'
 import { trackEvent } from '../lib/analytics'
 import './ColumnMultiplication.css'
 
@@ -63,10 +64,14 @@ function renderDigitRow({ value, width, shift = 0, blank = false, className = ''
   )
 }
 
-function renderProblem(problem) {
-  const widestPartial = Math.max(...problem.partialProducts.map(p => String(p.value).length + p.shift))
-  const width = Math.max(String(problem.product).length, String(problem.a).length, String(problem.b).length, widestPartial)
+// Every problem of a preset is laid out on the same number of digit columns
+// (a product of an m-digit by an n-digit number has at most m + n digits, and
+// so does the widest shifted partial product), so columns line up on the grid.
+function digitColumns(aDigits, bDigits) {
+  return aDigits + bDigits
+}
 
+function renderProblem(problem, width) {
   return (
     <div className="colarith-problem" aria-label={`${problem.a} times ${problem.b}`}>
       <div className="colarith-row">
@@ -82,13 +87,13 @@ function renderProblem(problem) {
       <div className="colarith-line" />
 
       {problem.partialProducts.map((partial, idx) => (
-        <div key={idx} className="colarith-row colarith-partial-row">
+        <div key={idx} className="colarith-row">
           <span className="colarith-op" aria-hidden="true" />
           {renderDigitRow({ value: partial.value, width, shift: partial.shift, blank: true })}
         </div>
       ))}
 
-      <div className="colarith-line colarith-line-final" />
+      <div className="colarith-line" />
 
       <div className="colarith-row">
         <span className="colarith-op" aria-hidden="true" />
@@ -105,15 +110,20 @@ export default function ColumnMultiplication() {
 
   const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[1]
   const problemCount = columns === 2 ? 12 : columns === 3 ? 15 : 18
+  const { aDigits, bDigits } = activePreset
 
   const problems = useMemo(() => {
     void seed
     const items = []
     for (let i = 0; i < problemCount; i++) {
-      items.push(generateProblem(activePreset.aDigits, activePreset.bDigits))
+      items.push(generateProblem(aDigits, bDigits))
     }
     return items
-  }, [activePreset.aDigits, activePreset.bDigits, problemCount, seed])
+  }, [aDigits, bDigits, problemCount, seed])
+
+  const width = digitColumns(aDigits, bDigits)
+  // Rows: multiplicand, multiplier, one partial product per multiplier digit, product.
+  const [sheetRef, sheetStyle] = useNotebookGrid({ columns, cellsWide: width + 1, rows: 3 + bDigits })
 
   return (
     <div className="tool-panel">
@@ -161,8 +171,9 @@ export default function ColumnMultiplication() {
       </div>
 
       <div
-        className={`worksheet notebook-grid-bg print-area cols-${columns}`}
-        style={{ '--notebook-grid-size': '26px' }}
+        ref={sheetRef}
+        className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${columns}`}
+        style={sheetStyle}
       >
         <div className="worksheet-header">
           <div className="ws-title">
@@ -173,13 +184,10 @@ export default function ColumnMultiplication() {
           </div>
         </div>
 
-        <div
-          className="colarith-grid"
-          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-        >
+        <div className="colarith-grid">
           {problems.map((problem, idx) => (
-            <div key={idx} className="colarith-item colarith-item-tall">
-              {renderProblem(problem)}
+            <div key={idx} className="colarith-item">
+              {renderProblem(problem, width)}
             </div>
           ))}
         </div>
