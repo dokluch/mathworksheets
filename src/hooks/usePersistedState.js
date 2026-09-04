@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 
 const STORAGE_KEY = 'mathsheets'
 
@@ -33,4 +33,10 @@ export function usePersistedState(tabId, key, defaultValue) {
   }, [tabId, key, value])
 
   return [value, setValue]
+}
+
+/** Read one tab's persisted settings without subscribing (used for analytics). */
+export function getPersistedTab(tabId) {
+  const all = loadState()
+  return all[tabId] ? { ...all[tabId] } : {}
 }

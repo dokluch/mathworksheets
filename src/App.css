@@ -449,3 +449,33 @@
     overflow: visible;
   }
 }
+
+/* Catalog cards and the back button are links now (deep-linkable); keep button styling. */
+a.catalog-card,
+a.back-btn {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* No-JS fallback content (removed before React mounts) */
+#static-content .static-intro,
+#static-content h2,
+#static-content ol,
+#static-content ul,
+#static-content nav[aria-label="Breadcrumb"],
+#static-content > main > p {
+  width: 100%;
+  max-width: 680px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+#static-content h2 {
+  color: var(--color-text);
+  font-size: 18px;
+  margin: 28px 0 8px;
+}
+
+#static-content .catalog-grid {
+  margin-top: 8px;
+}

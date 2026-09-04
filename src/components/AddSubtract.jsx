@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
+import { trackEvent } from '../lib/analytics'
 import './AddSubtract.css'
 
 const PRESETS = [
@@ -257,7 +258,7 @@ export default function AddSubtract() {
         </div>
 
         <div className="control-actions">
-          <button className="btn btn-primary" onClick={() => setSeed(s => s + 1)}>
+          <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'addsub' }); setSeed(s => s + 1) }}>
             <IconRefresh size={16} stroke={2} /> Regenerate
           </button>
           {problems && (

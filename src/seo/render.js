@@ -1,0 +1,717 @@
+/**
+ * Pure string renderers for everything a crawler or agent can fetch without
+ * JavaScript: <head> metadata, static HTML content, Markdown twins, llms.txt,
+ * sitemap, robots, the machine-readable catalog and the 404 bodies.
+ *
+ * No DOM, no React, no Node APIs: this file runs in the Vite config, the
+ * prerender script, the Vercel edge middleware and in tests.
+ */
+import { WORKSHEETS, findWorksheetBySlug } from '../worksheets.js'
+import {
+  SITE_URL, BRAND, BRAND_ALT, TAGLINE, DESCRIPTION, AUTHOR, GITHUB_URL,
+  LICENSE_URL, LICENSE_NAME, OG_IMAGE_PATH, THEME_COLOR, absoluteUrl,
+} from './site.js'
+
+export const HEAD_START = '<!-- seo:head -->'
+export const HEAD_END = '<!-- /seo:head -->'
+export const CONTENT_START = '<!-- seo:content -->'
+export const CONTENT_END = '<!-- /seo:content -->'
+
+/* ────────────────────────────── routes ────────────────────────────── */
+
+export function homeRoute() {
+  return { kind: 'home', path: '/', md: '/index.md', html: 'index.html', mdFile: 'index.md' }
+}
+
+export function worksheetRoute(ws) {
+  return {
+    kind: 'worksheet',
+    worksheet: ws,
+    path: `/worksheets/${ws.slug}`,
+    md: `/worksheets/${ws.slug}.md`,
+    html: `worksheets/${ws.slug}.html`,
+    mdFile: `worksheets/${ws.slug}.md`,
+  }
+}
+
+export function developersRoute() {
+  return { kind: 'developers', path: '/developers', md: '/developers.md', html: 'developers.html', mdFile: 'developers.md' }
+}
+
+export function routes() {
+  return [homeRoute(), ...WORKSHEETS.map(worksheetRoute), developersRoute()]
+}
+
+/** Normalise a pathname (strip trailing slash, collapse `/index`). */
+export function normalizePath(pathname) {
+  let p = pathname || '/'
+  try { p = decodeURIComponent(p) } catch { /* keep raw */ }
+  if (p.length > 1) p = p.replace(/\/+$/, '')
+  if (p === '' || p === '/index' || p === '/index.html') p = '/'
+  return p
+}
+
+export function findRoute(pathname) {
+  const p = normalizePath(pathname)
+  if (p === '/') return homeRoute()
+  if (p === '/developers') return developersRoute()
+  const m = p.match(/^\/worksheets\/([a-z0-9-]+)$/)
+  if (m) {
+    const ws = findWorksheetBySlug(m[1])
+    return ws ? worksheetRoute(ws) : null
+  }
+  return null
+}
+
+/* ────────────────────────────── helpers ────────────────────────────── */
+
+export function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+function attr(s) {
+  return escapeHtml(s)
+}
+
+function jsonLd(obj) {
+  // "</" must not appear inside a <script> element.
+  return `<script type="application/ld+json">${JSON.stringify(obj).replace(/<\//g, '<\\/')}</script>`
+}
+
+export function pageTitle(route) {
+  if (route.kind === 'home') return `${BRAND} – ${TAGLINE}`
+  if (route.kind === 'developers') return `Developer Resources · ${BRAND}`
+  return `${route.worksheet.label} Worksheets · ${BRAND}`
+}
+
+export function pageDescription(route) {
+  if (route.kind === 'home') return DESCRIPTION
+  if (route.kind === 'developers') {
+    return `${BRAND} developer resources: open-source repository, worksheet catalog JSON, Markdown content negotiation, llms.txt and sitemap.`
+  }
+  const ws = route.worksheet
+  return `Free printable ${ws.label.toLowerCase()} worksheets for grades ${ws.grades}. ${ws.shortDesc}. Randomized every time, prints on one page.`
+}
+
+function gradeLevelText(ws) {
+  return ws.grades.includes('–') ? `Grades ${ws.grades}` : `Grade ${ws.grades}`
+}
+
+/* ────────────────────────────── JSON-LD ────────────────────────────── */
+
+const WEBSITE_ID = `${SITE_URL}/#website`
+const AUTHOR_ID = `${SITE_URL}/#author`
+
+function authorNode() {
+  return { '@type': 'Person', '@id': AUTHOR_ID, name: AUTHOR.name, url: AUTHOR.url }
+}
+
+function websiteNode() {
+  return {
+    '@type': 'WebSite',
+    '@id': WEBSITE_ID,
+    url: `${SITE_URL}/`,
+    name: BRAND,
+    alternateName: [BRAND_ALT, `${BRAND} – ${TAGLINE}`],
+    description: DESCRIPTION,
+    inLanguage: 'en',
+    publisher: { '@id': AUTHOR_ID },
+  }
+}
+
+export function structuredData(route) {
+  if (route.kind === 'home') {
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        websiteNode(),
+        authorNode(),
+        {
+          '@type': 'WebApplication',
+          '@id': `${SITE_URL}/#app`,
+          name: BRAND,
+          alternateName: BRAND_ALT,
+          url: `${SITE_URL}/`,
+          description: DESCRIPTION,
+          applicationCategory: 'EducationalApplication',
+          operatingSystem: 'Any (web browser)',
+          browserRequirements: 'Requires JavaScript to generate and print worksheets',
+          isAccessibleForFree: true,
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+          license: LICENSE_URL,
+          author: { '@id': AUTHOR_ID },
+          screenshot: absoluteUrl(OG_IMAGE_PATH),
+          featureList: WORKSHEETS.map(w => `${w.label}: ${w.shortDesc}`),
+          audience: { '@type': 'EducationalAudience', educationalRole: 'student' },
+          isPartOf: { '@id': WEBSITE_ID },
+        },
+        {
+          '@type': 'ItemList',
+          name: `${BRAND} worksheets`,
+          itemListElement: WORKSHEETS.map((w, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: w.label,
+            url: absoluteUrl(worksheetRoute(w).path),
+          })),
+        },
+      ],
+    }
+  }
+
+  if (route.kind === 'developers') {
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebPage',
+          '@id': `${absoluteUrl(route.path)}#page`,
+          url: absoluteUrl(route.path),
+          name: pageTitle(route),
+          description: pageDescription(route),
+          isPartOf: { '@id': WEBSITE_ID },
+          inLanguage: 'en',
+          about: {
+            '@type': 'SoftwareSourceCode',
+            name: BRAND,
+            codeRepository: GITHUB_URL,
+            programmingLanguage: 'JavaScript',
+            runtimePlatform: 'React 19, Vite',
+            license: LICENSE_URL,
+            author: { '@id': AUTHOR_ID },
+          },
+        },
+        authorNode(),
+        breadcrumbs([{ name: BRAND, path: '/' }, { name: 'Developer Resources', path: route.path }]),
+      ],
+    }
+  }
+
+  const ws = route.worksheet
+  const url = absoluteUrl(route.path)
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'LearningResource',
+        '@id': `${url}#resource`,
+        url,
+        name: `${ws.label} Worksheets`,
+        alternateName: `${BRAND} ${ws.label}`,
+        description: ws.longDesc,
+        learningResourceType: ws.interactive ? 'Interactive exercise' : 'Worksheet',
+        educationalLevel: gradeLevelText(ws),
+        teaches: ws.skills,
+        educationalUse: 'practice',
+        audience: { '@type': 'EducationalAudience', educationalRole: 'student' },
+        inLanguage: 'en',
+        isAccessibleForFree: true,
+        license: LICENSE_URL,
+        author: { '@id': AUTHOR_ID },
+        isPartOf: { '@id': WEBSITE_ID },
+        encoding: [{ '@type': 'MediaObject', encodingFormat: 'text/markdown', contentUrl: absoluteUrl(route.md) }],
+      },
+      authorNode(),
+      breadcrumbs([{ name: BRAND, path: '/' }, { name: ws.label, path: route.path }]),
+    ],
+  }
+}
+
+function breadcrumbs(items) {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((it, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: it.name,
+      item: absoluteUrl(it.path),
+    })),
+  }
+}
+
+/* ────────────────────────────── <head> ────────────────────────────── */
+
+export function renderHead(route) {
+  const title = pageTitle(route)
+  const description = pageDescription(route)
+  const url = absoluteUrl(route.path)
+  const image = absoluteUrl(OG_IMAGE_PATH)
+  const lines = [
+    `<title>${escapeHtml(title)}</title>`,
+    `<meta name="description" content="${attr(description)}" />`,
+    `<meta name="robots" content="index, follow, max-image-preview:large" />`,
+    `<meta name="theme-color" content="${THEME_COLOR}" />`,
+    `<meta name="application-name" content="${BRAND}" />`,
+    `<meta name="author" content="${attr(AUTHOR.name)}" />`,
+    `<link rel="canonical" href="${attr(url)}" />`,
+    `<link rel="alternate" type="text/markdown" href="${attr(absoluteUrl(route.md))}" title="${attr(title)} (Markdown)" />`,
+    `<link rel="sitemap" type="application/xml" href="${attr(absoluteUrl('/sitemap.xml'))}" />`,
+    `<meta property="og:type" content="website" />`,
+    `<meta property="og:site_name" content="${BRAND}" />`,
+    `<meta property="og:locale" content="en_US" />`,
+    `<meta property="og:url" content="${attr(url)}" />`,
+    `<meta property="og:title" content="${attr(title)}" />`,
+    `<meta property="og:description" content="${attr(description)}" />`,
+    `<meta property="og:image" content="${attr(image)}" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta property="og:image:alt" content="${attr(`${BRAND} – ${TAGLINE}`)}" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:title" content="${attr(title)}" />`,
+    `<meta name="twitter:description" content="${attr(description)}" />`,
+    `<meta name="twitter:image" content="${attr(image)}" />`,
+    jsonLd(structuredData(route)),
+  ]
+  return lines.join('\n    ')
+}
+
+/* ────────────────────────────── static HTML content ────────────────────────────── */
+
+function worksheetCard(ws) {
+  const r = worksheetRoute(ws)
+  return (
+    `<a class="catalog-card" href="${r.path}" style="--card-color:${ws.color}">` +
+    `<span class="catalog-card-text"><span class="catalog-card-label">${escapeHtml(ws.label)}</span>` +
+    `<span class="catalog-card-desc">${escapeHtml(ws.shortDesc)}</span></span></a>`
+  )
+}
+
+function agentLinksHtml() {
+  return (
+    `<p>Every page is also available as Markdown: append <code>.md</code> to the path or send <code>Accept: text/markdown</code>. ` +
+    `See <a href="/llms.txt">llms.txt</a>, the <a href="/worksheets.json">worksheet catalog (JSON)</a>, ` +
+    `the <a href="/sitemap.xml">sitemap</a> and the <a href="/developers">developer resources</a>. ` +
+    `Source code is on <a href="${GITHUB_URL}">GitHub</a> under ${LICENSE_NAME}.</p>`
+  )
+}
+
+function homeContent() {
+  const cards = WORKSHEETS.map(worksheetCard).join('\n        ')
+  return `<main class="catalog catalog--full">
+      <header class="catalog-header">
+        <div class="catalog-brand">
+          <h1 class="catalog-title">${BRAND} – ${TAGLINE}</h1>
+          <p class="catalog-subtitle">Free, randomized practice sheets you can print in one click.</p>
+        </div>
+      </header>
+      <section class="static-intro">
+        <p>${BRAND} is a free, open-source generator of printable math worksheets for grades 1–3 (ages 6–9). Each sheet is randomized every time you open or regenerate it, so children get fresh practice instead of memorising one page. Pick a worksheet, adjust the difficulty (number range, digits, layout, columns) and print it from your browser; your settings are remembered on this device for next time.</p>
+        <p>The catalog covers multiplication tables, addition and subtraction drills with missing numbers, vertical column addition with carrying, long multiplication, comparing numbers with &gt;, &lt; and =, rounding to the nearest 10, 100 and 1000, and number patterns. The Equation Explorer is an on-screen activity where children move terms across the equals sign and check their answer on a number line.</p>
+      </section>
+      <h2>Worksheets</h2>
+      <nav class="catalog-grid" aria-label="Worksheet types">
+        ${cards}
+      </nav>
+      <h2>How it works</h2>
+      <ol>
+        <li>Choose a worksheet from the list above.</li>
+        <li>Set the difficulty: number limit, digits, columns or level.</li>
+        <li>Press Regenerate for a new random set, then Print. Sheets are laid out to fit an A4 or Letter page.</li>
+      </ol>
+      <h2>For teachers, parents and AI agents</h2>
+      <p>Worksheets are generated in the browser: nothing is uploaded, there is no account and no cost. ${BRAND} was built by a parent to supplement a grade 1–3 math curriculum and is free to use and adapt for non-commercial purposes.</p>
+      ${agentLinksHtml()}
+    </main>`
+}
+
+function worksheetContent(route) {
+  const ws = route.worksheet
+  const others = WORKSHEETS.filter(w => w.id !== ws.id)
+  const settings = ws.settings.map(s => `<li>${escapeHtml(s)}</li>`).join('\n        ')
+  const related = others.map(w => `<li><a href="${worksheetRoute(w).path}">${escapeHtml(w.label)}</a> – ${escapeHtml(w.shortDesc)}</li>`).join('\n        ')
+  return `<main class="catalog catalog--full">
+      <nav aria-label="Breadcrumb"><a href="/">${BRAND}</a> › ${escapeHtml(ws.label)}</nav>
+      <header class="catalog-header">
+        <div class="catalog-brand">
+          <h1 class="catalog-title">${escapeHtml(ws.label)} Worksheets</h1>
+          <p class="catalog-subtitle">${escapeHtml(ws.shortDesc)} · ${gradeLevelText(ws)}</p>
+        </div>
+      </header>
+      <section class="static-intro">
+        <p>${escapeHtml(ws.longDesc)}</p>
+        <p><strong>Skills:</strong> ${ws.skills.map(escapeHtml).join(', ')}. <strong>Format:</strong> ${ws.interactive ? 'interactive, on screen' : 'printable, randomized on every load'}.</p>
+      </section>
+      <h2>Settings</h2>
+      <ul>
+        ${settings}
+      </ul>
+      <h2>How to use this ${ws.interactive ? 'activity' : 'worksheet'}</h2>
+      <ol>
+        <li>Open <a href="${route.path}">${escapeHtml(absoluteUrl(route.path))}</a> (JavaScript required).</li>
+        <li>Adjust the settings above; they are saved in your browser.</li>
+        <li>${ws.interactive ? 'Type the answer and press Check; press Next for a new equation.' : 'Press Regenerate for a new random set, then Print.'}</li>
+      </ol>
+      <h2>Other ${BRAND} worksheets</h2>
+      <ul>
+        ${related}
+      </ul>
+      ${agentLinksHtml()}
+    </main>`
+}
+
+function developersContent() {
+  const list = WORKSHEETS.map(w => `<li><code>${w.id}</code> → <a href="${worksheetRoute(w).path}">${worksheetRoute(w).path}</a> (<a href="${worksheetRoute(w).md}">.md</a>)</li>`).join('\n        ')
+  return `<main class="catalog catalog--full">
+      <nav aria-label="Breadcrumb"><a href="/">${BRAND}</a> › Developer Resources</nav>
+      <header class="catalog-header">
+        <div class="catalog-brand">
+          <h1 class="catalog-title">${BRAND} Developer Resources</h1>
+          <p class="catalog-subtitle">Open source, machine-readable and agent-friendly.</p>
+        </div>
+      </header>
+      <section class="static-intro">
+        <p>${BRAND} (also known as “${BRAND_ALT}”) is a React 19 + Vite single-page app. There is no server API: worksheets are generated client-side. Everything below is static and cacheable.</p>
+      </section>
+      <h2>Resources</h2>
+      <ul>
+        <li><a href="${GITHUB_URL}">Source code on GitHub</a> – ${LICENSE_NAME}, <code>npm install &amp;&amp; npm run dev</code></li>
+        <li><a href="/worksheets.json">worksheets.json</a> – machine-readable catalog of every worksheet with slugs, URLs, grades, skills and settings</li>
+        <li><a href="/llms.txt">llms.txt</a> and <a href="/llms-full.txt">llms-full.txt</a> – llmstxt.org index and full content for language models</li>
+        <li><a href="/sitemap.xml">sitemap.xml</a> and <a href="/robots.txt">robots.txt</a></li>
+        <li><a href="/index.md">index.md</a> – this site as Markdown; every HTML page has a <code>.md</code> twin</li>
+      </ul>
+      <h2>Markdown content negotiation</h2>
+      <p>Every page URL answers <code>Accept: text/markdown</code> with <code>Content-Type: text/markdown; charset=utf-8</code> and <code>Vary: Accept</code>, following the acceptmarkdown.com convention. HTML responses carry a <code>Link: rel="alternate"; type="text/markdown"</code> header pointing at the twin. Unknown paths return HTTP 404 with a Markdown body listing where to look next.</p>
+      <h2>Worksheet ids and URLs</h2>
+      <ul>
+        ${list}
+      </ul>
+      <h2>Adding a worksheet</h2>
+      <ol>
+        <li>Add an entry to <code>src/worksheets.js</code> (id, slug, label, descriptions, grades, skills, settings).</li>
+        <li>Create the component in <code>src/components/</code> and register it in the <code>COMPONENTS</code> and <code>ICONS</code> maps in <code>src/App.jsx</code>.</li>
+        <li>Run <code>npm test</code> and <code>npm run build</code>; the static pages, Markdown twins, sitemap, llms.txt and catalog JSON are regenerated from the catalog.</li>
+      </ol>
+    </main>`
+}
+
+export function renderStaticContent(route) {
+  const inner =
+    route.kind === 'home' ? homeContent() :
+    route.kind === 'developers' ? developersContent() :
+    worksheetContent(route)
+  return `<div id="static-content">\n    ${inner}\n    </div>`
+}
+
+/** Replace the marker blocks in an HTML template with this route's head and content. */
+export function injectRoute(template, route) {
+  const headRe = new RegExp(`${HEAD_START}[\\s\\S]*?${HEAD_END.replace('/', '\\/')}`)
+  const contentRe = new RegExp(`${CONTENT_START}[\\s\\S]*?${CONTENT_END.replace('/', '\\/')}`)
+  if (!headRe.test(template)) throw new Error('index.html is missing the <!-- seo:head --> … <!-- /seo:head --> markers')
+  if (!contentRe.test(template)) throw new Error('index.html is missing the <!-- seo:content --> … <!-- /seo:content --> markers')
+  return template
+    .replace(headRe, () => `${HEAD_START}\n    ${renderHead(route)}\n    ${HEAD_END}`)
+    .replace(contentRe, () => `${CONTENT_START}\n    ${renderStaticContent(route)}\n    ${CONTENT_END}`)
+}
+
+/* ────────────────────────────── Markdown ────────────────────────────── */
+
+function mdLink(label, path) {
+  return `[${label}](${absoluteUrl(path)})`
+}
+
+function agentLinksMarkdown() {
+  return [
+    `Every page is also available as Markdown: append \`.md\` to the path or request it with \`Accept: text/markdown\`.`,
+    ``,
+    `- ${mdLink('llms.txt', '/llms.txt')}: index for language models`,
+    `- ${mdLink('worksheets.json', '/worksheets.json')}: machine-readable worksheet catalog`,
+    `- ${mdLink('Developer resources', '/developers.md')}`,
+    `- ${mdLink('Sitemap', '/sitemap.xml')}`,
+    `- [Source on GitHub](${GITHUB_URL}): ${LICENSE_NAME}`,
+  ].join('\n')
+}
+
+export function renderIndexMarkdown() {
+  const list = WORKSHEETS.map(w => `- ${mdLink(w.label, worksheetRoute(w).md)}: ${w.shortDesc} (grades ${w.grades})`).join('\n')
+  return `# ${BRAND} – ${TAGLINE}
+
+> ${DESCRIPTION}
+
+${BRAND} is a free, open-source generator of printable math worksheets for grades 1–3 (ages 6–9). Each sheet is randomized every time it is opened or regenerated. Pick a worksheet, adjust the difficulty (number range, digits, layout, columns) and print it from the browser; settings are remembered per device. Worksheets are generated client-side: no account, no upload, no cost.
+
+## Worksheets
+
+${list}
+
+## How it works
+
+1. Choose a worksheet.
+2. Set the difficulty: number limit, digits, columns or level.
+3. Press Regenerate for a new random set, then Print. Sheets fit an A4 or Letter page.
+
+## For developers and AI agents
+
+${agentLinksMarkdown()}
+`
+}
+
+export function renderWorksheetMarkdown(route) {
+  const ws = route.worksheet
+  const settings = ws.settings.map(s => `- ${s}`).join('\n')
+  const others = WORKSHEETS.filter(w => w.id !== ws.id)
+    .map(w => `- ${mdLink(w.label, worksheetRoute(w).md)}: ${w.shortDesc}`)
+    .join('\n')
+  return `# ${ws.label} Worksheets
+
+> ${ws.shortDesc}. ${gradeLevelText(ws)}. Part of ${mdLink(BRAND, '/index.md')}.
+
+${ws.longDesc}
+
+**Skills:** ${ws.skills.join(', ')}.
+**Format:** ${ws.interactive ? 'interactive, on screen' : 'printable, randomized on every load'}.
+**URL:** ${absoluteUrl(route.path)}
+
+## Settings
+
+${settings}
+
+## How to use
+
+1. Open ${absoluteUrl(route.path)} (JavaScript required).
+2. Adjust the settings; they are saved in the browser.
+3. ${ws.interactive ? 'Type the answer and press Check; press Next for a new equation.' : 'Press Regenerate for a new random set, then Print.'}
+
+## Other ${BRAND} worksheets
+
+${others}
+
+## For developers and AI agents
+
+${agentLinksMarkdown()}
+`
+}
+
+export function renderDevelopersMarkdown() {
+  const list = WORKSHEETS.map(w => `- \`${w.id}\` → ${absoluteUrl(worksheetRoute(w).path)} (${mdLink('Markdown', worksheetRoute(w).md)})`).join('\n')
+  return `# ${BRAND} Developer Resources
+
+> ${BRAND} (also known as “${BRAND_ALT}”) is an open-source React 19 + Vite single-page app that generates printable math worksheets client-side. There is no server API; every resource below is a static file.
+
+## Resources
+
+- [Source code on GitHub](${GITHUB_URL}): ${LICENSE_NAME}; \`npm install && npm run dev\`
+- ${mdLink('worksheets.json', '/worksheets.json')}: machine-readable catalog of every worksheet (slug, URL, Markdown URL, grades, skills, settings)
+- ${mdLink('llms.txt', '/llms.txt')}: llmstxt.org index
+- ${mdLink('llms-full.txt', '/llms-full.txt')}: every page's Markdown in one file
+- ${mdLink('sitemap.xml', '/sitemap.xml')} and ${mdLink('robots.txt', '/robots.txt')}
+- ${mdLink('index.md', '/index.md')}: the home page as Markdown
+
+## Markdown content negotiation
+
+Every page URL answers \`Accept: text/markdown\` with \`Content-Type: text/markdown; charset=utf-8\` and \`Vary: Accept\` (acceptmarkdown.com convention). HTML responses carry \`Link: <…md>; rel="alternate"; type="text/markdown"\`. Requests that accept neither HTML nor Markdown get \`406 Not Acceptable\`. Unknown paths return HTTP 404 with a Markdown body that lists where to look next.
+
+## Worksheet ids and URLs
+
+${list}
+
+## Adding a worksheet
+
+1. Add an entry to \`src/worksheets.js\` (id, slug, label, descriptions, grades, skills, settings).
+2. Create the component in \`src/components/\` and register it in the \`COMPONENTS\` and \`ICONS\` maps in \`src/App.jsx\`.
+3. Run \`npm test\` and \`npm run build\`; static pages, Markdown twins, sitemap, llms.txt and the catalog JSON are regenerated from the catalog.
+`
+}
+
+export function renderMarkdown(route) {
+  if (route.kind === 'home') return renderIndexMarkdown()
+  if (route.kind === 'developers') return renderDevelopersMarkdown()
+  return renderWorksheetMarkdown(route)
+}
+
+/* ────────────────────────────── llms.txt ────────────────────────────── */
+
+export function renderLlmsTxt() {
+  const worksheets = WORKSHEETS.map(w => `- ${mdLink(w.label, worksheetRoute(w).md)}: ${w.shortDesc}; grades ${w.grades}; ${w.interactive ? 'interactive on-screen activity' : 'printable'}`).join('\n')
+  return `# ${BRAND}
+
+> ${BRAND} (“${BRAND_ALT}”) is a free, open-source web app with printable, randomized math worksheets for grades 1–3: multiplication tables, addition and subtraction, column addition, long multiplication, comparison, rounding, number patterns, plus an interactive equation explorer. Site: ${SITE_URL}/
+
+Worksheets are generated in the browser and printed from the print dialog; there is no account, no server API and no cost (${LICENSE_NAME}). Every HTML page has a Markdown twin: append \`.md\` to the path or request the page with \`Accept: text/markdown\`.
+
+## Worksheets
+
+${worksheets}
+
+## Developers
+
+- ${mdLink('Developer resources', '/developers.md')}: repository, catalog JSON, content negotiation, how to add a worksheet
+- ${mdLink('Worksheet catalog (JSON)', '/worksheets.json')}: ids, slugs, URLs, grades, skills and settings for every worksheet
+- [Source on GitHub](${GITHUB_URL}): React 19 + Vite, ${LICENSE_NAME}
+
+## Optional
+
+- ${mdLink('Home page (Markdown)', '/index.md')}: overview of the site
+- ${mdLink('llms-full.txt', '/llms-full.txt')}: every page's Markdown concatenated in one file
+- ${mdLink('Sitemap', '/sitemap.xml')}: all HTML URLs
+`
+}
+
+export function renderLlmsFullTxt() {
+  const sections = routes().map(r => renderMarkdown(r).trimEnd())
+  return `${sections.join('\n\n---\n\n')}\n`
+}
+
+/* ────────────────────────────── sitemap / robots / catalog ────────────────────────────── */
+
+export function renderSitemap({ now = new Date() } = {}) {
+  const lastmod = now.toISOString().slice(0, 10)
+  const urls = routes().map(r => {
+    const priority = r.kind === 'home' ? '1.0' : r.kind === 'worksheet' ? '0.8' : '0.5'
+    return `  <url>
+    <loc>${escapeHtml(absoluteUrl(r.path))}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>${priority}</priority>
+  </url>`
+  })
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join('\n')}
+</urlset>
+`
+}
+
+export const AI_CRAWLERS = [
+  'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-Web', 'Claude-SearchBot', 'anthropic-ai',
+  'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'Bytespider', 'Amazonbot', 'meta-externalagent',
+]
+
+export function renderRobots() {
+  const blocks = AI_CRAWLERS.map(ua => `User-agent: ${ua}\nAllow: /`).join('\n\n')
+  return `# ${BRAND} – ${SITE_URL}/
+# Everything is public. AI crawlers and answer engines are welcome; see /llms.txt.
+
+User-agent: *
+Allow: /
+
+${blocks}
+
+Sitemap: ${absoluteUrl('/sitemap.xml')}
+`
+}
+
+export function catalogJson({ now = new Date() } = {}) {
+  return {
+    name: BRAND,
+    alternateName: BRAND_ALT,
+    description: DESCRIPTION,
+    url: `${SITE_URL}/`,
+    generatedAt: now.toISOString(),
+    license: { name: LICENSE_NAME, url: LICENSE_URL },
+    repository: GITHUB_URL,
+    llms: absoluteUrl('/llms.txt'),
+    sitemap: absoluteUrl('/sitemap.xml'),
+    developers: absoluteUrl('/developers'),
+    worksheets: WORKSHEETS.map(w => {
+      const r = worksheetRoute(w)
+      return {
+        id: w.id,
+        slug: w.slug,
+        label: w.label,
+        url: absoluteUrl(r.path),
+        markdownUrl: absoluteUrl(r.md),
+        description: w.shortDesc,
+        longDescription: w.longDesc,
+        grades: w.grades,
+        skills: w.skills,
+        settings: w.settings,
+        printable: !w.interactive,
+        interactive: w.interactive,
+      }
+    }),
+  }
+}
+
+export function renderCatalogJson(opts) {
+  return `${JSON.stringify(catalogJson(opts), null, 2)}\n`
+}
+
+/* ────────────────────────────── 404 ────────────────────────────── */
+
+function notFoundLinks() {
+  return [
+    { label: `${BRAND} home`, path: '/' },
+    ...WORKSHEETS.map(w => ({ label: `${w.label} worksheets`, path: worksheetRoute(w).path })),
+    { label: 'Developer resources', path: '/developers' },
+    { label: 'Sitemap', path: '/sitemap.xml' },
+    { label: 'llms.txt', path: '/llms.txt' },
+    { label: 'Worksheet catalog (JSON)', path: '/worksheets.json' },
+  ]
+}
+
+export function renderNotFoundMarkdown(pathname = '') {
+  const shown = pathname ? `\`${pathname.replace(/`/g, '')}\` ` : ''
+  const links = notFoundLinks().map(l => `- ${mdLink(l.label, l.path)}`).join('\n')
+  return `# 404 – Page not found · ${BRAND}
+
+The path ${shown}does not exist on ${SITE_URL}. This response has HTTP status 404.
+
+## Where to look next
+
+${links}
+
+Every HTML page also has a Markdown twin (append \`.md\` or send \`Accept: text/markdown\`).
+`
+}
+
+export function renderNotFoundHtml(pathname = '') {
+  const links = notFoundLinks().map(l => `<li><a href="${l.path}">${escapeHtml(l.label)}</a></li>`).join('\n        ')
+  const shown = pathname ? `<code>${escapeHtml(pathname)}</code> ` : ''
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>404 – Page not found · ${BRAND}</title>
+    <style>
+      body { margin: 0; padding: 48px 20px; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #1f2937; background: #f8fafc; }
+      main { max-width: 640px; margin: 0 auto; }
+      h1 { font-size: 26px; margin: 0 0 8px; }
+      h2 { font-size: 18px; margin: 28px 0 8px; }
+      a { color: ${THEME_COLOR}; }
+      code { background: #e5e7eb; padding: 1px 5px; border-radius: 4px; }
+      ul { padding-left: 20px; line-height: 1.7; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>404 – Page not found</h1>
+      <p>The path ${shown}does not exist on ${BRAND}. This response has HTTP status 404.</p>
+      <h2>Where to look next</h2>
+      <ul>
+        ${links}
+      </ul>
+      <p>Every page also has a Markdown twin: append <code>.md</code> or send <code>Accept: text/markdown</code>.</p>
+    </main>
+  </body>
+</html>
+`
+}
+
+/* ────────────────────────────── build output ────────────────────────────── */
+
+/**
+ * Everything the prerender step writes into dist/, keyed by relative path.
+ * @param {string} template  the built dist/index.html
+ */
+export function buildSiteFiles(template, { now = new Date() } = {}) {
+  const files = {}
+  for (const route of routes()) {
+    files[route.html] = injectRoute(template, route)
+    files[route.mdFile] = renderMarkdown(route)
+  }
+  files['llms.txt'] = renderLlmsTxt()
+  files['llms-full.txt'] = renderLlmsFullTxt()
+  files['sitemap.xml'] = renderSitemap({ now })
+  files['robots.txt'] = renderRobots()
+  files['worksheets.json'] = renderCatalogJson({ now })
+  files['404.html'] = renderNotFoundHtml()
+  return files
+}

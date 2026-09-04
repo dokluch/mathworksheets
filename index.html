@@ -4,22 +4,11 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Math Worksheets</title>
-    <meta name="description" content="Printable math practice worksheets for grades 1-3: multiplication tables, addition, subtraction, comparison, rounding, and number patterns." />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Math Worksheets" />
-    <meta property="og:description" content="Printable math practice worksheets for grades 1–3: multiplication tables, addition, subtraction, comparison, rounding, and number patterns." />
-    <meta property="og:image" content="/og-image.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Math Worksheets" />
-    <meta name="twitter:description" content="Printable math practice worksheets for grades 1–3" />
-    <meta name="twitter:image" content="/og-image.jpg" />
+    <!-- seo:head -->
+    <!-- Title, description, canonical, Open Graph, Twitter and JSON-LD are
+         generated from src/worksheets.js by the seoHtml() plugin in vite.config.js
+         (and per route by scripts/prerender.mjs after the build). -->
+    <!-- /seo:head -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +16,10 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- seo:content -->
+    <!-- Static, crawlable page content is injected here at build time and
+         removed by src/main.jsx before React mounts. -->
+    <!-- /seo:content -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

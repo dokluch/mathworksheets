@@ -189,6 +189,25 @@
   box-shadow: var(--shadow-md);
 }
 
+.notebook-grid-bg {
+  background-color: var(--color-surface);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
+      var(--notebook-grid-line-color) calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
+      var(--notebook-grid-line-color) var(--notebook-grid-size)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
+      var(--notebook-grid-line-color) calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
+      var(--notebook-grid-line-color) var(--notebook-grid-size)
+    );
+}
+
 .worksheet-header {
   margin-bottom: 24px;
   padding-bottom: 16px;
@@ -320,12 +339,32 @@
     width: 100%;
   }
 
+  .notebook-grid-bg {
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
+        var(--notebook-grid-line-color-print) calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
+        var(--notebook-grid-line-color-print) var(--notebook-grid-size)
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
+        var(--notebook-grid-line-color-print) calc(var(--notebook-grid-size) - var(--notebook-grid-line-width)),
+        var(--notebook-grid-line-color-print) var(--notebook-grid-size)
+      );
+  }
+
   .worksheet-header {
     border-bottom-color: #999;
   }
 
   .problem-item {
     border-bottom-color: #ddd;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
   }
 
   .problem-text {

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
+import { trackEvent } from '../lib/analytics'
 import './Comparison.css'
 
 function randInt(min, max) {
@@ -121,7 +122,7 @@ export default function Comparison() {
     const items = []
     for (let i = 0; i < problemCount; i++) {
       // ~15% chance of equal pair to keep kids on their toes
-      if (Math.random() < 0.15) {
+      if (randInt(1, 100) <= 15) {
         const [a, b] = generateEqualPair(maxVal)
         items.push({ a, b, answer: '=' })
       } else {
@@ -168,7 +169,7 @@ export default function Comparison() {
         </div>
 
         <div className="control-actions">
-          <button className="btn btn-primary" onClick={() => setSeed(s => s + 1)}>
+          <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'compare' }); setSeed(s => s + 1) }}>
             <IconRefresh size={16} stroke={2} /> Regenerate
           </button>
           <button className="btn btn-secondary" onClick={() => window.print()}>

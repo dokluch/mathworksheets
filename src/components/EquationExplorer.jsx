@@ -1,6 +1,7 @@
 import { useMemo, useState, useRef, useCallback, useEffect } from 'react'
 import { IconRefresh, IconCheck, IconArrowRight, IconPlayerPlay } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
+import { trackEvent } from '../lib/analytics'
 import './EquationExplorer.css'
 
 // ── Helpers ──
@@ -421,6 +422,7 @@ export default function EquationExplorer() {
   )
 
   const handleNextProblem = useCallback(() => {
+    trackEvent('regenerate_worksheet', { worksheet_id: 'eqexplore' })
     setSeed(s => s + 1)
     setAnswer('')
     setStatus('solving')
@@ -436,6 +438,7 @@ export default function EquationExplorer() {
 
     if (parsed === correctAnswer) {
       setStatus('correct')
+      trackEvent('solve_equation', { worksheet_id: 'eqexplore', ops, range })
       setShowCelebration(true)
       setStreak(s => s + 1)
       setStreakBump(true)
@@ -447,7 +450,7 @@ export default function EquationExplorer() {
       setShowExplanation(true)
       setReplayKey(k => k + 1)
     }
-  }, [answer, correctAnswer])
+  }, [answer, correctAnswer, ops, range])
 
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter') {

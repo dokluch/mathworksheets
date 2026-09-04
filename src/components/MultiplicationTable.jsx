@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { IconPrinter, IconRefresh } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
+import { trackEvent } from '../lib/analytics'
 import './MultiplicationTable.css'
 
 function shuffleArray(array) {
@@ -107,7 +108,7 @@ export default function MultiplicationTable() {
         </div>
 
         <div className="control-actions">
-          <button className="btn btn-primary" onClick={() => setSeed(s => s + 1)}>
+          <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'multiply' }); setSeed(s => s + 1) }}>
             <IconRefresh size={16} stroke={2} /> Regenerate
           </button>
           {tableData && (
