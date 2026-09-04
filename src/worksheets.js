@@ -69,12 +69,12 @@ export const WORKSHEETS = [
     label: 'Column Multiplication',
     shortDesc: 'Long multiplication practice',
     longDesc:
-      'Long multiplication (3 × 2 digits or 4 × 2 digits) with room for the partial products and their place-value shifts, printed on a notebook grid. ' +
+      'Long multiplication (2 × 2, 3 × 2 or 4 × 2 digits) with room for the partial products and their place-value shifts, printed on a notebook grid. ' +
       'Designed for grade 3 students who already know their times tables and are learning the standard written algorithm.',
     grades: '3',
     skills: ['long multiplication', 'partial products', 'place value'],
     settings: [
-      'Preset: 3 × 2 digits or 4 × 2 digits',
+      'Preset: 2 × 2, 3 × 2 or 4 × 2 digits',
       'Columns: number of problem columns per page',
     ],
     color: '#7c2d12',

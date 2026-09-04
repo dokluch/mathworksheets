@@ -6,6 +6,7 @@ import { trackEvent } from '../lib/analytics'
 import './ColumnMultiplication.css'
 
 const PRESETS = [
+  { value: '2x2', label: '2 x 2 digits', aDigits: 2, bDigits: 2 },
   { value: '3x2', label: '3 x 2 digits', aDigits: 3, bDigits: 2 },
   { value: '4x2', label: '4 x 2 digits', aDigits: 4, bDigits: 2 },
 ]
@@ -14,14 +15,21 @@ function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
+/** A number whose digits are all 1–9, so every partial product fills a full row. */
+function randNoZeroDigits(digits) {
+  let n = 0
+  for (let i = 0; i < digits; i++) n = n * 10 + randInt(1, 9)
+  return n
+}
+
 function generateProblem(aDigits, bDigits) {
   const aMin = 10 ** (aDigits - 1)
   const aMax = 10 ** aDigits - 1
-  const bMin = 10 ** (bDigits - 1)
-  const bMax = 10 ** bDigits - 1
 
   const a = randInt(aMin, aMax)
-  const b = randInt(bMin, bMax)
+  // A zero digit in the multiplier would give a partial product of "0" with a
+  // single placeholder in an otherwise blank row, which reads as a mistake.
+  const b = randNoZeroDigits(bDigits)
 
   const bDigitsArr = String(b).split('').reverse().map(Number)
   const partialProducts = bDigitsArr.map((digit, shift) => ({
@@ -108,7 +116,7 @@ export default function ColumnMultiplication() {
   const [columns, setColumns] = usePersistedState('colmul', 'columns', 3)
   const [seed, setSeed] = useState(0)
 
-  const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[1]
+  const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[PRESETS.length - 1]
   const problemCount = columns === 2 ? 12 : columns === 3 ? 15 : 18
   const { aDigits, bDigits } = activePreset
 
