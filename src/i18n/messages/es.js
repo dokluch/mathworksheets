@@ -150,11 +150,7 @@ export default {
   common: {
     regenerate: 'Regenerar',
     print: 'Imprimir',
-    printCta: {
-      title: '¿Listo para imprimir?',
-      hint: 'La hoja cabe en una página. Regenera primero si quieres otra serie de ejercicios.',
-      button: 'Imprimir la hoja',
-    },
+    printWorksheet: 'Imprimir la hoja',
     columns: 'Columnas',
     limit: 'Límite',
     range: 'Rango',

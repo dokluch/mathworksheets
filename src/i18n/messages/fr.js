@@ -150,11 +150,7 @@ export default {
   common: {
     regenerate: 'Régénérer',
     print: 'Imprimer',
-    printCta: {
-      title: 'Prêt à imprimer ?',
-      hint: 'La fiche tient sur une page. Régénérez d’abord si vous voulez une autre série d’exercices.',
-      button: 'Imprimer la fiche',
-    },
+    printWorksheet: 'Imprimer la fiche',
     columns: 'Colonnes',
     limit: 'Limite',
     range: 'Plage',

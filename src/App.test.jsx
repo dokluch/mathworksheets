@@ -201,19 +201,19 @@ describe('App', () => {
     expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('en')
   })
 
-  it('shows a bottom Print call to action on printable sheets only, which prints on click and is never printed', () => {
+  it('shows a bottom Print worksheet button on printable sheets only, which prints on click and is never printed', () => {
     window.print = vi.fn()
     window.history.replaceState(null, '', '/worksheets/column-addition')
     render(<App />)
-    const cta = screen.getByRole('complementary', { name: 'Ready to print?' })
-    expect(cta.className).toContain('no-print')
-    fireEvent.click(screen.getByRole('button', { name: /Print worksheet/ }))
+    const button = screen.getByRole('button', { name: /Print worksheet/ })
+    expect(button.closest('.print-cta').className).toContain('no-print')
+    fireEvent.click(button)
     expect(window.print).toHaveBeenCalledTimes(1)
 
     cleanup()
     window.history.replaceState(null, '', '/worksheets/equation-explorer')
     render(<App />)
-    expect(screen.queryByRole('complementary', { name: 'Ready to print?' })).toBeNull()
+    expect(screen.queryByRole('button', { name: /Print worksheet/ })).toBeNull()
   })
 
   it('tracks print_worksheet with the sheet id and its settings on beforeprint', () => {

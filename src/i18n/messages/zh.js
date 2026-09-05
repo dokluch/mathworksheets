@@ -150,11 +150,7 @@ export default {
   common: {
     regenerate: '重新生成',
     print: '打印',
-    printCta: {
-      title: '准备好打印了吗？',
-      hint: '练习页正好一页。如果想换一组题目，请先重新生成。',
-      button: '打印练习页',
-    },
+    printWorksheet: '打印练习页',
     columns: '列数',
     limit: '范围',
     range: '范围',
