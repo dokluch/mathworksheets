@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookGrid, problemsPerPage } from '../hooks/useNotebookGrid'
 import { trackEvent } from '../lib/analytics'
 import { useT } from '../i18n/context'
 import './ColumnAddition.css'
@@ -95,10 +95,13 @@ export default function ColumnAddition() {
   const [preferCarry, setPreferCarry] = usePersistedState('coladd', 'preferCarry', true)
   const [seed, setSeed] = useState(0)
 
-  const problemCount = columns === 2 ? 16 : columns === 3 ? 21 : 28
+  // Rows: two addends and the sum. Problems are short, so they sit one blank
+  // row apart (the next problem's carry row) and fill exactly one printed page.
+  const rows = 3
+  const spacing = { rowGap: 0, headerGap: 0 }
+  const problemCount = problemsPerPage({ columns, rows, ...spacing })
   const width = digits + 1
-  // Rows: two addends and the sum.
-  const [sheetRef, sheetStyle] = useNotebookGrid({ columns, cellsWide: width + 1, rows: 3 })
+  const [sheetRef, sheetStyle] = useNotebookGrid({ columns, cellsWide: width + 1, rows, ...spacing })
 
   const problems = useMemo(() => {
     void seed

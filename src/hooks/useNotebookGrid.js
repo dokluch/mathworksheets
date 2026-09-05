@@ -13,8 +13,13 @@ export const SCREEN_SQUARE = 26
 export const MIN_SQUARE = 18
 /** 1/4 inch at 96 dpi: standard quad ruling on printed sheets. */
 export const PRINT_SQUARE = 24
-/** Letter landscape (11in) minus the 0.3in margins declared by `@page` in index.css. */
+/** Letter landscape (11in × 8.5in) minus the 0.3in margins declared by `@page` in index.css. */
 export const PRINT_WIDTH = (11 - 0.6) * 96
+export const PRINT_HEIGHT = (8.5 - 0.6) * 96
+/** Squares taken by the header band (top padding + title); see ColumnAddition.css. */
+export const HEADER_BAND = 3
+/** Default empty squares below the header band and between rows of problems (each problem also has one spare square above it). */
+export const ROW_GAP = 1
 /** Squares of padding on each side of the sheet. */
 export const PAD = 1
 /** Width assumed until the sheet has been measured (also used in jsdom). */
@@ -47,12 +52,28 @@ export function notebookLayout({ width, columns, cellsWide, square = SCREEN_SQUA
 }
 
 /**
- * @param {{ columns: number, cellsWide: number, rows: number }} o
- *   rows: digit rows per problem (rules between rows take no space)
+ * Rows of problems that fit on one printed page, given the digit rows per
+ * problem: header band, headerGap, then n items of (rows + 1) squares
+ * separated by rowGap, with no bottom padding in print.
+ */
+export function rowsPerPage(rows, { rowGap = ROW_GAP, headerGap = ROW_GAP } = {}) {
+  const squares = Math.floor(PRINT_HEIGHT / PRINT_SQUARE)
+  return Math.max(1, Math.floor((squares - HEADER_BAND - headerGap + rowGap) / (rows + 1 + rowGap)))
+}
+
+/** Problems that fill exactly one printed page for a column count. */
+export function problemsPerPage({ columns, rows, rowGap, headerGap }) {
+  return columns * rowsPerPage(rows, { rowGap, headerGap })
+}
+
+/**
+ * @param {{ columns: number, cellsWide: number, rows: number, rowGap?: number, headerGap?: number }} o
+ *   rows: digit rows per problem (rules between rows take no space);
+ *   rowGap / headerGap: empty squares between problem rows / below the header (default ROW_GAP)
  * @returns {[import('react').RefObject, object]}
  *   attach the ref and the style object to the `.worksheet.colarith-notebook` element
  */
-export function useNotebookGrid({ columns, cellsWide, rows }) {
+export function useNotebookGrid({ columns, cellsWide, rows, rowGap = ROW_GAP, headerGap = ROW_GAP }) {
   const ref = useRef(null)
   const [width, setWidth] = useState(null)
 
@@ -85,6 +106,8 @@ export function useNotebookGrid({ columns, cellsWide, rows }) {
     '--nb-cols': columns,
     '--nb-cell-w': cellsWide,
     '--nb-rows': rows,
+    '--nb-row-gap': rowGap,
+    '--nb-header-gap': headerGap,
   }
 
   return [ref, style]

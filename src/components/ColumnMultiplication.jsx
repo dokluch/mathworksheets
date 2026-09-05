@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookGrid, problemsPerPage } from '../hooks/useNotebookGrid'
 import { trackEvent } from '../lib/analytics'
 import { useT } from '../i18n/context'
 import './ColumnMultiplication.css'
@@ -119,8 +119,11 @@ export default function ColumnMultiplication() {
   const [seed, setSeed] = useState(0)
 
   const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[PRESETS.length - 1]
-  const problemCount = columns === 2 ? 12 : columns === 3 ? 15 : 18
   const { aDigits, bDigits } = activePreset
+  // Rows: multiplicand, multiplier, one partial product per multiplier digit, product.
+  const rows = 3 + bDigits
+  // Exactly one printed page.
+  const problemCount = problemsPerPage({ columns, rows })
   const presetLabel = (a, b) => t('colmul.preset', { a, b })
 
   const problems = useMemo(() => {
@@ -133,8 +136,7 @@ export default function ColumnMultiplication() {
   }, [aDigits, bDigits, problemCount, seed])
 
   const width = digitColumns(aDigits, bDigits)
-  // Rows: multiplicand, multiplier, one partial product per multiplier digit, product.
-  const [sheetRef, sheetStyle] = useNotebookGrid({ columns, cellsWide: width + 1, rows: 3 + bDigits })
+  const [sheetRef, sheetStyle] = useNotebookGrid({ columns, cellsWide: width + 1, rows })
 
   return (
     <div className="tool-panel">

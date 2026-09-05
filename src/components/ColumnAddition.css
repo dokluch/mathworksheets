@@ -120,7 +120,7 @@
   display: flex;
   align-items: center;
   height: calc(3 * var(--nb-sq));
-  margin: calc(-1 * var(--nb-sq)) calc(-1 * var(--nb-sq)) var(--nb-sq);
+  margin: calc(-1 * var(--nb-sq)) calc(-1 * var(--nb-sq)) calc(var(--nb-header-gap, 1) * var(--nb-sq));
   padding: 0 var(--nb-sq);
   border-bottom-width: 2px;
   background: var(--color-surface);
@@ -131,7 +131,7 @@
 .colarith-notebook .colarith-grid {
   grid-template-columns: repeat(var(--nb-cols), calc(var(--nb-cell-w) * var(--nb-sq)));
   column-gap: calc(var(--nb-gap) * var(--nb-sq));
-  row-gap: var(--nb-sq);
+  row-gap: calc(var(--nb-row-gap, 1) * var(--nb-sq));
   justify-content: start;
   margin-left: calc(var(--nb-offset) * var(--nb-sq));
 }
@@ -202,7 +202,7 @@
     --nb-sq: var(--nb-sq-print);
     --nb-gap: var(--nb-gap-print);
     --nb-offset: var(--nb-offset-print);
-    padding: var(--nb-sq);
+    padding: var(--nb-sq) var(--nb-sq) 0;
     overflow: visible;
   }
 

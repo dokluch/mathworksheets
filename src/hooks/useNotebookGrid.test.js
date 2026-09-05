@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { notebookLayout, PRINT_WIDTH, PRINT_SQUARE, PAD, SCREEN_SQUARE, MIN_SQUARE } from './useNotebookGrid'
+import {
+  notebookLayout, rowsPerPage, problemsPerPage,
+  PRINT_WIDTH, PRINT_HEIGHT, PRINT_SQUARE, PAD, SCREEN_SQUARE, MIN_SQUARE, HEADER_BAND, ROW_GAP,
+} from './useNotebookGrid'
 
 function blockSquares(columns, cellsWide, { gap, offset }) {
   return PAD * 2 + offset + columns * cellsWide + (columns - 1) * gap
@@ -48,5 +51,28 @@ describe('notebookLayout', () => {
     const layout = notebookLayout({ width: PRINT_WIDTH, columns: 2, cellsWide: 6, square: PRINT_SQUARE })
     expect(layout.gap).toBe(6)
     expect(layout.offset).toBeGreaterThan(0)
+  })
+})
+
+describe('problemsPerPage', () => {
+  function pageSquares(rows, n, rowGap = ROW_GAP, headerGap = ROW_GAP) {
+    return HEADER_BAND + headerGap + n * (rows + 1) + (n - 1) * rowGap
+  }
+
+  it('fills a letter landscape page without spilling over', () => {
+    for (const rows of [3, 4, 5, 6]) {
+      for (const spacing of [{}, { rowGap: 0, headerGap: 0 }, { rowGap: 2, headerGap: 1 }]) {
+        const n = rowsPerPage(rows, spacing)
+        expect(pageSquares(rows, n, spacing.rowGap, spacing.headerGap) * PRINT_SQUARE).toBeLessThanOrEqual(PRINT_HEIGHT)
+        expect(pageSquares(rows, n + 1, spacing.rowGap, spacing.headerGap) * PRINT_SQUARE).toBeGreaterThan(PRINT_HEIGHT)
+      }
+    }
+  })
+
+  it('gives 4 rows of long multiplication and 7 rows of packed column addition per page', () => {
+    expect(rowsPerPage(5)).toBe(4)
+    expect(rowsPerPage(3, { rowGap: 0, headerGap: 0 })).toBe(7)
+    expect(problemsPerPage({ columns: 3, rows: 5 })).toBe(12)
+    expect(problemsPerPage({ columns: 4, rows: 3, rowGap: 0, headerGap: 0 })).toBe(28)
   })
 })
