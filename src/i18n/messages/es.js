@@ -339,6 +339,44 @@ export default {
           ],
         },
         {
+          heading: 'Por qué papel en lugar de una app',
+          paragraphs: [
+            'No faltan aplicaciones de matemáticas para niños, y la mayoría premia cada toque con una respuesta inmediata: un sonido, una estrella, una animación. Según nuestra experiencia, eso convierte la práctica en entretenimiento. El niño aprende a adivinar rápido y a esperar que la app diga sí o no, en vez de quedarse con un problema y pensarlo. La respuesta inmediata mantiene muy bien ocupados a los niños; no estamos convencidos de que les enseñe.',
+            'Una hoja impresa funciona de otra manera. El niño tiene que escribir la respuesta, no puede deshacerla con un toque y debe decidir por sí mismo si parece correcta. La corrección llega después, de un adulto que revisa la página. Esa pausa es lo importante: el pensamiento ocurre en la cabeza del niño, no en la app.',
+            'Así usamos estas hojas con nuestros propios hijos, y es también lo que sugiere un cuerpo sólido de investigación. La práctica que se siente más difícil y que retrasa la respuesta tiende a producir un aprendizaje más duradero que la práctica que se siente fácil. La evidencia no es unánime, y la respuesta inmediata tiene su lugar para datos simples y para niños que apenas empiezan, pero para construir una comprensión real, el esfuerzo y la corrección diferida son una buena apuesta.',
+          ],
+        },
+        {
+          heading: 'Cómo corregir',
+          paragraphs: [
+            'Al revisar una hoja, el tono importa tanto como la corrección. La investigación sobre retroalimentación y elogios apunta en una misma dirección: comenta el trabajo y el método, no al niño, y trata un error como una invitación a pensar de nuevo, no como un veredicto.',
+          ],
+          items: [
+            'Marca primero lo que está bien y luego señala un problema que merece otra mirada. Basta con algo como «Mira este otra vez, creo que algo se escapó».',
+            'Evita las críticas duras y las etiquetas: ni «está mal, no prestaste atención» ni «eres tan listo». Elogia el esfuerzo y el método: «alineaste las columnas con cuidado».',
+            'Si el niño se atasca, haz una pregunta en vez de dar la respuesta: «¿Cuánto es 7 + 5 por sí solo?», «¿Por qué columna empezamos?».',
+            'Deja que el niño encuentre y corrija el error. La corrección que hace por sí mismo es la que se queda.',
+            'Sé breve y sé amable. Diez minutos tranquilos con una página valen más que media hora tensa.',
+          ],
+        },
+        {
+          heading: 'Lo que dice la investigación',
+          items: [
+            '[Butler, Karpicke & Roediger (2007)](https://doi.org/10.1037/1076-898X.13.4.273): la retroalimentación dada tras una demora produjo mejor retención a largo plazo que la inmediata.',
+            '[Mullet, Butler, Verdin, von Borries & Marsh (2014)](https://www.sciencedirect.com/science/article/abs/pii/S2211368114000448): los estudiantes preferían la retroalimentación inmediata y creían que ayudaba más, pero la retroalimentación diferida en sus tareas dio mejores resultados en los exámenes.',
+            '[Fyfe & Rittle-Johnson (2017)](https://link.springer.com/article/10.1007/s11251-016-9401-1): en un estudio en aula con 243 alumnos de segundo y tercer grado, la retroalimentación inmediata ayudó durante la práctica, pero practicar sin retroalimentación llevó a un mejor dominio una semana después.',
+            '[Bjork & Bjork (2011)](https://bjorklab.psych.ucla.edu/publication/bjork-e-l-bjork-r-a-2014-making-things-hard-on-yourself-but-in-a-good-way-creating-desirable-difficulties-to-enhance-learning-in-m-a-gernsbacher-and-j-pomerantz-eds-psycholo/): las «dificultades deseables», condiciones que hacen que la práctica se sienta más difícil, como autoevaluarse o espaciar las sesiones, suelen producir un aprendizaje más duradero.',
+            '[Kapur (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1111/cogs.12107): el «fracaso productivo»: los alumnos que lucharon con problemas de matemáticas antes de que se les enseñara el método lograron una comprensión más profunda que quienes recibieron primero la enseñanza.',
+            '[Kluger & DeNisi (1996)](https://doi.org/10.1037/0033-2909.119.2.254): un metaanálisis de 607 efectos halló que la retroalimentación ayuda en promedio, pero más de un tercio de las intervenciones empeoró el rendimiento, sobre todo las que dirigen la atención a la persona en vez de a la tarea.',
+            '[Hattie & Timperley (2007)](https://doi.org/10.3102/003465430298487): la retroalimentación funciona mejor cuando trata de la tarea y del método y responde «¿y ahora qué?»; la dirigida a la persona es la menos eficaz.',
+            '[Mueller & Dweck (1998)](https://pubmed.ncbi.nlm.nih.gov/9686450/) y [Kamins & Dweck (1999)](https://eric.ed.gov/?id=EJ586556): los niños elogiados o criticados como personas («eres tan listo», «eres descuidado») respondieron con impotencia a los reveses posteriores; los que recibieron comentarios sobre el esfuerzo y el método siguieron adelante.',
+            '[Van der Weel & van der Meer (2024)](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1219945/full): escribir a mano produjo una conectividad cerebral mucho más rica que teclear, con patrones vinculados a la formación de la memoria.',
+          ],
+          paragraphs: [
+            'Ninguno de estos estudios es un argumento definitivo por sí solo, y los resultados varían. Pero la dirección es lo bastante constante como para que hayamos construido {brand} en torno a ella. Algunos de los trabajos en los que nos apoyamos:',
+          ],
+        },
+        {
           heading: 'Qué obtienes',
           items: [
             'Fichas para imprimir de 1.º a 3.º: tablas de multiplicar, sumas y restas, suma en columna, multiplicación en columna, comparación de números, redondeo y series numéricas.',

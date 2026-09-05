@@ -19,13 +19,51 @@ export const PAGES = [
     title: `About ${BRAND}`,
     navLabel: 'About',
     description: `${BRAND} is a free, open-source generator of printable math worksheets for grades 1–3, built by a parent to give every child simple practice at no cost.`,
-    updated: '2026-09-04',
+    updated: '2026-09-05',
     sections: [
       {
         heading: 'Why this site exists',
         paragraphs: [
           `${BRAND} started as a way for a parent to print fresh math practice for their daughters without hunting through ad-filled worksheet sites or paying for a subscription. The goal is simple: free, straightforward math resources for everyone, whether you are a parent at the kitchen table, a teacher preparing a lesson, or a tutor who needs one more page of practice.`,
           `Every worksheet is randomized each time you open or regenerate it, so children get new problems instead of memorising a single page. Sheets are designed to print cleanly on one Letter or A4 page.`,
+        ],
+      },
+      {
+        heading: 'Why paper instead of an app',
+        paragraphs: [
+          'There is no shortage of math apps for children, and most of them reward every tap with instant feedback: a chime, a star, a bouncing animation. In our experience that turns practice into entertainment. The child learns to guess quickly and wait for the app to say yes or no, rather than to sit with a problem and think it through. Instant feedback is very good at keeping children busy; we are not convinced it is good at teaching them.',
+          'A printed worksheet works differently. The child has to write the answer down, cannot undo it with a tap, and has to decide for themselves whether it looks right. The feedback comes later, from a grown-up who looks over the page. That pause is the point: the thinking happens in the child’s head, not in the app.',
+          'This is how we use these sheets with our own children, and it is also what a fair body of research suggests. Practice that feels harder and that delays the answer tends to produce more durable learning than practice that feels smooth. The evidence is not one-sided, and instant feedback has its place for simple facts and for children who are just starting out, but for building real understanding, effortful practice with delayed feedback is a good bet.',
+        ],
+      },
+      {
+        heading: 'How to give feedback',
+        paragraphs: [
+          'When you check a sheet, the tone matters as much as the correction. Research on feedback and praise points in one direction: comment on the work and the method, not on the child, and treat a mistake as an invitation to think again rather than a verdict.',
+        ],
+        items: [
+          'Mark what is right first, then point to a problem that deserves another look. Something like “Have another look at this one, I think something slipped” is enough.',
+          'Avoid harsh critique and avoid labels: neither “that’s wrong, you weren’t paying attention” nor “you’re so smart”. Praise the effort and the method instead: “you lined up the columns carefully”.',
+          'If the child is stuck, ask a question rather than giving the answer: “What is 7 + 5 on its own?”, “Which column do we start with?”.',
+          'Let the child find and fix the error. The correction they make themselves is the one that sticks.',
+          'Keep it short and keep it kind. A relaxed ten minutes over one page beats a tense half hour.',
+        ],
+      },
+      {
+        heading: 'What the research says',
+        items: [
+          '[Butler, Karpicke & Roediger (2007)](https://doi.org/10.1037/1076-898X.13.4.273): feedback given after a delay produced better long-term retention than feedback given immediately.',
+          '[Mullet, Butler, Verdin, von Borries & Marsh (2014)](https://www.sciencedirect.com/science/article/abs/pii/S2211368114000448): students preferred immediate feedback and believed it helped more, yet delayed feedback on their homework led to better exam results.',
+          '[Fyfe & Rittle-Johnson (2017)](https://link.springer.com/article/10.1007/s11251-016-9401-1): in a classroom study with 243 second and third graders, immediate feedback helped during practice, but practising without feedback led to better mastery a week later.',
+          '[Bjork & Bjork (2011)](https://bjorklab.psych.ucla.edu/publication/bjork-e-l-bjork-r-a-2014-making-things-hard-on-yourself-but-in-a-good-way-creating-desirable-difficulties-to-enhance-learning-in-m-a-gernsbacher-and-j-pomerantz-eds-psycholo/): “desirable difficulties”, conditions that make practice feel harder, such as testing yourself and spacing sessions out, tend to produce more durable learning.',
+          '[Kapur (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1111/cogs.12107): “productive failure”: students who wrestled with math problems before being taught the method gained deeper conceptual understanding than those who were taught first.',
+          '[Kluger & DeNisi (1996)](https://doi.org/10.1037/0033-2909.119.2.254): a meta-analysis of 607 effects found that feedback helps on average, but more than a third of feedback interventions made performance worse, particularly feedback that turns attention to the person instead of the task.',
+          '[Hattie & Timperley (2007)](https://doi.org/10.3102/003465430298487): feedback works best when it is about the task and the method and answers “where to next?”; feedback aimed at the person is the least effective kind.',
+          '[Mueller & Dweck (1998)](https://pubmed.ncbi.nlm.nih.gov/9686450/) and [Kamins & Dweck (1999)](https://eric.ed.gov/?id=EJ586556): children praised or criticised as people (“you’re so smart”, “you’re careless”) responded helplessly to later setbacks; children given feedback about effort and method kept going.',
+          '[Van der Weel & van der Meer (2024)](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1219945/full): writing by hand produced far more elaborate brain connectivity than typing, in patterns linked to memory formation.',
+        ],
+        paragraphs: [
+          `None of these studies is a knock-down argument on its own, and results vary. But the direction is consistent enough that we built ${BRAND} around it. A few of the studies we lean on:`,
         ],
       },
       {

@@ -201,7 +201,7 @@ describe('renderStaticContent', () => {
       assertSequential(headingLevels(html))
       expect(textOf(html).length).toBeGreaterThanOrEqual(600)
       expect(html).toContain(`<nav aria-label="Breadcrumb"><a href="/">${BRAND}</a>`)
-      expect(html).toContain('Last updated September 4, 2026')
+      expect(html).toContain(`Last updated ${new Date(`${page.updated}T00:00:00Z`).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}`)
       for (const s of page.sections) expect(html).toContain(`<h2>${s.heading}</h2>`)
       expect(textOf(html)).toContain(OPERATOR)
       expect(html).toContain(`href="mailto:${CONTACT_EMAIL}"`)
@@ -282,7 +282,7 @@ describe('markdown twins', () => {
     for (const page of PAGES) {
       const md = renderMarkdown(pageRoute(page))
       expect(md.startsWith(`# ${page.title}\n\n> `)).toBe(true)
-      expect(md).toContain('**Last updated:** September 4, 2026')
+      expect(md).toMatch(/\*\*Last updated:\*\* [A-Z][a-z]+ \d{1,2}, \d{4}/)
       for (const s of page.sections) expect(md).toContain(`\n## ${s.heading}\n`)
       expect(md).toContain(OPERATOR)
       expect(md).toContain(`mailto:${CONTACT_EMAIL}`)

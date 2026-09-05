@@ -339,6 +339,44 @@ export default {
           ],
         },
         {
+          heading: 'Perché la carta invece di un’app',
+          paragraphs: [
+            'Le app di matematica per bambini non mancano, e quasi tutte premiano ogni tocco con un riscontro immediato: un suono, una stella, un’animazione. Nella nostra esperienza questo trasforma l’esercizio in intrattenimento. Il bambino impara a indovinare in fretta e ad aspettare che l’app dica sì o no, invece di fermarsi su un problema e ragionarci. Il riscontro immediato tiene i bambini molto occupati; non siamo convinti che insegni loro qualcosa.',
+            'Una scheda stampata funziona in modo diverso. Il bambino deve scrivere la risposta, non può cancellarla con un tocco e deve decidere da solo se sembra giusta. Il riscontro arriva dopo, da un adulto che guarda la pagina. Quella pausa è il punto: il pensiero avviene nella testa del bambino, non nell’app.',
+            'È così che usiamo queste schede con i nostri figli, ed è anche ciò che suggerisce un solido corpo di ricerche. L’esercizio che sembra più difficile e che rimanda la risposta tende a produrre un apprendimento più duraturo di quello che scorre liscio. Le prove non sono a senso unico, e il riscontro immediato ha il suo posto per i fatti semplici e per i bambini alle prime armi, ma per costruire una vera comprensione, lo sforzo e il riscontro differito sono una buona scommessa.',
+          ],
+        },
+        {
+          heading: 'Come dare un riscontro',
+          paragraphs: [
+            'Quando controllate una scheda, il tono conta quanto la correzione. Le ricerche su feedback e lodi indicano una sola direzione: commentate il lavoro e il metodo, non il bambino, e trattate un errore come un invito a ripensarci, non come un verdetto.',
+          ],
+          items: [
+            'Segnate prima ciò che è giusto, poi indicate un problema che merita un altro sguardo. Basta qualcosa come «Guarda ancora questo, credo che qualcosa sia scappato».',
+            'Evitate critiche dure ed etichette: né «è sbagliato, non stavi attento» né «sei così intelligente». Lodate invece l’impegno e il metodo: «hai allineato le colonne con cura».',
+            'Se il bambino è bloccato, fate una domanda invece di dare la risposta: «Quanto fa 7 + 5 da solo?», «Da quale colonna si comincia?».',
+            'Lasciate che il bambino trovi e corregga l’errore. La correzione che fa da solo è quella che resta.',
+            'Siate brevi e gentili. Dieci minuti sereni su una pagina valgono più di mezz’ora tesa.',
+          ],
+        },
+        {
+          heading: 'Cosa dice la ricerca',
+          items: [
+            '[Butler, Karpicke & Roediger (2007)](https://doi.org/10.1037/1076-898X.13.4.273): un riscontro dato dopo un ritardo ha prodotto una memorizzazione a lungo termine migliore di un riscontro immediato.',
+            '[Mullet, Butler, Verdin, von Borries & Marsh (2014)](https://www.sciencedirect.com/science/article/abs/pii/S2211368114000448): gli studenti preferivano il riscontro immediato e lo ritenevano più utile, ma il riscontro differito sui compiti ha portato a risultati migliori agli esami.',
+            '[Fyfe & Rittle-Johnson (2017)](https://link.springer.com/article/10.1007/s11251-016-9401-1): in uno studio in classe con 243 alunni di seconda e terza, il riscontro immediato aiutava durante l’esercizio, ma esercitarsi senza riscontro ha portato a una padronanza migliore una settimana dopo.',
+            '[Bjork & Bjork (2011)](https://bjorklab.psych.ucla.edu/publication/bjork-e-l-bjork-r-a-2014-making-things-hard-on-yourself-but-in-a-good-way-creating-desirable-difficulties-to-enhance-learning-in-m-a-gernsbacher-and-j-pomerantz-eds-psycholo/): le «difficoltà desiderabili», condizioni che rendono l’esercizio più impegnativo, come mettersi alla prova o distanziare le sessioni, tendono a produrre un apprendimento più duraturo.',
+            '[Kapur (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1111/cogs.12107): il «fallimento produttivo»: gli studenti che si sono cimentati con problemi di matematica prima che venisse insegnato il metodo hanno raggiunto una comprensione più profonda di chi è stato istruito prima.',
+            '[Kluger & DeNisi (1996)](https://doi.org/10.1037/0033-2909.119.2.254): una meta-analisi di 607 effetti ha rilevato che il feedback aiuta in media, ma più di un terzo degli interventi ha peggiorato le prestazioni, soprattutto quelli che spostano l’attenzione sulla persona invece che sul compito.',
+            '[Hattie & Timperley (2007)](https://doi.org/10.3102/003465430298487): il feedback funziona meglio quando riguarda il compito e il metodo e risponde a «e adesso?»; quello rivolto alla persona è il meno efficace.',
+            '[Mueller & Dweck (1998)](https://pubmed.ncbi.nlm.nih.gov/9686450/) e [Kamins & Dweck (1999)](https://eric.ed.gov/?id=EJ586556): i bambini lodati o criticati come persone («sei così intelligente», «sei sbadato») hanno reagito con impotenza agli insuccessi successivi; quelli che ricevevano commenti su impegno e metodo hanno continuato.',
+            '[Van der Weel & van der Meer (2024)](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1219945/full): scrivere a mano ha prodotto una connettività cerebrale molto più ricca rispetto alla tastiera, con schemi legati alla formazione della memoria.',
+          ],
+          paragraphs: [
+            'Nessuno di questi studi è un argomento definitivo da solo, e i risultati variano. Ma la direzione è abbastanza costante da averci fatto costruire {brand} intorno ad essa. Alcuni dei lavori su cui ci basiamo:',
+          ],
+        },
+        {
           heading: 'Cosa ottieni',
           items: [
             'Schede da stampare per le classi 1ª–3ª: tabelline, addizioni e sottrazioni, addizione in colonna, moltiplicazione in colonna, confronto di numeri, arrotondamento e sequenze numeriche.',

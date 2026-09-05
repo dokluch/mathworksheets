@@ -339,6 +339,44 @@ export default {
           ],
         },
         {
+          heading: 'Pourquoi du papier plutôt qu’une appli',
+          paragraphs: [
+            'Les applications de maths pour enfants ne manquent pas, et la plupart récompensent chaque appui par un retour immédiat : un carillon, une étoile, une animation. D’après notre expérience, l’entraînement se transforme alors en divertissement. L’enfant apprend à deviner vite et à attendre que l’appli dise oui ou non, plutôt qu’à rester sur un problème et à réfléchir. Le retour immédiat occupe très bien les enfants ; nous ne sommes pas convaincus qu’il leur apprenne grand-chose.',
+            'Une fiche imprimée fonctionne autrement. L’enfant doit écrire sa réponse, ne peut pas l’effacer d’un geste et doit juger lui-même si elle a l’air juste. Le retour vient plus tard, d’un adulte qui relit la page. Cette pause est l’essentiel : la réflexion se fait dans la tête de l’enfant, pas dans l’appli.',
+            'C’est ainsi que nous utilisons ces fiches avec nos propres enfants, et c’est aussi ce que suggère un ensemble solide de recherches. Un entraînement qui semble plus difficile et qui fait attendre la réponse produit en général un apprentissage plus durable qu’un entraînement qui semble facile. Les résultats ne sont pas unanimes, et le retour immédiat a sa place pour les faits simples et les tout débutants, mais pour construire une vraie compréhension, l’effort et le retour différé sont un bon pari.',
+          ],
+        },
+        {
+          heading: 'Comment corriger',
+          paragraphs: [
+            'Quand vous relisez une fiche, le ton compte autant que la correction. Les recherches sur le feedback et les compliments vont dans le même sens : commentez le travail et la méthode, pas l’enfant, et traitez une erreur comme une invitation à réfléchir de nouveau plutôt que comme un verdict.',
+          ],
+          items: [
+            'Signalez d’abord ce qui est juste, puis montrez un problème qui mérite un second regard. Un simple « Regarde encore celui-ci, je crois que quelque chose a glissé » suffit.',
+            'Évitez les critiques dures et les étiquettes : ni « c’est faux, tu n’as pas fait attention » ni « tu es tellement intelligent ». Félicitez plutôt l’effort et la méthode : « tu as bien aligné les colonnes ».',
+            'Si l’enfant bloque, posez une question plutôt que de donner la réponse : « Combien font 7 + 5 tout seuls ? », « Par quelle colonne commence-t-on ? ».',
+            'Laissez l’enfant trouver et corriger l’erreur lui-même. La correction qu’il fait seul est celle qui reste.',
+            'Faites court et restez bienveillant. Dix minutes détendues sur une page valent mieux qu’une demi-heure tendue.',
+          ],
+        },
+        {
+          heading: 'Ce que dit la recherche',
+          items: [
+            '[Butler, Karpicke & Roediger (2007)](https://doi.org/10.1037/1076-898X.13.4.273) : un retour donné après un délai a produit une meilleure mémorisation à long terme qu’un retour immédiat.',
+            '[Mullet, Butler, Verdin, von Borries & Marsh (2014)](https://www.sciencedirect.com/science/article/abs/pii/S2211368114000448) : les étudiants préféraient le retour immédiat et le croyaient plus efficace, mais un retour différé sur leurs devoirs a donné de meilleurs résultats aux examens.',
+            '[Fyfe & Rittle-Johnson (2017)](https://link.springer.com/article/10.1007/s11251-016-9401-1) : dans une étude en classe avec 243 élèves de CE1 et CE2, le retour immédiat aidait pendant l’exercice, mais s’entraîner sans retour a conduit à une meilleure maîtrise une semaine plus tard.',
+            '[Bjork & Bjork (2011)](https://bjorklab.psych.ucla.edu/publication/bjork-e-l-bjork-r-a-2014-making-things-hard-on-yourself-but-in-a-good-way-creating-desirable-difficulties-to-enhance-learning-in-m-a-gernsbacher-and-j-pomerantz-eds-psycholo/) : les « difficultés désirables », des conditions qui rendent l’entraînement plus ardu, comme se tester soi-même ou espacer les séances, produisent en général un apprentissage plus durable.',
+            '[Kapur (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1111/cogs.12107) : l’« échec productif » : les élèves qui se sont débattus avec des problèmes de maths avant qu’on leur enseigne la méthode ont acquis une compréhension plus profonde que ceux à qui on l’a enseignée d’abord.',
+            '[Kluger & DeNisi (1996)](https://doi.org/10.1037/0033-2909.119.2.254) : une méta-analyse de 607 effets a montré que le feedback aide en moyenne, mais que plus d’un tiers des interventions ont dégradé la performance, surtout celles qui détournent l’attention vers la personne plutôt que vers la tâche.',
+            '[Hattie & Timperley (2007)](https://doi.org/10.3102/003465430298487) : le feedback fonctionne le mieux quand il porte sur la tâche et la méthode et répond à « et maintenant ? » ; le feedback qui vise la personne est le moins efficace.',
+            '[Mueller & Dweck (1998)](https://pubmed.ncbi.nlm.nih.gov/9686450/) et [Kamins & Dweck (1999)](https://eric.ed.gov/?id=EJ586556) : les enfants félicités ou critiqués en tant que personnes (« tu es si intelligent », « tu es étourdi ») ont réagi avec impuissance aux échecs suivants ; ceux qui recevaient un retour sur l’effort et la méthode ont persévéré.',
+            '[Van der Weel & van der Meer (2024)](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1219945/full) : écrire à la main a produit une connectivité cérébrale bien plus riche que taper au clavier, selon des schémas associés à la formation de la mémoire.',
+          ],
+          paragraphs: [
+            'Aucune de ces études n’est un argument définitif à elle seule, et les résultats varient. Mais la direction est assez constante pour que nous ayons construit {brand} autour d’elle. Quelques travaux sur lesquels nous nous appuyons :',
+          ],
+        },
+        {
           heading: 'Ce que vous obtenez',
           items: [
             'Des fiches à imprimer du CP au CE2 : tables de multiplication, additions et soustractions, addition posée, multiplication posée, comparaison de nombres, arrondi et suites de nombres.',

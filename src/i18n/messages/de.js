@@ -339,6 +339,44 @@ export default {
           ],
         },
         {
+          heading: 'Warum Papier statt einer App',
+          paragraphs: [
+            'An Mathe-Apps für Kinder mangelt es nicht, und die meisten belohnen jedes Tippen mit sofortiger Rückmeldung: ein Klang, ein Stern, eine Animation. Nach unserer Erfahrung wird Üben so zur Unterhaltung. Das Kind lernt, schnell zu raten und darauf zu warten, dass die App Ja oder Nein sagt, statt bei einer Aufgabe zu bleiben und sie zu durchdenken. Sofortige Rückmeldung beschäftigt Kinder sehr gut; dass sie ihnen etwas beibringt, bezweifeln wir.',
+            'Ein gedrucktes Arbeitsblatt funktioniert anders. Das Kind muss die Antwort aufschreiben, kann sie nicht mit einem Tipp rückgängig machen und muss selbst entscheiden, ob sie richtig aussieht. Die Rückmeldung kommt später, von einem Erwachsenen, der sich das Blatt ansieht. Diese Pause ist der Punkt: Das Denken findet im Kopf des Kindes statt, nicht in der App.',
+            'So nutzen wir diese Blätter mit unseren eigenen Kindern, und so legt es auch ein solider Forschungsstand nahe. Üben, das sich schwerer anfühlt und die Antwort hinauszögert, führt meist zu dauerhafterem Lernen als Üben, das glatt läuft. Die Belege sind nicht einseitig, und sofortige Rückmeldung hat ihren Platz bei einfachen Fakten und bei Kindern, die gerade erst anfangen. Um echtes Verständnis aufzubauen, sind anstrengendes Üben und verzögerte Rückmeldung aber eine gute Wette.',
+          ],
+        },
+        {
+          heading: 'Wie man Rückmeldung gibt',
+          paragraphs: [
+            'Wenn Sie ein Blatt durchsehen, zählt der Ton so viel wie die Korrektur. Die Forschung zu Feedback und Lob zeigt in eine Richtung: Kommentieren Sie die Arbeit und den Weg, nicht das Kind, und behandeln Sie einen Fehler als Einladung, noch einmal nachzudenken, nicht als Urteil.',
+          ],
+          items: [
+            'Markieren Sie zuerst, was richtig ist, und zeigen Sie dann auf eine Aufgabe, die einen zweiten Blick verdient. Ein „Schau dir diese noch einmal an, ich glaube, da ist etwas verrutscht“ reicht.',
+            'Vermeiden Sie harte Kritik und Etiketten: weder „das ist falsch, du hast nicht aufgepasst“ noch „du bist so klug“. Loben Sie stattdessen Anstrengung und Methode: „du hast die Spalten sorgfältig untereinander geschrieben“.',
+            'Wenn das Kind feststeckt, stellen Sie eine Frage, statt die Antwort zu geben: „Was ist 7 + 5 für sich allein?“, „Mit welcher Spalte fangen wir an?“.',
+            'Lassen Sie das Kind den Fehler selbst finden und verbessern. Die Korrektur, die es selbst macht, bleibt hängen.',
+            'Fassen Sie sich kurz und bleiben Sie freundlich. Zehn entspannte Minuten über einem Blatt sind besser als eine angespannte halbe Stunde.',
+          ],
+        },
+        {
+          heading: 'Was die Forschung sagt',
+          items: [
+            '[Butler, Karpicke & Roediger (2007)](https://doi.org/10.1037/1076-898X.13.4.273): Verzögerte Rückmeldung führte zu besserem langfristigem Behalten als sofortige Rückmeldung.',
+            '[Mullet, Butler, Verdin, von Borries & Marsh (2014)](https://www.sciencedirect.com/science/article/abs/pii/S2211368114000448): Studierende bevorzugten sofortige Rückmeldung und hielten sie für hilfreicher, doch verzögerte Rückmeldung zu ihren Hausaufgaben brachte bessere Prüfungsergebnisse.',
+            '[Fyfe & Rittle-Johnson (2017)](https://link.springer.com/article/10.1007/s11251-016-9401-1): In einer Klassenstudie mit 243 Zweit- und Drittklässlern half sofortige Rückmeldung während des Übens, doch Üben ohne Rückmeldung führte eine Woche später zu besserer Beherrschung.',
+            '[Bjork & Bjork (2011)](https://bjorklab.psych.ucla.edu/publication/bjork-e-l-bjork-r-a-2014-making-things-hard-on-yourself-but-in-a-good-way-creating-desirable-difficulties-to-enhance-learning-in-m-a-gernsbacher-and-j-pomerantz-eds-psycholo/): „Wünschenswerte Schwierigkeiten“, also Bedingungen, die das Üben schwerer erscheinen lassen, etwa sich selbst abzufragen oder Sitzungen zu verteilen, führen meist zu dauerhafterem Lernen.',
+            '[Kapur (2014)](https://onlinelibrary.wiley.com/doi/abs/10.1111/cogs.12107): „Produktives Scheitern“: Schüler, die mit Matheaufgaben rangen, bevor ihnen die Methode gezeigt wurde, entwickelten ein tieferes Verständnis als Schüler, die zuerst unterrichtet wurden.',
+            '[Kluger & DeNisi (1996)](https://doi.org/10.1037/0033-2909.119.2.254): Eine Metaanalyse von 607 Effekten ergab, dass Feedback im Schnitt hilft, aber mehr als ein Drittel der Feedback-Interventionen die Leistung verschlechterte, vor allem solche, die die Aufmerksamkeit auf die Person statt auf die Aufgabe lenken.',
+            '[Hattie & Timperley (2007)](https://doi.org/10.3102/003465430298487): Feedback wirkt am besten, wenn es sich auf Aufgabe und Vorgehen bezieht und die Frage „Wohin als Nächstes?“ beantwortet; auf die Person gerichtetes Feedback ist die am wenigsten wirksame Art.',
+            '[Mueller & Dweck (1998)](https://pubmed.ncbi.nlm.nih.gov/9686450/) und [Kamins & Dweck (1999)](https://eric.ed.gov/?id=EJ586556): Kinder, die als Person gelobt oder kritisiert wurden („du bist so klug“, „du bist schlampig“), reagierten auf spätere Rückschläge hilflos; Kinder mit Rückmeldung zu Anstrengung und Methode machten weiter.',
+            '[Van der Weel & van der Meer (2024)](https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1219945/full): Handschrift erzeugte weit ausgeprägtere Vernetzung im Gehirn als Tippen, in Mustern, die mit Gedächtnisbildung verbunden sind.',
+          ],
+          paragraphs: [
+            'Keine dieser Studien ist für sich ein endgültiges Argument, und die Ergebnisse unterscheiden sich. Aber die Richtung ist beständig genug, dass wir {brand} darum herum gebaut haben. Einige der Arbeiten, auf die wir uns stützen:',
+          ],
+        },
+        {
           heading: 'Was du bekommst',
           items: [
             'Arbeitsblätter zum Ausdrucken für die Klassen 1–3: Einmaleins, Addition und Subtraktion, schriftliche Addition, schriftliche Multiplikation, Zahlenvergleich, Runden und Zahlenfolgen.',
