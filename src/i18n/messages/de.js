@@ -150,6 +150,11 @@ export default {
   common: {
     regenerate: 'Neu erzeugen',
     print: 'Drucken',
+    printCta: {
+      title: 'Bereit zum Drucken?',
+      hint: 'Das Blatt passt auf eine Seite. Erst neu generieren, wenn du andere Aufgaben möchtest.',
+      button: 'Arbeitsblatt drucken',
+    },
     columns: 'Spalten',
     limit: 'Zahlenraum',
     range: 'Bereich',

@@ -159,6 +159,11 @@ export default {
   common: {
     regenerate: 'Regenerate',
     print: 'Print',
+    printCta: {
+      title: 'Ready to print?',
+      hint: 'The sheet fits on one page. Regenerate first if you want a different set of problems.',
+      button: 'Print worksheet',
+    },
     columns: 'Columns',
     limit: 'Limit',
     range: 'Range',

@@ -9,6 +9,7 @@ import { LocaleContext } from './i18n/context.js'
 import './App.css'
 import LanguageSwitcher from './components/LanguageSwitcher'
 import SiteFooter from './components/SiteFooter'
+import PrintCta from './components/PrintCta'
 import StaticPage from './components/StaticPage'
 import MultiplicationTable from './components/MultiplicationTable'
 import AddSubtract from './components/AddSubtract'
@@ -187,6 +188,7 @@ export default function App() {
             </div>
             <div className="worksheet-content">
               <ActiveComponent />
+              {!activeInfo?.interactive && <PrintCta />}
             </div>
           </main>
         )}

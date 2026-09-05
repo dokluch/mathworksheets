@@ -150,6 +150,11 @@ export default {
   common: {
     regenerate: 'Rigenera',
     print: 'Stampa',
+    printCta: {
+      title: 'Pronto per la stampa?',
+      hint: 'La scheda sta in una pagina. Rigenera prima se vuoi una serie di esercizi diversa.',
+      button: 'Stampa la scheda',
+    },
     columns: 'Colonne',
     limit: 'Limite',
     range: 'Intervallo',
