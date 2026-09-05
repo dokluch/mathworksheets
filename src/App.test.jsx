@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { render, screen, fireEvent, cleanup } from '@testing-library/react'
+import { render, screen, fireEvent, cleanup, within } from '@testing-library/react'
 
 vi.mock('./lib/analytics.js', () => ({
   trackEvent: vi.fn(),
@@ -68,9 +68,9 @@ describe('App', () => {
     const footer = screen.getByRole('contentinfo')
     expect(footer.className).toContain('no-print')
     for (const [name, href] of [['About', '/about'], ['Privacy', '/privacy'], ['Terms', '/terms']]) {
-      expect(screen.getByRole('link', { name }).getAttribute('href')).toBe(href)
+      expect(within(footer).getByRole('link', { name }).getAttribute('href')).toBe(href)
     }
-    expect(screen.getByRole('link', { name: /GitHub/ }).getAttribute('href')).toContain('github.com/dokluch')
+    expect(within(footer).getByRole('link', { name: /GitHub/ }).getAttribute('href')).toContain('github.com/dokluch')
     expect(footer.textContent).toContain('Superposition Labs Inc.')
   })
 
@@ -142,7 +142,7 @@ describe('App', () => {
     const button = screen.getByRole('button', { name: /Language/ })
     expect(button.closest('.lang-switcher').className).toContain('no-print')
     // On a worksheet the switcher lives in the worksheet header, not the sidebar.
-    expect(button.closest('.worksheet-topbar')).toBeTruthy()
+    expect(button.closest('.site-header')).toBeTruthy()
     expect(document.querySelector('.catalog--sidebar .lang-switcher')).toBeNull()
     expect(document.querySelectorAll('.lang-switcher').length).toBe(1)
     fireEvent.click(button)
@@ -214,6 +214,56 @@ describe('App', () => {
     window.history.replaceState(null, '', '/worksheets/equation-explorer')
     render(<App />)
     expect(screen.queryByRole('button', { name: /Print worksheet/ })).toBeNull()
+  })
+
+  it('has a site header with the brand as H1 link home, an About link and the language switcher on the catalog', () => {
+    render(<App />)
+    const header = document.querySelector('header.site-header')
+    expect(header.className).toContain('no-print')
+    const h1 = screen.getByRole('heading', { level: 1 })
+    expect(header.contains(h1)).toBe(true)
+    const brand = h1.querySelector('a')
+    expect(brand.getAttribute('href')).toBe('/')
+    expect(brand.textContent).toBe('MathSheets')
+    const about = header.querySelector('a[href="/about"]')
+    expect(about.textContent).toBe('About')
+    expect(header.contains(screen.getByRole('button', { name: /Language/ }))).toBe(true)
+    expect(document.querySelector('.lang-corner')).toBeNull()
+  })
+
+  it('the header stays on static pages (without a second H1) and on worksheets, and the brand goes home', () => {
+    window.history.replaceState(null, '', '/terms')
+    render(<App />)
+    let header = document.querySelector('header.site-header')
+    expect(screen.getAllByRole('heading', { level: 1 }).length).toBe(1)
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Terms of Service')
+    expect(header.querySelector('h1')).toBeNull()
+    fireEvent.click(header.querySelector('a[href="/about"]'))
+    expect(window.location.pathname).toBe('/about')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('About MathSheets')
+
+    fireEvent.click(header.querySelector('a.site-brand'))
+    expect(window.location.pathname).toBe('/')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+
+    fireEvent.click(screen.getByRole('link', { name: /Rounding/ }))
+    expect(window.location.pathname).toBe('/worksheets/rounding')
+    header = document.querySelector('header.site-header')
+    expect(header.contains(screen.getByRole('button', { name: /Language/ }))).toBe(true)
+    expect(document.querySelector('.worksheet-topbar button')).toBeNull()
+
+    fireEvent.click(header.querySelector('a.site-brand'))
+    expect(window.location.pathname).toBe('/')
+    expect(screen.queryByRole('tabpanel')).toBeNull()
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+  })
+
+  it('the header links follow the locale', () => {
+    window.history.replaceState(null, '', '/fr/privacy')
+    render(<App />)
+    const header = document.querySelector('header.site-header')
+    expect(header.querySelector('a.site-brand').getAttribute('href')).toBe('/fr')
+    expect(header.querySelector('a.site-nav-link').getAttribute('href')).toBe('/fr/about')
   })
 
   it('tracks print_worksheet with the sheet id and its settings on beforeprint', () => {

@@ -210,6 +210,17 @@ describe('renderStaticContent', () => {
     expect(renderStaticContent(pageRoute(PAGES[0]))).toContain('href="/privacy"')
   })
 
+  it('every kind of page carries the site header with a brand link home and the About page', () => {
+    for (const route of routes()) {
+      const html = renderStaticContent(route)
+      const prefix = route.locale === 'en' ? '' : `/${route.locale}`
+      expect(html).toContain('<header class="site-header no-print">')
+      expect(html).toContain(`<a class="site-brand" href="${prefix || '/'}">`)
+      expect(html).toContain(`<a class="site-nav-link" href="${prefix}/about">`)
+      expect((html.match(/<h1\b/g) || []).length).toBe(1)
+    }
+  })
+
   it('every kind of page carries the site footer with links to the static pages and GitHub', () => {
     for (const route of routes('en')) {
       const html = renderStaticContent(route)

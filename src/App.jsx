@@ -1,13 +1,13 @@
 import { useEffect, useCallback, useMemo } from 'react'
-import { IconGrid3x3, IconPlusMinus, IconRuler2, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator } from '@tabler/icons-react'
+import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator } from '@tabler/icons-react'
 import { usePersistedState, getPersistedTab } from './hooks/usePersistedState'
 import { useRoute, sheetIdToPath } from './hooks/useRoute'
 import { trackEvent, settingsToParams } from './lib/analytics'
-import { BRAND } from './seo/site'
 import { t as translate, localizedWorksheets, DEFAULT_LOCALE } from './i18n/index.js'
 import { LocaleContext } from './i18n/context.js'
 import './App.css'
 import LanguageSwitcher from './components/LanguageSwitcher'
+import SiteHeader from './components/SiteHeader'
 import SiteFooter from './components/SiteFooter'
 import PrintCta from './components/PrintCta'
 import StaticPage from './components/StaticPage'
@@ -101,8 +101,10 @@ export default function App() {
   return (
     <LocaleContext.Provider value={localeCtx}>
       <div className={`app ${activeSheet ? 'has-active' : 'catalog-only'}`}>
-        {/* Language switcher: top-right corner of the catalog and static pages (the worksheet header carries it otherwise) */}
-        {!activeSheet && <div className="lang-corner no-print">{switcher}</div>}
+        <SiteHeader navigate={navigate} isHome={!activeSheet && !activePage}>
+          {switcher}
+        </SiteHeader>
+        <div className="app-body">
 
         {/* ── Static page (About, Privacy, Terms, Developers) ── */}
         {activePage ? (
@@ -143,15 +145,7 @@ export default function App() {
           </aside>
         ) : (
           <main className="catalog no-print catalog--full">
-            <header className="catalog-header">
-              <div className="catalog-brand">
-                <h1 className="catalog-title">
-                  <IconRuler2 size={28} stroke={2} />
-                  {BRAND}
-                </h1>
-                <p className="catalog-subtitle">{t('app.subtitle')}</p>
-              </div>
-            </header>
+            <p className="catalog-hero">{t('app.subtitle')}</p>
 
             <nav className="catalog-grid" aria-label={t('app.worksheetTypes')}>
               {worksheets.map(ws => (
@@ -184,7 +178,6 @@ export default function App() {
                 {activeInfo && <activeInfo.Icon size={22} stroke={1.8} />}
                 {activeInfo?.label}
               </h2>
-              {switcher}
             </div>
             <div className="worksheet-content">
               <ActiveComponent />
@@ -192,6 +185,7 @@ export default function App() {
             </div>
           </main>
         )}
+        </div>
       </div>
     </LocaleContext.Provider>
   )

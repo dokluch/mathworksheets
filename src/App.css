@@ -16,13 +16,104 @@
   flex-direction: column;
 }
 
+/* Everything under the site header */
+.app-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 /* ── Desktop: side-by-side when active ── */
 @media (min-width: 769px) {
   .app.has-active {
-    flex-direction: row;
     overflow: hidden;
     height: 100vh;
     height: 100dvh;
+  }
+  .app.has-active .app-body {
+    flex-direction: row;
+    overflow: hidden;
+  }
+}
+
+/* =============================================
+   SITE HEADER — brand · About · language
+   ============================================= */
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 20px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.site-brand-title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  display: flex;
+}
+
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  margin-left: -6px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: color 0.15s;
+}
+
+.site-brand svg {
+  color: var(--color-primary);
+}
+
+.site-brand:hover {
+  color: var(--color-primary);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.site-nav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: background 0.15s, color 0.15s;
+}
+
+.site-nav-link:hover {
+  background: rgba(0,0,0,0.05);
+  color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .site-header {
+    padding: 8px 12px;
+  }
+  .site-brand {
+    font-size: 17px;
+  }
+  .site-nav-link {
+    min-height: 40px;
+    padding: 8px;
   }
 }
 
@@ -39,8 +130,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px 20px 40px;
+  padding: 32px 20px 40px;
   flex: 1;
+}
+
+/* Tagline under the header on the catalog */
+.catalog-hero {
+  color: var(--color-text-muted);
+  font-size: 16px;
+  text-align: center;
+  margin: 0 0 28px;
 }
 
 /* — Sidebar mode (desktop) — */
@@ -52,7 +151,6 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    height: 100dvh;
     padding: 12px 0;
   }
 }
@@ -131,13 +229,6 @@
 }
 
 /* ── Language switcher ── */
-.lang-corner {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  z-index: 30;
-}
-
 .lang-switcher {
   position: relative;
   display: inline-flex;
@@ -204,10 +295,6 @@
 }
 
 @media (max-width: 768px) {
-  .lang-corner {
-    top: 8px;
-    right: 8px;
-  }
   .lang-btn {
     padding: 8px 9px;
     min-height: 40px;
@@ -398,7 +485,6 @@
 @media (min-width: 769px) {
   .worksheet-main {
     overflow-y: auto;
-    height: 100dvh;
   }
 }
 
@@ -443,7 +529,12 @@
 
 @media (max-width: 768px) {
   .catalog--full {
-    padding: 32px 16px 28px;
+    padding: 20px 16px 28px;
+  }
+
+  .catalog-hero {
+    font-size: 14px;
+    margin-bottom: 20px;
   }
 
   .catalog-title {
@@ -561,7 +652,8 @@
     padding: 0;
     max-width: none;
   }
-  .app.has-active {
+  .app.has-active,
+  .app-body {
     display: block;
     height: auto;
     overflow: visible;

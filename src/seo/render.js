@@ -477,6 +477,17 @@ export function siteFooterLinks(locale = DEFAULT_LOCALE) {
   ]
 }
 
+/** Site header for the crawlable HTML: brand link home and the About page (mirrors components/SiteHeader.jsx). */
+export function headerHtml(locale = DEFAULT_LOCALE) {
+  const about = localizedPages(locale).find(p => p.id === 'about')
+  return `<header class="site-header no-print">
+      <a class="site-brand" href="${homeRoute(locale).path}">${brandIcon(22)}<span>${BRAND}</span></a>
+      <nav class="site-nav" aria-label="${attr(t(locale, 'static.footerSite'))}">
+        <a class="site-nav-link" href="${pageRoute(about, locale).path}">${escapeHtml(about.navLabel)}</a>
+      </nav>
+    </header>`
+}
+
 export function footerHtml({ year = new Date().getFullYear(), locale = DEFAULT_LOCALE } = {}) {
   const links = siteFooterLinks(locale)
     .map(l => `<a href="${l.path}"${l.external ? ' rel="noopener noreferrer"' : ''}>${escapeHtml(l.label)}</a>`)
@@ -654,7 +665,7 @@ export function renderStaticContent(route) {
     route.kind === 'home' ? homeContent(route) :
     route.kind === 'worksheet' ? worksheetContent(route) :
     staticMain(route)
-  return `<div id="static-content">\n    ${inner}\n    ${footerHtml({ locale: route.locale })}\n    </div>`
+  return `<div id="static-content">\n    ${headerHtml(route.locale)}\n    ${inner}\n    ${footerHtml({ locale: route.locale })}\n    </div>`
 }
 
 /** Replace the marker blocks in an HTML template with this route's head and content, and set <html lang>. */
