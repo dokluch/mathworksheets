@@ -3,13 +3,10 @@ import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useNotebookGrid } from '../hooks/useNotebookGrid'
 import { trackEvent } from '../lib/analytics'
+import { useT } from '../i18n/context'
 import './ColumnAddition.css'
 
-const DIGIT_PRESETS = [
-  { digits: 2, label: '2-digit' },
-  { digits: 3, label: '3-digit' },
-  { digits: 4, label: '4-digit' },
-]
+const DIGIT_PRESETS = [2, 3, 4]
 
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -92,6 +89,7 @@ function renderProblem(problem, width) {
 }
 
 export default function ColumnAddition() {
+  const t = useT()
   const [digits, setDigits] = usePersistedState('coladd', 'digits', 3)
   const [columns, setColumns] = usePersistedState('coladd', 'columns', 3)
   const [preferCarry, setPreferCarry] = usePersistedState('coladd', 'preferCarry', true)
@@ -118,23 +116,23 @@ export default function ColumnAddition() {
       <div className="controls no-print">
         <div className="control-row">
           <label className="control-label">
-            Number size
-            <div className="btn-group" role="group" aria-label="Number size">
-              {DIGIT_PRESETS.map(preset => (
+            {t('common.numberSize')}
+            <div className="btn-group" role="group" aria-label={t('common.numberSize')}>
+              {DIGIT_PRESETS.map(d => (
                 <button
-                  key={preset.digits}
-                  className={`btn-toggle ${digits === preset.digits ? 'active' : ''}`}
-                  onClick={() => setDigits(preset.digits)}
+                  key={d}
+                  className={`btn-toggle ${digits === d ? 'active' : ''}`}
+                  onClick={() => setDigits(d)}
                 >
-                  {preset.label}
+                  {t('coladd.digitPreset', { d })}
                 </button>
               ))}
             </div>
           </label>
 
           <label className="control-label">
-            Columns
-            <div className="btn-group" role="group" aria-label="Columns">
+            {t('common.columns')}
+            <div className="btn-group" role="group" aria-label={t('common.columns')}>
               {[2, 3, 4].map(value => (
                 <button
                   key={value}
@@ -153,16 +151,16 @@ export default function ColumnAddition() {
               checked={preferCarry}
               onChange={event => setPreferCarry(event.target.checked)}
             />
-            Prefer carry practice
+            {t('coladd.preferCarry')}
           </label>
         </div>
 
         <div className="control-actions">
           <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'coladd' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> Regenerate
+            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
           </button>
           <button className="btn btn-secondary" onClick={() => window.print()}>
-            <IconPrinter size={16} stroke={2} /> Print
+            <IconPrinter size={16} stroke={2} /> {t('common.print')}
           </button>
         </div>
       </div>
@@ -174,9 +172,9 @@ export default function ColumnAddition() {
       >
         <div className="worksheet-header">
           <div className="ws-title">
-            Column Addition
+            {t('coladd.title')}
             <span className="ws-meta">
-              {digits}-digit numbers
+              {t('coladd.meta', { d: digits })}
             </span>
           </div>
         </div>

@@ -4,10 +4,14 @@
  * - Accept: text/markdown on any page URL → the page's Markdown twin, with
  *   Content-Type: text/markdown; charset=utf-8 and Vary: Accept
  *   (acceptmarkdown.com convention, RFC 9110 q-values honoured).
- * - HTML responses get Vary: Accept and a Link: rel="alternate" header.
+ * - HTML responses get Vary: Accept, Content-Language and a Link: rel="alternate" header.
  * - Nothing acceptable → 406 with a plain-text list of representations.
- * - Unknown extensionless paths → real 404 with a Markdown (or HTML) body
- *   that points agents at the sitemap, llms.txt and developer resources.
+ * - Unknown extensionless paths → real 404 with a Markdown (or HTML) body, in
+ *   the language of the path's locale prefix, that points agents at the
+ *   sitemap, llms.txt and developer resources.
+ *
+ * Locale prefixes (/fr, /fr/worksheets/<slug>, …) are resolved by findRoute();
+ * there is no Accept-Language redirect, so responses never vary on it.
  *
  * Static files with an extension (assets, .md, .txt, .xml, .json, images)
  * never hit this function thanks to the matcher.
@@ -16,6 +20,7 @@ import { next, rewrite } from '@vercel/functions'
 import { negotiate } from './src/seo/negotiate.js'
 import { findRoute, normalizePath, renderNotFoundMarkdown, renderNotFoundHtml } from './src/seo/render.js'
 import { absoluteUrl } from './src/seo/site.js'
+import { splitLocale, LOCALE_META } from './src/i18n/index.js'
 
 // Vercel statically evaluates this export: keep the matcher an inline literal.
 export const config = {
@@ -28,12 +33,14 @@ const MARKDOWN = 'text/markdown; charset=utf-8'
 const HTML = 'text/html; charset=utf-8'
 
 export function notFoundResponse(pathname, accept) {
+  const { locale } = splitLocale(normalizePath(pathname))
   const chosen = negotiate(accept, ['text/markdown', 'text/html'])
-  const body = chosen === 'text/html' ? renderNotFoundHtml(pathname) : renderNotFoundMarkdown(pathname)
+  const body = chosen === 'text/html' ? renderNotFoundHtml(pathname, locale) : renderNotFoundMarkdown(pathname, locale)
   return new Response(body, {
     status: 404,
     headers: {
       'Content-Type': chosen === 'text/html' ? HTML : MARKDOWN,
+      'Content-Language': LOCALE_META[locale].lang,
       Vary: 'Accept',
       'Cache-Control': 'public, max-age=0, must-revalidate',
       'X-Content-Type-Options': 'nosniff',
@@ -52,11 +59,13 @@ export default function middleware(request) {
   if (!route) return notFoundResponse(pathname, accept)
 
   const chosen = negotiate(accept, ['text/html', 'text/markdown'])
+  const lang = LOCALE_META[route.locale].lang
 
   if (chosen === 'text/markdown') {
     return rewrite(new URL(route.md, request.url), {
       headers: {
         'Content-Type': MARKDOWN,
+        'Content-Language': lang,
         Vary: 'Accept',
         'Content-Location': route.md,
         Link: `<${route.path}>; rel="canonical"; type="text/html"`,
@@ -69,6 +78,7 @@ export default function middleware(request) {
     return next({
       headers: {
         Vary: 'Accept',
+        'Content-Language': lang,
         Link: `<${route.md}>; rel="alternate"; type="text/markdown"`,
       },
     })

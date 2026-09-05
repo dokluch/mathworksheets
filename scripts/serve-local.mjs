@@ -8,7 +8,8 @@
  *
  * Emulates: middleware.js on extensionless paths (x-middleware-next /
  * x-middleware-rewrite semantics of @vercel/functions), cleanUrls (/foo →
- * foo.html), trailingSlash: false (308), vercel.json headers, 404.html fallback.
+ * foo.html, so /fr → fr.html and /fr/privacy → fr/privacy.html),
+ * trailingSlash: false (308), vercel.json headers, 404.html fallback.
  * Not a substitute for the real deployment: run verify:live against the
  * Vercel URL as well.
  */

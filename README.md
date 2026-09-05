@@ -19,6 +19,8 @@ Free, printable, randomized math worksheets for grades 1–3. An open-source web
 
 Each worksheet is randomized and printable, and has its own URL (`/worksheets/<slug>`). Settings persist between sessions so you can pick up where you left off.
 
+The whole site is available in English, French, Spanish, German, Italian, Russian and Simplified Chinese: pick a language with the globe button in the header, or use the prefixed URLs (`/fr`, `/de/worksheets/rounding`, …). English lives at the root.
+
 |                  Multiplication                   |                 Add & Subtract                  |
 | :-----------------------------------------------: | :---------------------------------------------: |
 | ![Multiplication](screenshots/multiplication.png) | ![Add & Subtract](screenshots/add-subtract.png) |

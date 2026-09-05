@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { IconPrinter, IconRefresh } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { trackEvent } from '../lib/analytics'
+import { useT } from '../i18n/context'
 import './MultiplicationTable.css'
 
 function shuffleArray(array) {
@@ -14,6 +15,7 @@ function shuffleArray(array) {
 }
 
 export default function MultiplicationTable() {
+  const t = useT()
   const [start, setStart] = usePersistedState('multiply', 'start', 1)
   const [end, setEnd] = usePersistedState('multiply', 'end', 10)
   const [fillDiagonal, setFillDiagonal] = usePersistedState('multiply', 'fillDiagonal', false)
@@ -58,7 +60,7 @@ export default function MultiplicationTable() {
       <div className="controls no-print">
         <div className="control-row">
           <label className="control-label">
-            Range
+            {t('common.range')}
             <div className="range-inputs">
               <input
                 type="number"
@@ -67,9 +69,9 @@ export default function MultiplicationTable() {
                 max={20}
                 onChange={e => setStart(Math.max(1, parseInt(e.target.value) || 1))}
                 className="num-input"
-                aria-label="Range start"
+                aria-label={t('multiply.rangeStart')}
               />
-              <span className="range-sep">to</span>
+              <span className="range-sep">{t('multiply.to')}</span>
               <input
                 type="number"
                 value={end}
@@ -77,7 +79,7 @@ export default function MultiplicationTable() {
                 max={50}
                 onChange={e => setEnd(Math.max(2, parseInt(e.target.value) || 2))}
                 className="num-input"
-                aria-label="Range end"
+                aria-label={t('multiply.rangeEnd')}
               />
             </div>
           </label>
@@ -89,12 +91,12 @@ export default function MultiplicationTable() {
                 checked={fillDiagonal}
                 onChange={e => setFillDiagonal(e.target.checked)}
               />
-              Fill diagonal
+              {t('multiply.fillDiagonal')}
             </span>
           </label>
 
           <label className="control-label">
-            Pre-fill {randomPercent}%
+            {t('multiply.prefill', { pct: randomPercent })}
             <input
               type="range"
               min={0}
@@ -109,18 +111,18 @@ export default function MultiplicationTable() {
 
         <div className="control-actions">
           <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'multiply' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> Regenerate
+            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
           </button>
           {tableData && (
             <button className="btn btn-secondary" onClick={() => window.print()}>
-              <IconPrinter size={16} stroke={2} /> Print
+              <IconPrinter size={16} stroke={2} /> {t('common.print')}
             </button>
           )}
         </div>
       </div>
 
       {tableData && (
-        <div className="mult-table-wrap print-area" tabIndex={0} role="region" aria-label="Multiplication table">
+        <div className="mult-table-wrap print-area" tabIndex={0} role="region" aria-label={t('multiply.tableAria')}>
           <table className="mult-table">
             <thead>
               <tr>

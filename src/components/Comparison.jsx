@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { trackEvent } from '../lib/analytics'
+import { useT } from '../i18n/context'
 import './Comparison.css'
 
 function randInt(min, max) {
@@ -103,14 +104,10 @@ function generateEqualPair(maxVal) {
   return [a, a]
 }
 
-const PRESETS = [
-  { label: 'Within 10', max: 10 },
-  { label: 'Within 20', max: 20 },
-  { label: 'Within 100', max: 100 },
-  { label: 'Within 1000', max: 1000 },
-]
+const PRESETS = [10, 20, 100, 1000]
 
 export default function Comparison() {
+  const t = useT()
   const [maxVal, setMaxVal] = usePersistedState('compare', 'maxVal', 100)
   const [columns, setColumns] = usePersistedState('compare', 'columns', 3)
   const [seed, setSeed] = useState(0)
@@ -138,23 +135,23 @@ export default function Comparison() {
       <div className="controls no-print">
         <div className="control-row">
           <label className="control-label">
-            Range
-            <div className="btn-group" role="group" aria-label="Range">
-              {PRESETS.map(p => (
+            {t('common.range')}
+            <div className="btn-group" role="group" aria-label={t('common.range')}>
+              {PRESETS.map(max => (
                 <button
-                  key={p.max}
-                  className={`btn-toggle ${maxVal === p.max ? 'active' : ''}`}
-                  onClick={() => setMaxVal(p.max)}
+                  key={max}
+                  className={`btn-toggle ${maxVal === max ? 'active' : ''}`}
+                  onClick={() => setMaxVal(max)}
                 >
-                  {p.label}
+                  {t('common.within', { n: max })}
                 </button>
               ))}
             </div>
           </label>
 
           <label className="control-label">
-            Columns
-            <div className="btn-group" role="group" aria-label="Columns">
+            {t('common.columns')}
+            <div className="btn-group" role="group" aria-label={t('common.columns')}>
               {[2, 3, 4].map(c => (
                 <button
                   key={c}
@@ -170,10 +167,10 @@ export default function Comparison() {
 
         <div className="control-actions">
           <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'compare' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> Regenerate
+            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
           </button>
           <button className="btn btn-secondary" onClick={() => window.print()}>
-            <IconPrinter size={16} stroke={2} /> Print
+            <IconPrinter size={16} stroke={2} /> {t('common.print')}
           </button>
         </div>
       </div>
@@ -181,9 +178,9 @@ export default function Comparison() {
       <div className={`worksheet print-area cols-${columns}`}>
         <div className="worksheet-header">
           <div className="ws-title">
-            Comparison
+            {t('compare.title')}
             <span className="ws-meta">
-              {'<  >  ='} · within {maxVal}
+              {'<  >  ='} · {t('common.withinMeta', { n: maxVal })}
             </span>
           </div>
         </div>

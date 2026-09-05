@@ -28,7 +28,7 @@ export default defineConfig([
   },
   {
     // Build tooling, edge middleware and shared SEO modules run outside the browser too.
-    files: ['scripts/**/*.{js,mjs}', 'middleware.js', 'vite.config.js', 'src/seo/**/*.js', 'src/worksheets.js'],
+    files: ['scripts/**/*.{js,mjs}', 'middleware.js', 'vite.config.js', 'src/seo/**/*.js', 'src/i18n/**/*.js', 'src/worksheets.js'],
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
   {

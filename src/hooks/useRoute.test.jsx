@@ -4,7 +4,9 @@ import { renderHook, act } from '@testing-library/react'
 
 vi.mock('../lib/analytics.js', () => ({ trackPageView: vi.fn(), trackEvent: vi.fn() }))
 import { trackPageView } from '../lib/analytics.js'
-import { useRoute, pathToSheetId, sheetIdToPath, titleForSheet } from './useRoute.js'
+import { useRoute, pathToSheetId, sheetIdToPath, titleForSheet, localeFromPath } from './useRoute.js'
+import { pageTitle, worksheetRoute } from '../seo/render.js'
+import { findWorksheetById } from '../worksheets.js'
 
 function setPath(path) {
   window.history.replaceState(null, '', path)
@@ -118,6 +120,96 @@ describe('useRoute', () => {
   })
 
   it('ignores an unknown remembered sheet id', () => {
+    const { result } = renderHook(() => useRoute('does-not-exist'))
+    expect(result.current[0]).toBeNull()
+    expect(window.location.pathname).toBe('/')
+  })
+})
+
+describe('locales', () => {
+  it('helpers understand locale prefixes and never treat /en as one', () => {
+    expect(localeFromPath('/fr')).toBe('fr')
+    expect(localeFromPath('/fr/worksheets/rounding/')).toBe('fr')
+    expect(localeFromPath('/en')).toBe('en')
+    expect(localeFromPath('/')).toBe('en')
+    expect(pathToSheetId('/fr/worksheets/rounding')).toBe('rounding')
+    expect(pathToSheetId('/en/worksheets/rounding')).toBeNull()
+    expect(sheetIdToPath('multiply', 'fr')).toBe('/fr/worksheets/multiplication')
+    expect(sheetIdToPath(null, 'fr')).toBe('/fr')
+    expect(sheetIdToPath('bogus', 'zh')).toBe('/zh')
+    expect(titleForSheet('compare', 'fr')).toBe(pageTitle(worksheetRoute(findWorksheetById('compare'), 'fr')))
+    expect(titleForSheet(null, 'de')).not.toBe(titleForSheet(null))
+  })
+
+  it('the hook exposes the locale, switches it in place and updates the document', () => {
+    document.head.innerHTML += '<link rel="alternate" hreflang="es" href="z" /><link rel="alternate" hreflang="x-default" href="z" />'
+    setPath('/fr/worksheets/patterns')
+    const { result } = renderHook(() => useRoute(null))
+    expect(result.current[0]).toBe('patterns')
+    expect(result.current[3]).toBe('fr')
+    expect(document.documentElement.lang).toBe('fr')
+    expect(document.title).toBe(titleForSheet('patterns', 'fr'))
+
+    act(() => result.current[4]('es'))
+    expect(window.location.pathname).toBe('/es/worksheets/patterns')
+    expect(result.current[0]).toBe('patterns')
+    expect(result.current[3]).toBe('es')
+    expect(document.documentElement.lang).toBe('es')
+    expect(document.querySelector('link[rel="canonical"]').getAttribute('href')).toMatch(/\/es\/worksheets\/patterns$/)
+    expect(document.querySelector('link[rel="alternate"][type="text/markdown"]').getAttribute('href')).toMatch(/\/es\/worksheets\/patterns\.md$/)
+    expect(document.querySelector('link[hreflang="es"]').getAttribute('href')).toMatch(/\/es\/worksheets\/patterns$/)
+    expect(document.querySelector('link[hreflang="x-default"]').getAttribute('href')).toMatch(/\/worksheets\/patterns$/)
+    expect(trackPageView).toHaveBeenLastCalledWith('/es/worksheets/patterns', titleForSheet('patterns', 'es'))
+    expect(result.current[5]('ru')).toBe('/ru/worksheets/patterns')
+    expect(result.current[5]('en')).toBe('/worksheets/patterns')
+
+    // navigate keeps the locale; an unknown code is ignored
+    act(() => result.current[1]('multiply'))
+    expect(window.location.pathname).toBe('/es/worksheets/multiplication')
+    act(() => result.current[4]('xx'))
+    expect(window.location.pathname).toBe('/es/worksheets/multiplication')
+    act(() => result.current[1](null))
+    expect(window.location.pathname).toBe('/es')
+
+    // Back to an English URL
+    act(() => {
+      setPath('/worksheets/patterns')
+      window.dispatchEvent(new PopStateEvent('popstate'))
+    })
+    expect(result.current[3]).toBe('en')
+    expect(document.documentElement.lang).toBe('en')
+  })
+
+  it('a bare / restores the remembered locale and sheet silently', () => {
+    const lengthBefore = window.history.length
+    const { result } = renderHook(() => useRoute('rounding', 'de'))
+    expect(result.current[0]).toBe('rounding')
+    expect(result.current[3]).toBe('de')
+    expect(window.location.pathname).toBe('/de/worksheets/rounding')
+    expect(window.history.length).toBe(lengthBefore)
+  })
+
+  it('an explicit English URL beats the remembered locale; /en and unknown localized paths fall back', () => {
+    setPath('/privacy')
+    let hook = renderHook(() => useRoute('rounding', 'fr'))
+    expect(hook.result.current[3]).toBe('en')
+    expect(hook.result.current[2].page.slug).toBe('privacy')
+    expect(window.location.pathname).toBe('/privacy')
+    hook.unmount()
+
+    setPath('/fr/nope')
+    hook = renderHook(() => useRoute(null))
+    expect(hook.result.current[3]).toBe('fr')
+    expect(window.location.pathname).toBe('/fr')
+    hook.unmount()
+
+    setPath('/en')
+    hook = renderHook(() => useRoute(null))
+    expect(hook.result.current[3]).toBe('en')
+    expect(window.location.pathname).toBe('/')
+  })
+
+  it('placeholder to keep the original describe shape', () => {
     const { result } = renderHook(() => useRoute('does-not-exist'))
     expect(result.current[0]).toBeNull()
     expect(window.location.pathname).toBe('/')

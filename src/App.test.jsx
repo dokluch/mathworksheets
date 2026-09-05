@@ -9,6 +9,8 @@ vi.mock('./lib/analytics.js', () => ({
 }))
 import { trackEvent } from './lib/analytics.js'
 import { WORKSHEETS } from './worksheets.js'
+import { PAGES } from './pages.js'
+import { t, localizeWorksheet, localizePage } from './i18n/index.js'
 import App from './App.jsx'
 
 beforeEach(() => {
@@ -115,6 +117,73 @@ describe('App', () => {
     expect(footer.className).toContain('site-footer--sidebar')
     expect(screen.getByRole('link', { name: 'Privacy' }).getAttribute('href')).toBe('/privacy')
     expect(footer.textContent).not.toContain('Superposition')
+  })
+
+  it('renders the French catalog under /fr: translated copy, prefixed links, lang attribute', () => {
+    window.history.replaceState(null, '', '/fr')
+    render(<App />)
+    expect(document.documentElement.lang).toBe('fr')
+    expect(screen.getByText(t('fr', 'app.subtitle'))).toBeTruthy()
+    const links = screen.getAllByRole('link')
+    for (const ws of WORKSHEETS) {
+      const link = links.find(l => l.getAttribute('href') === `/fr/worksheets/${ws.slug}`)
+      expect(link, `French link for ${ws.slug}`).toBeTruthy()
+      expect(link.textContent).toContain(localizeWorksheet(ws, 'fr').label)
+    }
+    const privacy = localizePage(PAGES[1], 'fr')
+    expect(screen.getByRole('link', { name: privacy.navLabel }).getAttribute('href')).toBe('/fr/privacy')
+    expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('fr')
+  })
+
+  it('the language switcher moves the current page to another locale, remembers it and tracks it', () => {
+    window.history.replaceState(null, '', '/worksheets/rounding')
+    render(<App />)
+    const button = screen.getByRole('button', { name: /Language/ })
+    expect(button.closest('.lang-switcher').className).toContain('no-print')
+    fireEvent.click(button)
+    expect(button.getAttribute('aria-expanded')).toBe('true')
+    const item = screen.getByRole('menuitemradio', { name: 'Français' })
+    expect(item.getAttribute('href')).toBe('/fr/worksheets/rounding')
+    expect(screen.getByRole('menuitemradio', { name: 'English' }).getAttribute('aria-checked')).toBe('true')
+    fireEvent.click(item)
+    expect(window.location.pathname).toBe('/fr/worksheets/rounding')
+    expect(document.documentElement.lang).toBe('fr')
+    const rounding = WORKSHEETS.find(w => w.id === 'rounding')
+    expect(screen.getByRole('tabpanel', { name: localizeWorksheet(rounding, 'fr').label })).toBeTruthy()
+    expect(screen.getByRole('link', { name: new RegExp(t('fr', 'app.allSheets')) }).getAttribute('href')).toBe('/fr')
+    expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('fr')
+    expect(JSON.parse(localStorage.getItem('mathsheets')).app.activeTab).toBe('rounding')
+    expect(trackEvent).toHaveBeenCalledWith('switch_locale', { locale: 'fr' })
+    expect(screen.queryByRole('menu')).toBeNull()
+  })
+
+  it('Escape closes the language menu and a static page keeps the switcher', () => {
+    window.history.replaceState(null, '', '/about')
+    render(<App />)
+    const button = screen.getByRole('button', { name: /Language/ })
+    fireEvent.click(button)
+    expect(screen.getByRole('menu')).toBeTruthy()
+    fireEvent.keyDown(document, { key: 'Escape' })
+    expect(screen.queryByRole('menu')).toBeNull()
+    expect(button.getAttribute('aria-expanded')).toBe('false')
+    fireEvent.click(button)
+    fireEvent.click(screen.getByRole('menuitemradio', { name: 'Deutsch' }))
+    expect(window.location.pathname).toBe('/de/about')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(localizePage(PAGES[0], 'de').title)
+  })
+
+  it('a bare / restores the remembered locale; an explicit English URL wins and resets it', () => {
+    localStorage.setItem('mathsheets', JSON.stringify({ app: { locale: 'de', activeTab: null } }))
+    render(<App />)
+    expect(window.location.pathname).toBe('/de')
+    expect(document.documentElement.lang).toBe('de')
+    cleanup()
+    localStorage.setItem('mathsheets', JSON.stringify({ app: { locale: 'fr', activeTab: 'patterns' } }))
+    window.history.replaceState(null, '', '/worksheets/comparison')
+    render(<App />)
+    expect(window.location.pathname).toBe('/worksheets/comparison')
+    expect(document.documentElement.lang).toBe('en')
+    expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('en')
   })
 
   it('tracks print_worksheet with the sheet id and its settings on beforeprint', () => {

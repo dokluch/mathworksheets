@@ -3,12 +3,13 @@ import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useNotebookGrid } from '../hooks/useNotebookGrid'
 import { trackEvent } from '../lib/analytics'
+import { useT } from '../i18n/context'
 import './ColumnMultiplication.css'
 
 const PRESETS = [
-  { value: '2x2', label: '2 x 2 digits', aDigits: 2, bDigits: 2 },
-  { value: '3x2', label: '3 x 2 digits', aDigits: 3, bDigits: 2 },
-  { value: '4x2', label: '4 x 2 digits', aDigits: 4, bDigits: 2 },
+  { value: '2x2', aDigits: 2, bDigits: 2 },
+  { value: '3x2', aDigits: 3, bDigits: 2 },
+  { value: '4x2', aDigits: 4, bDigits: 2 },
 ]
 
 function randInt(min, max) {
@@ -79,9 +80,9 @@ function digitColumns(aDigits, bDigits) {
   return aDigits + bDigits
 }
 
-function renderProblem(problem, width) {
+function renderProblem(problem, width, t) {
   return (
-    <div className="colarith-problem" aria-label={`${problem.a} times ${problem.b}`}>
+    <div className="colarith-problem" aria-label={t('colmul.problemAria', { a: problem.a, b: problem.b })}>
       <div className="colarith-row">
         <span className="colarith-op" aria-hidden="true" />
         {renderDigitRow({ value: problem.a, width })}
@@ -112,6 +113,7 @@ function renderProblem(problem, width) {
 }
 
 export default function ColumnMultiplication() {
+  const t = useT()
   const [preset, setPreset] = usePersistedState('colmul', 'preset', '4x2')
   const [columns, setColumns] = usePersistedState('colmul', 'columns', 3)
   const [seed, setSeed] = useState(0)
@@ -119,6 +121,7 @@ export default function ColumnMultiplication() {
   const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[PRESETS.length - 1]
   const problemCount = columns === 2 ? 12 : columns === 3 ? 15 : 18
   const { aDigits, bDigits } = activePreset
+  const presetLabel = (a, b) => t('colmul.preset', { a, b })
 
   const problems = useMemo(() => {
     void seed
@@ -138,23 +141,23 @@ export default function ColumnMultiplication() {
       <div className="controls no-print">
         <div className="control-row">
           <label className="control-label">
-            Number size
-            <div className="btn-group" role="group" aria-label="Number size">
+            {t('common.numberSize')}
+            <div className="btn-group" role="group" aria-label={t('common.numberSize')}>
               {PRESETS.map(option => (
                 <button
                   key={option.value}
                   className={`btn-toggle ${preset === option.value ? 'active' : ''}`}
                   onClick={() => setPreset(option.value)}
                 >
-                  {option.label}
+                  {presetLabel(option.aDigits, option.bDigits)}
                 </button>
               ))}
             </div>
           </label>
 
           <label className="control-label">
-            Columns
-            <div className="btn-group" role="group" aria-label="Columns">
+            {t('common.columns')}
+            <div className="btn-group" role="group" aria-label={t('common.columns')}>
               {[2, 3, 4].map(value => (
                 <button
                   key={value}
@@ -170,10 +173,10 @@ export default function ColumnMultiplication() {
 
         <div className="control-actions">
           <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'colmul' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> Regenerate
+            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
           </button>
           <button className="btn btn-secondary" onClick={() => window.print()}>
-            <IconPrinter size={16} stroke={2} /> Print
+            <IconPrinter size={16} stroke={2} /> {t('common.print')}
           </button>
         </div>
       </div>
@@ -185,9 +188,9 @@ export default function ColumnMultiplication() {
       >
         <div className="worksheet-header">
           <div className="ws-title">
-            Column Multiplication
+            {t('colmul.title')}
             <span className="ws-meta">
-              long multiplication · {activePreset.label}
+              {t('colmul.meta', { preset: presetLabel(aDigits, bDigits) })}
             </span>
           </div>
         </div>
@@ -195,7 +198,7 @@ export default function ColumnMultiplication() {
         <div className="colarith-grid">
           {problems.map((problem, idx) => (
             <div key={idx} className="colarith-item">
-              {renderProblem(problem, width)}
+              {renderProblem(problem, width, t)}
             </div>
           ))}
         </div>

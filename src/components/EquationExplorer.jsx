@@ -2,6 +2,7 @@ import { useMemo, useState, useRef, useCallback, useEffect } from 'react'
 import { IconRefresh, IconCheck, IconArrowRight, IconPlayerPlay } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { trackEvent } from '../lib/analytics'
+import { useT } from '../i18n/context'
 import './EquationExplorer.css'
 
 // ── Helpers ──
@@ -92,6 +93,7 @@ function displaySign(term, isFirst) {
 // ── Number Line component ──
 
 function NumberLine({ problem }) {
+  const t = useT()
   const { a, b, op, result, range = 10 } = problem
 
   // Build jump steps: decompose into place-value jumps for range >= 100
@@ -164,7 +166,7 @@ function NumberLine({ problem }) {
 
   return (
     <div className="eq-numline">
-      <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} aria-label={`Number line showing ${a} ${op} ${b} = ${result}`}>
+      <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} aria-label={t('eq.numberLineAria', { a, op, b, result })}>
         <line x1={pad} y1={lineY} x2={W - pad} y2={lineY} stroke="var(--color-border-dark)" strokeWidth="2" />
         {Array.from({ length: tickCount }, (_, i) => {
           const val = viewMin + i * tickStep
@@ -369,6 +371,7 @@ function Celebration() {
 // ── Main component ──
 
 export default function EquationExplorer() {
+  const t = useT()
   const [ops, setOps] = usePersistedState('eqexplore', 'ops', 'both')
   const [range, setRange] = usePersistedState('eqexplore', 'range', 10)
   const [seed, setSeed] = useState(0)
@@ -663,7 +666,7 @@ export default function EquationExplorer() {
               onKeyDown={handleKeyDown}
               readOnly={isTouchDevice}
               disabled={status === 'correct'}
-              aria-label="Your answer"
+              aria-label={t('eq.yourAnswer')}
               autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
@@ -687,7 +690,7 @@ export default function EquationExplorer() {
             onPointerDown={isDraggable ? (e) => handlePointerDown(e, term.id) : undefined}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
-            aria-label={isDraggable ? `Drag ${term.value} to rearrange equation` : undefined}
+            aria-label={isDraggable ? t('eq.drag', { n: term.value }) : undefined}
           >
             {term.value}
           </div>
@@ -719,13 +722,20 @@ export default function EquationExplorer() {
         </div>
         <button className="btn btn-secondary" onClick={handleNextProblem}>
           <IconRefresh size={16} />
-          New
+          {t('eq.newProblem')}
         </button>
       </div>
 
       {/* Streak */}
       <div className={`eq-streak${streak > 0 ? ' eq-streak--active' : ''}`} aria-live="polite">
-        {streak > 0 && <>🔥 <span className={`eq-streak-num${streakBump ? ' eq-streak-num--bump' : ''}`}>{streak}</span> in a row</>}
+        {streak > 0 && (() => {
+          // Wrap the number wherever the language puts it ("3 in a row", "连续答对 3 题").
+          const text = t('eq.streak', { n: streak })
+          const at = text.indexOf(String(streak))
+          const before = at >= 0 ? text.slice(0, at) : ''
+          const after = at >= 0 ? text.slice(at + String(streak).length) : ` ${text}`
+          return <>🔥 {before}<span className={`eq-streak-num${streakBump ? ' eq-streak-num--bump' : ''}`}>{streak}</span>{after}</>
+        })()}
       </div>
 
       {/* Equation board */}
@@ -745,12 +755,12 @@ export default function EquationExplorer() {
 
       {/* Drag hint */}
       {status === 'solving' && (
-        <p className="eq-hint">Tip: drag a number across the = sign to rearrange</p>
+        <p className="eq-hint">{t('eq.hint')}</p>
       )}
 
       {/* Reset rearrangement */}
       {!isOriginalForm && status === 'solving' && (
-        <button className="eq-reset-link" onClick={handleResetForm}>Reset equation</button>
+        <button className="eq-reset-link" onClick={handleResetForm}>{t('eq.reset')}</button>
       )}
 
       {/* Actions — hidden when numpad is visible */}
@@ -758,11 +768,11 @@ export default function EquationExplorer() {
         <div className="eq-actions">
           {status === 'correct' ? (
             <button className="eq-btn eq-btn--next" onClick={handleNextProblem}>
-              Next <IconArrowRight size={18} />
+              {t('eq.next')} <IconArrowRight size={18} />
             </button>
           ) : (
             <button className="eq-btn eq-btn--check" onClick={handleCheck} disabled={!answer}>
-              <IconCheck size={18} /> Check
+              <IconCheck size={18} /> {t('eq.check')}
             </button>
           )}
         </div>
@@ -770,14 +780,14 @@ export default function EquationExplorer() {
 
       {/* On-screen numeric keypad for touch devices */}
       {isTouchDevice && (
-        <div className="eq-numpad" role="group" aria-label="Numeric keypad">
+        <div className="eq-numpad" role="group" aria-label={t('eq.keypad')}>
           <div className="eq-numpad-digits">
             {[1,2,3,4,5,6,7,8,9].map(d => (
               <button key={d} className="eq-numpad-key" onClick={() => handleNumpadDigit(String(d))} type="button">{d}</button>
             ))}
-            <button className="eq-numpad-key eq-numpad-key--muted" onClick={handleNumpadBackspace} type="button" aria-label="Backspace">⌫</button>
+            <button className="eq-numpad-key eq-numpad-key--muted" onClick={handleNumpadBackspace} type="button" aria-label={t('eq.backspace')}>⌫</button>
             <button className="eq-numpad-key" onClick={() => handleNumpadDigit('0')} type="button">0</button>
-            <button className="eq-numpad-key eq-numpad-key--muted" onClick={() => setAnswer('')} type="button" aria-label="Clear">C</button>
+            <button className="eq-numpad-key eq-numpad-key--muted" onClick={() => setAnswer('')} type="button" aria-label={t('eq.clear')}>C</button>
           </div>
           <button
             className={`eq-numpad-action${status === 'correct' ? ' eq-numpad-action--next' : ''}`}
@@ -785,7 +795,7 @@ export default function EquationExplorer() {
             disabled={status !== 'correct' && !answer}
             type="button"
           >
-            {status === 'correct' ? <><span>Next</span> <IconArrowRight size={20} /></> : <><IconCheck size={20} /> <span>Check</span></>}
+            {status === 'correct' ? <><span>{t('eq.next')}</span> <IconArrowRight size={20} /></> : <><IconCheck size={20} /> <span>{t('eq.check')}</span></>}
           </button>
         </div>
       )}
@@ -795,11 +805,11 @@ export default function EquationExplorer() {
         {status === 'correct' && (
           <span className="eq-feedback--correct">
             <span className="eq-checkmark"><IconCheck size={18} /></span>{' '}
-            Correct!
+            {t('eq.correct')}
           </span>
         )}
         {status === 'wrong' && (
-          <span className="eq-feedback--wrong">Not quite — try again or see how it works below</span>
+          <span className="eq-feedback--wrong">{t('eq.wrong')}</span>
         )}
       </div>
 
@@ -808,8 +818,8 @@ export default function EquationExplorer() {
         <div className="eq-explain">
           <div className="eq-explain-inner">
             <div className="eq-explain-tabs">
-              <button className={`eq-explain-tab${explainTab === 'numline' ? ' eq-explain-tab--active' : ''}`} onClick={() => setExplainTab('numline')}>Number Line</button>
-              <button className={`eq-explain-tab${explainTab === 'tenframe' ? ' eq-explain-tab--active' : ''}`} onClick={() => setExplainTab('tenframe')}>Ten Frame</button>
+              <button className={`eq-explain-tab${explainTab === 'numline' ? ' eq-explain-tab--active' : ''}`} onClick={() => setExplainTab('numline')}>{t('eq.numberLine')}</button>
+              <button className={`eq-explain-tab${explainTab === 'tenframe' ? ' eq-explain-tab--active' : ''}`} onClick={() => setExplainTab('tenframe')}>{t('eq.tenFrame')}</button>
             </div>
 
             <p className="eq-explain-title">
@@ -821,13 +831,13 @@ export default function EquationExplorer() {
 
             <div className="eq-explain-footer">
               <button className="eq-btn--replay" onClick={() => setReplayKey(k => k + 1)}>
-                <IconPlayerPlay size={14} /> Replay
+                <IconPlayerPlay size={14} /> {t('eq.replay')}
               </button>
               <button className="eq-btn eq-btn--gotit" onClick={() => {
                 setShowExplanation(false)
                 inputRef.current?.focus()
               }}>
-                Got it
+                {t('eq.gotIt')}
               </button>
             </div>
           </div>

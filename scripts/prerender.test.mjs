@@ -4,7 +4,8 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { prerender } from './prerender.mjs'
 import { WORKSHEETS } from '../src/worksheets.js'
-import { routes } from '../src/seo/render.js'
+import { routes, worksheetRoute, pageTitle } from '../src/seo/render.js'
+import { LOCALES } from '../src/i18n/index.js'
 
 const TEMPLATE = `<!doctype html><html><head><!-- seo:head --><!-- /seo:head --></head>
 <body><div id="root"></div><!-- seo:content --><!-- /seo:content --><script src="/assets/app.js"></script></body></html>`
@@ -39,5 +40,25 @@ describe('scripts/prerender.mjs', () => {
     const privacy = await readFile(join(dist, 'privacy.html'), 'utf8')
     expect(privacy).toContain('<title>Privacy Policy · MathSheets</title>')
     expect(privacy).toContain('<footer class="site-footer no-print">')
+
+    // Every locale: <locale>.html/.md at the root, the rest under <locale>/
+    expect(written.length).toBe(2 * LOCALES.length * (WORKSHEETS.length + 2 + 3) + 6)
+    for (const l of LOCALES.filter(x => x !== 'en')) {
+      expect(root).toContain(`${l}.html`)
+      expect(root).toContain(`${l}.md`)
+      const lws = await readdir(join(dist, l, 'worksheets'))
+      for (const w of WORKSHEETS) {
+        expect(lws).toContain(`${w.slug}.html`)
+        expect(lws).toContain(`${w.slug}.md`)
+      }
+      const ldir = await readdir(join(dist, l))
+      for (const f of ['developers.html', 'developers.md', 'about.html', 'privacy.md', 'terms.html']) expect(ldir).toContain(f)
+    }
+    const roundingWs = WORKSHEETS.find(w => w.id === 'rounding')
+    const fr = await readFile(join(dist, 'fr', 'worksheets', 'rounding.html'), 'utf8')
+    expect(fr).toContain('<html lang="fr">')
+    expect(fr).toContain(`<title>${pageTitle(worksheetRoute(roundingWs, 'fr'))}</title>`)
+    expect(fr).toContain('/assets/app.js')
+    expect(await readFile(join(dist, 'zh.html'), 'utf8')).toContain('<html lang="zh-Hans">')
   })
 })

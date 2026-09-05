@@ -9,6 +9,8 @@
  */
 import { WORKSHEETS } from '../src/worksheets.js'
 import { PAGES } from '../src/pages.js'
+import { LOCALES, LOCALE_META } from '../src/i18n/index.js'
+import { worksheetRoute, pageTitle, escapeHtml } from '../src/seo/render.js'
 
 const base = (process.argv[2] || process.env.SITE_URL || 'https://mathworksheets-eight.vercel.app').replace(/\/+$/, '')
 
@@ -121,8 +123,39 @@ async function main() {
   }
   const cat = await get('/worksheets.json')
   let catOk = false
-  try { catOk = cat.status === 200 && JSON.parse(cat.text).worksheets.length === WORKSHEETS.length } catch { catOk = false }
-  record('GET /worksheets.json → valid catalog', catOk, String(cat.status))
+  try {
+    const json = JSON.parse(cat.text)
+    catOk = cat.status === 200 && json.worksheets.length === WORKSHEETS.length && json.locales.length === LOCALES.length
+  } catch { catOk = false }
+  record('GET /worksheets.json → valid catalog with locales', catOk, String(cat.status))
+
+  // 3b. Localized pages (English lives at the root; /en is not a page)
+  const rounding = WORKSHEETS.find(w => w.id === 'rounding')
+  for (const l of LOCALES.filter(x => x !== 'en')) {
+    const lang = LOCALE_META[l].lang
+    const lhome = await get(`/${l}`, { accept: 'text/html' })
+    record(`GET /${l} → 200 HTML with lang="${lang}"`, lhome.status === 200 && lhome.text.includes(`<html lang="${lang}">`), String(lhome.status))
+    const hreflangs = (lhome.text.match(/hreflang="/g) || []).length
+    record(`GET /${l} has one <h1>, ${LOCALES.length + 1} hreflang links and enough text`, (lhome.text.match(/<h1\b/gi) || []).length === 1 && hreflangs === LOCALES.length + 1 && textLength(lhome.text) >= (l === 'zh' ? 300 : 500), `${hreflangs} hreflang, ${textLength(lhome.text)} chars`)
+    record(`GET /${l} Link header points at /${l}.md`, (lhome.headers.get('link') || '').includes(`</${l}.md>`), `Link: ${lhome.headers.get('link')}`)
+    const lmd = await get(`/${l}.md`)
+    record(`GET /${l}.md → 200 text/markdown`, lmd.status === 200 && /^text\/markdown/.test(lmd.headers.get('content-type') || '') && /^# /.test(lmd.text.trimStart()), `${lmd.status} ${lmd.headers.get('content-type')}`)
+    const wsPath = `/${l}/worksheets/${rounding.slug}`
+    const lws = await get(wsPath, { accept: 'text/html' })
+    record(`GET ${wsPath} → 200 with localized title`, lws.status === 200 && lws.text.includes(`<title>${escapeHtml(pageTitle(worksheetRoute(rounding, l)))}</title>`), String(lws.status))
+    const lwsMd = await get(`${wsPath}.md`)
+    record(`GET ${wsPath}.md → 200 text/markdown`, lwsMd.status === 200 && /^text\/markdown/.test(lwsMd.headers.get('content-type') || ''), String(lwsMd.status))
+    const ldev = await get(`/${l}/developers`, { accept: 'text/html' })
+    record(`GET /${l}/developers → 200`, ldev.status === 200 && ldev.text.includes(`<html lang="${lang}">`), String(ldev.status))
+    const lpage = await get(`/${l}/${PAGES[0].slug}`, { accept: 'text/html' })
+    record(`GET /${l}/${PAGES[0].slug} → 200`, lpage.status === 200 && lpage.text.includes(`<html lang="${lang}">`), String(lpage.status))
+    const lnf = await get(`/${l}/nope`, { accept: 'text/html' })
+    record(`GET /${l}/nope → 404 in ${lang}`, lnf.status === 404 && lnf.text.includes(`<html lang="${lang}">`), String(lnf.status))
+  }
+  const enPrefix = await get('/en')
+  record('GET /en → 404 (English lives at the root)', enPrefix.status === 404, String(enPrefix.status))
+  const sitemap = await get('/sitemap.xml')
+  record('sitemap.xml lists localized URLs with xhtml:link alternates', sitemap.text.includes('/zh/developers</loc>') && sitemap.text.includes('<xhtml:link ') && sitemap.text.includes('hreflang="x-default"'))
 
   // 4. Agent-friendly 404s
   const nf = await get('/some-path-that-does-not-exist')

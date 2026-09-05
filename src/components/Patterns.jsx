@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { trackEvent } from '../lib/analytics'
+import { useT } from '../i18n/context'
 import './Patterns.css'
 
 function randInt(min, max) {
@@ -129,14 +130,15 @@ function generateLevel3() {
 }
 
 const LEVELS = [
-  { value: 1, label: 'Easy' },
-  { value: 2, label: 'Medium' },
-  { value: 3, label: 'Hard' },
+  { value: 1, key: 'patterns.easy' },
+  { value: 2, key: 'patterns.medium' },
+  { value: 3, key: 'patterns.hard' },
 ]
 
 const generators = { 1: generateLevel1, 2: generateLevel2, 3: generateLevel3 }
 
 export default function Patterns() {
+  const t = useT()
   const [level, setLevel] = usePersistedState('patterns', 'level', 1)
   const [seed, setSeed] = useState(0)
 
@@ -156,15 +158,15 @@ export default function Patterns() {
       <div className="controls no-print">
         <div className="control-row">
           <label className="control-label">
-            Difficulty
-            <div className="btn-group" role="group" aria-label="Difficulty">
+            {t('common.difficulty')}
+            <div className="btn-group" role="group" aria-label={t('common.difficulty')}>
               {LEVELS.map(l => (
                 <button
                   key={l.value}
                   className={`btn-toggle ${level === l.value ? 'active' : ''}`}
                   onClick={() => setLevel(l.value)}
                 >
-                  {l.label}
+                  {t(l.key)}
                 </button>
               ))}
             </div>
@@ -173,10 +175,10 @@ export default function Patterns() {
 
         <div className="control-actions">
           <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'patterns' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> Regenerate
+            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
           </button>
           <button className="btn btn-secondary" onClick={() => window.print()}>
-            <IconPrinter size={16} stroke={2} /> Print
+            <IconPrinter size={16} stroke={2} /> {t('common.print')}
           </button>
         </div>
       </div>
@@ -184,12 +186,12 @@ export default function Patterns() {
       <div className="worksheet print-area">
         <div className="worksheet-header">
           <div className="ws-title">
-            Number Patterns
+            {t('patterns.title')}
             <span className="ws-meta">
-              {LEVELS.find(l => l.value === level)?.label}
+              {t(LEVELS.find(l => l.value === level)?.key ?? 'patterns.easy')}
             </span>
           </div>
-          <p className="ws-instructions">Fill in the missing numbers in each sequence.</p>
+          <p className="ws-instructions">{t('patterns.instructions')}</p>
         </div>
 
         <div className="pattern-list">
@@ -202,7 +204,7 @@ export default function Patterns() {
                     {row.blankPositions.has(j) ? (
                       <span className="blank-slot" />
                     ) : (
-                      <span className="pattern-val">{val.toLocaleString()}</span>
+                      <span className="pattern-val">{String(val)}</span>
                     )}
                     {j < row.seq.length - 1 && <span className="pattern-comma">,</span>}
                   </span>

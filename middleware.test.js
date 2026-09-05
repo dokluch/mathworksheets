@@ -85,6 +85,60 @@ describe('known routes', () => {
   })
 })
 
+describe('locale prefixes', () => {
+  it('matcher runs for prefixed pages but not their markdown twins', () => {
+    const re = new RegExp(`^${MATCHER}$`)
+    for (const p of ['/fr', '/fr/worksheets/rounding', '/zh/developers', '/de/privacy']) expect(re.test(p)).toBe(true)
+    for (const p of ['/fr.md', '/fr/worksheets/rounding.md', '/de/privacy.md']) expect(re.test(p)).toBe(false)
+  })
+
+  it('HTML responses carry Content-Language and the localized markdown twin', () => {
+    let res = middleware(req('/fr', 'text/html'))
+    expect(next).toHaveBeenCalledTimes(1)
+    expect(res.headers.get('content-language')).toBe('fr')
+    expect(res.headers.get('link')).toBe('</fr.md>; rel="alternate"; type="text/markdown"')
+    expect(res.headers.get('vary')).toBe('Accept')
+    res = middleware(req('/zh/privacy', 'text/html'))
+    expect(res.headers.get('content-language')).toBe('zh-Hans')
+    expect(res.headers.get('link')).toBe('</zh/privacy.md>; rel="alternate"; type="text/markdown"')
+    res = middleware(req('/', 'text/html'))
+    expect(res.headers.get('content-language')).toBe('en')
+  })
+
+  it('Accept: text/markdown rewrites to the prefixed .md file', () => {
+    const res = middleware(req('/fr/worksheets/rounding/', 'text/markdown'))
+    expect(rewrite).toHaveBeenCalledTimes(1)
+    expect(res.headers.get('x-rewrite-to')).toBe(`${BASE}/fr/worksheets/rounding.md`)
+    expect(res.headers.get('content-location')).toBe('/fr/worksheets/rounding.md')
+    expect(res.headers.get('content-language')).toBe('fr')
+    expect(res.headers.get('link')).toBe('</fr/worksheets/rounding>; rel="canonical"; type="text/html"')
+  })
+
+  it('unknown localized paths get a 404 in that language; /en is not a page', async () => {
+    let res = middleware(req('/fr/nope', 'text/html'))
+    expect(res.status).toBe(404)
+    expect(res.headers.get('content-language')).toBe('fr')
+    let body = await res.text()
+    expect(body).toContain('<html lang="fr">')
+    expect(body).toContain('href="/fr/worksheets/multiplication"')
+    res = middleware(req('/ru/worksheets/nope', '*/*'))
+    expect(res.status).toBe(404)
+    body = await res.text()
+    expect(body).toContain(`${SITE_URL}/ru/worksheets/multiplication`)
+    expect(body).not.toContain('Page not found')
+    for (const p of ['/en', '/en/developers', '/xx/developers']) expect(middleware(req(p, 'text/html')).status).toBe(404)
+    expect(next).not.toHaveBeenCalled()
+  })
+
+  it('406 lists the localized representations', async () => {
+    const res = middleware(req('/it/worksheets/patterns', 'application/json'))
+    expect(res.status).toBe(406)
+    const body = await res.text()
+    expect(body).toContain(`${SITE_URL}/it/worksheets/patterns`)
+    expect(body).toContain(`${SITE_URL}/it/worksheets/patterns.md`)
+  })
+})
+
 describe('unknown paths', () => {
   it('return a real 404 with a Markdown body by default', async () => {
     const res = middleware(req('/some-path-that-does-not-exist', '*/*'))

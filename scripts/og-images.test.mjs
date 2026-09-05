@@ -11,7 +11,9 @@ describe('scripts/og-images.mjs', () => {
     const targets = ogTargets()
     expect(targets.length).toBe(WORKSHEETS.length + 2)
     for (const route of routes().filter(r => r.kind === 'page')) expect(ogImagePath(route)).toBe(OG_IMAGE_PATH)
-    for (const route of routes().filter(r => r.kind !== 'page')) {
+    // Every locale shares the English cards.
+    for (const route of routes()) expect(ogImagePath(route)).toBe(ogImagePath(routes('en').find(r => r.kind === route.kind && (r.worksheet?.id ?? r.page?.id) === (route.worksheet?.id ?? route.page?.id))))
+    for (const route of routes('en').filter(r => r.kind !== 'page')) {
       const t = targets.find(x => x.route.path === route.path)
       expect(t, route.path).toBeTruthy()
       expect('/' + t.file).toBe(ogImagePath(route))
@@ -50,7 +52,7 @@ describe('scripts/og-images.mjs', () => {
   })
 
   it('every page has its generated image committed under public/ (run `npm run og`)', async () => {
-    for (const route of routes()) {
+    for (const route of routes('en')) {
       const file = resolve(OUT_DIR, ogImagePath(route).replace(/^\//, ''))
       await expect(access(file), `${ogImagePath(route)} is missing – run npm run og`).resolves.toBeUndefined()
     }

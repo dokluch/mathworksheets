@@ -2,8 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { WORKSHEETS } from '../worksheets.js'
 import { PAGES } from '../pages.js'
 import { SITE_URL, BRAND, OPERATOR, CONTACT_EMAIL, OG_IMAGE_PATH } from './site.js'
+import { LOCALES, LOCALE_META, localizeWorksheet, localizePage } from '../i18n/index.js'
 import {
-  routes, findRoute, normalizePath, homeRoute, worksheetRoute, developersRoute, pageRoute,
+  routes, findRoute, normalizePath, homeRoute, worksheetRoute, developersRoute, pageRoute, sameRouteIn,
   renderHead, renderStaticContent, staticBody, footerHtml, siteFooterLinks, injectRoute, structuredData, pageTitle,
   ogImagePath, inlineHtml, inlineMarkdown,
   renderMarkdown, renderLlmsTxt, renderLlmsFullTxt, renderSitemap, renderRobots,
@@ -58,8 +59,10 @@ describe('catalog invariants', () => {
 
 describe('routes', () => {
   it('lists home, every worksheet, developers and every static page', () => {
-    const r = routes()
+    const r = routes('en')
     expect(r.length).toBe(WORKSHEETS.length + 2 + PAGES.length)
+    expect(routes().length).toBe(LOCALES.length * r.length)
+    expect(routes().slice(0, r.length).map(x => x.path)).toEqual(r.map(x => x.path))
     expect(r[0].path).toBe('/')
     expect(r.map(x => x.path)).toContain('/developers')
     expect(r.slice(-PAGES.length).map(x => x.path)).toEqual(['/about', '/privacy', '/terms'])
@@ -208,7 +211,7 @@ describe('renderStaticContent', () => {
   })
 
   it('every kind of page carries the site footer with links to the static pages and GitHub', () => {
-    for (const route of routes()) {
+    for (const route of routes('en')) {
       const html = renderStaticContent(route)
       expect(html.startsWith('<div id="static-content">')).toBe(true)
       expect(html).toContain('<footer class="site-footer no-print">')
@@ -324,7 +327,7 @@ describe('llms-full.txt', () => {
   it('contains every page in order, separated by horizontal rules', () => {
     const full = renderLlmsFullTxt()
     const h1s = full.match(/^# .+$/gm)
-    expect(h1s.length).toBe(routes().length)
+    expect(h1s.length).toBe(routes('en').length)
     expect(h1s[0]).toContain(BRAND)
     for (const ws of WORKSHEETS) expect(full).toContain(`# ${ws.label} Worksheets`)
     expect(full).toContain('\n---\n')
@@ -390,6 +393,155 @@ describe('404 bodies', () => {
     expect(html).not.toContain('<script>')
     expect(html).toContain('href="/llms.txt"')
     expect(html).toContain('href="/sitemap.xml"')
+  })
+})
+
+describe('i18n routes and surfaces', () => {
+  const others = LOCALES.filter(l => l !== 'en')
+  const ws = WORKSHEETS.find(w => w.id === 'rounding')
+
+  it('builds locale-prefixed paths and files, English at the root', () => {
+    expect(homeRoute('fr')).toMatchObject({ kind: 'home', locale: 'fr', path: '/fr', md: '/fr.md', html: 'fr.html', mdFile: 'fr.md' })
+    expect(worksheetRoute(ws, 'de')).toMatchObject({ locale: 'de', path: '/de/worksheets/rounding', md: '/de/worksheets/rounding.md', html: 'de/worksheets/rounding.html', mdFile: 'de/worksheets/rounding.md' })
+    expect(developersRoute('zh').path).toBe('/zh/developers')
+    expect(pageRoute(PAGES[1], 'it')).toMatchObject({ kind: 'page', locale: 'it', path: '/it/privacy', html: 'it/privacy.html' })
+    expect(worksheetRoute(ws, 'fr').worksheet).toEqual(localizeWorksheet(ws, 'fr'))
+    expect(worksheetRoute(ws, 'fr').worksheet.slug).toBe(ws.slug)
+    expect(pageRoute(PAGES[0], 'es').page).toEqual(localizePage(PAGES[0], 'es'))
+    expect(new Set(routes().map(r => r.path)).size).toBe(routes().length)
+    expect(new Set(routes().map(r => r.html)).size).toBe(routes().length)
+  })
+
+  it('findRoute round-trips every route and rejects /en and unknown prefixes', () => {
+    for (const r of routes()) {
+      expect(findRoute(r.path), r.path).toMatchObject({ kind: r.kind, locale: r.locale, path: r.path })
+    }
+    expect(findRoute('/fr/').path).toBe('/fr')
+    expect(findRoute('/fr/index.html').path).toBe('/fr')
+    expect(findRoute('/fr/worksheets/rounding/').worksheet.id).toBe('rounding')
+    expect(findRoute('/en')).toBeNull()
+    expect(findRoute('/en/developers')).toBeNull()
+    expect(findRoute('/xx/developers')).toBeNull()
+    expect(findRoute('/fr/worksheets/nope')).toBeNull()
+    expect(findRoute('/fr/nope')).toBeNull()
+    expect(sameRouteIn(findRoute('/fr/privacy'), 'en').path).toBe('/privacy')
+    expect(sameRouteIn(findRoute('/worksheets/rounding'), 'ru').path).toBe('/ru/worksheets/rounding')
+  })
+
+  it('head carries hreflang for every locale plus x-default, og:locale(:alternate), inLanguage and a shared og:image', () => {
+    for (const locale of LOCALES) {
+      for (const route of [homeRoute(locale), worksheetRoute(ws, locale), developersRoute(locale), pageRoute(PAGES[0], locale)]) {
+        const head = renderHead(route)
+        const hreflangs = [...head.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)" \/>/g)].map(m => [m[1], m[2]])
+        expect(hreflangs.length).toBe(LOCALES.length + 1)
+        expect(hreflangs.find(([h]) => h === 'x-default')[1]).toBe(`${SITE_URL}${sameRouteIn(route, 'en').path}`)
+        expect(hreflangs.find(([h]) => h === LOCALE_META[locale].hreflang)[1]).toBe(`${SITE_URL}${route.path}`)
+        expect(head).toContain(`<link rel="canonical" href="${SITE_URL}${route.path}" />`)
+        expect(head).toContain(`<meta property="og:locale" content="${LOCALE_META[locale].og}" />`)
+        expect((head.match(/og:locale:alternate/g) || []).length).toBe(LOCALES.length - 1)
+        expect(head).toContain(`type="text/markdown" href="${SITE_URL}${route.md}"`)
+        expect(head).toContain(`<meta property="og:image" content="${SITE_URL}${ogImagePath(sameRouteIn(route, 'en'))}" />`)
+        const json = JSON.parse(head.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])
+        const langs = json['@graph'].filter(n => n.inLanguage).map(n => n.inLanguage)
+        expect(langs.length).toBeGreaterThan(0)
+        for (const l of langs) expect(l).toBe(LOCALE_META[locale].lang)
+      }
+    }
+  })
+
+  it('translates titles, keeps German nouns capitalised and never lowercases in de', () => {
+    expect(pageTitle(worksheetRoute(ws, 'fr'))).toBe(`Fiches ${localizeWorksheet(ws, 'fr').label} · ${BRAND}`)
+    const de = worksheetRoute(ws, 'de')
+    const label = localizeWorksheet(ws, 'de').label
+    expect(label).not.toBe(ws.label)
+    const description = renderHead(de).match(/<meta name="description" content="([^"]*)"/)[1]
+    expect(description.startsWith(`Kostenlose ${label}`)).toBe(true)
+  })
+
+  it('injectRoute sets <html lang> for the locale (and for a bare <html>)', () => {
+    expect(injectRoute(TEMPLATE, homeRoute('fr'))).toContain('<html lang="fr">')
+    expect(injectRoute(TEMPLATE, worksheetRoute(ws, 'zh'))).toContain('<html lang="zh-Hans">')
+    expect(injectRoute('<html lang="en"><head><!-- seo:head --><!-- /seo:head --></head><body><!-- seo:content --><!-- /seo:content --></body></html>', homeRoute('ru'))).toContain('<html lang="ru">')
+    expect(injectRoute(TEMPLATE, homeRoute())).toContain('<html lang="en">')
+  })
+
+  it('static content per locale: one H1, sequential headings, localized links, enough text, unprefixed agent files', () => {
+    for (const locale of others) {
+      const min = locale === 'zh' ? 300 : 500
+      for (const route of routes(locale)) {
+        const html = renderStaticContent(route)
+        expect((html.match(/<h1\b/g) || []).length, route.path).toBe(1)
+        assertSequential(headingLevels(html))
+        expect(textOf(html).length, route.path).toBeGreaterThanOrEqual(min)
+        if (route.kind !== 'home') expect(html).toContain(`href="${homeRoute(locale).path}"`)
+        for (const p of PAGES) expect(html).toContain(`href="/${locale}/${p.slug}"`)
+        expect(html).not.toContain(`href="/${locale}/llms.txt"`)
+      }
+      const home = renderStaticContent(homeRoute(locale))
+      for (const w of WORKSHEETS) expect(home).toContain(`href="/${locale}/worksheets/${w.slug}"`)
+      expect(home).toContain('href="/llms.txt"')
+      expect(home).toContain(`href="/${locale}/developers"`)
+      expect(home).not.toContain(homeRoute().path === '/' ? 'href="/worksheets/' : 'x')
+      const page = renderStaticContent(pageRoute(PAGES[0], locale))
+      expect(page).toContain(`href="/${locale}/privacy"`)
+      expect(page).not.toContain('](')
+      expect(page).toContain(`href="mailto:${CONTACT_EMAIL}"`)
+    }
+  })
+
+  it('markdown per locale has one H1, absolute localized links and the translated catalog copy', () => {
+    for (const locale of others) {
+      for (const route of routes(locale)) {
+        const md = renderMarkdown(route)
+        expect(md.startsWith('# ')).toBe(true)
+        expect((md.match(/^# /gm) || []).length).toBe(1)
+        expect(md).not.toContain('](/')
+      }
+      const md = renderMarkdown(worksheetRoute(ws, locale))
+      const lws = localizeWorksheet(ws, locale)
+      expect(md).toContain(lws.longDesc)
+      for (const s of lws.settings) expect(md).toContain(`- ${s}`)
+      expect(md).toContain(`${SITE_URL}/${locale}/worksheets/multiplication.md`)
+      expect(renderMarkdown(pageRoute(PAGES[2], locale))).toContain(`](${SITE_URL}/${locale}/privacy)`)
+    }
+  })
+
+  it('llms.txt stays English but points at the localized home pages; llms-full is English only', () => {
+    const txt = renderLlmsTxt()
+    const optional = txt.split(/^## Optional/m)[1]
+    for (const l of others) expect(optional).toContain(`](${SITE_URL}/${l}.md): Home page in ${LOCALE_META[l].englishName}`)
+    expect(renderLlmsFullTxt()).not.toContain(`${SITE_URL}/fr`)
+  })
+
+  it('sitemap lists every locale once with xhtml:link alternates; catalog exposes locales and alternates', () => {
+    const xml = renderSitemap({ now: new Date('2026-09-04T12:00:00Z') })
+    expect(xml).toContain('xmlns:xhtml="http://www.w3.org/1999/xhtml"')
+    const urls = xml.split('<url>').slice(1)
+    expect(urls.length).toBe(routes().length)
+    for (const u of urls) expect((u.match(/<xhtml:link /g) || []).length).toBe(LOCALES.length + 1)
+    expect(xml).toContain(`<loc>${SITE_URL}/zh/developers</loc>`)
+    expect(xml).toContain(`<xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}/worksheets/rounding" />`)
+    const json = JSON.parse(renderCatalogJson({ now: new Date('2026-09-04T12:00:00Z') }))
+    expect(json.locales.map(l => l.code)).toEqual(LOCALES)
+    expect(json.worksheets[0].alternates.fr).toBe(`${SITE_URL}/fr/worksheets/multiplication`)
+    expect(json.worksheets[0].alternates.en).toBe(`${SITE_URL}/worksheets/multiplication`)
+  })
+
+  it('404 bodies follow the locale of the path', () => {
+    const md = renderNotFoundMarkdown('/fr/nope', 'fr')
+    expect(md).toContain(`${SITE_URL}/fr/worksheets/multiplication`)
+    expect(md).toContain(`${SITE_URL}/fr/privacy`)
+    expect(md).not.toContain('Page not found')
+    const html = renderNotFoundHtml('/fr/nope', 'fr')
+    expect(html).toContain('<html lang="fr">')
+    expect(html).toContain('href="/fr"')
+    expect(renderNotFoundHtml('/x')).toContain('<html lang="en">')
+  })
+
+  it('buildSiteFiles writes every locale', () => {
+    const names = Object.keys(buildSiteFiles(TEMPLATE, { now: new Date('2026-09-04T12:00:00Z') }))
+    expect(names).toEqual(expect.arrayContaining(['fr.html', 'fr.md', 'fr/worksheets/rounding.html', 'fr/worksheets/rounding.md', 'zh/developers.md', 'ru/privacy.html']))
+    expect(names.length).toBe(2 * routes().length + 6)
   })
 })
 
