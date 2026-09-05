@@ -52,11 +52,6 @@ export default function App() {
     if (!activePage) setPersistedSheet(activeSheet)
   }, [activeSheet, activePage, setPersistedSheet])
 
-  // Remember the language chosen (or implied by the URL) for the next visit to "/".
-  useEffect(() => {
-    setPersistedLocale(locale)
-  }, [locale, setPersistedLocale])
-
   const localeCtx = useMemo(() => ({ locale, t: (key, params) => translate(locale, key, params) }), [locale])
   const t = localeCtx.t
 
@@ -81,10 +76,12 @@ export default function App() {
     navigate(id)
   }, [navigate])
 
+  // Only an explicit choice is remembered; it then applies to every unprefixed URL (see useRoute).
   const switchLocale = useCallback((code) => {
     trackEvent('switch_locale', { locale: code })
+    setPersistedLocale(code)
     setLocale(code)
-  }, [setLocale])
+  }, [setLocale, setPersistedLocale])
 
   const ActiveComponent = activeSheet ? COMPONENTS[activeSheet] : null
   const activeInfo = worksheets.find(w => w.id === activeSheet)
@@ -103,7 +100,7 @@ export default function App() {
   return (
     <LocaleContext.Provider value={localeCtx}>
       <div className={`app ${activeSheet ? 'has-active' : 'catalog-only'}`}>
-        {/* Language switcher in the top-right corner of the catalog and static pages */}
+        {/* Language switcher: top-right corner of the catalog and static pages (the worksheet header carries it otherwise) */}
         {!activeSheet && <div className="lang-corner no-print">{switcher}</div>}
 
         {/* ── Static page (About, Privacy, Terms, Developers) ── */}
@@ -114,12 +111,11 @@ export default function App() {
           </>
         ) : activeSheet ? (
           <aside className="catalog no-print catalog--sidebar">
-            <header className="catalog-header catalog-header--row">
+            <header className="catalog-header">
               <a className="back-btn" href={sheetIdToPath(null, locale)} onClick={(e) => { e.preventDefault(); navigate(null) }}>
                 <IconArrowLeft size={18} stroke={2} />
                 <span className="back-btn-label">{t('app.allSheets')}</span>
               </a>
-              {switcher}
             </header>
 
             <nav className="catalog-grid catalog-grid--compact" role="tablist" aria-label={t('app.worksheetTypes')}>
@@ -187,6 +183,7 @@ export default function App() {
                 {activeInfo && <activeInfo.Icon size={22} stroke={1.8} />}
                 {activeInfo?.label}
               </h2>
+              {switcher}
             </div>
             <div className="worksheet-content">
               <ActiveComponent />

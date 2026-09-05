@@ -189,12 +189,24 @@ describe('locales', () => {
     expect(window.history.length).toBe(lengthBefore)
   })
 
-  it('an explicit English URL beats the remembered locale; /en and unknown localized paths fall back', () => {
+  it('the remembered locale applies to any unprefixed URL; a prefixed URL wins; /en and unknown localized paths fall back', () => {
     setPath('/privacy')
     let hook = renderHook(() => useRoute('rounding', 'fr'))
-    expect(hook.result.current[3]).toBe('en')
+    expect(hook.result.current[3]).toBe('fr')
     expect(hook.result.current[2].page.slug).toBe('privacy')
-    expect(window.location.pathname).toBe('/privacy')
+    expect(window.location.pathname).toBe('/fr/privacy')
+    hook.unmount()
+
+    setPath('/worksheets/patterns')
+    hook = renderHook(() => useRoute('rounding', 'de'))
+    expect(hook.result.current[0]).toBe('patterns')
+    expect(window.location.pathname).toBe('/de/worksheets/patterns')
+    hook.unmount()
+
+    setPath('/es/worksheets/patterns')
+    hook = renderHook(() => useRoute(null, 'de'))
+    expect(hook.result.current[3]).toBe('es')
+    expect(window.location.pathname).toBe('/es/worksheets/patterns')
     hook.unmount()
 
     setPath('/fr/nope')

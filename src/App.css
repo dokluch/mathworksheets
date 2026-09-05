@@ -131,13 +131,6 @@
 }
 
 /* ── Language switcher ── */
-.catalog-header--row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
 .lang-corner {
   position: absolute;
   top: 12px;
@@ -210,15 +203,6 @@
   font-weight: 600;
 }
 
-/* Sidebar: keep the menu above the scrolling worksheet list */
-.catalog--sidebar .catalog-header--row {
-  padding: 0 8px 0 16px;
-}
-
-.catalog--sidebar .lang-switcher {
-  margin-bottom: 8px;
-}
-
 @media (max-width: 768px) {
   .lang-corner {
     top: 8px;
@@ -227,9 +211,6 @@
   .lang-btn {
     padding: 8px 9px;
     min-height: 40px;
-  }
-  .catalog--sidebar .lang-switcher {
-    margin-bottom: 4px;
   }
 }
 
@@ -423,6 +404,10 @@
 
 .worksheet-topbar {
   padding: 16px 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 @media (max-width: 768px) {

@@ -132,7 +132,8 @@ describe('App', () => {
     }
     const privacy = localizePage(PAGES[1], 'fr')
     expect(screen.getByRole('link', { name: privacy.navLabel }).getAttribute('href')).toBe('/fr/privacy')
-    expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('fr')
+    // Following a French link is not a choice: the stored preference is untouched.
+    expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('en')
   })
 
   it('the language switcher moves the current page to another locale, remembers it and tracks it', () => {
@@ -140,6 +141,10 @@ describe('App', () => {
     render(<App />)
     const button = screen.getByRole('button', { name: /Language/ })
     expect(button.closest('.lang-switcher').className).toContain('no-print')
+    // On a worksheet the switcher lives in the worksheet header, not the sidebar.
+    expect(button.closest('.worksheet-topbar')).toBeTruthy()
+    expect(document.querySelector('.catalog--sidebar .lang-switcher')).toBeNull()
+    expect(document.querySelectorAll('.lang-switcher').length).toBe(1)
     fireEvent.click(button)
     expect(button.getAttribute('aria-expanded')).toBe('true')
     const item = screen.getByRole('menuitemradio', { name: 'Français' })
@@ -172,7 +177,7 @@ describe('App', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(localizePage(PAGES[0], 'de').title)
   })
 
-  it('a bare / restores the remembered locale; an explicit English URL wins and resets it', () => {
+  it('the remembered choice applies to / and to any unprefixed URL; a prefixed URL wins without overwriting it', () => {
     localStorage.setItem('mathsheets', JSON.stringify({ app: { locale: 'de', activeTab: null } }))
     render(<App />)
     expect(window.location.pathname).toBe('/de')
@@ -181,8 +186,18 @@ describe('App', () => {
     localStorage.setItem('mathsheets', JSON.stringify({ app: { locale: 'fr', activeTab: 'patterns' } }))
     window.history.replaceState(null, '', '/worksheets/comparison')
     render(<App />)
+    expect(window.location.pathname).toBe('/fr/worksheets/comparison')
+    expect(document.documentElement.lang).toBe('fr')
+    expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('fr')
+    cleanup()
+    window.history.replaceState(null, '', '/es/worksheets/comparison')
+    render(<App />)
+    expect(window.location.pathname).toBe('/es/worksheets/comparison')
+    expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('fr')
+    // Choosing English explicitly stores it and stops the redirect.
+    fireEvent.click(screen.getByRole('button', { name: /Language|Idioma/ }))
+    fireEvent.click(screen.getByRole('menuitemradio', { name: 'English' }))
     expect(window.location.pathname).toBe('/worksheets/comparison')
-    expect(document.documentElement.lang).toBe('en')
     expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('en')
   })
 
