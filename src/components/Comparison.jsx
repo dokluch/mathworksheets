@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
-import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
-import { trackEvent } from '../lib/analytics'
 import { useT } from '../i18n/context'
+import { SettingsPanel, SettingRow, SegmentedControl, PanelActions } from './controls/SettingsPanel'
 import './Comparison.css'
 
 function randInt(min, max) {
@@ -132,48 +131,18 @@ export default function Comparison() {
 
   return (
     <div className="tool-panel">
-      <div className="controls no-print">
-        <div className="control-row">
-          <label className="control-label">
-            {t('common.range')}
-            <div className="btn-group" role="group" aria-label={t('common.range')}>
-              {PRESETS.map(max => (
-                <button
-                  key={max}
-                  className={`btn-toggle ${maxVal === max ? 'active' : ''}`}
-                  onClick={() => setMaxVal(max)}
-                >
-                  {t('common.within', { n: max })}
-                </button>
-              ))}
-            </div>
-          </label>
-
-          <label className="control-label">
-            {t('common.columns')}
-            <div className="btn-group" role="group" aria-label={t('common.columns')}>
-              {[2, 3, 4].map(c => (
-                <button
-                  key={c}
-                  className={`btn-toggle ${columns === c ? 'active' : ''}`}
-                  onClick={() => setColumns(c)}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-          </label>
-        </div>
-
-        <div className="control-actions">
-          <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'compare' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
-          </button>
-          <button className="btn btn-secondary" onClick={() => window.print()}>
-            <IconPrinter size={16} stroke={2} /> {t('common.print')}
-          </button>
-        </div>
-      </div>
+      <SettingsPanel actions={<PanelActions worksheetId="compare" onRegenerate={() => setSeed(s => s + 1)} />}>
+        <SettingRow label={t('common.range')}>
+          <SegmentedControl
+            value={maxVal}
+            onChange={setMaxVal}
+            options={PRESETS.map(max => ({ value: max, label: t('common.within', { n: max }) }))}
+          />
+        </SettingRow>
+        <SettingRow label={t('common.columns')}>
+          <SegmentedControl value={columns} onChange={setColumns} options={[2, 3, 4].map(c => ({ value: c, label: c }))} />
+        </SettingRow>
+      </SettingsPanel>
 
       <div className={`worksheet print-area cols-${columns}`}>
         <div className="worksheet-header">

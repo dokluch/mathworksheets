@@ -1,9 +1,8 @@
 import { useMemo, useState } from 'react'
-import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useNotebookGrid, problemsPerPage } from '../hooks/useNotebookGrid'
-import { trackEvent } from '../lib/analytics'
 import { useT } from '../i18n/context'
+import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './ColumnAddition.css'
 
 const DIGIT_PRESETS = [2, 3, 4]
@@ -116,57 +115,23 @@ export default function ColumnAddition() {
 
   return (
     <div className="tool-panel">
-      <div className="controls no-print">
-        <div className="control-row">
-          <label className="control-label">
-            {t('common.numberSize')}
-            <div className="btn-group" role="group" aria-label={t('common.numberSize')}>
-              {DIGIT_PRESETS.map(d => (
-                <button
-                  key={d}
-                  className={`btn-toggle ${digits === d ? 'active' : ''}`}
-                  onClick={() => setDigits(d)}
-                >
-                  {t('coladd.digitPreset', { d })}
-                </button>
-              ))}
-            </div>
-          </label>
-
-          <label className="control-label">
-            {t('common.columns')}
-            <div className="btn-group" role="group" aria-label={t('common.columns')}>
-              {[2, 3, 4].map(value => (
-                <button
-                  key={value}
-                  className={`btn-toggle ${columns === value ? 'active' : ''}`}
-                  onClick={() => setColumns(value)}
-                >
-                  {value}
-                </button>
-              ))}
-            </div>
-          </label>
-
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              checked={preferCarry}
-              onChange={event => setPreferCarry(event.target.checked)}
-            />
+      <SettingsPanel actions={<PanelActions worksheetId="coladd" onRegenerate={() => setSeed(s => s + 1)} />}>
+        <SettingRow label={t('common.numberSize')}>
+          <SegmentedControl
+            value={digits}
+            onChange={setDigits}
+            options={DIGIT_PRESETS.map(d => ({ value: d, label: t('coladd.digitPreset', { d }) }))}
+          />
+        </SettingRow>
+        <SettingRow label={t('common.columns')}>
+          <SegmentedControl value={columns} onChange={setColumns} options={[2, 3, 4].map(c => ({ value: c, label: c }))} />
+        </SettingRow>
+        <SettingRow label={t('common.options')}>
+          <CheckboxOption checked={preferCarry} onChange={setPreferCarry}>
             {t('coladd.preferCarry')}
-          </label>
-        </div>
-
-        <div className="control-actions">
-          <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'coladd' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
-          </button>
-          <button className="btn btn-secondary" onClick={() => window.print()}>
-            <IconPrinter size={16} stroke={2} /> {t('common.print')}
-          </button>
-        </div>
-      </div>
+          </CheckboxOption>
+        </SettingRow>
+      </SettingsPanel>
 
       <div
         ref={sheetRef}

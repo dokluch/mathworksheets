@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
-import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
-import { trackEvent } from '../lib/analytics'
 import { useT } from '../i18n/context'
+import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
 
 const PRESETS = [10, 20, 100, 1000]
@@ -173,98 +172,44 @@ export default function AddSubtract() {
 
   return (
     <div className="tool-panel">
-      <div className="controls no-print">
-        <div className="control-row">
-          <label className="control-label">
-            {t('common.operation')}
-            <div className="btn-group" role="group" aria-label={t('common.operation')}>
-              {[
-                { value: 'add', label: '+' },
-                { value: 'sub', label: '−' },
-                { value: 'both', label: '+ / −' },
-              ].map(o => (
-                <button
-                  key={o.value}
-                  className={`btn-toggle ${ops === o.value ? 'active' : ''}`}
-                  onClick={() => setOps(o.value)}
-                >
-                  {o.label}
-                </button>
-              ))}
-            </div>
-          </label>
-
-          <label className="control-label">
-            {t('common.limit')}
-            <div className="btn-group" role="group" aria-label={t('common.limit')}>
-              {PRESETS.map(max => (
-                <button
-                  key={max}
-                  className={`btn-toggle ${maxVal === max ? 'active' : ''}`}
-                  onClick={() => setMaxVal(max)}
-                >
-                  {t('common.within', { n: max })}
-                </button>
-              ))}
-            </div>
-          </label>
-        </div>
-
-        <div className="control-row">
-          <label className="control-label">
-            {t('common.layout')}
-            <div className="btn-group">
-              {[
-                { value: 'inline', label: t('addsub.inline') },
-                { value: 'stacked', label: t('addsub.stacked') },
-              ].map(l => (
-                <button
-                  key={l.value}
-                  className={`btn-toggle ${layout === l.value ? 'active' : ''}`}
-                  onClick={() => setLayout(l.value)}
-                >
-                  {l.label}
-                </button>
-              ))}
-            </div>
-          </label>
-
-          <label className="control-label">
-            {t('common.columns')}
-            <div className="btn-group">
-              {[2, 3, 4].map(c => (
-                <button
-                  key={c}
-                  className={`btn-toggle ${columns === c ? 'active' : ''}`}
-                  onClick={() => setColumns(c)}
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-          </label>
-
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              checked={sixtySevenMode}
-              onChange={event => setSixtySevenMode(event.target.checked)}
-            />
+      <SettingsPanel actions={<PanelActions worksheetId="addsub" onRegenerate={() => setSeed(s => s + 1)} />}>
+        <SettingRow label={t('common.operation')}>
+          <SegmentedControl
+            value={ops}
+            onChange={setOps}
+            options={[
+              { value: 'add', label: '+' },
+              { value: 'sub', label: '−' },
+              { value: 'both', label: '+ / −' },
+            ]}
+          />
+        </SettingRow>
+        <SettingRow label={t('common.limit')}>
+          <SegmentedControl
+            value={maxVal}
+            onChange={setMaxVal}
+            options={PRESETS.map(max => ({ value: max, label: t('common.within', { n: max }) }))}
+          />
+        </SettingRow>
+        <SettingRow label={t('common.layout')}>
+          <SegmentedControl
+            value={layout}
+            onChange={setLayout}
+            options={[
+              { value: 'inline', label: t('addsub.inline') },
+              { value: 'stacked', label: t('addsub.stacked') },
+            ]}
+          />
+        </SettingRow>
+        <SettingRow label={t('common.columns')}>
+          <SegmentedControl value={columns} onChange={setColumns} options={[2, 3, 4].map(c => ({ value: c, label: c }))} />
+        </SettingRow>
+        <SettingRow label={t('common.options')}>
+          <CheckboxOption checked={sixtySevenMode} onChange={setSixtySevenMode}>
             {t('addsub.sixtySeven')}
-          </label>
-        </div>
-
-        <div className="control-actions">
-          <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'addsub' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
-          </button>
-          {problems && (
-            <button className="btn btn-secondary" onClick={() => window.print()}>
-              <IconPrinter size={16} stroke={2} /> {t('common.print')}
-            </button>
-          )}
-        </div>
-      </div>
+          </CheckboxOption>
+        </SettingRow>
+      </SettingsPanel>
 
       {problems && (
         <div className={`worksheet print-area cols-${columns}`}>

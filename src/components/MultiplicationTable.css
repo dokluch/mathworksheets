@@ -55,14 +55,22 @@
     border: 1px solid #888;
   }
 
+  /* Browsers drop backgrounds when printing unless told otherwise, which left
+     the top row and left column blank on paper. */
+  .mult-table .corner-cell,
+  .mult-table .header-cell {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
   .mult-table .corner-cell {
-    background: #ddd;
+    background: #d5dcea;
     color: #333;
     border-color: #888;
   }
 
   .mult-table .header-cell {
-    background: #eee;
+    background: #e8edf6;
     color: #333;
   }
 }

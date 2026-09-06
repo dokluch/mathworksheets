@@ -216,6 +216,27 @@ describe('App', () => {
     expect(screen.queryByRole('button', { name: /Print worksheet/ })).toBeNull()
   })
 
+  it('every printable worksheet renders the shared settings panel, hidden from print', () => {
+    for (const ws of WORKSHEETS) {
+      cleanup()
+      window.history.replaceState(null, '', `/worksheets/${ws.slug}`)
+      render(<App />)
+      const panel = document.querySelector('.settings-panel')
+      if (ws.interactive) {
+        expect(panel, ws.slug).toBeNull()
+        continue
+      }
+      expect(panel, ws.slug).toBeTruthy()
+      expect(panel.className).toContain('no-print')
+      expect(document.querySelector('.controls'), ws.slug).toBeNull()
+      expect(within(panel).getByRole('button', { name: /Regenerate/ })).toBeTruthy()
+      expect(within(panel).getByRole('button', { name: /Print/ })).toBeTruthy()
+      if (panel.querySelector('.btn-group')) {
+        expect(within(panel).getAllByRole('button', { pressed: true }).length, ws.slug).toBeGreaterThan(0)
+      }
+    }
+  })
+
   it('has a site header with the brand as H1 link home, an About link and the language switcher on the catalog', () => {
     render(<App />)
     const header = document.querySelector('header.site-header')

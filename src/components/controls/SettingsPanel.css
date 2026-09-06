@@ -1,0 +1,180 @@
+/* ── Settings panel (shared by every printable worksheet) ── */
+.settings-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  /* No overflow: hidden — it would clip focus rings at the card edge. */
+}
+
+.settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 24px 20px;
+}
+
+.setting-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.setting-label {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--color-text-muted);
+}
+
+.setting-control {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.checkbox-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+  flex: none;
+}
+
+.checkbox-option input[type="checkbox"]:focus-visible {
+  border-radius: 3px;
+}
+
+/* Several checkbox options in one row stack vertically. */
+.setting-control > .checkbox-option {
+  flex-basis: 100%;
+}
+
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.range-sep {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.num-input {
+  width: 72px;
+  padding: 7px 10px;
+  border: 1px solid var(--color-border-dark);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 14px;
+  text-align: center;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.num-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.slider {
+  width: 100%;
+  max-width: 240px;
+  accent-color: var(--color-primary);
+}
+
+.settings-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 24px;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--color-surface);
+}
+
+/* Tablet and up: settings flow two per row, each taking half the width.
+   A control wider than a half (four "Within 1000" buttons at narrow widths,
+   long localized labels) cannot shrink below its content, so flex wrapping
+   drops it onto a full row of its own. Reading order is preserved. */
+@media (min-width: 769px) {
+  .settings-body {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 18px 32px;
+    align-items: flex-start;
+  }
+
+  .setting-row {
+    flex: 1 1 calc(50% - 16px);
+    min-width: auto; /* cannot shrink below its control, so it wraps to a full row instead */
+    max-width: 100%;
+  }
+}
+
+/* Mobile: touch targets, full-width segmented controls, stacked actions */
+@media (max-width: 768px) {
+  .settings-body {
+    padding: 16px 16px 18px;
+  }
+
+  .settings-panel .btn-group {
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+
+  .settings-panel .btn-toggle {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px 6px;
+    white-space: normal; /* "Within 1000" wraps to two lines instead of overflowing */
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .settings-panel .range-inputs {
+    width: 100%;
+  }
+
+  .settings-panel .num-input {
+    flex: 1 1 0;
+    width: auto;
+    min-height: 44px;
+    font-size: 16px; /* stops iOS zooming on focus */
+  }
+
+  .settings-panel .slider {
+    max-width: none;
+    min-height: 44px;
+  }
+
+  .checkbox-option {
+    min-height: 44px;
+  }
+
+  .settings-footer {
+    flex-direction: column;
+    padding: 12px 16px 16px;
+  }
+
+  .settings-footer .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+}

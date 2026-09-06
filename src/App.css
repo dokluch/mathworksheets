@@ -523,6 +523,13 @@
   }
 }
 
+/* Settings panel above the printable sheet */
+.tool-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 /* =============================================
    MOBILE — Full catalog landing
    ============================================= */
@@ -715,6 +722,102 @@ a.back-btn {
 
 .static-page .catalog-grid {
   margin-top: 8px;
+}
+
+/* =============================================
+   BUTTONS (global primitives: settings panel, Equation Explorer, print CTA)
+   ============================================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 20px;
+  border: none;
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-dark);
+}
+
+.btn-secondary:hover {
+  background: var(--color-surface-hover);
+}
+
+/* Segmented toggle group */
+/* Never wraps: a group too wide for its slot makes the whole setting move
+   to the next row instead of breaking the pill. */
+.btn-group {
+  display: inline-flex;
+  flex-wrap: nowrap;
+}
+
+.btn-toggle {
+  padding: 7px 14px;
+  border: 1px solid var(--color-border-dark);
+  background: var(--color-surface);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--color-text);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.btn-toggle:not(:first-child) {
+  border-left: none;
+}
+
+.btn-toggle:hover {
+  background: var(--color-surface-hover);
+}
+
+.btn-toggle.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-toggle.active + .btn-toggle {
+  border-left: 1px solid var(--color-primary);
+}
+
+/* Lift the focused segment above its neighbours so the ring is not covered;
+   the end-cap radius rules below win over this square default. */
+.btn-toggle:focus-visible {
+  position: relative;
+  z-index: 1;
+  box-shadow: var(--focus-ring);
+  border-radius: 0;
+}
+
+.btn-toggle:first-child {
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.btn-toggle:last-child {
+  border-radius: 0 var(--radius) var(--radius) 0;
 }
 
 /* =============================================

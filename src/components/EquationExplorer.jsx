@@ -711,14 +711,14 @@ export default function EquationExplorer() {
       {/* Controls */}
       <div className="eq-controls no-print">
         <div className="btn-group">
-          <button className={`btn-toggle${ops === 'add' ? ' active' : ''}`} onClick={() => { setOps('add'); handleNextProblem() }}>+</button>
-          <button className={`btn-toggle${ops === 'sub' ? ' active' : ''}`} onClick={() => { setOps('sub'); handleNextProblem() }}>−</button>
-          <button className={`btn-toggle${ops === 'both' ? ' active' : ''}`} onClick={() => { setOps('both'); handleNextProblem() }}>+ / −</button>
+          <button className={`btn-toggle${ops === 'add' ? ' active' : ''}`} aria-pressed={ops === 'add'} onClick={() => { setOps('add'); handleNextProblem() }}>+</button>
+          <button className={`btn-toggle${ops === 'sub' ? ' active' : ''}`} aria-pressed={ops === 'sub'} onClick={() => { setOps('sub'); handleNextProblem() }}>−</button>
+          <button className={`btn-toggle${ops === 'both' ? ' active' : ''}`} aria-pressed={ops === 'both'} onClick={() => { setOps('both'); handleNextProblem() }}>+ / −</button>
         </div>
         <div className="btn-group">
-          <button className={`btn-toggle${range === 10 ? ' active' : ''}`} onClick={() => { setRange(10); handleNextProblem() }}>10</button>
-          <button className={`btn-toggle${range === 100 ? ' active' : ''}`} onClick={() => { setRange(100); handleNextProblem() }}>100</button>
-          <button className={`btn-toggle${range === 1000 ? ' active' : ''}`} onClick={() => { setRange(1000); handleNextProblem() }}>1000</button>
+          <button className={`btn-toggle${range === 10 ? ' active' : ''}`} aria-pressed={range === 10} onClick={() => { setRange(10); handleNextProblem() }}>10</button>
+          <button className={`btn-toggle${range === 100 ? ' active' : ''}`} aria-pressed={range === 100} onClick={() => { setRange(100); handleNextProblem() }}>100</button>
+          <button className={`btn-toggle${range === 1000 ? ' active' : ''}`} aria-pressed={range === 1000} onClick={() => { setRange(1000); handleNextProblem() }}>1000</button>
         </div>
         <button className="btn btn-secondary" onClick={handleNextProblem}>
           <IconRefresh size={16} />

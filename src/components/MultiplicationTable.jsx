@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react'
-import { IconPrinter, IconRefresh } from '@tabler/icons-react'
+import { useId, useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
-import { trackEvent } from '../lib/analytics'
 import { useT } from '../i18n/context'
+import { SettingsPanel, SettingRow, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './MultiplicationTable.css'
 
 function shuffleArray(array) {
@@ -19,8 +18,10 @@ export default function MultiplicationTable() {
   const [start, setStart] = usePersistedState('multiply', 'start', 1)
   const [end, setEnd] = usePersistedState('multiply', 'end', 10)
   const [fillDiagonal, setFillDiagonal] = usePersistedState('multiply', 'fillDiagonal', false)
+  const [shuffleHeaders, setShuffleHeaders] = usePersistedState('multiply', 'shuffleHeaders', false)
   const [randomPercent, setRandomPercent] = usePersistedState('multiply', 'randomPercent', 50)
   const [seed, setSeed] = useState(0)
+  const sliderId = useId()
 
   const tableData = useMemo(() => {
     if (end <= start) return null
@@ -29,11 +30,16 @@ export default function MultiplicationTable() {
     const numbers = []
     for (let i = start; i <= end; i++) numbers.push(i)
 
+    // Rows and columns are shuffled independently so the sheet cannot be filled
+    // in by reading a neighbouring cell and adding one.
+    const rows = shuffleHeaders ? shuffleArray(numbers) : numbers
+    const cols = shuffleHeaders ? shuffleArray(numbers) : numbers
+
     const cells = {}
     const offDiag = []
 
-    for (const r of numbers) {
-      for (const c of numbers) {
+    for (const r of rows) {
+      for (const c of cols) {
         const key = `${r}-${c}`
         const product = r * c
         if (fillDiagonal && r === c) {
@@ -52,74 +58,56 @@ export default function MultiplicationTable() {
       }
     }
 
-    return { numbers, cells }
-  }, [start, end, fillDiagonal, randomPercent, seed])
+    return { rows, cols, cells }
+  }, [start, end, fillDiagonal, shuffleHeaders, randomPercent, seed])
 
   return (
     <div className="tool-panel">
-      <div className="controls no-print">
-        <div className="control-row">
-          <label className="control-label">
-            {t('common.range')}
-            <div className="range-inputs">
-              <input
-                type="number"
-                value={start}
-                min={1}
-                max={20}
-                onChange={e => setStart(Math.max(1, parseInt(e.target.value) || 1))}
-                className="num-input"
-                aria-label={t('multiply.rangeStart')}
-              />
-              <span className="range-sep">{t('multiply.to')}</span>
-              <input
-                type="number"
-                value={end}
-                min={2}
-                max={50}
-                onChange={e => setEnd(Math.max(2, parseInt(e.target.value) || 2))}
-                className="num-input"
-                aria-label={t('multiply.rangeEnd')}
-              />
-            </div>
-          </label>
-
-          <label className="control-label">
-            <span className="checkbox-label">
-              <input
-                type="checkbox"
-                checked={fillDiagonal}
-                onChange={e => setFillDiagonal(e.target.checked)}
-              />
-              {t('multiply.fillDiagonal')}
-            </span>
-          </label>
-
-          <label className="control-label">
-            {t('multiply.prefill', { pct: randomPercent })}
+      <SettingsPanel actions={<PanelActions worksheetId="multiply" onRegenerate={() => setSeed(s => s + 1)} showPrint={Boolean(tableData)} />}>
+        <SettingRow label={t('common.range')}>
+          <div className="range-inputs">
             <input
-              type="range"
-              min={0}
-              max={100}
-              step={5}
-              value={randomPercent}
-              onChange={e => setRandomPercent(parseInt(e.target.value))}
-              className="slider"
+              type="number"
+              value={start}
+              min={1}
+              max={20}
+              onChange={e => setStart(Math.max(1, parseInt(e.target.value) || 1))}
+              className="num-input"
+              aria-label={t('multiply.rangeStart')}
             />
-          </label>
-        </div>
-
-        <div className="control-actions">
-          <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'multiply' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
-          </button>
-          {tableData && (
-            <button className="btn btn-secondary" onClick={() => window.print()}>
-              <IconPrinter size={16} stroke={2} /> {t('common.print')}
-            </button>
-          )}
-        </div>
-      </div>
+            <span className="range-sep">{t('multiply.to')}</span>
+            <input
+              type="number"
+              value={end}
+              min={2}
+              max={50}
+              onChange={e => setEnd(Math.max(2, parseInt(e.target.value) || 2))}
+              className="num-input"
+              aria-label={t('multiply.rangeEnd')}
+            />
+          </div>
+        </SettingRow>
+        <SettingRow label={t('multiply.prefill', { pct: randomPercent })} htmlFor={sliderId}>
+          <input
+            id={sliderId}
+            type="range"
+            min={0}
+            max={100}
+            step={5}
+            value={randomPercent}
+            onChange={e => setRandomPercent(parseInt(e.target.value))}
+            className="slider"
+          />
+        </SettingRow>
+        <SettingRow label={t('common.options')}>
+          <CheckboxOption checked={fillDiagonal} onChange={setFillDiagonal}>
+            {t('multiply.fillDiagonal')}
+          </CheckboxOption>
+          <CheckboxOption checked={shuffleHeaders} onChange={setShuffleHeaders}>
+            {t('multiply.shuffleHeaders')}
+          </CheckboxOption>
+        </SettingRow>
+      </SettingsPanel>
 
       {tableData && (
         <div className="mult-table-wrap print-area" tabIndex={0} role="region" aria-label={t('multiply.tableAria')}>
@@ -127,16 +115,16 @@ export default function MultiplicationTable() {
             <thead>
               <tr>
                 <th className="corner-cell">×</th>
-                {tableData.numbers.map(n => (
+                {tableData.cols.map(n => (
                   <th key={n} className="header-cell">{n}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {tableData.numbers.map(r => (
+              {tableData.rows.map(r => (
                 <tr key={r}>
                   <th className="header-cell">{r}</th>
-                  {tableData.numbers.map(c => {
+                  {tableData.cols.map(c => {
                     const key = `${r}-${c}`
                     const val = tableData.cells[key]
                     return (

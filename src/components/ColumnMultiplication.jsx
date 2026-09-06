@@ -1,9 +1,8 @@
 import { useMemo, useState } from 'react'
-import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useNotebookGrid, problemsPerPage } from '../hooks/useNotebookGrid'
-import { trackEvent } from '../lib/analytics'
 import { useT } from '../i18n/context'
+import { SettingsPanel, SettingRow, SegmentedControl, PanelActions } from './controls/SettingsPanel'
 import './ColumnMultiplication.css'
 
 const PRESETS = [
@@ -140,48 +139,18 @@ export default function ColumnMultiplication() {
 
   return (
     <div className="tool-panel">
-      <div className="controls no-print">
-        <div className="control-row">
-          <label className="control-label">
-            {t('common.numberSize')}
-            <div className="btn-group" role="group" aria-label={t('common.numberSize')}>
-              {PRESETS.map(option => (
-                <button
-                  key={option.value}
-                  className={`btn-toggle ${preset === option.value ? 'active' : ''}`}
-                  onClick={() => setPreset(option.value)}
-                >
-                  {presetLabel(option.aDigits, option.bDigits)}
-                </button>
-              ))}
-            </div>
-          </label>
-
-          <label className="control-label">
-            {t('common.columns')}
-            <div className="btn-group" role="group" aria-label={t('common.columns')}>
-              {[2, 3, 4].map(value => (
-                <button
-                  key={value}
-                  className={`btn-toggle ${columns === value ? 'active' : ''}`}
-                  onClick={() => setColumns(value)}
-                >
-                  {value}
-                </button>
-              ))}
-            </div>
-          </label>
-        </div>
-
-        <div className="control-actions">
-          <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'colmul' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
-          </button>
-          <button className="btn btn-secondary" onClick={() => window.print()}>
-            <IconPrinter size={16} stroke={2} /> {t('common.print')}
-          </button>
-        </div>
-      </div>
+      <SettingsPanel actions={<PanelActions worksheetId="colmul" onRegenerate={() => setSeed(s => s + 1)} />}>
+        <SettingRow label={t('common.numberSize')}>
+          <SegmentedControl
+            value={preset}
+            onChange={setPreset}
+            options={PRESETS.map(option => ({ value: option.value, label: presetLabel(option.aDigits, option.bDigits) }))}
+          />
+        </SettingRow>
+        <SettingRow label={t('common.columns')}>
+          <SegmentedControl value={columns} onChange={setColumns} options={[2, 3, 4].map(c => ({ value: c, label: c }))} />
+        </SettingRow>
+      </SettingsPanel>
 
       <div
         ref={sheetRef}

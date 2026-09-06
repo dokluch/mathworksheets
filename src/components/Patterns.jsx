@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
-import { IconRefresh, IconPrinter } from '@tabler/icons-react'
 import { usePersistedState } from '../hooks/usePersistedState'
-import { trackEvent } from '../lib/analytics'
 import { useT } from '../i18n/context'
+import { SettingsPanel, SettingRow, SegmentedControl, PanelActions } from './controls/SettingsPanel'
 import './Patterns.css'
 
 function randInt(min, max) {
@@ -155,33 +154,15 @@ export default function Patterns() {
 
   return (
     <div className="tool-panel">
-      <div className="controls no-print">
-        <div className="control-row">
-          <label className="control-label">
-            {t('common.difficulty')}
-            <div className="btn-group" role="group" aria-label={t('common.difficulty')}>
-              {LEVELS.map(l => (
-                <button
-                  key={l.value}
-                  className={`btn-toggle ${level === l.value ? 'active' : ''}`}
-                  onClick={() => setLevel(l.value)}
-                >
-                  {t(l.key)}
-                </button>
-              ))}
-            </div>
-          </label>
-        </div>
-
-        <div className="control-actions">
-          <button className="btn btn-primary" onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: 'patterns' }); setSeed(s => s + 1) }}>
-            <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
-          </button>
-          <button className="btn btn-secondary" onClick={() => window.print()}>
-            <IconPrinter size={16} stroke={2} /> {t('common.print')}
-          </button>
-        </div>
-      </div>
+      <SettingsPanel actions={<PanelActions worksheetId="patterns" onRegenerate={() => setSeed(s => s + 1)} />}>
+        <SettingRow label={t('common.difficulty')}>
+          <SegmentedControl
+            value={level}
+            onChange={setLevel}
+            options={LEVELS.map(l => ({ value: l.value, label: t(l.key) }))}
+          />
+        </SettingRow>
+      </SettingsPanel>
 
       <div className="worksheet print-area">
         <div className="worksheet-header">
