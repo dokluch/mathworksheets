@@ -11,12 +11,12 @@ import { usePreviewScale } from '../hooks/usePreviewScale'
 import { LEVELS, generateSheet, glyph } from '../lib/orderOfOperations'
 
 /**
- * Header budget for listRowsPerPage: the title, the ruled Name/Date/Set block,
- * the instruction line and the space below it, measured on the printed sheet.
- * 88px in the Latin and Cyrillic locales; 94 is Chinese, where the instruction
- * wraps to two lines, and the tallest translation is the one that has to fit.
+ * Header budget for listRowsPerPage: the title, the ruled Name/Date/Set block
+ * and the space below them, measured on the printed sheet. 66px in the Latin
+ * and Cyrillic locales; 70 is Chinese, whose taller line box sets the budget,
+ * because the tallest translation is the one that has to fit.
  */
-export const ORDER_HEADER_PX = 94
+export const ORDER_HEADER_PX = 70
 /** JetBrains Mono advance at the printed figure size, for the width budget. */
 export const ORDER_CHAR_PX = 9
 /** One answer box and the gap between two, matching OrderOfOperations.css.
@@ -126,7 +126,6 @@ export default function OrderOfOperations() {
           <WorksheetHeader
             title={t('order.title')}
             meta={t(`order.${level}`)}
-            instructions={t('order.instructions')}
             stamp={setStamp(problems)}
           />
 

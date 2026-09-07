@@ -213,7 +213,6 @@ export default {
     useBrackets: 'Utiliser les parenthèses',
     defaultNotation: 'cross',
     title: 'Ordre des opérations',
-    instructions: 'Les parenthèses d’abord, puis × et ÷, puis + et −. Une case par chiffre de la réponse.',
   },
 
   eq: {

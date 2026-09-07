@@ -213,7 +213,6 @@ export default {
     useBrackets: 'Klammern verwenden',
     defaultNotation: 'dot',
     title: 'Rechenreihenfolge',
-    instructions: 'Zuerst die Klammern, dann · und :, dann + und −. Ein Kästchen je Ziffer der Antwort.',
   },
 
   eq: {

@@ -213,7 +213,6 @@ export default {
     useBrackets: '使用括号',
     defaultNotation: 'cross',
     title: '运算顺序',
-    instructions: '先算括号，再算 × 和 ÷，最后算 + 和 −。答案每一位数字一个方框。',
   },
 
   eq: {

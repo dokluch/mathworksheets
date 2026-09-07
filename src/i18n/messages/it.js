@@ -213,7 +213,6 @@ export default {
     useBrackets: 'Usa le parentesi',
     defaultNotation: 'dot',
     title: 'Ordine delle operazioni',
-    instructions: 'Prima le parentesi, poi · e :, poi + e −. Una casella per ogni cifra del risultato.',
   },
 
   eq: {

@@ -224,7 +224,6 @@ export default {
     // Which signs this language's schools write; the setting overrides it once chosen.
     defaultNotation: 'cross',
     title: 'Order of Operations',
-    instructions: 'Brackets first, then × and ÷, then + and −. One box per digit of the answer.',
   },
 
   eq: {

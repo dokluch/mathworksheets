@@ -218,7 +218,6 @@ export default {
     useBrackets: 'Использовать скобки',
     defaultNotation: 'dot',
     title: 'Порядок действий',
-    instructions: 'Сначала скобки, потом · и :, затем + и −. По одной клетке на каждую цифру ответа.',
   },
 
   eq: {

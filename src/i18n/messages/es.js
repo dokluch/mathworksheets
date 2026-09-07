@@ -213,7 +213,6 @@ export default {
     useBrackets: 'Usar paréntesis',
     defaultNotation: 'cross',
     title: 'Orden de las operaciones',
-    instructions: 'Primero los paréntesis, luego × y ÷, después + y −. Una casilla por cada cifra de la respuesta.',
   },
 
   eq: {
