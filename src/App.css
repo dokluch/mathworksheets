@@ -682,6 +682,20 @@
   display: flex;
   flex-direction: column;
   min-width: 0; /* prevent flex overflow */
+  /* One column for the whole page. The title, the panel + sheet, and the
+     prose below them all sit on it and are centred together in the main area
+     — they used to be pinned to its left edge, which left 524px of dead space
+     to the right of the sheet at 1680px. --page-max is the outer width; the
+     gutters are inside it, so a plate that wants to match the sheet's own
+     width subtracts them (see .worksheet-details). */
+  --page-gutter: 24px;
+  --page-max: 960px;
+}
+
+@media (max-width: 768px) {
+  .worksheet-main {
+    --page-gutter: 12px;
+  }
 }
 
 @media (min-width: 769px) {
@@ -691,16 +705,22 @@
 }
 
 .worksheet-topbar {
-  padding: 16px 24px 0;
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: 16px var(--page-gutter) 0;
   display: flex;
   flex-direction: column;
+  /* The title sits on the column's left edge, over the panel's left edge —
+     the same measure-left idiom the static pages use. Centring the block is
+     not the same as centring the type inside it. */
   align-items: flex-start;
   gap: 2px;
 }
 
 @media (max-width: 768px) {
   .worksheet-topbar {
-    padding: 12px 16px 0;
+    padding-block: 12px 0;
   }
 }
 
@@ -732,9 +752,10 @@
 
 .worksheet-content {
   flex: 1;
-  padding: 20px 24px 32px;
-  max-width: 960px;
   width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: 20px var(--page-gutter) 32px;
 }
 
 /* The crawlable worksheet prose, kept in the DOM after hydration (see
@@ -743,10 +764,16 @@
    not a panel floating on the cover. No `width: 100%` beside the horizontal
    margins: together they made the block its parent's full width *and* inset
    it, pushing the page 24px wider than a 390px viewport. */
+/* Exactly as wide as the sheet above it, and on the same centre line. It used
+   to take --page-max as its own outer width while the sheet took that minus
+   the gutters, so the prose plate ran 48px wider and stuck out to the right of
+   the thing it explains. `width` carries the gutter on narrow screens, where
+   the max-width does not bite. */
 .worksheet-details {
-  max-width: 960px;
+  width: calc(100% - var(--page-gutter) * 2);
+  max-width: calc(var(--page-max) - var(--page-gutter) * 2);
   padding: var(--sq) calc(var(--sq) * 0.9) calc(var(--sq) * 1.2);
-  margin: var(--half-sq) 24px calc(var(--sq) * 1.2);
+  margin: var(--half-sq) auto calc(var(--sq) * 1.2);
   background: var(--paper);
   border-radius: var(--radius);
   box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
@@ -755,14 +782,14 @@
 
 @media (max-width: 768px) {
   .worksheet-details {
-    margin: 8px 12px 24px;
+    margin: 8px auto 24px;
     padding: 16px 16px 4px;
   }
 }
 
 @media (max-width: 768px) {
   .worksheet-content {
-    padding: 16px 12px 24px;
+    padding-block: 16px 24px;
   }
 }
 

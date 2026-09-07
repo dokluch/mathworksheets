@@ -608,3 +608,35 @@ Verified: 195 tests, lint and build clean; 21 route × viewport combinations wit
 zero contrast failures and no horizontal overflow; the 8 notebook print
 configurations unchanged (ruled, 696px, one page each) and the full 10-sheet
 sweep still one page in A4 and Letter, two with the answer key.
+
+## Revision — one column for the worksheet page
+
+The worksheet page had no shared measure. Its three blocks each sized
+themselves, and all three were pinned to the left edge of the main area:
+
+| | before | after |
+|---|---|---|
+| title / panel / sheet, at 1680px | `244..1156`, 524px dead to the right | `494..1406`, centred |
+| prose plate width | **960px** | **912px**, matching the sheet |
+| mobile title left edge | 16px | 12px, on the panel's edge |
+
+`.worksheet-main` now declares the column — `--page-max: 960px` outer and
+`--page-gutter` (24px, 12px on phones) — and the topbar, the content and the
+prose plate all take it. The plate subtracts the gutters (`width: calc(100% -
+var(--page-gutter) * 2)`; the `width` rather than only a `max-width` is what
+keeps its gutter on a narrow screen), so it lands on exactly the sheet's edges
+instead of overhanging it by 48px.
+
+The title stays left on the column rather than centring inside it — centring
+the block is not the same as centring the type in it, and every other title in
+the product sits left on its measure.
+
+Verified: title, panel, sheet and prose share one left edge and one width at
+1680 / 1440 / 1180 / 900 / 390; six routes × four widths all centred with no
+horizontal overflow; print, the 8 notebook configurations, 195 tests, lint and
+build unchanged.
+
+**Known and not addressed:** the prose inside that plate runs the full 912px
+(~110 characters). The type ramp asks for 65–75ch, so it wants a `--measure`
+cap centred in the plate the way `.static-page` does. Left alone because the
+brief was the plate's width, not the copy's.
