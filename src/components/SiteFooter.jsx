@@ -1,11 +1,10 @@
-import { IconBrandGithub } from '@tabler/icons-react'
 import { siteFooterLinks } from '../seo/render'
 import { LICENSE_NAME, LICENSE_URL, OPERATOR } from '../seo/site'
 import { useLocale, useT } from '../i18n/context.js'
 
 /**
- * Site footer: About · Privacy · Terms · GitHub and the copyright line, in
- * the current locale. `variant="sidebar"` is the compact form shown under the
+ * Site footer: About · Privacy · Terms and the copyright line, in the
+ * current locale. `variant="sidebar"` is the compact form shown under the
  * worksheet list. Never printed (no-print).
  */
 export default function SiteFooter({ navigate, variant = 'full' }) {
@@ -19,12 +18,7 @@ export default function SiteFooter({ navigate, variant = 'full' }) {
   return (
     <footer className={`site-footer no-print${variant === 'sidebar' ? ' site-footer--sidebar' : ''}`}>
       <nav className="site-footer-links" aria-label={t('static.footerSite')}>
-        {siteFooterLinks(locale).map(l => l.external ? (
-          <a key={l.path} href={l.path} target="_blank" rel="noopener noreferrer">
-            <IconBrandGithub size={16} stroke={1.5} />
-            {l.label}
-          </a>
-        ) : (
+        {siteFooterLinks(locale).map(l => (
           <a key={l.path} href={l.path} onClick={internal(l.path)}>{l.label}</a>
         ))}
       </nav>

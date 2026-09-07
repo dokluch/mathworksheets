@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { WORKSHEETS } from '../worksheets.js'
 import { PAGES } from '../pages.js'
-import { SITE_URL, BRAND, OPERATOR, CONTACT_EMAIL, OG_IMAGE_PATH } from './site.js'
+import { SITE_URL, BRAND, OPERATOR, CONTACT_EMAIL, OG_IMAGE_PATH, GITHUB_URL } from './site.js'
 import { LOCALES, LOCALE_META, localizeWorksheet, localizePage } from '../i18n/index.js'
 import {
   routes, findRoute, normalizePath, homeRoute, worksheetRoute, developersRoute, pageRoute, sameRouteIn,
@@ -303,19 +303,29 @@ describe('renderStaticContent', () => {
     }
   })
 
-  it('every kind of page carries the site footer with links to the static pages and GitHub', () => {
+  it('every kind of page carries the site footer with links to the static pages', () => {
     for (const route of routes('en')) {
       const html = renderStaticContent(route)
       expect(html.startsWith('<div id="static-content">')).toBe(true)
       expect(html).toContain('<footer class="site-footer no-print">')
       for (const p of PAGES) expect(html).toContain(`href="/${p.slug}"`)
-      expect(html).toContain('href="https://github.com/dokluch/mathworksheets"')
       expect(html).toContain(OPERATOR)
       expect(html).toContain('creativecommons.org/licenses/by-nc/4.0/')
     }
-    expect(siteFooterLinks().map(l => l.label)).toEqual(['About', 'Privacy', 'Terms', 'GitHub'])
+    expect(siteFooterLinks().map(l => l.label)).toEqual(['About', 'Privacy', 'Terms'])
     expect(footerHtml({ year: 2030 })).toContain('© 2030 ')
     expect(headingLevels(footerHtml())).toEqual([])
+  })
+
+  it('the home page and the About page do not link GitHub', () => {
+    // The repository is going private; only /developers still names it.
+    for (const locale of LOCALES) {
+      const about = PAGES.find(p => p.id === 'about')
+      for (const route of [homeRoute(locale), pageRoute(about, locale), worksheetRoute(WORKSHEETS[0], locale)]) {
+        expect(renderStaticContent(route)).not.toContain(GITHUB_URL)
+        expect(renderMarkdown(route)).not.toContain(GITHUB_URL)
+      }
+    }
   })
 
   it('inline helpers escape HTML and turn [label](url) into links', () => {

@@ -112,14 +112,15 @@ describe('App', () => {
     expect(stamp.textContent).toContain(t('fr', 'common.printFooterTagline'))
   })
 
-  it('shows a footer with About, Privacy, Terms and GitHub links that is never printed', () => {
+  it('shows a footer with About, Privacy and Terms links that is never printed', () => {
     render(<App />)
     const footer = screen.getByRole('contentinfo')
     expect(footer.className).toContain('no-print')
     for (const [name, href] of [['About', '/about'], ['Privacy', '/privacy'], ['Terms', '/terms']]) {
       expect(within(footer).getByRole('link', { name }).getAttribute('href')).toBe(href)
     }
-    expect(within(footer).getByRole('link', { name: /GitHub/ }).getAttribute('href')).toContain('github.com/dokluch')
+    // The repository is going private, so the footer no longer links it.
+    expect(within(footer).queryByRole('link', { name: /GitHub/ })).toBeNull()
     expect(footer.textContent).toContain('Superposition Labs Inc.')
   })
 

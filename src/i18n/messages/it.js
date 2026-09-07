@@ -80,12 +80,11 @@ export default {
       adding3: 'Esegui {test} e {build}; le pagine statiche, i gemelli Markdown, la sitemap, llms.txt e il catalogo JSON vengono rigenerati dal catalogo.',
     },
     agentLinks: {
-      text: 'Ogni pagina è disponibile anche in Markdown: aggiungi {code} al percorso o invia {accept}. Vedi {llms}, il {catalog}, la {sitemap} e le {developers}. Il codice sorgente è su {github} con licenza {license}.',
+      text: 'Ogni pagina è disponibile anche in Markdown: aggiungi {code} al percorso o invia {accept}. Vedi {llms}, il {catalog}, la {sitemap} e le {developers}. Con licenza {license}.',
       llms: 'llms.txt',
       catalog: 'catalogo delle schede (JSON)',
       sitemap: 'sitemap',
       developers: 'risorse per sviluppatori',
-      github: 'GitHub',
     },
   },
 
@@ -95,7 +94,6 @@ export default {
     catalogNote: 'catalogo delle schede leggibile dalle macchine',
     developersLink: 'Risorse per sviluppatori',
     sitemapLink: 'Sitemap',
-    sourceLink: 'Codice sorgente su GitHub',
     homeIntro: '{brand} è un generatore gratuito e open source di schede di matematica da stampare per bambini di 6–9 anni (classi 1ª–3ª). Ogni scheda viene generata a caso ogni volta che viene aperta o rigenerata. Scegli una scheda, regola la difficoltà (intervallo di numeri, cifre, disposizione, colonne) e stampala dal browser; le impostazioni vengono ricordate per dispositivo. Le schede vengono generate lato client: nessun account, nessun caricamento, nessun costo.',
     worksheetItem: '{link}: {shortDesc} (classi {grades})',
     howItWorks: 'Come funziona',
@@ -196,6 +194,19 @@ export default {
     problemAria: '{a} per {b}',
   },
 
+  coldiv: {
+    preset: '{a} ÷ {b} cifre',
+    title: 'Divisione in colonna',
+    meta: 'divisione in colonna · {preset}',
+    notation: 'Notazione',
+    bracket: 'Parentesi',
+    corner: 'Angolo',
+    allowRemainder: 'Consenti i resti',
+    defaultNotation: 'corner',
+    problemAria: '{dividend} diviso {divisor}',
+    quotientAria: { one: 'quoziente: {n} casella vuota', other: 'quoziente: {n} caselle vuote' },
+  },
+
   compare: {
     title: 'Confronto',
   },
@@ -286,6 +297,18 @@ export default {
       settings: [
         'Preimpostazione: 2 × 2, 3 × 2 o 4 × 2 cifre',
         'Colonne: numero di colonne di problemi per pagina',
+      ],
+    },
+    coldiv: {
+      label: 'Divisione in colonna',
+      shortDesc: 'Esercizi di divisione in colonna',
+      longDesc: 'Divisione in colonna di numeri di 3 e 4 cifre per un divisore di 1 o 2 cifre, stampata su una griglia a quadretti con la struttura già tracciata e quadretti vuoti per svolgere i calcoli. La disposizione può seguire l’uso inglese (divisore a sinistra della parentesi e quoziente sopra la linea) o quello continentale (divisore in alto a destra e quoziente sotto), e le divisioni possono essere esatte o lasciare un resto.',
+      skills: ['divisione in colonna', 'resti', 'valore posizionale', 'stima'],
+      settings: [
+        'Preimpostazione: 3 ÷ 1, 4 ÷ 1 o 4 ÷ 2 cifre',
+        'Notazione: parentesi o angolo',
+        'Colonne: numero di colonne di problemi per pagina',
+        'Consentire i resti invece della divisione esatta',
       ],
     },
     compare: {
@@ -400,7 +423,7 @@ export default {
         {
           heading: 'Open source',
           paragraphs: [
-            'Il codice sorgente è su {github} con licenza {license}. Puoi usare, condividere e adattare le schede e il codice per scopi non commerciali citando la fonte. Segnalazioni di errori e idee per nuove schede sono benvenute.',
+            'Le schede e il sito sono pubblicati con licenza {license}. Puoi usarli, condividerli e adattarli per scopi non commerciali citando la fonte. Segnalazioni di errori e idee per nuove schede sono benvenute.',
           ],
         },
         {

@@ -44,7 +44,7 @@ export default {
     home: {
       subtitle: 'Free, randomized practice sheets you can print in one click.',
       intro1: '{brand} is a free, open-source generator of printable math worksheets for grades 1–3 (ages 6–9). Each sheet is randomized every time you open or regenerate it, so children get fresh practice instead of memorising one page. Pick a worksheet, adjust the difficulty (number range, digits, layout, columns) and print it from your browser; your settings are remembered on this device for next time.',
-      intro2: 'The catalog covers multiplication tables, addition and subtraction drills with missing numbers, vertical column addition with carrying, long multiplication, comparing numbers with >, < and =, rounding to the nearest 10, 100 and 1000, and number patterns. The Equation Explorer is an on-screen activity where children move terms across the equals sign and check their answer on a number line.',
+      intro2: 'The catalog covers multiplication tables, addition and subtraction drills with missing numbers, vertical column addition with carrying, long multiplication, long division, comparing numbers with >, < and =, rounding to the nearest 10, 100 and 1000, and number patterns. The Equation Explorer is an on-screen activity where children move terms across the equals sign and check their answer on a number line.',
       worksheets: 'Worksheets',
       howItWorks: 'How it works',
       step1: 'Choose a worksheet from the list above.',
@@ -89,12 +89,11 @@ export default {
       adding3: 'Run {test} and {build}; the static pages, Markdown twins, sitemap, llms.txt and catalog JSON are regenerated from the catalog.',
     },
     agentLinks: {
-      text: 'Every page is also available as Markdown: append {code} to the path or send {accept}. See {llms}, the {catalog}, the {sitemap} and the {developers}. Source code is on {github} under {license}.',
+      text: 'Every page is also available as Markdown: append {code} to the path or send {accept}. See {llms}, the {catalog}, the {sitemap} and the {developers}. Licensed {license}.',
       llms: 'llms.txt',
       catalog: 'worksheet catalog (JSON)',
       sitemap: 'sitemap',
       developers: 'developer resources',
-      github: 'GitHub',
     },
   },
 
@@ -104,7 +103,6 @@ export default {
     catalogNote: 'machine-readable worksheet catalog',
     developersLink: 'Developer resources',
     sitemapLink: 'Sitemap',
-    sourceLink: 'Source on GitHub',
     homeIntro: '{brand} is a free, open-source generator of printable math worksheets for grades 1–3 (ages 6–9). Each sheet is randomized every time it is opened or regenerated. Pick a worksheet, adjust the difficulty (number range, digits, layout, columns) and print it from the browser; settings are remembered per device. Worksheets are generated client-side: no account, no upload, no cost.',
     worksheetItem: '{link}: {shortDesc} (grades {grades})',
     howItWorks: 'How it works',
@@ -203,6 +201,20 @@ export default {
     title: 'Column Multiplication',
     meta: 'long multiplication · {preset}',
     problemAria: '{a} times {b}',
+  },
+
+  coldiv: {
+    preset: '{a} ÷ {b} digits',
+    title: 'Long Division',
+    meta: 'long division · {preset}',
+    notation: 'Notation',
+    bracket: 'Bracket',
+    corner: 'Corner',
+    allowRemainder: 'Allow remainders',
+    // Which frame this language's schools use; the setting overrides it once chosen.
+    defaultNotation: 'bracket',
+    problemAria: '{dividend} divided by {divisor}',
+    quotientAria: { one: 'quotient: {n} empty box', other: 'quotient: {n} empty boxes' },
   },
 
   compare: {

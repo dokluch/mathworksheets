@@ -474,7 +474,6 @@ function agentLinksHtml(locale) {
     catalog: link('/worksheets.json', t(locale, 'static.agentLinks.catalog')),
     sitemap: link('/sitemap.xml', t(locale, 'static.agentLinks.sitemap')),
     developers: link(developersRoute(locale).path, t(locale, 'static.agentLinks.developers')),
-    github: link(GITHUB_URL, t(locale, 'static.agentLinks.github')),
     license: LICENSE_NAME,
   })}</p>`
 }
@@ -483,12 +482,12 @@ function breadcrumbNav(locale, current) {
   return `<nav aria-label="Breadcrumb"><a href="${homeRoute(locale).path}">${BRAND}</a> › ${escapeHtml(current)}</nav>`
 }
 
-/** Links shown in the site footer (React and static HTML share this list). */
+/**
+ * Links shown in the site footer (React and static HTML share this list).
+ * No GitHub link: the repository is going private.
+ */
 export function siteFooterLinks(locale = DEFAULT_LOCALE) {
-  return [
-    ...localizedPages(locale).map(p => ({ label: p.navLabel, path: pageRoute(p, locale).path, external: false })),
-    { label: 'GitHub', path: GITHUB_URL, external: true },
-  ]
+  return localizedPages(locale).map(p => ({ label: p.navLabel, path: pageRoute(p, locale).path, external: false }))
 }
 
 /** Site header for the crawlable HTML: brand link home and the About page (mirrors components/SiteHeader.jsx). */
@@ -735,7 +734,6 @@ function agentLinksMarkdown(locale) {
     `- ${mdLink('worksheets.json', '/worksheets.json')}: ${m('md.catalogNote')}`,
     `- ${mdLink(m('md.developersLink'), developersRoute(locale).md)}`,
     `- ${mdLink(m('md.sitemapLink'), '/sitemap.xml')}`,
-    `- [${m('md.sourceLink')}](${GITHUB_URL}): ${LICENSE_NAME}`,
   ].join('\n')
 }
 

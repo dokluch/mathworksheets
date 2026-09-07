@@ -86,7 +86,7 @@ export const PAGES = [
       {
         heading: 'Open source',
         paragraphs: [
-          `The source code is on ${github} under the ${license} license. You are welcome to use, share and adapt the worksheets and the code for non-commercial purposes with attribution. Bug reports and ideas for new worksheets are appreciated.`,
+          `The worksheets and the site are published under the ${license} license. You are welcome to use, share and adapt them for non-commercial purposes with attribution. Bug reports and ideas for new worksheets are appreciated.`,
         ],
       },
       {

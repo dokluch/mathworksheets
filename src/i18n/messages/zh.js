@@ -80,12 +80,11 @@ export default {
       adding3: '运行 {test} 和 {build}；静态页面、Markdown 副本、站点地图、llms.txt 和 JSON 目录会根据目录自动重新生成。',
     },
     agentLinks: {
-      text: '每个页面也提供 Markdown 版本：在路径后加上 {code}，或发送 {accept}。参见 {llms}、{catalog}、{sitemap} 和 {developers}。源代码托管在 {github}，许可协议为 {license}。',
+      text: '每个页面也提供 Markdown 版本：在路径后加上 {code}，或发送 {accept}。参见 {llms}、{catalog}、{sitemap} 和 {developers}。许可协议为 {license}。',
       llms: 'llms.txt',
       catalog: '练习题目录（JSON）',
       sitemap: '站点地图',
       developers: '开发者资源',
-      github: 'GitHub',
     },
   },
 
@@ -95,7 +94,6 @@ export default {
     catalogNote: '机器可读的练习题目录',
     developersLink: '开发者资源',
     sitemapLink: '站点地图',
-    sourceLink: 'GitHub 上的源代码',
     homeIntro: '{brand} 是一个免费、开源的可打印数学练习题生成器，适合 1–3 年级（6–9 岁）的孩子。每次打开或重新生成时题目都会随机变化。选一份练习题，调整难度（数字范围、位数、排版、列数），然后从浏览器打印；设置按设备保存。练习题在客户端生成：无需账号，不上传，完全免费。',
     worksheetItem: '{link}：{shortDesc}（{grades} 年级）',
     howItWorks: '使用方法',
@@ -196,6 +194,19 @@ export default {
     problemAria: '{a} 乘以 {b}',
   },
 
+  coldiv: {
+    preset: '{a} 位 ÷ {b} 位',
+    title: '竖式除法',
+    meta: '竖式除法 · {preset}',
+    notation: '写法',
+    bracket: '括号',
+    corner: '转角',
+    allowRemainder: '允许有余数',
+    defaultNotation: 'bracket',
+    problemAria: '{dividend} 除以 {divisor}',
+    quotientAria: { other: '商：{n} 个空格' },
+  },
+
   compare: {
     title: '比较大小',
   },
@@ -286,6 +297,18 @@ export default {
       settings: [
         '预设：2 位 × 2 位、3 位 × 2 位或 4 位 × 2 位',
         '列数：每页题目的列数',
+      ],
+    },
+    coldiv: {
+      label: '竖式除法',
+      shortDesc: '竖式除法练习',
+      longDesc: '用一位数或两位数去除三位数和四位数的竖式除法，印在方格纸上，除法框已经画好，下面留出空格供孩子演算。框架可以采用英式写法（除数在括号左边、商写在横线上方），也可以采用欧陆写法（除数在右上角、商写在它下面）；题目可以整除，也可以留有余数。',
+      skills: ['竖式除法', '余数', '数位', '估算'],
+      settings: [
+        '预设：3 ÷ 1、4 ÷ 1 或 4 ÷ 2 位',
+        '写法：括号式或转角式',
+        '列数：每页题目的列数',
+        '允许有余数而不是整除',
       ],
     },
     compare: {
@@ -400,7 +423,7 @@ export default {
         {
           heading: '开源',
           paragraphs: [
-            '源代码托管在 {github}，许可协议为 {license}。你可以在注明出处的前提下，将练习题和代码用于非商业目的并自由使用、分享和改编。欢迎提交错误报告和新练习题的想法。',
+            '练习题和本网站以 {license} 许可协议发布。你可以在注明出处的前提下，将其用于非商业目的并自由使用、分享和改编。欢迎提交错误报告和新练习题的想法。',
           ],
         },
         {

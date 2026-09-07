@@ -80,12 +80,11 @@ export default {
       adding3: 'Ejecuta {test} y {build}; las páginas estáticas, los gemelos Markdown, el sitemap, llms.txt y el catálogo JSON se regeneran a partir del catálogo.',
     },
     agentLinks: {
-      text: 'Cada página también está disponible en Markdown: añade {code} a la ruta o envía {accept}. Consulta {llms}, el {catalog}, el {sitemap} y los {developers}. El código fuente está en {github} bajo licencia {license}.',
+      text: 'Cada página también está disponible en Markdown: añade {code} a la ruta o envía {accept}. Consulta {llms}, el {catalog}, el {sitemap} y los {developers}. Bajo licencia {license}.',
       llms: 'llms.txt',
       catalog: 'catálogo de fichas (JSON)',
       sitemap: 'sitemap',
       developers: 'recursos para desarrolladores',
-      github: 'GitHub',
     },
   },
 
@@ -95,7 +94,6 @@ export default {
     catalogNote: 'catálogo de fichas legible por máquinas',
     developersLink: 'Recursos para desarrolladores',
     sitemapLink: 'Sitemap',
-    sourceLink: 'Código fuente en GitHub',
     homeIntro: '{brand} es un generador gratuito y de código abierto de fichas de matemáticas para imprimir, para niños de 6 a 9 años (1.º a 3.º de primaria). Cada ficha se genera al azar cada vez que se abre o se regenera. Elige una ficha, ajusta la dificultad (rango de números, cifras, disposición, columnas) e imprímela desde el navegador; los ajustes se recuerdan por dispositivo. Las fichas se generan en el cliente: sin cuenta, sin subidas, sin coste.',
     worksheetItem: '{link}: {shortDesc} (cursos {grades})',
     howItWorks: 'Cómo funciona',
@@ -196,6 +194,19 @@ export default {
     problemAria: '{a} por {b}',
   },
 
+  coldiv: {
+    preset: '{a} ÷ {b} cifras',
+    title: 'División larga',
+    meta: 'división larga · {preset}',
+    notation: 'Notación',
+    bracket: 'Corchete',
+    corner: 'Caja',
+    allowRemainder: 'Permitir restos',
+    defaultNotation: 'corner',
+    problemAria: '{dividend} dividido entre {divisor}',
+    quotientAria: { one: 'cociente: {n} casilla vacía', other: 'cociente: {n} casillas vacías' },
+  },
+
   compare: {
     title: 'Comparación',
   },
@@ -286,6 +297,18 @@ export default {
       settings: [
         'Preajuste: 2 × 2, 3 × 2 o 4 × 2 cifras',
         'Columnas: número de columnas de problemas por página',
+      ],
+    },
+    coldiv: {
+      label: 'División larga',
+      shortDesc: 'Práctica de división larga',
+      longDesc: 'División larga de números de 3 y 4 cifras entre un divisor de 1 o 2 cifras, impresa sobre una cuadrícula de cuaderno con la caja ya dibujada y casillas vacías para hacer la operación. El marco puede escribirse a la manera inglesa (divisor a la izquierda del corchete y cociente sobre la raya) o a la continental (divisor arriba a la derecha y cociente debajo), y las divisiones pueden ser exactas o dejar resto.',
+      skills: ['división larga', 'restos', 'valor posicional', 'estimación'],
+      settings: [
+        'Preajuste: 3 ÷ 1, 4 ÷ 1 o 4 ÷ 2 cifras',
+        'Notación: corchete o caja',
+        'Columnas: número de columnas de problemas por página',
+        'Permitir restos en lugar de división exacta',
       ],
     },
     compare: {
@@ -400,7 +423,7 @@ export default {
         {
           heading: 'Código abierto',
           paragraphs: [
-            'El código fuente está en {github} bajo la licencia {license}. Puedes usar, compartir y adaptar las fichas y el código con fines no comerciales citando la fuente. Se agradecen los informes de errores y las ideas para nuevas fichas.',
+            'Las fichas y el sitio se publican bajo la licencia {license}. Puedes usarlas, compartirlas y adaptarlas con fines no comerciales citando la fuente. Se agradecen los informes de errores y las ideas para nuevas fichas.',
           ],
         },
         {

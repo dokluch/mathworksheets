@@ -80,12 +80,11 @@ export default {
       adding3: 'Lancez {test} et {build} ; les pages statiques, les jumeaux Markdown, le sitemap, llms.txt et le catalogue JSON sont régénérés depuis le catalogue.',
     },
     agentLinks: {
-      text: 'Chaque page existe aussi en Markdown : ajoutez {code} au chemin ou envoyez {accept}. Voir {llms}, le {catalog}, le {sitemap} et les {developers}. Le code source est sur {github} sous licence {license}.',
+      text: 'Chaque page existe aussi en Markdown : ajoutez {code} au chemin ou envoyez {accept}. Voir {llms}, le {catalog}, le {sitemap} et les {developers}. Sous licence {license}.',
       llms: 'llms.txt',
       catalog: 'catalogue des fiches (JSON)',
       sitemap: 'sitemap',
       developers: 'ressources pour développeurs',
-      github: 'GitHub',
     },
   },
 
@@ -95,7 +94,6 @@ export default {
     catalogNote: 'catalogue des fiches lisible par les machines',
     developersLink: 'Ressources pour développeurs',
     sitemapLink: 'Sitemap',
-    sourceLink: 'Code source sur GitHub',
     homeIntro: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer pour les 6–9 ans (CP à CE2). Chaque fiche est tirée au sort à chaque ouverture ou régénération. Choisissez une fiche, réglez la difficulté (plage de nombres, chiffres, disposition, colonnes) et imprimez-la depuis le navigateur ; les réglages sont mémorisés par appareil. Les fiches sont générées côté client : pas de compte, pas d’envoi, aucun coût.',
     worksheetItem: '{link} : {shortDesc} (niveaux {grades})',
     howItWorks: 'Comment ça marche',
@@ -196,6 +194,19 @@ export default {
     problemAria: '{a} fois {b}',
   },
 
+  coldiv: {
+    preset: '{a} ÷ {b} chiffres',
+    title: 'Division posée',
+    meta: 'division posée · {preset}',
+    notation: 'Notation',
+    bracket: 'Crochet',
+    corner: 'Potence',
+    allowRemainder: 'Autoriser les restes',
+    defaultNotation: 'corner',
+    problemAria: '{dividend} divisé par {divisor}',
+    quotientAria: { one: 'quotient : {n} case vide', other: 'quotient : {n} cases vides' },
+  },
+
   compare: {
     title: 'Comparaison',
   },
@@ -286,6 +297,18 @@ export default {
       settings: [
         'Préréglage : 2 × 2, 3 × 2 ou 4 × 2 chiffres',
         'Colonnes : nombre de colonnes de problèmes par page',
+      ],
+    },
+    coldiv: {
+      label: 'Division posée',
+      shortDesc: 'Entraînement à la division posée',
+      longDesc: 'Division posée de nombres à 3 ou 4 chiffres par un diviseur à 1 ou 2 chiffres, imprimée sur un quadrillage de cahier avec la potence déjà tracée et des cases vides pour poser l’opération. La disposition peut suivre l’usage anglais (diviseur à gauche du crochet, quotient au-dessus du trait) ou l’usage continental (diviseur en haut à droite, quotient en dessous), et les divisions peuvent tomber juste ou laisser un reste.',
+      skills: ['division posée', 'restes', 'valeur de position', 'estimation'],
+      settings: [
+        'Préréglage : 3 ÷ 1, 4 ÷ 1 ou 4 ÷ 2 chiffres',
+        'Notation : crochet ou potence',
+        'Colonnes : nombre de colonnes de problèmes par page',
+        'Autoriser les restes au lieu d’une division exacte',
       ],
     },
     compare: {
@@ -400,7 +423,7 @@ export default {
         {
           heading: 'Open source',
           paragraphs: [
-            'Le code source est sur {github} sous licence {license}. Vous pouvez utiliser, partager et adapter les fiches et le code à des fins non commerciales en citant la source. Les rapports de bugs et les idées de nouvelles fiches sont les bienvenus.',
+            'Les fiches et le site sont publiés sous licence {license}. Vous pouvez les utiliser, les partager et les adapter à des fins non commerciales en citant la source. Les rapports de bugs et les idées de nouvelles fiches sont les bienvenus.',
           ],
         },
         {

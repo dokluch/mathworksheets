@@ -80,12 +80,11 @@ export default {
       adding3: 'Führe {test} und {build} aus; die statischen Seiten, Markdown-Zwillinge, Sitemap, llms.txt und der JSON-Katalog werden aus dem Katalog neu erzeugt.',
     },
     agentLinks: {
-      text: 'Jede Seite gibt es auch als Markdown: Hänge {code} an den Pfad an oder sende {accept}. Siehe {llms}, den {catalog}, die {sitemap} und die {developers}. Der Quellcode liegt auf {github} unter {license}.',
+      text: 'Jede Seite gibt es auch als Markdown: Hänge {code} an den Pfad an oder sende {accept}. Siehe {llms}, den {catalog}, die {sitemap} und die {developers}. Lizenziert unter {license}.',
       llms: 'llms.txt',
       catalog: 'Arbeitsblatt-Katalog (JSON)',
       sitemap: 'Sitemap',
       developers: 'Ressourcen für Entwickler',
-      github: 'GitHub',
     },
   },
 
@@ -95,7 +94,6 @@ export default {
     catalogNote: 'maschinenlesbarer Arbeitsblatt-Katalog',
     developersLink: 'Ressourcen für Entwickler',
     sitemapLink: 'Sitemap',
-    sourceLink: 'Quellcode auf GitHub',
     homeIntro: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3 (6–9 Jahre). Jedes Blatt wird bei jedem Öffnen oder Neu-Erzeugen zufällig zusammengestellt. Wähle ein Arbeitsblatt, stelle den Schwierigkeitsgrad ein (Zahlenraum, Stellen, Layout, Spalten) und drucke es aus dem Browser; die Einstellungen werden pro Gerät gespeichert. Die Arbeitsblätter entstehen clientseitig: kein Konto, kein Upload, keine Kosten.',
     worksheetItem: '{link}: {shortDesc} (Klassen {grades})',
     howItWorks: 'So funktioniert es',
@@ -196,6 +194,19 @@ export default {
     problemAria: '{a} mal {b}',
   },
 
+  coldiv: {
+    preset: '{a} ÷ {b} Stellen',
+    title: 'Schriftliche Division',
+    meta: 'schriftliche Division · {preset}',
+    notation: 'Schreibweise',
+    bracket: 'Klammer',
+    corner: 'Winkel',
+    allowRemainder: 'Reste zulassen',
+    defaultNotation: 'corner',
+    problemAria: '{dividend} geteilt durch {divisor}',
+    quotientAria: { one: 'Ergebnis: {n} leeres Kästchen', other: 'Ergebnis: {n} leere Kästchen' },
+  },
+
   compare: {
     title: 'Zahlenvergleich',
   },
@@ -286,6 +297,18 @@ export default {
       settings: [
         'Voreinstellung: 2 × 2, 3 × 2 oder 4 × 2 Stellen',
         'Spalten: Anzahl der Aufgabenspalten pro Seite',
+      ],
+    },
+    coldiv: {
+      label: 'Schriftliche Division',
+      shortDesc: 'Schriftliches Dividieren üben',
+      longDesc: 'Schriftliche Division von 3- und 4-stelligen Zahlen durch einen ein- oder zweistelligen Divisor, gedruckt auf einem Rechenkaro-Raster mit fertig gezeichnetem Rahmen und leeren Kästchen für den Rechenweg. Der Rahmen lässt sich in der englischen Schreibweise (Divisor links der Klammer, Ergebnis über dem Strich) oder in der kontinentalen (Divisor rechts oben, Ergebnis darunter) setzen, und die Aufgaben gehen wahlweise glatt auf oder lassen einen Rest.',
+      skills: ['schriftliche Division', 'Reste', 'Stellenwert', 'Überschlag'],
+      settings: [
+        'Voreinstellung: 3 ÷ 1, 4 ÷ 1 oder 4 ÷ 2 Stellen',
+        'Schreibweise: Klammer oder Winkel',
+        'Spalten: Anzahl der Aufgabenspalten pro Seite',
+        'Reste statt glatt aufgehender Division zulassen',
       ],
     },
     compare: {
@@ -400,7 +423,7 @@ export default {
         {
           heading: 'Open Source',
           paragraphs: [
-            'Der Quellcode liegt auf {github} unter der Lizenz {license}. Du darfst die Arbeitsblätter und den Code für nicht-kommerzielle Zwecke mit Namensnennung nutzen, teilen und anpassen. Fehlermeldungen und Ideen für neue Arbeitsblätter sind willkommen.',
+            'Die Arbeitsblätter und die Website stehen unter der Lizenz {license}. Du darfst sie für nicht-kommerzielle Zwecke mit Namensnennung nutzen, teilen und anpassen. Fehlermeldungen und Ideen für neue Arbeitsblätter sind willkommen.',
           ],
         },
         {
