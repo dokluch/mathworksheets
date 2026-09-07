@@ -151,6 +151,7 @@ export default {
     regenerate: 'Обновить',
     print: 'Печать',
     printWorksheet: 'Распечатать лист',
+    printFooterTagline: 'Бесплатные материалы по математике для печати',
     columns: 'Столбцы',
     limit: 'Предел',
     range: 'Диапазон',

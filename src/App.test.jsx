@@ -102,6 +102,16 @@ describe('App', () => {
     expect(details.textContent).toContain(localizeWorksheet(WORKSHEETS.find(w => w.slug === 'column-addition'), 'fr').longDesc)
   })
 
+  it('stamps the brand on printed sheets only', () => {
+    window.history.replaceState(null, '', '/fr/worksheets/column-addition')
+    render(<App />)
+    const stamp = document.querySelector('.print-footer')
+    expect(stamp).toBeTruthy()
+    expect(stamp.className).toContain('print-only')
+    expect(stamp.textContent).toContain('Super Awesome Math (superawesomemath.com)')
+    expect(stamp.textContent).toContain(t('fr', 'common.printFooterTagline'))
+  })
+
   it('shows a footer with About, Privacy, Terms and GitHub links that is never printed', () => {
     render(<App />)
     const footer = screen.getByRole('contentinfo')

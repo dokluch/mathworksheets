@@ -151,6 +151,7 @@ export default {
     regenerate: 'Neu erzeugen',
     print: 'Drucken',
     printWorksheet: 'Arbeitsblatt drucken',
+    printFooterTagline: 'Kostenlose Mathe-Materialien zum Ausdrucken',
     columns: 'Spalten',
     limit: 'Zahlenraum',
     range: 'Bereich',

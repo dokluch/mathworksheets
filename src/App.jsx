@@ -12,6 +12,7 @@ import LanguageSwitcher from './components/LanguageSwitcher'
 import SiteHeader from './components/SiteHeader'
 import SiteFooter from './components/SiteFooter'
 import PrintCta from './components/PrintCta'
+import PrintFooter from './components/PrintFooter'
 import StaticPage from './components/StaticPage'
 import WorksheetDetails from './components/WorksheetDetails'
 import MultiplicationTable from './components/MultiplicationTable'
@@ -198,6 +199,7 @@ export default function App() {
               <ActiveComponent />
               {!activeInfo?.interactive && <PrintCta />}
             </div>
+            <PrintFooter />
             {activeRoute && <WorksheetDetails route={activeRoute} navigate={navigate} />}
           </main>
         )}

@@ -151,6 +151,7 @@ export default {
     regenerate: 'Régénérer',
     print: 'Imprimer',
     printWorksheet: 'Imprimer la fiche',
+    printFooterTagline: 'Ressources de maths gratuites à imprimer',
     columns: 'Colonnes',
     limit: 'Limite',
     range: 'Plage',

@@ -151,6 +151,7 @@ export default {
     regenerate: 'Rigenera',
     print: 'Stampa',
     printWorksheet: 'Stampa la scheda',
+    printFooterTagline: 'Risorse di matematica gratuite da stampare',
     columns: 'Colonne',
     limit: 'Limite',
     range: 'Intervallo',

@@ -151,6 +151,7 @@ export default {
     regenerate: '重新生成',
     print: '打印',
     printWorksheet: '打印练习页',
+    printFooterTagline: '免费可打印的数学学习资源',
     columns: '列数',
     limit: '范围',
     range: '范围',

@@ -532,10 +532,6 @@
   border-top: 1px solid var(--color-border);
 }
 
-.worksheet-details h2:first-of-type {
-  margin-top: 0;
-}
-
 @media (max-width: 768px) {
   .worksheet-details {
     padding: 16px 12px 24px;

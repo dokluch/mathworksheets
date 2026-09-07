@@ -160,6 +160,7 @@ export default {
     regenerate: 'Regenerate',
     print: 'Print',
     printWorksheet: 'Print worksheet',
+    printFooterTagline: 'Free printable math resources',
     columns: 'Columns',
     limit: 'Limit',
     range: 'Range',
