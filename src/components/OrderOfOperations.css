@@ -1,0 +1,86 @@
+/* ── Order of operations ── */
+.order-grid {
+  display: grid;
+  gap: 6px 24px;
+  overflow-x: auto;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border-light);
+  font-family: var(--font-figure);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.order-expr {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.order-expr .val {
+  font-variant-numeric: tabular-nums;
+}
+
+.order-expr .op {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* Brackets sit tight against the terms they hold, so the group reads as one
+   thing to do first rather than as two more operators in the queue. */
+.order-paren {
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.order-expr .order-paren + .val,
+.order-expr .val + .order-paren {
+  margin-left: -3px;
+}
+
+/* The answer boxes are `.colarith-blank` from ColumnAddition.css — the same
+   mark the column sheets give a child to write a digit into. Only the cell
+   size it derives from is set here, so restyling the blank restyles both. */
+.order-boxes {
+  --colarith-cell-size: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── Print styles ── */
+@media print {
+  /* No row gap on paper, so a row's pitch is exactly its height and
+     listRowsPerPage() can do the page arithmetic in one number. The bottom
+     rule already separates the rows; the gap is screen comfort only. */
+  .order-grid {
+    row-gap: 0;
+  }
+
+  .order-item {
+    /* Pinned so listRowsPerPage() can do exact arithmetic against it:
+       PRINT_ORDER_ROW in hooks/useNotebookGrid.js must match this number. */
+    height: 44px;
+    padding: 0;
+    border-bottom-color: #ddd;
+    color: #111;
+  }
+
+  .order-expr .op,
+  .order-paren {
+    color: #111;
+  }
+
+  /* Matches the print cell size the column sheets drop to. */
+  .order-boxes {
+    --colarith-cell-size: 22px;
+  }
+}

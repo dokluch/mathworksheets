@@ -30,7 +30,7 @@ export default {
     home: {
       subtitle: 'Fichas de práctica gratuitas y aleatorias que imprimes con un clic.',
       intro1: '{brand} es un generador gratuito y de código abierto de fichas de matemáticas para imprimir, para niños de 6 a 9 años (1.º a 3.º de primaria). Cada ficha se genera al azar cada vez que la abres o la regeneras, así los niños practican con ejercicios nuevos en vez de memorizar una página. Elige una ficha, ajusta la dificultad (rango de números, cifras, disposición, columnas) e imprímela desde el navegador; tus ajustes se recuerdan en este dispositivo.',
-      intro2: 'El catálogo incluye tablas de multiplicar, sumas y restas con huecos, suma en columna con llevadas, multiplicación en columna, comparación de números con >, < y =, redondeo a la decena, centena y millar más cercanos, y series numéricas. El explorador de ecuaciones es una actividad en pantalla en la que los niños mueven términos a través del signo igual y comprueban su respuesta en una recta numérica.',
+      intro2: 'El catálogo incluye tablas de multiplicar, sumas y restas con huecos, suma en columna con llevadas, multiplicación en columna, comparación de números con >, < y =, redondeo a la decena, centena y millar más cercanos, series numéricas y expresiones de varios pasos en las que el orden de las operaciones decide la respuesta. El explorador de ecuaciones es una actividad en pantalla en la que los niños mueven términos a través del signo igual y comprueban su respuesta en una recta numérica.',
       worksheets: 'Fichas',
       howItWorks: 'Cómo funciona',
       step1: 'Elige una ficha de la lista de arriba.',
@@ -205,6 +205,17 @@ export default {
     instructions: 'Completa los números que faltan en cada serie.',
   },
 
+  order: {
+    easy: 'Fácil',
+    medium: 'Medio',
+    hard: 'Difícil',
+    notation: 'Signos',
+    useBrackets: 'Usar paréntesis',
+    defaultNotation: 'cross',
+    title: 'Orden de las operaciones',
+    instructions: 'Primero los paréntesis, luego × y ÷, después + y −. Una casilla por cada cifra de la respuesta.',
+  },
+
   eq: {
     newProblem: 'Nueva',
     streak: { one: '{n} seguida', other: '{n} seguidas' },
@@ -359,6 +370,30 @@ export default {
         { q: 'Mi hijo se ha atascado en una serie. ¿Qué hago?', a: 'Pregúntale qué cambia de un número al siguiente y escribid las diferencias debajo. Con las diferencias a la vista la regla suele saltar sola, y la costumbre de anotarlas sirve luego para series más difíciles.' },
       ],
     },
+    order: {
+      label: 'Orden de las operaciones',
+      shortDesc: 'Qué operación va primero',
+      longDesc: 'Expresiones de varios pasos en las que la respuesta depende de hacer las operaciones en el orden correcto: la multiplicación y la división antes que la suma y la resta, y los paréntesis antes que todo lo demás. Tres niveles van desde cadenas de un solo tipo (25 − 14 + 43) hasta la precedencia mixta (70 − 7 × 9) y las expresiones de cuatro términos con paréntesis (38 − (80 − 76) × 7). Cada paso cae en un número entero entre 2 y 100, la división siempre es exacta y las casillas indican cuántas cifras esperar.',
+      skills: [
+        'orden de las operaciones',
+        'paréntesis',
+        'cálculo mental',
+        'problemas de varios pasos',
+      ],
+      settings: [
+        'Nivel: fácil, medio o difícil',
+        'Signos: × ÷ o · :',
+        'Columnas: 1 o 2 por página',
+        'Usar paréntesis, o prescindir de ellos',
+        'Imprimir una hoja de respuestas',
+      ],
+      faq: [
+        { q: '¿Qué es el orden de las operaciones?', a: 'Primero se resuelve lo que está entre paréntesis, después todas las multiplicaciones y divisiones de izquierda a derecha, y por último las sumas y restas de izquierda a derecha. Es un convenio, no un descubrimiento: todos acuerdan leer 70 − 7 × 9 de la misma manera, para que la expresión tenga una sola respuesta en lugar de dos.' },
+        { q: '¿Por qué mi hijo obtiene 567 en 70 − 7 × 9?', a: 'Porque calculó estrictamente de izquierda a derecha: 70 − 7 son 63, y 63 × 9 son 567. La lectura correcta multiplica primero, lo que da 70 − 63 = 7. Este es el error más común en estas hojas, y la solución más rápida es pedir al niño que subraye la multiplicación antes de escribir nada.' },
+        { q: '¿Qué cambian los paréntesis?', a: 'Los paréntesis adelantan al principio de la cola lo que contienen. 30 − 17 + 9 es 22, pero 30 − (17 + 9) es 4, porque el paréntesis obliga a sumar primero. Todos los paréntesis de estas hojas cambian la respuesta, así que ninguno puede pasarse por alto sin consecuencias.' },
+        { q: '¿Por qué cada respuesta lleva una fila de casillas?', a: 'Hay una casilla por cada cifra de la respuesta, para que el niño vea si busca una sola cifra, un número de decenas o uno de centenas. Es una ayuda para comprobar más que una pista sobre el valor: una respuesta que no cabe en las casillas avisa de que hay que revisar el orden.' },
+      ],
+    },
     eqexplore: {
       label: 'Explorador de ecuaciones',
       shortDesc: 'Resuelve ecuaciones de forma interactiva',
@@ -430,7 +465,7 @@ export default {
         {
           heading: 'Qué obtienes',
           items: [
-            'Fichas para imprimir de 1.º a 3.º: tablas de multiplicar, sumas y restas, suma en columna, multiplicación en columna, comparación de números, redondeo y series numéricas.',
+            'Fichas para imprimir de 1.º a 3.º: tablas de multiplicar, sumas y restas, suma en columna, multiplicación en columna, comparación de números, redondeo, series numéricas y orden de las operaciones.',
             'Un explorador de ecuaciones en pantalla para jugar con ecuaciones y comprobar las respuestas en una recta numérica.',
             'Dificultad ajustable: rangos de números, cifras, columnas y disposición, recordados en tu dispositivo para la próxima vez.',
             'Sin cuenta, sin registro, sin anuncios, sin coste. No se sube nada: las fichas se generan en tu navegador.',

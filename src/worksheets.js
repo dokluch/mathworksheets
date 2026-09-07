@@ -134,7 +134,7 @@ export const WORKSHEETS = [
     ],
     examples: ['864 ÷ 6 = □', '3172 ÷ 4 = □', '4164 ÷ 12 = □'],
     prerequisites: ['colmul'],
-    nextSteps: [],
+    nextSteps: ['order'],
     updated: '2026-09-07',
     faq: [
       { q: 'When do children learn long division?', a: 'Long division normally arrives at the end of grade 3 or in grade 4, after multiplication facts and subtraction are secure. Each step divides, multiplies, subtracts and brings down, so weakness in any of those shows up quickly.' },
@@ -186,7 +186,7 @@ export const WORKSHEETS = [
     ],
     examples: ['48 → 50', '350 → 400', '1249 → 1000', '95 → 100'],
     prerequisites: ['compare'],
-    nextSteps: [],
+    nextSteps: ['order'],
     updated: '2026-09-07',
     faq: [
       { q: 'What is the rule for rounding?', a: 'Look at the digit one place to the right of the one you are rounding to. If it is 5 or more, round up; if it is 4 or less, round down. Rounding 48 to the nearest ten gives 50 because the 8 is 5 or more.' },
@@ -219,6 +219,36 @@ export const WORKSHEETS = [
       { q: 'My child is stuck on a sequence. What should I do?', a: 'Ask what changes from one number to the next and write the gaps underneath. Once the gaps are visible the rule usually becomes obvious, and the habit of writing them down transfers to harder sequences.' },
     ],
     color: '#5b4a91',
+    interactive: false,
+  },
+  {
+    id: 'order',
+    slug: 'order-of-operations',
+    label: 'Order of Operations',
+    shortDesc: 'Which operation comes first',
+    longDesc:
+      'Multi-step expressions where the answer depends on doing the operations in the right order: multiplication and division before addition and subtraction, and brackets before either. ' +
+      'Three levels run from chains of one kind (25 − 14 + 43) through mixed precedence (70 − 7 × 9) to four-term expressions with brackets (38 − (80 − 76) × 7). Every step lands on a whole number between 2 and 100, division is always exact, and the answer boxes show how many digits to expect.',
+    grades: '2–3',
+    skills: ['order of operations', 'brackets', 'mental arithmetic', 'multi-step problems'],
+    settings: [
+      'Level: easy, medium or hard',
+      'Notation: × ÷ or · : signs',
+      'Columns: 1 or 2 per page',
+      'Use brackets, or leave them out',
+      'Print an answer key',
+    ],
+    examples: ['25 − 14 + 43 = □□', '30 − (17 + 9) = □', '70 − 7 × 9 = □', '28 + 12 ÷ 2 = □□'],
+    prerequisites: ['addsub', 'multiply'],
+    nextSteps: ['eqexplore'],
+    updated: '2026-09-07',
+    faq: [
+      { q: 'What is the order of operations?', a: 'Work out anything in brackets first, then all the multiplication and division from left to right, then the addition and subtraction from left to right. It is a convention rather than a discovery: everyone agrees to read 70 − 7 × 9 the same way, so the expression has one answer instead of two.' },
+      { q: 'Why does my child get 567 for 70 − 7 × 9?', a: 'Because they worked strictly left to right: 70 − 7 is 63, and 63 × 9 is 567. The correct reading multiplies first, giving 70 − 63 = 7. This is the single most common mistake on these sheets, and the fastest cure is asking a child to underline the multiplication before they write anything.' },
+      { q: 'What do the brackets change?', a: 'Brackets promote whatever is inside them to the front of the queue. 30 − 17 + 9 is 22, but 30 − (17 + 9) is 4, because the bracket makes the addition happen first. Every bracket on these sheets changes the answer, so none of them can be safely ignored.' },
+      { q: 'Why does each answer have a row of boxes?', a: 'There is one box per digit of the answer, so a child can see whether they are looking for a single digit, a number in the tens, or one in the hundreds. It is a checking aid rather than a hint at the value: an answer that will not fit the boxes is a signal to go back and look at the order again.' },
+    ],
+    color: '#25457a',
     interactive: false,
   },
   {

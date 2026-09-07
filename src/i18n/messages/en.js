@@ -39,7 +39,7 @@ export default {
     home: {
       subtitle: 'Free, randomized practice sheets you can print in one click.',
       intro1: '{brand} is a free, open-source generator of printable math worksheets for grades 1–3 (ages 6–9). Each sheet is randomized every time you open or regenerate it, so children get fresh practice instead of memorising one page. Pick a worksheet, adjust the difficulty (number range, digits, layout, columns) and print it from your browser; your settings are remembered on this device for next time.',
-      intro2: 'The catalog covers multiplication tables, addition and subtraction drills with missing numbers, vertical column addition with carrying, long multiplication, long division, comparing numbers with >, < and =, rounding to the nearest 10, 100 and 1000, and number patterns. The Equation Explorer is an on-screen activity where children move terms across the equals sign and check their answer on a number line.',
+      intro2: 'The catalog covers multiplication tables, addition and subtraction drills with missing numbers, vertical column addition with carrying, long multiplication, long division, comparing numbers with >, < and =, rounding to the nearest 10, 100 and 1000, number patterns, and multi-step expressions where the order of operations decides the answer. The Equation Explorer is an on-screen activity where children move terms across the equals sign and check their answer on a number line.',
       worksheets: 'Worksheets',
       howItWorks: 'How it works',
       step1: 'Choose a worksheet from the list above.',
@@ -213,6 +213,18 @@ export default {
     hard: 'Hard',
     title: 'Number Patterns',
     instructions: 'Fill in the missing numbers in each sequence.',
+  },
+
+  order: {
+    easy: 'Easy',
+    medium: 'Medium',
+    hard: 'Hard',
+    notation: 'Signs',
+    useBrackets: 'Use brackets',
+    // Which signs this language's schools write; the setting overrides it once chosen.
+    defaultNotation: 'cross',
+    title: 'Order of Operations',
+    instructions: 'Brackets first, then × and ÷, then + and −. One box per digit of the answer.',
   },
 
   eq: {

@@ -194,6 +194,18 @@ const MARKS = {
       {digit(2, 5, '3')}{digit(4, 5, '6')}{digit(6, 5, '9')}{blank(8, 5)}{blank(10, 5)}
     </>
   ),
+  // Two expressions whose answer depends on what is done first: a bracket on
+  // the top row, a multiplication waiting inside a subtraction on the bottom.
+  order: () => (
+    <>
+      {digit(1, 2, '3')}{digit(2, 2, '0')}{digit(3, 2, '−')}
+      {digit(4, 2, '(')}{digit(5, 2, '1')}{digit(6, 2, '7')}{digit(7, 2, '+')}{digit(8, 2, '9')}{digit(9, 2, ')')}
+      {digit(10, 2, '=')}{box(11, 2)}
+      {digit(1, 5, '7')}{digit(2, 5, '0')}{digit(3, 5, '−')}
+      {digit(4, 5, '7')}{digit(5, 5, '·')}{digit(6, 5, '9')}
+      {digit(7, 5, '=')}{box(8, 5)}
+    </>
+  ),
   // The one screen-only sheet: an equation with a movable term.
   eqexplore: () => (
     <>

@@ -54,6 +54,9 @@ const DEFAULT_WIDTH = 910
 export const SHEET_PAD_TOP = 0.4 * 96
 /** Fixed print height of one row in a flat list worksheet (`.pattern-row`). */
 export const PRINT_LIST_ROW = 49
+/** Fixed print height of one order-of-operations row (`.order-item`), whose
+    answer boxes make it taller than a line of text but shorter than a sequence. */
+export const PRINT_ORDER_ROW = 44
 
 /**
  * Rows of a fixed-height list that fit one printed page, for worksheets laid

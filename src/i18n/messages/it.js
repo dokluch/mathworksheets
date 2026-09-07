@@ -30,7 +30,7 @@ export default {
     home: {
       subtitle: 'Schede di esercizi gratuite e casuali, da stampare con un clic.',
       intro1: '{brand} è un generatore gratuito e open source di schede di matematica da stampare per bambini di 6–9 anni (classi 1ª–3ª). Ogni scheda viene generata a caso ogni volta che la apri o la rigeneri, così i bambini si esercitano su problemi nuovi invece di memorizzare una pagina. Scegli una scheda, regola la difficoltà (intervallo di numeri, cifre, disposizione, colonne) e stampala dal browser; le impostazioni vengono ricordate su questo dispositivo.',
-      intro2: 'Il catalogo comprende tabelline, addizioni e sottrazioni con numeri mancanti, addizione in colonna con riporto, moltiplicazione in colonna, confronto di numeri con >, < e =, arrotondamento alla decina, al centinaio e al migliaio, e sequenze numeriche. L’esploratore di equazioni è un’attività a schermo in cui i bambini spostano i termini attraverso il segno di uguale e verificano la risposta su una linea dei numeri.',
+      intro2: 'Il catalogo comprende tabelline, addizioni e sottrazioni con numeri mancanti, addizione in colonna con riporto, moltiplicazione in colonna, confronto di numeri con >, < e =, arrotondamento alla decina, al centinaio e al migliaio, sequenze numeriche ed espressioni a più passaggi in cui l’ordine delle operazioni decide il risultato. L’esploratore di equazioni è un’attività a schermo in cui i bambini spostano i termini attraverso il segno di uguale e verificano la risposta su una linea dei numeri.',
       worksheets: 'Schede',
       howItWorks: 'Come funziona',
       step1: 'Scegli una scheda dall’elenco qui sopra.',
@@ -205,6 +205,17 @@ export default {
     instructions: 'Completa i numeri mancanti in ogni sequenza.',
   },
 
+  order: {
+    easy: 'Facile',
+    medium: 'Medio',
+    hard: 'Difficile',
+    notation: 'Segni',
+    useBrackets: 'Usa le parentesi',
+    defaultNotation: 'dot',
+    title: 'Ordine delle operazioni',
+    instructions: 'Prima le parentesi, poi · e :, poi + e −. Una casella per ogni cifra del risultato.',
+  },
+
   eq: {
     newProblem: 'Nuova',
     streak: { one: '{n} di fila', other: '{n} di fila' },
@@ -359,6 +370,30 @@ export default {
         { q: 'Mio figlio si è bloccato su una sequenza. Che faccio?', a: 'Chiedigli che cosa cambia da un numero al successivo e scrivete sotto le differenze. Quando le differenze sono visibili la regola salta fuori da sola, e l’abitudine di annotarle torna utile con le sequenze più difficili.' },
       ],
     },
+    order: {
+      label: 'Ordine delle operazioni',
+      shortDesc: 'Quale operazione viene prima',
+      longDesc: 'Espressioni a più passaggi in cui il risultato dipende dall’eseguire le operazioni nell’ordine giusto: moltiplicazione e divisione prima di addizione e sottrazione, e le parentesi prima di tutto il resto. Tre livelli vanno dalle catene di un solo tipo (25 − 14 + 43) alla precedenza mista (70 − 7 · 9), fino alle espressioni di quattro termini con parentesi (38 − (80 − 76) · 7). Ogni passaggio cade su un numero intero fra 2 e 100, la divisione è sempre esatta e le caselle indicano quante cifre aspettarsi.',
+      skills: [
+        'ordine delle operazioni',
+        'parentesi',
+        'calcolo mentale',
+        'problemi a più passaggi',
+      ],
+      settings: [
+        'Livello: facile, medio o difficile',
+        'Segni: × ÷ oppure · :',
+        'Colonne: 1 o 2 per pagina',
+        'Usare le parentesi, oppure ometterle',
+        'Stampare un foglio delle soluzioni',
+      ],
+      faq: [
+        { q: 'Che cos’è l’ordine delle operazioni?', a: 'Si calcola prima ciò che sta fra parentesi, poi tutte le moltiplicazioni e divisioni da sinistra a destra, infine addizioni e sottrazioni da sinistra a destra. È una convenzione e non una scoperta: tutti concordano nel leggere 70 − 7 · 9 allo stesso modo, così l’espressione ha un solo risultato invece di due.' },
+        { q: 'Perché mio figlio ottiene 567 da 70 − 7 · 9?', a: 'Perché ha calcolato rigorosamente da sinistra a destra: 70 − 7 fa 63, e 63 · 9 fa 567. La lettura corretta moltiplica per prima cosa, e dà 70 − 63 = 7. È l’errore più comune su queste schede, e il rimedio più rapido è chiedere al bambino di sottolineare la moltiplicazione prima di scrivere qualsiasi cosa.' },
+        { q: 'Che cosa cambiano le parentesi?', a: 'Le parentesi spostano in testa alla fila ciò che contengono. 30 − 17 + 9 fa 22, ma 30 − (17 + 9) fa 4, perché la parentesi impone di sommare per primo. Ogni parentesi di queste schede cambia il risultato, quindi nessuna può essere ignorata senza conseguenze.' },
+        { q: 'Perché ogni risultato ha una fila di caselle?', a: 'C’è una casella per ogni cifra del risultato, così un bambino vede se sta cercando una cifra sola, un numero di decine o uno di centinaia. È un aiuto alla verifica più che un indizio sul valore: un risultato che non entra nelle caselle segnala che conviene rivedere l’ordine.' },
+      ],
+    },
     eqexplore: {
       label: 'Esploratore di equazioni',
       shortDesc: 'Risolvi equazioni in modo interattivo',
@@ -430,7 +465,7 @@ export default {
         {
           heading: 'Cosa ottieni',
           items: [
-            'Schede da stampare per le classi 1ª–3ª: tabelline, addizioni e sottrazioni, addizione in colonna, moltiplicazione in colonna, confronto di numeri, arrotondamento e sequenze numeriche.',
+            'Schede da stampare per le classi 1ª–3ª: tabelline, addizioni e sottrazioni, addizione in colonna, moltiplicazione in colonna, confronto di numeri, arrotondamento, sequenze numeriche e ordine delle operazioni.',
             'Un esploratore di equazioni a schermo per giocare con le equazioni e verificare le risposte su una linea dei numeri.',
             'Difficoltà regolabile: intervalli di numeri, cifre, colonne e disposizione, ricordati sul tuo dispositivo per la prossima volta.',
             'Nessun account, nessuna registrazione, nessuna pubblicità, nessun costo. Nulla viene caricato: le schede vengono generate nel tuo browser.',

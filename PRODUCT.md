@@ -43,7 +43,7 @@ Settings are remembered per device so step 2 is shorter next time. Nothing is up
 ## Capabilities and Constraints
 
 - React 19 + Vite SPA. Worksheets are generated **client-side**; no backend, no account, no upload, no cost, no ads.
-- Nine worksheets: multiplication tables, addition & subtraction, column addition, column multiplication, long division, comparison, rounding, number patterns, and an interactive Equation Explorer (the one screen-only, non-printable surface).
+- Ten worksheets: multiplication tables, addition & subtraction, column addition, column multiplication, long division, comparison, rounding, number patterns, order of operations, and an interactive Equation Explorer (the one screen-only, non-printable surface).
 - Per-worksheet settings persist to localStorage under the legacy key `mathsheets`, kept deliberately across the rename.
 - **Print is the primary output.** Sheets are promised to fit one Letter or A4 page. Paper size must follow the user's locale/printer, not a hard-coded default.
 - Seven locales, English at the root and the rest under a path prefix. Message files must keep identical key sets. Long German and French labels are a real layout constraint.

@@ -30,7 +30,7 @@ export default {
     home: {
       subtitle: 'Des fiches d’entraînement gratuites et aléatoires, à imprimer en un clic.',
       intro1: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer pour les 6–9 ans (CP, CE1, CE2). Chaque fiche est tirée au sort à chaque ouverture ou régénération : les enfants s’entraînent sur de nouveaux exercices au lieu de mémoriser une page. Choisissez une fiche, réglez la difficulté (plage de nombres, chiffres, disposition, colonnes) et imprimez-la depuis votre navigateur ; vos réglages sont mémorisés sur cet appareil.',
-      intro2: 'Le catalogue couvre les tables de multiplication, les additions et soustractions à trous, l’addition posée avec retenue, la multiplication posée, la comparaison de nombres avec >, < et =, l’arrondi à la dizaine, à la centaine et au millier, ainsi que les suites de nombres. L’explorateur d’équations est une activité à l’écran où l’enfant déplace des termes de part et d’autre du signe égal et vérifie sa réponse sur une droite numérique.',
+      intro2: 'Le catalogue couvre les tables de multiplication, les additions et soustractions à trous, l’addition posée avec retenue, la multiplication posée, la comparaison de nombres avec >, < et =, l’arrondi à la dizaine, à la centaine et au millier, les suites de nombres, ainsi que les expressions à plusieurs étapes où l’ordre des opérations décide de la réponse. L’explorateur d’équations est une activité à l’écran où l’enfant déplace des termes de part et d’autre du signe égal et vérifie sa réponse sur une droite numérique.',
       worksheets: 'Fiches',
       howItWorks: 'Comment ça marche',
       step1: 'Choisissez une fiche dans la liste ci-dessus.',
@@ -205,6 +205,17 @@ export default {
     instructions: 'Complète les nombres manquants de chaque suite.',
   },
 
+  order: {
+    easy: 'Facile',
+    medium: 'Moyen',
+    hard: 'Difficile',
+    notation: 'Signes',
+    useBrackets: 'Utiliser les parenthèses',
+    defaultNotation: 'cross',
+    title: 'Ordre des opérations',
+    instructions: 'Les parenthèses d’abord, puis × et ÷, puis + et −. Une case par chiffre de la réponse.',
+  },
+
   eq: {
     newProblem: 'Nouveau',
     streak: { one: '{n} d’affilée', other: '{n} d’affilée' },
@@ -359,6 +370,30 @@ export default {
         { q: 'Mon enfant bloque sur une suite. Que faire ?', a: 'Demandez-lui ce qui change d’un nombre au suivant et écrivez les écarts en dessous. Une fois les écarts visibles, la règle saute aux yeux, et l’habitude de les noter se transpose aux suites plus difficiles.' },
       ],
     },
+    order: {
+      label: 'Ordre des opérations',
+      shortDesc: 'Quelle opération vient en premier',
+      longDesc: 'Des expressions à plusieurs étapes où la réponse dépend de l’ordre dans lequel on effectue les opérations : la multiplication et la division avant l’addition et la soustraction, et les parenthèses avant tout le reste. Trois niveaux vont des chaînes d’un seul type (25 − 14 + 43) à la précédence mixte (70 − 7 × 9), puis aux expressions à quatre termes avec parenthèses (38 − (80 − 76) × 7). Chaque étape tombe sur un nombre entier entre 2 et 100, la division est toujours exacte, et les cases de réponse indiquent le nombre de chiffres attendu.',
+      skills: [
+        'ordre des opérations',
+        'parenthèses',
+        'calcul mental',
+        'problèmes à plusieurs étapes',
+      ],
+      settings: [
+        'Niveau : facile, moyen ou difficile',
+        'Signes : × ÷ ou · :',
+        'Colonnes : 1 ou 2 par page',
+        'Utiliser les parenthèses, ou les omettre',
+        'Imprimer un corrigé',
+      ],
+      faq: [
+        { q: 'Qu’est-ce que l’ordre des opérations ?', a: 'On calcule d’abord ce qui est entre parenthèses, puis toutes les multiplications et divisions de gauche à droite, puis les additions et soustractions de gauche à droite. C’est une convention et non une découverte : tout le monde s’accorde à lire 70 − 7 × 9 de la même façon, pour que l’expression ait une seule réponse au lieu de deux.' },
+        { q: 'Pourquoi mon enfant trouve-t-il 567 pour 70 − 7 × 9 ?', a: 'Parce qu’il a calculé strictement de gauche à droite : 70 − 7 font 63, et 63 × 9 font 567. La lecture correcte multiplie d’abord, ce qui donne 70 − 63 = 7. C’est l’erreur la plus fréquente sur ces fiches, et le remède le plus rapide est de demander à l’enfant de souligner la multiplication avant d’écrire quoi que ce soit.' },
+        { q: 'Qu’est-ce que les parenthèses changent ?', a: 'Les parenthèses font passer ce qu’elles contiennent en tête de file. 30 − 17 + 9 fait 22, mais 30 − (17 + 9) fait 4, car la parenthèse impose l’addition d’abord. Chaque parenthèse de ces fiches change la réponse, si bien qu’aucune ne peut être ignorée sans conséquence.' },
+        { q: 'Pourquoi chaque réponse a-t-elle une rangée de cases ?', a: 'Il y a une case par chiffre de la réponse, pour qu’un enfant voie s’il cherche un chiffre seul, un nombre en dizaines ou un nombre en centaines. C’est une aide à la vérification plutôt qu’un indice sur la valeur : une réponse qui n’entre pas dans les cases signale qu’il faut revoir l’ordre des opérations.' },
+      ],
+    },
     eqexplore: {
       label: 'Explorateur d’équations',
       shortDesc: 'Résoudre des équations de façon interactive',
@@ -430,7 +465,7 @@ export default {
         {
           heading: 'Ce que vous obtenez',
           items: [
-            'Des fiches à imprimer du CP au CE2 : tables de multiplication, additions et soustractions, addition posée, multiplication posée, comparaison de nombres, arrondi et suites de nombres.',
+            'Des fiches à imprimer du CP au CE2 : tables de multiplication, additions et soustractions, addition posée, multiplication posée, comparaison de nombres, arrondi, suites de nombres et ordre des opérations.',
             'Un explorateur d’équations à l’écran pour manipuler des équations et vérifier les réponses sur une droite numérique.',
             'Une difficulté réglable : plages de nombres, chiffres, colonnes et disposition, mémorisés sur votre appareil pour la prochaine fois.',
             'Pas de compte, pas d’inscription, pas de publicité, aucun coût. Rien n’est envoyé : les fiches sont générées dans votre navigateur.',

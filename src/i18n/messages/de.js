@@ -30,7 +30,7 @@ export default {
     home: {
       subtitle: 'Kostenlose, zufällig erzeugte Übungsblätter, die du mit einem Klick ausdruckst.',
       intro1: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3 (6–9 Jahre). Jedes Blatt wird bei jedem Öffnen oder Neu-Erzeugen zufällig zusammengestellt, sodass Kinder frische Aufgaben üben, statt eine Seite auswendig zu lernen. Wähle ein Arbeitsblatt, stelle den Schwierigkeitsgrad ein (Zahlenraum, Stellen, Layout, Spalten) und drucke es aus dem Browser; deine Einstellungen werden auf diesem Gerät gespeichert.',
-      intro2: 'Der Katalog umfasst Einmaleins-Tabellen, Additions- und Subtraktionsaufgaben mit Lücken, schriftliche Addition mit Übertrag, schriftliche Multiplikation, Zahlenvergleich mit >, < und =, Runden auf Zehner, Hunderter und Tausender sowie Zahlenfolgen. Der Gleichungs-Explorer ist eine Bildschirmübung, bei der Kinder Terme über das Gleichheitszeichen schieben und ihre Antwort am Zahlenstrahl überprüfen.',
+      intro2: 'Der Katalog umfasst Einmaleins-Tabellen, Additions- und Subtraktionsaufgaben mit Lücken, schriftliche Addition mit Übertrag, schriftliche Multiplikation, Zahlenvergleich mit >, < und =, Runden auf Zehner, Hunderter und Tausender Zahlenfolgen sowie mehrschrittige Terme, bei denen die Rechenreihenfolge das Ergebnis entscheidet. Der Gleichungs-Explorer ist eine Bildschirmübung, bei der Kinder Terme über das Gleichheitszeichen schieben und ihre Antwort am Zahlenstrahl überprüfen.',
       worksheets: 'Arbeitsblätter',
       howItWorks: 'So funktioniert es',
       step1: 'Wähle ein Arbeitsblatt aus der Liste oben.',
@@ -205,6 +205,17 @@ export default {
     instructions: 'Trage die fehlenden Zahlen in jeder Folge ein.',
   },
 
+  order: {
+    easy: 'Leicht',
+    medium: 'Mittel',
+    hard: 'Schwer',
+    notation: 'Zeichen',
+    useBrackets: 'Klammern verwenden',
+    defaultNotation: 'dot',
+    title: 'Rechenreihenfolge',
+    instructions: 'Zuerst die Klammern, dann · und :, dann + und −. Ein Kästchen je Ziffer der Antwort.',
+  },
+
   eq: {
     newProblem: 'Neu',
     streak: { one: '{n} in Folge', other: '{n} in Folge' },
@@ -359,6 +370,30 @@ export default {
         { q: 'Mein Kind kommt bei einer Folge nicht weiter. Was tun?', a: 'Frag, was sich von einer Zahl zur nächsten ändert, und schreibt die Abstände darunter. Sind die Abstände sichtbar, zeigt sich die Regel meist von selbst — und die Gewohnheit, sie aufzuschreiben, hilft auch bei schwereren Folgen.' },
       ],
     },
+    order: {
+      label: 'Rechenreihenfolge',
+      shortDesc: 'Welche Rechnung kommt zuerst',
+      longDesc: 'Mehrschrittige Terme, bei denen das Ergebnis davon abhängt, die Rechenarten in der richtigen Reihenfolge auszuführen: Punktrechnung vor Strichrechnung, und Klammern vor allem anderen. Drei Stufen führen von Ketten einer einzigen Rechenart (25 − 14 + 43) über gemischte Rangfolge (70 − 7 · 9) bis zu viergliedrigen Termen mit Klammern (38 − (80 − 76) · 7). Jeder Zwischenschritt landet auf einer ganzen Zahl zwischen 2 und 100, geteilt wird immer ohne Rest, und die Kästchen zeigen, wie viele Ziffern zu erwarten sind.',
+      skills: [
+        'Rechenreihenfolge',
+        'Klammern',
+        'Kopfrechnen',
+        'mehrschrittige Aufgaben',
+      ],
+      settings: [
+        'Stufe: leicht, mittel oder schwer',
+        'Zeichen: × ÷ oder · :',
+        'Spalten: 1 oder 2 pro Seite',
+        'Klammern verwenden oder weglassen',
+        'Lösungsblatt drucken',
+      ],
+      faq: [
+        { q: 'Was bedeutet Punktrechnung vor Strichrechnung?', a: 'Zuerst wird alles in Klammern gerechnet, dann alle Mal- und Geteiltaufgaben von links nach rechts, danach Plus und Minus von links nach rechts. Das ist eine Vereinbarung und keine Entdeckung: alle lesen 70 − 7 · 9 auf dieselbe Weise, damit der Term ein einziges Ergebnis hat und nicht zwei.' },
+        { q: 'Warum rechnet mein Kind bei 70 − 7 · 9 das Ergebnis 567 aus?', a: 'Weil es streng von links nach rechts gerechnet hat: 70 − 7 ergibt 63, und 63 · 9 ergibt 567. Richtig wird zuerst multipliziert, also 70 − 63 = 7. Das ist der häufigste Fehler auf diesen Blättern, und am schnellsten hilft es, das Kind die Malaufgabe unterstreichen zu lassen, bevor es etwas aufschreibt.' },
+        { q: 'Was ändern die Klammern?', a: 'Klammern setzen das, was in ihnen steht, an den Anfang der Reihe. 30 − 17 + 9 ergibt 22, aber 30 − (17 + 9) ergibt 4, weil die Klammer die Addition zuerst erzwingt. Jede Klammer auf diesen Blättern verändert das Ergebnis, keine davon lässt sich folgenlos übergehen.' },
+        { q: 'Wozu die Kästchenreihe hinter dem Gleichheitszeichen?', a: 'Es gibt ein Kästchen je Ziffer des Ergebnisses, damit ein Kind sieht, ob es eine einzelne Ziffer, eine Zahl im Zehnerbereich oder eine im Hunderterbereich sucht. Das ist eine Kontrollhilfe und kein Hinweis auf den Wert: ein Ergebnis, das nicht in die Kästchen passt, ist ein Zeichen, die Reihenfolge noch einmal anzusehen.' },
+      ],
+    },
     eqexplore: {
       label: 'Gleichungs-Explorer',
       shortDesc: 'Gleichungen interaktiv lösen',
@@ -430,7 +465,7 @@ export default {
         {
           heading: 'Was du bekommst',
           items: [
-            'Arbeitsblätter zum Ausdrucken für die Klassen 1–3: Einmaleins, Addition und Subtraktion, schriftliche Addition, schriftliche Multiplikation, Zahlenvergleich, Runden und Zahlenfolgen.',
+            'Arbeitsblätter zum Ausdrucken für die Klassen 1–3: Einmaleins, Addition und Subtraktion, schriftliche Addition, schriftliche Multiplikation, Zahlenvergleich, Runden, Zahlenfolgen und Rechenreihenfolge.',
             'Einen Gleichungs-Explorer am Bildschirm, um mit Gleichungen zu spielen und Antworten am Zahlenstrahl zu prüfen.',
             'Einstellbare Schwierigkeit: Zahlenräume, Stellen, Spalten und Layout, auf deinem Gerät für das nächste Mal gespeichert.',
             'Kein Konto, keine Anmeldung, keine Werbung, keine Kosten. Nichts wird hochgeladen: Die Arbeitsblätter entstehen in deinem Browser.',
