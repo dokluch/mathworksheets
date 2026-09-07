@@ -3,7 +3,7 @@
  * build scripts and the tests. Pure data and string helpers only.
  *
  * English lives at the site root; every other locale is served under a
- * two-letter path prefix (/fr, /fr/worksheets/<slug>, /fr/developers).
+ * two-letter path prefix (/fr, /fr/worksheets/<slug>, /fr/about).
  */
 
 export const DEFAULT_LOCALE = 'en'

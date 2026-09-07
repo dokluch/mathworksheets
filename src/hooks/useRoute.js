@@ -61,7 +61,7 @@ function syncDocument(route) {
  * Tiny history-based router.
  *
  * - The URL wins: /worksheets/<slug> selects that sheet; /about, /privacy,
- *   /terms and /developers show that static page. A locale prefix (/fr/…)
+ *   /terms show that static page. A locale prefix (/fr/…)
  *   selects the language; English has no prefix.
  * - A remembered language (fallbackLocale, an explicit switcher choice) applies
  *   to every unprefixed URL: /worksheets/x becomes /fr/worksheets/x silently.
@@ -111,7 +111,14 @@ export function useRoute(fallbackId = null, fallbackLocale = DEFAULT_LOCALE) {
 
   const go = useCallback((next) => {
     if (normalizePath(window.location.pathname) !== next.path) window.history.pushState({ path: next.path }, '', next.path)
-    setRoute(prev => (prev.path === next.path ? prev : next))
+    setRoute(prev => {
+      if (prev.path === next.path) return prev
+      // A new page starts at the top: without this, following a link from the
+      // FAQ or the sibling list lands mid-page. Back/forward keep the browser's
+      // own scroll restoration.
+      try { window.scrollTo({ top: 0 }) } catch { /* not implemented in jsdom */ }
+      return next
+    })
   }, [])
 
   const navigate = useCallback((target) => {
@@ -126,6 +133,6 @@ export function useRoute(fallbackId = null, fallbackLocale = DEFAULT_LOCALE) {
   const pathInLocale = useCallback((code) => sameRouteIn(route, code).path, [route])
 
   const activeSheet = route.kind === 'worksheet' ? route.worksheet.id : null
-  const activePage = route.kind === 'page' || route.kind === 'developers' ? route : null
+  const activePage = route.kind === 'page' ? route : null
   return [activeSheet, navigate, activePage, route.locale, setLocale, pathInLocale]
 }

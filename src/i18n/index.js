@@ -84,6 +84,7 @@ export function localizeWorksheet(ws, locale = DEFAULT_LOCALE) {
     longDesc: m.longDesc ?? ws.longDesc,
     skills: m.skills ?? ws.skills,
     settings: m.settings ?? ws.settings,
+    faq: m.faq ?? ws.faq,
   }
 }
 

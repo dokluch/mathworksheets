@@ -120,7 +120,7 @@ export default function App() {
         </SiteHeader>
         <div className="app-body">
 
-        {/* ── Static page (About, Privacy, Terms, Developers) ── */}
+        {/* ── Static page (About, Privacy, Terms) ── */}
         {activePage ? (
           <>
             <StaticPage route={activePage} navigate={navigate} />

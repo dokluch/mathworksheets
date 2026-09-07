@@ -526,15 +526,18 @@
    components/WorksheetDetails.jsx). Reuses .static-page typography. */
 .worksheet-details {
   width: 100%;
-  max-width: 960px;
-  padding: 20px 24px 32px;
-  margin-top: 8px;
-  border-top: 1px solid var(--color-border);
+  max-width: 680px;
+  margin: 8px 24px 32px;
+  padding: 20px 24px 8px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
 }
 
 @media (max-width: 768px) {
   .worksheet-details {
-    padding: 16px 12px 24px;
+    margin: 8px 12px 24px;
+    padding: 16px 16px 4px;
   }
 }
 
@@ -699,7 +702,7 @@ a.back-btn {
   text-decoration: none;
 }
 
-/* Static pages (About, Privacy, Terms, Developers) and the no-JS fallback
+/* Static pages (About, Privacy, Terms) and the no-JS fallback
    content share this typography; React renders the same HTML string. */
 .static-page .static-intro,
 .static-page h2,
@@ -764,6 +767,10 @@ a.back-btn {
   color: var(--color-text-muted);
 }
 
+.worksheet-details .static-fold:last-of-type {
+  border-bottom: none;
+}
+
 .static-fold > summary::-webkit-details-marker {
   display: none;
 }
@@ -790,10 +797,27 @@ a.back-btn {
 }
 
 .static-page .static-fold > ul,
-.static-page .static-fold > ol {
+.static-page .static-fold > ol,
+.static-page .static-fold > dl {
   margin: 0 0 16px;
   color: var(--color-text-muted);
   line-height: 1.6;
+}
+
+/* FAQ: the question carries the weight, the answer sits under it. */
+.worksheet-faq dt {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-top: 20px;
+}
+
+.worksheet-faq dt:first-child {
+  margin-top: 0;
+}
+
+.worksheet-faq dd {
+  margin: 6px 0 0;
 }
 
 /* =============================================

@@ -14,10 +14,29 @@ function setPath(path) {
 }
 
 beforeEach(() => {
+  window.scrollTo = vi.fn()   // jsdom has no real implementation
   setPath('/')
   document.title = ''
   document.head.innerHTML = '<link rel="canonical" href="x" /><link rel="alternate" type="text/markdown" href="y" />'
   trackPageView.mockClear()
+})
+
+describe('scroll behaviour', () => {
+  it('scrolls to the top when navigating to a different page', () => {
+    setPath('/worksheets/rounding')
+    const { result } = renderHook(() => useRoute())
+    window.scrollTo.mockClear()
+    act(() => result.current[1]('/about'))
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0 })
+  })
+
+  it('does not scroll when navigating to the page already shown', () => {
+    setPath('/about')
+    const { result } = renderHook(() => useRoute())
+    window.scrollTo.mockClear()
+    act(() => result.current[1]('/about'))
+    expect(window.scrollTo).not.toHaveBeenCalled()
+  })
 })
 
 describe('path helpers', () => {
@@ -74,14 +93,6 @@ describe('useRoute', () => {
     expect(document.querySelector('link[rel="canonical"]').getAttribute('href')).toMatch(/\/privacy$/)
     expect(document.querySelector('link[rel="alternate"]').getAttribute('href')).toMatch(/\/privacy\.md$/)
     expect(trackPageView).toHaveBeenCalledWith('/privacy', `Privacy Policy · ${BRAND}`)
-  })
-
-  it('treats /developers as a static page too', () => {
-    setPath('/developers/')
-    const { result } = renderHook(() => useRoute(null))
-    expect(result.current[2].kind).toBe('developers')
-    expect(window.location.pathname).toBe('/developers/')
-    expect(document.title).toBe(`Developer Resources · ${BRAND}`)
   })
 
   it('falls back to the catalog (and rewrites the URL) for an unknown path', () => {

@@ -81,8 +81,8 @@ describe('App', () => {
     expect(details.textContent).toContain(ws.longDesc)
     for (const setting of ws.settings) expect(details.textContent).toContain(setting)
     expect(details.querySelector('a[href="/worksheets/rounding"]')).toBeTruthy()
-    expect(details.querySelector('a[href="/llms.txt"]')).toBeTruthy()
-    expect(details.querySelector('a[href="/developers"]')).toBeTruthy()
+    expect(details.querySelector('a[href="/llms.txt"]')).toBeNull()
+    expect(details.querySelector('.worksheet-faq')).toBeTruthy()
   })
 
   it('a sibling worksheet link inside the details block navigates in-app', () => {
@@ -151,13 +151,6 @@ describe('App', () => {
     fireEvent.click(screen.getByRole('main').querySelector('nav[aria-label="Breadcrumb"] a[href="/"]'))
     expect(window.location.pathname).toBe('/')
     expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
-  })
-
-  it('renders /developers in-app instead of bouncing to the catalog', () => {
-    window.history.replaceState(null, '', '/developers')
-    render(<App />)
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(`${BRAND} Developer Resources`)
-    expect(window.location.pathname).toBe('/developers')
   })
 
   it('the worksheet sidebar carries the compact footer links', () => {

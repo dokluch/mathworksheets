@@ -8,19 +8,14 @@ export default {
 
   seo: {
     homeTitle: '{brand} – {tagline}',
-    developersTitle: 'Recursos para desarrolladores · {brand}',
     worksheetTitle: 'Fichas de {label} · {brand}',
-    developersDescription: 'Recursos de {brand} para desarrolladores: repositorio de código abierto, catálogo JSON de fichas, negociación de contenido Markdown, llms.txt y sitemap.',
     worksheetDescription: 'Fichas gratuitas de {labelLower} para imprimir, cursos {grades}. {shortDesc}. Ejercicios nuevos cada vez, en una sola página.',
     gradeOne: 'Curso {grades}',
     gradeRange: 'Cursos {grades}',
     ogAltHome: '{brand} – {tagline}',
     ogAltWorksheet: 'Vista previa de la ficha de {label} – {brand}',
-    ogAltDevelopers: 'Recursos de {brand} para desarrolladores',
     worksheetHeading: 'Fichas de {label}',
     worksheetName: '{brand} {label}',
-    developersHeading: 'Recursos de {brand} para desarrolladores',
-    developersCrumb: 'Recursos para desarrolladores',
     worksheetList: 'Fichas de {brand}',
     learningResourceWorksheet: 'Ficha de ejercicios',
     learningResourceInteractive: 'Ejercicio interactivo',
@@ -51,6 +46,7 @@ export default {
       formatPrintable: 'imprimible, aleatorio en cada carga',
       settings: 'Ajustes',
       examples: 'Ejemplos de ejercicios',
+      faq: 'Preguntas frecuentes',
       howToUseWorksheet: 'Cómo usar esta ficha',
       howToUseActivity: 'Cómo usar esta actividad',
       step1: 'Abre {url}.',
@@ -61,38 +57,12 @@ export default {
       partOf: 'Parte de {link}.',
       url: 'URL',
     },
-    developers: {
-      subtitle: 'Código abierto, legible por máquinas y pensado para agentes.',
-      intro: '{brand} (también conocido como «{brandAlt}») es una aplicación de una sola página con React 19 + Vite. No hay API de servidor: las fichas se generan en el cliente. Todo lo que sigue es estático y cacheable.',
-      resources: 'Recursos',
-      sourceLink: 'Código fuente en GitHub',
-      catalogDesc: 'catálogo legible por máquinas de todas las fichas con slugs, URL, cursos, habilidades y ajustes',
-      llmsDesc: 'índice llmstxt.org y contenido completo para modelos de lenguaje',
-      indexMdDesc: 'este sitio en Markdown; cada página HTML tiene un gemelo {code}',
-      negotiationHeading: 'Negociación de contenido Markdown',
-      negotiationText: 'Cada URL de página responde a {accept} con {contentType} y {vary}, siguiendo la convención de acceptmarkdown.com. Las respuestas HTML llevan una cabecera {link} que apunta al gemelo. Las rutas desconocidas devuelven HTTP 404 con un cuerpo Markdown que indica dónde buscar.',
-      languagesHeading: 'Idiomas',
-      languagesText: 'Las páginas en inglés están en la raíz del sitio. Las mismas páginas están disponibles en {languages} bajo un prefijo de dos letras (por ejemplo {example}); cada página enlaza todas sus traducciones con hreflang y las lista en el sitemap. llms.txt y llms-full.txt solo están en inglés.',
-      idsHeading: 'Identificadores y URL de las fichas',
-      addingHeading: 'Añadir una ficha',
-      adding1: 'Añade una entrada en {file} (id, slug, etiqueta, descripciones, cursos, habilidades, ajustes) y sus traducciones en {messages}.',
-      adding2: 'Crea el componente en {dir} y regístralo en los mapas {components} e {icons} de {app}.',
-      adding3: 'Ejecuta {test} y {build}; las páginas estáticas, los gemelos Markdown, el sitemap, llms.txt y el catálogo JSON se regeneran a partir del catálogo.',
-    },
-    agentLinks: {
-      text: 'Cada página también está disponible en Markdown: añade {code} a la ruta o envía {accept}. Consulta {llms}, el {catalog}, el {sitemap} y los {developers}. Bajo licencia {license}.',
-      llms: 'llms.txt',
-      catalog: 'catálogo de fichas (JSON)',
-      sitemap: 'sitemap',
-      developers: 'recursos para desarrolladores',
-    },
   },
 
   md: {
     agentIntro: 'Cada página también está disponible en Markdown: añade `.md` a la ruta o pídela con `Accept: text/markdown`.',
     llmsNote: 'índice para modelos de lenguaje',
     catalogNote: 'catálogo de fichas legible por máquinas',
-    developersLink: 'Recursos para desarrolladores',
     sitemapLink: 'Sitemap',
     homeIntro: '{brand} es un generador gratuito y de código abierto de fichas de matemáticas para imprimir, para niños de 6 a 9 años (1.º a 3.º de primaria). Cada ficha se genera al azar cada vez que se abre o se regenera. Elige una ficha, ajusta la dificultad (rango de números, cifras, disposición, columnas) e imprímela desde el navegador; los ajustes se recuerdan por dispositivo. Las fichas se generan en el cliente: sin cuenta, sin subidas, sin coste.',
     worksheetItem: '{link}: {shortDesc} (cursos {grades})',
@@ -104,8 +74,6 @@ export default {
     howToUse: 'Cómo usarla',
     wsStep1: 'Abre {url}.',
     wsStep2: 'Ajusta las opciones; se guardan en el navegador.',
-    developersIntro: '{brand} (también conocido como «{brandAlt}») es una aplicación de una sola página de código abierto con React 19 + Vite que genera fichas de matemáticas para imprimir en el cliente. No hay API de servidor; cada recurso de abajo es un archivo estático.',
-    devCatalogNote: 'catálogo legible por máquinas de todas las fichas (slug, URL, URL Markdown, cursos, habilidades, ajustes)',
     devLlmsNote: 'índice llmstxt.org',
     devLlmsFullNote: 'el Markdown de todas las páginas en un solo archivo',
     devIndexNote: 'la página de inicio en Markdown',
@@ -130,7 +98,6 @@ export default {
     whereNext: 'Dónde buscar',
     home: 'Inicio de {brand}',
     worksheet: 'Fichas de {label}',
-    developers: 'Recursos para desarrolladores',
     sitemap: 'Sitemap',
     llms: 'llms.txt',
     catalog: 'Catálogo de fichas (JSON)',
@@ -264,6 +231,11 @@ export default {
         'Prerrellenar la diagonal (1×1, 2×2, …)',
         'Porcentaje de celdas prerrellenadas al azar',
       ],
+      faq: [
+        { q: '¿A qué edad se aprenden las tablas de multiplicar?', a: 'Las tablas se introducen en 2.º de primaria, hacia los 7 años, y se espera un dominio de memoria al final de 3.º. Empieza con un rango pequeño, del 1 al 5, y amplíalo solo cuando la respuesta salga sin contar.' },
+        { q: '¿Para qué sirven las casillas rellenadas de antemano?', a: 'Rellenar la diagonal (1×1, 2×2, 3×3…) o un porcentaje de casillas al azar convierte una cuadrícula vacía en un rompecabezas. Las respuestas visibles dan puntos de apoyo, así que una tabla medio llena es un paso más suave que una en blanco.' },
+        { q: '¿En qué orden conviene aprenderlas?', a: 'Lo habitual es empezar por el 2, el 5 y el 10, cuyos patrones se ven a simple vista, seguir con el 3, el 4 y el 6, y dejar el 7, el 8 y el 9 para el final. Como 3 × 4 y 4 × 3 dan lo mismo, aprender una tabla reduce a la mitad el trabajo de otra.' },
+      ],
     },
     addsub: {
       label: 'Suma y resta',
@@ -277,6 +249,11 @@ export default {
         'Columnas: 2, 3 o 4 (20–40 problemas)',
         'Modo 67: una respuesta oculta de 67 por columna',
       ],
+      faq: [
+        { q: '¿Qué se practica con el formato de número que falta?', a: 'Escribir la operación como a + □ = c o □ − b = c obliga a razonar hacia atrás en lugar de calcular de izquierda a derecha. Es el primer paso hacia el álgebra, y por eso el hueco cambia de posición de un ejercicio a otro.' },
+        { q: '¿Qué límite de números elijo?', a: 'Hasta 10 y hasta 20 para 1.º, hasta 100 para 2.º y hasta 1000 para 3.º. Si el niño cuenta con los dedos en lugar de recordar, baja un límite en vez de añadir más ejercicios.' },
+        { q: '¿Qué es el modo 67?', a: 'Esconde en cada columna exactamente un ejercicio cuyo resultado es 67, y convierte la ficha en una pequeña búsqueda del tesoro. Así el niño repasa sus propias respuestas, que es una forma de comprobación.' },
+      ],
     },
     coladd: {
       label: 'Suma en columna',
@@ -288,6 +265,11 @@ export default {
         'Columnas: número de columnas de problemas por página',
         'Priorizar los problemas que requieren llevadas',
       ],
+      faq: [
+        { q: '¿Para qué curso es la suma en columna?', a: 'La suma vertical con números de 2 cifras suele empezar en 2.º, y las de 3 y 4 cifras llegan en 3.º. La destreza de la que depende es el valor posicional: saber que el 4 de 348 vale cuatro decenas.' },
+        { q: '¿Qué es llevar, o reagrupar?', a: 'Cuando una columna suma más de 9, la parte de las decenas pasa a la columna de la izquierda. 8 + 6 son 14: se escribe el 4 y se lleva 1. La opción «preferir ejercicios con llevada» hace que la mayoría de los ejercicios requieran ese paso.' },
+        { q: '¿Por qué imprimir sobre cuadrícula?', a: 'Una cifra por casilla mantiene las unidades bajo las unidades y las decenas bajo las decenas. La mayoría de los errores iniciales son de alineación y no de cálculo, y la cuadrícula elimina esa fuente de error.' },
+      ],
     },
     colmul: {
       label: 'Multiplicación en columna',
@@ -297,6 +279,11 @@ export default {
       settings: [
         'Preajuste: 2 × 2, 3 × 2 o 4 × 2 cifras',
         'Columnas: número de columnas de problemas por página',
+      ],
+      faq: [
+        { q: '¿Cuándo está listo un niño para la multiplicación en columna?', a: 'Normalmente en 3.º, y solo cuando las tablas se recuerdan en lugar de reconstruirse. Una multiplicación en columna es una serie de multiplicaciones pequeñas más una suma: si las tablas flaquean, cada paso se vuelve más lento y difícil de comprobar.' },
+        { q: '¿Qué son los productos parciales?', a: 'Multiplicar 34 por 26 es multiplicar 34 por 6 y luego por 20, y sumar ambos resultados. Cada uno de esos resultados es un producto parcial y ocupa su propia fila en la ficha.' },
+        { q: '¿Por qué la segunda fila se desplaza a la izquierda?', a: 'La segunda fila multiplica por decenas, no por unidades, así que su resultado es diez veces mayor y empieza una columna más a la izquierda. El desplazamiento hace visible el valor posicional; no es una norma de formato que haya que memorizar.' },
       ],
     },
     coldiv: {
@@ -310,6 +297,11 @@ export default {
         'Columnas: número de columnas de problemas por página',
         'Permitir restos en lugar de división exacta',
       ],
+      faq: [
+        { q: '¿Cuándo se aprende la división larga?', a: 'La división larga suele llegar al final de 3.º o en 4.º, cuando la multiplicación y la resta están consolidadas. Cada paso exige dividir, multiplicar, restar y bajar la cifra siguiente, así que cualquier debilidad se nota enseguida.' },
+        { q: '¿Qué diferencia hay entre las dos notaciones?', a: 'La forma con corchete coloca el divisor a la izquierda del dividendo y el cociente sobre la línea superior; la forma en ángulo coloca el divisor arriba a la derecha y el cociente debajo. Es el mismo método escrito de otra manera, y la forma que ve un niño depende del país donde estudia.' },
+        { q: '¿Conviene permitir restos?', a: 'Empieza con divisiones exactas, para que lo único nuevo sea el método. Activa los restos cuando los cuatro pasos sean automáticos: un resto obliga a comprobar que de verdad es menor que el divisor.' },
+      ],
     },
     compare: {
       label: 'Comparación',
@@ -319,6 +311,11 @@ export default {
       settings: [
         'Límite: hasta 10, 20, 100 o 1000',
         'Columnas: número de columnas de problemas por página',
+      ],
+      faq: [
+        { q: '¿Cómo ayudo a recordar > y <?', a: 'El lado abierto siempre mira al número mayor: el símbolo se ensancha hacia «más». Leer la frase entera en voz alta —«cuarenta y tres es mayor que treinta y cuatro»— fija el sentido más rápido que repetir el símbolo aislado.' },
+        { q: '¿Por qué las parejas son deliberadamente engañosas?', a: 'Parejas como 43 y 34, o 208 y 280, usan las mismas cifras en otro orden, y aproximadamente una de cada siete parejas es igual. Quien mira solo la primera cifra falla, y ese es justamente el hábito que la ficha quiere corregir.' },
+        { q: '¿Qué límite corresponde a cada curso?', a: 'Hasta 10 y 20 para 1.º, hasta 100 para 2.º y hasta 1000 para 3.º. Comparar números largos es sobre todo un ejercicio de valor posicional: sube el límite solo cuando las parejas cortas salgan rápido.' },
       ],
     },
     rounding: {
@@ -330,6 +327,11 @@ export default {
         'Posición: decena, centena o millar más cercano',
         'Columnas: número de columnas de problemas por página',
       ],
+      faq: [
+        { q: '¿Cuál es la regla del redondeo?', a: 'Se mira la cifra situada una posición a la derecha de aquella a la que se redondea. Si es 5 o más, se redondea hacia arriba; si es 4 o menos, hacia abajo. Redondear 48 a la decena da 50, porque el 8 es 5 o más.' },
+        { q: '¿Por qué aparecen tantos números acabados en 5?', a: 'El caso del 5 es el único que se resuelve por convenio y no por evidencia, y es donde se concentran los errores. El generador los incluye a propósito, junto con una mezcla de casos que redondean hacia arriba y hacia abajo.' },
+        { q: '¿Cuándo se aprende a redondear?', a: 'El redondeo a la decena suele aparecer en 2.º, y la centena y el millar en 3.º. Es la base de la estimación, que es como un niño aprende a notar que un resultado es demasiado grande.' },
+      ],
     },
     patterns: {
       label: 'Series',
@@ -338,6 +340,11 @@ export default {
       skills: ['series numéricas', 'contar a saltos', 'sucesiones', 'pensamiento algebraico'],
       settings: [
         'Nivel: fácil, medio o difícil',
+      ],
+      faq: [
+        { q: '¿Qué enseñan las series numéricas?', a: 'Encontrar la regla detrás de 2, 4, 6, □, 10 es pensamiento algebraico temprano: el niño busca una relación en lugar de aplicar una operación dada. Además refuerza el conteo salteado, que sostiene las tablas de multiplicar.' },
+        { q: '¿En qué se diferencian los tres niveles?', a: 'El nivel fácil usa un paso constante, por ejemplo sumar 3 cada vez. El medio multiplica o alterna dos pasos. El difícil combina reglas, así que hay que probar una hipótesis con varios términos antes de darla por buena.' },
+        { q: 'Mi hijo se ha atascado en una serie. ¿Qué hago?', a: 'Pregúntale qué cambia de un número al siguiente y escribid las diferencias debajo. Con las diferencias a la vista la regla suele saltar sola, y la costumbre de anotarlas sirve luego para series más difíciles.' },
       ],
     },
     eqexplore: {
@@ -348,6 +355,11 @@ export default {
       settings: [
         'Operación: suma, resta o ambas',
         'Rango: tamaño de los números usados',
+      ],
+      faq: [
+        { q: '¿Se puede imprimir el explorador de ecuaciones?', a: 'No. Es la única actividad del sitio pensada para la pantalla: los términos se arrastran al otro lado del igual, la recta numérica se anima y la respuesta se comprueba al escribirla. Todas las demás fichas se imprimen en una página.' },
+        { q: '¿Qué significa pasar un término al otro lado del igual?', a: 'Una ecuación sigue siendo cierta mientras ambos lados cambien igual. Pasar un término invierte su signo: x + 7 = 12 se convierte en x = 12 − 7. Ver cómo cambia el signo en el momento hace la regla concreta en lugar de memorizada.' },
+        { q: '¿Para qué edad es?', a: 'Para 2.º y 3.º, entre los 7 y los 9 años aproximadamente, cuando la suma y la resta hasta 100 resultan cómodas. Suele ser la primera vez que un niño ve una letra representando un número desconocido.' },
       ],
     },
   },

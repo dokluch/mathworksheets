@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { staticBody, pageTitle } from '../seo/render'
 import { useInAppLinks } from '../hooks/useInAppLinks'
 
@@ -12,10 +11,6 @@ import { useInAppLinks } from '../hooks/useInAppLinks'
  * .md/.json/.txt files and external sites stay native.
  */
 export default function StaticPage({ route, navigate }) {
-  useEffect(() => {
-    try { window.scrollTo({ top: 0 }) } catch { /* not implemented in jsdom */ }
-  }, [route.path])
-
   const onClick = useInAppLinks(navigate)
 
   return (

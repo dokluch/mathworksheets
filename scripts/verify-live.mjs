@@ -112,9 +112,7 @@ async function main() {
     // one-H1-per-route invariant inside the file.
     ['/llms-full.txt', new RegExp(`^${BRAND} — full site content`)],
     ['/index.md', brandHeading],
-    ['/developers', /Developer Resources/],
     ['/favicon.svg', /^<svg/],
-    ['/developers.md', new RegExp(`^# ${BRAND} Developer Resources`)],
     ...PAGES.flatMap(p => [
       [`/${p.slug}`, new RegExp(`<title>${p.title} · ${BRAND}</title>`)],
       [`/${p.slug}.md`, new RegExp(`^# ${p.title}`)],
@@ -125,7 +123,7 @@ async function main() {
     const r = await get(path)
     record(`GET ${path} → 200 and looks right`, r.status === 200 && re.test(r.text.trimStart()), String(r.status))
   }
-  for (const path of ['/og/developers.png', '/favicon.png', '/apple-touch-icon.png']) {
+  for (const path of ['/og/home.png', '/favicon.png', '/apple-touch-icon.png']) {
     const img = await head(path)
     record(`GET ${path} → 200 image/png`, img.status === 200 && /^image\/png/.test(img.type) && isPng(img.bytes), `${img.status} ${img.type}`)
   }
@@ -163,8 +161,6 @@ async function main() {
     record(`GET ${wsPath} → 200 with localized title`, lws.status === 200 && lws.text.includes(`<title>${escapeHtml(pageTitle(worksheetRoute(rounding, l)))}</title>`), String(lws.status))
     const lwsMd = await get(`${wsPath}.md`)
     record(`GET ${wsPath}.md → 200 text/markdown`, lwsMd.status === 200 && /^text\/markdown/.test(lwsMd.headers.get('content-type') || ''), String(lwsMd.status))
-    const ldev = await get(`/${l}/developers`, { accept: 'text/html' })
-    record(`GET /${l}/developers → 200`, ldev.status === 200 && ldev.text.includes(`<html lang="${lang}">`), String(ldev.status))
     const lpage = await get(`/${l}/${PAGES[0].slug}`, { accept: 'text/html' })
     record(`GET /${l}/${PAGES[0].slug} → 200`, lpage.status === 200 && lpage.text.includes(`<html lang="${lang}">`), String(lpage.status))
     const lnf = await get(`/${l}/nope`, { accept: 'text/html' })
@@ -173,7 +169,7 @@ async function main() {
   const enPrefix = await get('/en')
   record('GET /en → 404 (English lives at the root)', enPrefix.status === 404, String(enPrefix.status))
   const sitemap = await get('/sitemap.xml')
-  record('sitemap.xml lists localized URLs with xhtml:link alternates', sitemap.text.includes('/zh/developers</loc>') && sitemap.text.includes('<xhtml:link ') && sitemap.text.includes('hreflang="x-default"'))
+  record('sitemap.xml lists localized URLs with xhtml:link alternates', sitemap.text.includes('/zh/about</loc>') && sitemap.text.includes('<xhtml:link ') && sitemap.text.includes('hreflang="x-default"'))
 
   // 4. Agent-friendly 404s
   const nf = await get('/some-path-that-does-not-exist')

@@ -22,7 +22,7 @@ describe('scripts/prerender.mjs', () => {
     expect(logs[0]).toContain(`wrote ${written.length} files`)
 
     const root = await readdir(dist)
-    for (const f of ['index.html', 'index.md', 'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', '404.html', 'developers.html', 'developers.md', 'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md']) {
+    for (const f of ['index.html', 'index.md', 'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', '404.html', 'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md']) {
       expect(root).toContain(f)
     }
     const ws = await readdir(join(dist, 'worksheets'))
@@ -43,7 +43,8 @@ describe('scripts/prerender.mjs', () => {
     expect(privacy).toContain('<footer class="site-footer no-print">')
 
     // Every locale: <locale>.html/.md at the root, the rest under <locale>/
-    expect(written.length).toBe(2 * LOCALES.length * (WORKSHEETS.length + 2 + 3) + 6)
+    // Per locale: html + md for home, every worksheet and the 3 static pages, plus 6 shared files.
+    expect(written.length).toBe(2 * LOCALES.length * (WORKSHEETS.length + 1 + 3) + 6)
     for (const l of LOCALES.filter(x => x !== 'en')) {
       expect(root).toContain(`${l}.html`)
       expect(root).toContain(`${l}.md`)
@@ -53,7 +54,7 @@ describe('scripts/prerender.mjs', () => {
         expect(lws).toContain(`${w.slug}.md`)
       }
       const ldir = await readdir(join(dist, l))
-      for (const f of ['developers.html', 'developers.md', 'about.html', 'privacy.md', 'terms.html']) expect(ldir).toContain(f)
+      for (const f of ['about.html', 'about.md', 'privacy.md', 'terms.html']) expect(ldir).toContain(f)
     }
     const roundingWs = WORKSHEETS.find(w => w.id === 'rounding')
     const fr = await readFile(join(dist, 'fr', 'worksheets', 'rounding.html'), 'utf8')

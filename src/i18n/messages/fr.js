@@ -8,19 +8,14 @@ export default {
 
   seo: {
     homeTitle: '{brand} – {tagline}',
-    developersTitle: 'Ressources pour développeurs · {brand}',
     worksheetTitle: 'Fiches {label} · {brand}',
-    developersDescription: 'Ressources {brand} pour développeurs : dépôt open source, catalogue JSON des fiches, négociation de contenu Markdown, llms.txt et sitemap.',
     worksheetDescription: 'Fiches gratuites à imprimer « {labelLower} » pour les niveaux {grades}. {shortDesc}. Nouveaux exercices à chaque fois, tient sur une page.',
     gradeOne: 'Niveau {grades}',
     gradeRange: 'Niveaux {grades}',
     ogAltHome: '{brand} – {tagline}',
     ogAltWorksheet: 'Aperçu de la fiche {label} – {brand}',
-    ogAltDevelopers: 'Ressources {brand} pour développeurs',
     worksheetHeading: 'Fiches {label}',
     worksheetName: '{brand} {label}',
-    developersHeading: 'Ressources {brand} pour développeurs',
-    developersCrumb: 'Ressources pour développeurs',
     worksheetList: 'Fiches {brand}',
     learningResourceWorksheet: 'Fiche d’exercices',
     learningResourceInteractive: 'Exercice interactif',
@@ -51,6 +46,7 @@ export default {
       formatPrintable: 'à imprimer, aléatoire à chaque chargement',
       settings: 'Réglages',
       examples: 'Exemples de calculs',
+      faq: 'Questions fréquentes',
       howToUseWorksheet: 'Comment utiliser cette fiche',
       howToUseActivity: 'Comment utiliser cette activité',
       step1: 'Ouvrez {url}.',
@@ -61,38 +57,12 @@ export default {
       partOf: 'Fait partie de {link}.',
       url: 'URL',
     },
-    developers: {
-      subtitle: 'Open source, lisible par les machines et accueillant pour les agents.',
-      intro: '{brand} (aussi appelé « {brandAlt} ») est une application monopage React 19 + Vite. Il n’y a pas d’API serveur : les fiches sont générées côté client. Tout ce qui suit est statique et peut être mis en cache.',
-      resources: 'Ressources',
-      sourceLink: 'Code source sur GitHub',
-      catalogDesc: 'catalogue lisible par les machines de toutes les fiches avec slugs, URL, niveaux, compétences et réglages',
-      llmsDesc: 'index llmstxt.org et contenu complet pour les modèles de langage',
-      indexMdDesc: 'ce site en Markdown ; chaque page HTML a un jumeau {code}',
-      negotiationHeading: 'Négociation de contenu Markdown',
-      negotiationText: 'Chaque URL de page répond à {accept} avec {contentType} et {vary}, selon la convention acceptmarkdown.com. Les réponses HTML portent un en-tête {link} qui pointe vers le jumeau. Les chemins inconnus renvoient un HTTP 404 avec un corps Markdown indiquant où chercher.',
-      languagesHeading: 'Langues',
-      languagesText: 'Les pages en anglais sont à la racine du site. Les mêmes pages existent en {languages} sous un préfixe de deux lettres (par exemple {example}) ; chaque page relie toutes ses traductions par hreflang et les liste dans le sitemap. llms.txt et llms-full.txt sont uniquement en anglais.',
-      idsHeading: 'Identifiants et URL des fiches',
-      addingHeading: 'Ajouter une fiche',
-      adding1: 'Ajoutez une entrée dans {file} (id, slug, libellé, descriptions, niveaux, compétences, réglages) et ses traductions dans {messages}.',
-      adding2: 'Créez le composant dans {dir} et enregistrez-le dans les tables {components} et {icons} de {app}.',
-      adding3: 'Lancez {test} et {build} ; les pages statiques, les jumeaux Markdown, le sitemap, llms.txt et le catalogue JSON sont régénérés depuis le catalogue.',
-    },
-    agentLinks: {
-      text: 'Chaque page existe aussi en Markdown : ajoutez {code} au chemin ou envoyez {accept}. Voir {llms}, le {catalog}, le {sitemap} et les {developers}. Sous licence {license}.',
-      llms: 'llms.txt',
-      catalog: 'catalogue des fiches (JSON)',
-      sitemap: 'sitemap',
-      developers: 'ressources pour développeurs',
-    },
   },
 
   md: {
     agentIntro: 'Chaque page existe aussi en Markdown : ajoutez `.md` au chemin ou demandez-la avec `Accept: text/markdown`.',
     llmsNote: 'index pour les modèles de langage',
     catalogNote: 'catalogue des fiches lisible par les machines',
-    developersLink: 'Ressources pour développeurs',
     sitemapLink: 'Sitemap',
     homeIntro: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer pour les 6–9 ans (CP à CE2). Chaque fiche est tirée au sort à chaque ouverture ou régénération. Choisissez une fiche, réglez la difficulté (plage de nombres, chiffres, disposition, colonnes) et imprimez-la depuis le navigateur ; les réglages sont mémorisés par appareil. Les fiches sont générées côté client : pas de compte, pas d’envoi, aucun coût.',
     worksheetItem: '{link} : {shortDesc} (niveaux {grades})',
@@ -104,8 +74,6 @@ export default {
     howToUse: 'Mode d’emploi',
     wsStep1: 'Ouvrez {url}.',
     wsStep2: 'Ajustez les réglages ; ils sont enregistrés dans le navigateur.',
-    developersIntro: '{brand} (aussi appelé « {brandAlt} ») est une application monopage open source React 19 + Vite qui génère des fiches de maths à imprimer côté client. Il n’y a pas d’API serveur ; chaque ressource ci-dessous est un fichier statique.',
-    devCatalogNote: 'catalogue lisible par les machines de toutes les fiches (slug, URL, URL Markdown, niveaux, compétences, réglages)',
     devLlmsNote: 'index llmstxt.org',
     devLlmsFullNote: 'le Markdown de toutes les pages dans un seul fichier',
     devIndexNote: 'la page d’accueil en Markdown',
@@ -130,7 +98,6 @@ export default {
     whereNext: 'Où chercher',
     home: 'Accueil {brand}',
     worksheet: 'Fiches {label}',
-    developers: 'Ressources pour développeurs',
     sitemap: 'Sitemap',
     llms: 'llms.txt',
     catalog: 'Catalogue des fiches (JSON)',
@@ -264,6 +231,11 @@ export default {
         'Pré-remplir la diagonale (1×1, 2×2, …)',
         'Pourcentage de cases pré-remplies au hasard',
       ],
+      faq: [
+        { q: 'À quel âge apprend-on les tables de multiplication ?', a: 'Les tables sont abordées au CE1, vers 7 ans, et doivent être sues par cœur à la fin du CE2. Commencez par une plage réduite, de 1 à 5, et élargissez-la seulement quand la réponse vient sans compter.' },
+        { q: 'À quoi servent les cases pré-remplies ?', a: 'Pré-remplir la diagonale (1×1, 2×2, 3×3…) ou un pourcentage de cases au hasard transforme une grille vide en énigme. Les réponses visibles donnent des points d’appui, si bien qu’une table à moitié remplie est une étape plus douce qu’une table vierge.' },
+        { q: 'Dans quel ordre apprendre les tables ?', a: 'On commence souvent par 2, 5 et 10, dont les régularités se voient, puis 3, 4 et 6, et enfin 7, 8 et 9. Comme 3 × 4 et 4 × 3 donnent le même résultat, apprendre une table réduit de moitié le travail sur une autre.' },
+      ],
     },
     addsub: {
       label: 'Addition et soustraction',
@@ -277,6 +249,11 @@ export default {
         'Colonnes : 2, 3 ou 4 (20 à 40 problèmes)',
         'Mode 67 : une réponse cachée de 67 par colonne',
       ],
+      faq: [
+        { q: 'Que travaille le format à nombre manquant ?', a: 'Écrire un calcul sous la forme a + □ = c ou □ − b = c oblige l’enfant à raisonner à l’envers plutôt qu’à calculer de gauche à droite. C’est un premier pas vers l’algèbre, et c’est pourquoi la case vide change de place d’un problème à l’autre.' },
+        { q: 'Quelle limite de nombres choisir ?', a: 'Jusqu’à 10 et jusqu’à 20 conviennent au CP, jusqu’à 100 au CE1 et jusqu’à 1000 au CE2. Si l’enfant compte sur ses doigts au lieu de se souvenir, revenez à la limite précédente plutôt que d’ajouter des exercices.' },
+        { q: 'Qu’est-ce que le mode 67 ?', a: 'Il cache dans chaque colonne exactement un calcul dont le résultat est 67, ce qui transforme la fiche en petite chasse au trésor. L’enfant relit ainsi ses propres réponses, ce qui est une forme de vérification.' },
+      ],
     },
     coladd: {
       label: 'Addition posée',
@@ -288,6 +265,11 @@ export default {
         'Colonnes : nombre de colonnes de problèmes par page',
         'Privilégier les problèmes qui demandent une retenue',
       ],
+      faq: [
+        { q: 'À quel niveau aborde-t-on l’addition posée ?', a: 'L’addition verticale à 2 chiffres commence en général au CE1, les nombres à 3 et 4 chiffres suivant au CE2. La compétence dont elle dépend est la valeur de position : savoir que le 4 de 348 vaut quatre dizaines.' },
+        { q: 'Qu’est-ce que la retenue ?', a: 'Quand une colonne dépasse 9, la partie dizaines passe dans la colonne de gauche. 8 + 6 font 14 : on écrit 4 et on retient 1. L’option « privilégier les retenues » garantit que la plupart des calculs demandent cette étape.' },
+        { q: 'Pourquoi imprimer sur un quadrillage ?', a: 'Un chiffre par case maintient les unités sous les unités et les dizaines sous les dizaines. La plupart des erreurs en début d’apprentissage viennent d’un mauvais alignement plutôt que du calcul, et le quadrillage supprime cette source d’erreur.' },
+      ],
     },
     colmul: {
       label: 'Multiplication posée',
@@ -297,6 +279,11 @@ export default {
       settings: [
         'Préréglage : 2 × 2, 3 × 2 ou 4 × 2 chiffres',
         'Colonnes : nombre de colonnes de problèmes par page',
+      ],
+      faq: [
+        { q: 'Quand un enfant est-il prêt pour la multiplication posée ?', a: 'En général au CE2, et seulement lorsque les tables sont sues et non reconstruites. Une multiplication posée est une suite de petites multiplications suivie d’une addition : si les tables hésitent, chaque étape devient plus lente et plus difficile à vérifier.' },
+        { q: 'Que sont les produits partiels ?', a: 'Multiplier 34 par 26, c’est multiplier 34 par 6, puis par 20, et additionner les deux résultats. Chacun de ces résultats est un produit partiel et occupe sa propre ligne sur la fiche.' },
+        { q: 'Pourquoi la deuxième ligne est-elle décalée vers la gauche ?', a: 'La deuxième ligne multiplie par des dizaines et non par des unités : son résultat est dix fois plus grand et commence donc une colonne plus à gauche. Ce décalage rend la valeur de position visible ; ce n’est pas une règle de présentation à retenir par cœur.' },
       ],
     },
     coldiv: {
@@ -310,6 +297,11 @@ export default {
         'Colonnes : nombre de colonnes de problèmes par page',
         'Autoriser les restes au lieu d’une division exacte',
       ],
+      faq: [
+        { q: 'Quand apprend-on la division posée ?', a: 'La division posée arrive en fin de CE2 ou au CM1, une fois les tables et la soustraction bien assurées. Chaque étape demande de diviser, multiplier, soustraire puis abaisser : la moindre fragilité se voit tout de suite.' },
+        { q: 'Quelle est la différence entre les deux présentations ?', a: 'La présentation à crochet place le diviseur à gauche du dividende, le quotient au-dessus de la barre ; la potence place le diviseur en haut à droite, le quotient en dessous. C’est la même méthode écrite autrement, et la forme rencontrée dépend du pays où l’enfant est scolarisé.' },
+        { q: 'Faut-il autoriser les restes ?', a: 'Commencez par des divisions exactes, pour que seule la méthode soit nouvelle. Activez les restes quand les quatre étapes sont automatiques : un reste oblige l’enfant à vérifier qu’il est bien inférieur au diviseur.' },
+      ],
     },
     compare: {
       label: 'Comparaison',
@@ -319,6 +311,11 @@ export default {
       settings: [
         'Limite : jusqu’à 10, 20, 100 ou 1000',
         'Colonnes : nombre de colonnes de problèmes par page',
+      ],
+      faq: [
+        { q: 'Comment aider un enfant à retenir > et < ?', a: 'Le côté ouvert est toujours tourné vers le plus grand nombre : le symbole s’élargit vers le « plus ». Lire la phrase entière à voix haute — « quarante-trois est plus grand que trente-quatre » — ancre le sens plus vite que de réciter le symbole seul.' },
+        { q: 'Pourquoi les paires sont-elles volontairement pièges ?', a: 'Des paires comme 43 et 34, ou 208 et 280, reprennent les mêmes chiffres dans un autre ordre, et environ une paire sur sept est une égalité. L’enfant qui ne regarde que le premier chiffre se trompe : c’est précisément l’habitude que la fiche veut corriger.' },
+        { q: 'Quelle limite pour quel niveau ?', a: 'Jusqu’à 10 et 20 au CP, jusqu’à 100 au CE1 et jusqu’à 1000 au CE2. Comparer des nombres plus longs est surtout un exercice de valeur de position : n’augmentez la limite que lorsque les petites paires sont rapides.' },
       ],
     },
     rounding: {
@@ -330,6 +327,11 @@ export default {
         'Position : dizaine, centaine ou millier',
         'Colonnes : nombre de colonnes de problèmes par page',
       ],
+      faq: [
+        { q: 'Quelle est la règle de l’arrondi ?', a: 'On regarde le chiffre situé juste à droite du rang auquel on arrondit. S’il vaut 5 ou plus, on arrondit au-dessus ; s’il vaut 4 ou moins, on arrondit en dessous. Arrondir 48 à la dizaine donne 50, car 8 est supérieur à 5.' },
+        { q: 'Pourquoi autant de nombres se terminant par 5 ?', a: 'Le cas du 5 est le seul qui repose sur une convention plutôt que sur une évidence, et c’est là que se concentrent les erreurs. Le générateur les inclut volontairement, avec un mélange de cas arrondis au-dessus et en dessous.' },
+        { q: 'Quand apprend-on à arrondir ?', a: 'L’arrondi à la dizaine apparaît généralement au CE1, la centaine et le millier suivant au CE2. C’est la base de l’estimation, qui permet à l’enfant de repérer qu’un résultat est bien trop grand.' },
+      ],
     },
     patterns: {
       label: 'Suites',
@@ -338,6 +340,11 @@ export default {
       skills: ['suites de nombres', 'comptage par sauts', 'séquences', 'pensée algébrique'],
       settings: [
         'Niveau : facile, moyen ou difficile',
+      ],
+      faq: [
+        { q: 'Qu’apportent les suites de nombres ?', a: 'Trouver la règle derrière 2, 4, 6, □, 10 relève de la pensée algébrique : l’enfant cherche une relation au lieu d’appliquer une opération donnée. Cela renforce aussi le comptage de n en n, qui soutient les tables de multiplication.' },
+        { q: 'Quelle est la différence entre les trois niveaux ?', a: 'Le niveau facile utilise un pas constant, par exemple ajouter 3 à chaque fois. Le niveau moyen multiplie ou alterne deux pas. Le niveau difficile combine des règles : il faut alors tester une hypothèse sur plusieurs termes avant de s’y fier.' },
+        { q: 'Mon enfant bloque sur une suite. Que faire ?', a: 'Demandez-lui ce qui change d’un nombre au suivant et écrivez les écarts en dessous. Une fois les écarts visibles, la règle saute aux yeux, et l’habitude de les noter se transpose aux suites plus difficiles.' },
       ],
     },
     eqexplore: {
@@ -348,6 +355,11 @@ export default {
       settings: [
         'Opération : addition, soustraction ou les deux',
         'Plage : taille des nombres utilisés',
+      ],
+      faq: [
+        { q: 'Peut-on imprimer l’explorateur d’équations ?', a: 'Non. C’est la seule activité du site conçue pour l’écran : on fait glisser les termes de part et d’autre du signe égal, la droite numérique s’anime et la réponse est vérifiée à la saisie. Toutes les autres fiches s’impriment sur une page.' },
+        { q: 'Que signifie faire passer un terme de l’autre côté du signe égal ?', a: 'Une équation reste vraie tant que les deux côtés subissent le même changement. Faire passer un terme inverse son signe : x + 7 = 12 devient x = 12 − 7. Voir le signe changer au moment où cela se produit rend la règle concrète au lieu d’être apprise par cœur.' },
+        { q: 'À quel âge s’adresse-t-elle ?', a: 'Au CE1 et au CE2, entre 7 et 9 ans environ, quand l’addition et la soustraction jusqu’à 100 sont à l’aise. C’est souvent la première fois qu’un enfant voit une lettre représenter un nombre inconnu.' },
       ],
     },
   },
