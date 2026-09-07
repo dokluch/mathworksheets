@@ -166,10 +166,19 @@
 }
 
 /* ── Problem numbering ──
-   Every problem on a sheet is numbered, so a grown-up checking the page can
-   say "have another look at number 7" and the child knows which one. The
-   counter is absolutely positioned so it adds no height: the notebook sheets
-   are laid out in whole squares and any extra flow would break the grid. */
+   The numbers exist for exactly one purpose: so a grown-up marking the page
+   against the answer key can say "have another look at number 7" and the child
+   knows which one. Without a key there is nothing to check against, and a
+   column of small grey numerals is just noise on a sheet a child has to read.
+
+   So the counter prints only when the key does. The gate is the rendered
+   `.answer-key` itself rather than a class each sheet remembers to set, which
+   means it holds for every worksheet — including any added later — and the two
+   can never fall out of step. AnswerKey returns null when there is nothing to
+   print, so this matches exactly when a key will actually come out.
+
+   The counter is absolutely positioned so it adds no height: the notebook
+   sheets are laid out in whole squares and any extra flow would break the grid. */
 .problem-grid,
 .colarith-grid,
 .compare-grid,
@@ -187,11 +196,11 @@
   position: relative;
 }
 
-.problem-item::before,
-.colarith-item::before,
-.compare-item::before,
-.rounding-item::before,
-.order-item::before {
+.tool-panel:has(.answer-key) .problem-item::before,
+.tool-panel:has(.answer-key) .colarith-item::before,
+.tool-panel:has(.answer-key) .compare-item::before,
+.tool-panel:has(.answer-key) .rounding-item::before,
+.tool-panel:has(.answer-key) .order-item::before {
   content: counter(problem);
   position: absolute;
   top: 2px;
@@ -368,11 +377,11 @@
     color: #111;
   }
 
-  .problem-item::before,
-  .colarith-item::before,
-  .compare-item::before,
-  .rounding-item::before,
-  .order-item::before {
+  .tool-panel:has(.answer-key) .problem-item::before,
+  .tool-panel:has(.answer-key) .colarith-item::before,
+  .tool-panel:has(.answer-key) .compare-item::before,
+  .tool-panel:has(.answer-key) .rounding-item::before,
+  .tool-panel:has(.answer-key) .order-item::before {
     color: #555;
   }
 
