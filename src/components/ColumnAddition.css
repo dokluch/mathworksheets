@@ -211,6 +211,12 @@
     --nb-offset: var(--nb-offset-print);
     padding: var(--nb-sq) var(--nb-sq) 0;
     overflow: visible;
+    /* Squared paper is ruled to the edge of the page. Without this the ruling
+       stopped at the last problem and long division printed two inches of bare
+       white under the method that needs the working room most. --nb-page-sq is
+       the page's own square budget (useNotebookGrid), so the sheet reaches the
+       bottom margin exactly and can never push a second page. */
+    min-height: calc(var(--nb-page-sq) * var(--nb-sq));
   }
 
   .colarith-notebook .worksheet-header {

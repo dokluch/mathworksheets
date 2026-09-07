@@ -471,3 +471,57 @@ stopped at three borders. What changed, and why:
   `--color-accent-orange`, `--color-accent-purple`, `--color-header-bg`.
 - **Guarded state added:** a multiplication range wider than 15 factors cannot
   fit one page, so it now says so instead of silently paging.
+
+## Revision — printed ruling, preview alignment, card treatment
+
+Four defects, all measured before and after.
+
+- **The printed ruling was gone.** In the print block `.worksheet { background:
+  #fff }` and `.notebook-grid-bg { background-image: … }` are the same
+  specificity, so the later rule won the image while the shorthand won
+  `background-size` — resetting it to `auto`. Measured on long division:
+  `26px 26px, 26px 26px` on screen, **`auto, auto`** in print, which paints one
+  stray 1px rule at the edge of the sheet instead of squared paper. Every
+  notebook worksheet printed unruled. The shorthand is now `background-color`,
+  and the print rule restates `background-size`, `-origin`, `-position` and
+  `-repeat` so an unrelated shorthand can never flatten the layer again.
+  Rule: **inside `@media print`, never the `background` shorthand on a surface
+  another rule paints an image onto.**
+- **The ruling now reaches the bottom margin.** It used to stop at the last
+  problem, so bracket long division printed 2.4in of bare white under the
+  method that needs working room most. `PAGE_SQUARES` (29, the page's own
+  square budget) is published as `--nb-page-sq` and the print sheet carries
+  `min-height: calc(var(--nb-page-sq) * var(--nb-sq))` — 696px against a 717px
+  printable height, so it fills the page and cannot push a second one.
+- **Long division clears its header by one square.** Its frames grow *upward*
+  into the quotient row (`.coldiv-item` is `flex-start`, unlike the carry space
+  above a column sum), so at `headerGap: 0` the first row's quotient boxes butt
+  against the header rule. `headerGap: 1` costs nothing: `rowsPerPage` returns
+  the same count for all six preset × notation combinations.
+- **The ruling is neutral.** `--notebook-grid-line-color` was slate-400
+  (`rgba(148,163,184,.28)`) — the last cool hue left on the paper after the
+  palette went warm, and distinctly lavender on cream. Both screen and print
+  values are neutral now, at the same blended lightness (≈223 on paper, ≈196
+  on white), so the ruling is no heavier, only the right colour.
+- **The catalog previews sit on their own ruling.** `SheetThumb` drew squared
+  paper at an 8px pitch and then placed every mark off it — digits at `y=30`,
+  rules at `y=20`/`44`, headers on grid *lines* rather than cell centres, and a
+  `fontSize` of 9 against an 8px square. All nine mark sets are redrawn through
+  `cx`/`cy`/`ln`/`span`: a digit is centred in a cell at the sheet's own 0.77
+  digit-to-square ratio, a rule falls on a grid line, a blank is ink inside a
+  cell. The times table's cells are two squares wide, as the real table's are.
+  Long division shows the frame `frameLayout()` renders rather than a
+  decorative curly brace.
+- **The subject colour moved from a band to the shadow.** The 5px band ruled
+  across the head of each card sat between the card edge and the preview and
+  read as chrome — the loudest thing on a page whose subject is nine drawn
+  sheets. The card now casts a shadow tinted with `--card-color` via
+  `color-mix`, declared after a neutral shadow so an engine without `color-mix`
+  keeps depth rather than losing it.
+
+Verified: 195 tests, lint and build clean; 8 print configurations at
+`background-size: 24px 24px`, `boxH: 696`, one page each, long division at a
+24px header gap with no problem lost; the 10-route full print sweep still one
+page in A4 and Letter (two with the answer key); 21 route × viewport
+combinations with zero contrast failures and no horizontal overflow; detector
+clean of non-advisory findings on every touched file.

@@ -123,9 +123,13 @@ export default function ColumnDivision() {
   const columnOptions = useMemo(() => COLUMN_OPTIONS.filter(c => fitsPrint(c, frame.cols)), [frame.cols])
   const activeColumns = columnOptions.includes(columns) ? columns : columnOptions[columnOptions.length - 1]
 
-  // Frames are tall, so they sit directly under the header and directly under
-  // each other; the spare square each item carries is the only separator.
-  const spacing = { rowGap: 0, headerGap: 0 }
+  // Frames are tall, so they sit directly under each other; the spare square
+  // each item carries is the only separator. The one square below the header is
+  // not decoration: a division frame grows *upward* into its quotient row
+  // (.coldiv-item is flex-start, unlike the carry-space above a column sum), so
+  // without it the first row's quotient boxes butt against the header rule. It
+  // is free — rowsPerPage returns the same count for every preset and notation.
+  const spacing = { rowGap: 0, headerGap: 1 }
   const problemCount = problemsPerPage({ columns: activeColumns, rows: frame.rows, ...spacing })
   const presetLabel = (a, b) => t('coldiv.preset', { a, b })
 

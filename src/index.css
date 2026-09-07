@@ -69,8 +69,13 @@
   --font-figure: 'JetBrains Mono', ui-monospace, monospace;
   --notebook-grid-size: 10px;
   --notebook-grid-line-width: 1px;
-  --notebook-grid-line-color: rgba(148, 163, 184, 0.28);
-  --notebook-grid-line-color-print: rgba(107, 114, 128, 0.42);
+  /* The ruling is drawn in the sheet's own ink, tinted right down. It used to
+     be slate-400 — the last cool hue left anywhere on the paper after the
+     palette went warm, and on a cream sheet it read distinctly lavender. Both
+     replacements hold the previous blended lightness (≈223 on paper, ≈196 on
+     white) so the ruling is no heavier, only neutral. */
+  --notebook-grid-line-color: rgba(26, 31, 36, 0.14);
+  --notebook-grid-line-color-print: rgba(114, 114, 114, 0.42);
   /* ── One module ──
      The notebook square is the product's own unit (SCREEN_SQUARE in
      hooks/useNotebookGrid.js). The interface is measured in it too, so the

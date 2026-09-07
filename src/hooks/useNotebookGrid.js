@@ -32,6 +32,11 @@ const PAPER_HEIGHT_IN = 8.27
 export const PRINT_WIDTH = (PAPER_WIDTH_IN - PAGE_MARGIN_X * 2) * 96
 export const PRINT_HEIGHT = (PAPER_HEIGHT_IN - PAGE_MARGIN_TOP - PAGE_MARGIN_BOTTOM) * 96
 
+/** Whole squares the printable box holds top to bottom: the page's row budget,
+    and the height the ruling is stretched to so the sheet is squared paper all
+    the way to the bottom margin rather than only as far as the last problem. */
+export const PAGE_SQUARES = Math.floor(PRINT_HEIGHT / PRINT_SQUARE)
+
 /**
  * Squares taken by the header band: the title line and the ruled
  * Name / Date / Set no. block sit side by side, so the band measures 72px —
@@ -92,8 +97,7 @@ export function notebookLayout({ width, columns, cellsWide, square = SCREEN_SQUA
  * separated by rowGap, with no bottom padding in print.
  */
 export function rowsPerPage(rows, { rowGap = ROW_GAP, headerGap = ROW_GAP } = {}) {
-  const squares = Math.floor(PRINT_HEIGHT / PRINT_SQUARE)
-  return Math.max(1, Math.floor((squares - HEADER_BAND - headerGap + rowGap) / (rows + 1 + rowGap)))
+  return Math.max(1, Math.floor((PAGE_SQUARES - HEADER_BAND - headerGap + rowGap) / (rows + 1 + rowGap)))
 }
 
 /** Problems that fill exactly one printed page for a column count. */
@@ -143,6 +147,7 @@ export function useNotebookGrid({ columns, cellsWide, rows, rowGap = ROW_GAP, he
     '--nb-rows': rows,
     '--nb-row-gap': rowGap,
     '--nb-header-gap': headerGap,
+    '--nb-page-sq': PAGE_SQUARES,
   }
 
   return [ref, style]

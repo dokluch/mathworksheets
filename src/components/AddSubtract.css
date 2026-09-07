@@ -307,7 +307,12 @@
      the content stops read as a second paper over the white page, and it
      spends ink on nothing. */
   .worksheet {
-    background: #fff;
+    /* `background-color`, never the `background` shorthand: the shorthand also
+       resets background-size/origin/repeat, and it was silently flattening the
+       squared ruling below to `auto` — one stray rule at the edge of the sheet
+       instead of a printed notebook page. */
+    background-color: #fff;
+    background-image: none;
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -318,6 +323,9 @@
     width: 100%;
   }
 
+  /* Darker ruling for paper. The geometry longhands are repeated rather than
+     inherited from the screen rule: `.worksheet` above is the same specificity,
+     so anything it resets has to be restated here or it wins. */
   .notebook-grid-bg {
     background-image:
       linear-gradient(
@@ -330,6 +338,10 @@
         transparent calc(100% - var(--notebook-grid-line-width)),
         var(--notebook-grid-line-color-print) calc(100% - var(--notebook-grid-line-width))
       );
+    background-size: var(--notebook-grid-size) var(--notebook-grid-size);
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
   }
 
   .worksheet-header {

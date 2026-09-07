@@ -426,9 +426,9 @@
 }
 
 /* Each card is a sheet lying on the cover: paper stock, a square-cut corner,
-   and the subject colour on its edge the way a school book is colour-coded by
-   subject. It shows the worksheet it prints, so the choice is made on the
-   thing itself rather than on a label. */
+   and the subject colour in the shadow it casts, the way a coloured page tints
+   what is under it. It shows the worksheet it prints, so the choice is made on
+   the thing itself rather than on a label. */
 .catalog-card {
   position: relative;
   display: flex;
@@ -448,18 +448,28 @@
   --focus-inner: var(--paper);
 }
 
-/* The subject band along the head of the sheet. */
-.catalog-card::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 5px;
-  background: var(--card-color, var(--cover));
+/* The subject colour, carried by the shadow the sheet casts rather than by a
+   band ruled across the top of it: the band sat between the card's edge and the
+   preview and read as chrome, and it was the loudest thing on a page whose
+   subject is nine drawn sheets. A second declaration so a browser without
+   `color-mix` keeps the neutral shadow above rather than losing depth entirely. */
+.catalog-card {
+  box-shadow:
+    0 0 0 1px var(--edge),
+    0 2px 4px rgba(26, 31, 36, 0.09),
+    0 10px 22px -10px color-mix(in srgb, var(--card-color, #1a1f24) 45%, transparent);
 }
 
 .catalog-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 0 0 1px var(--edge-strong), 0 6px 10px rgba(26, 31, 36, 0.10), 0 18px 30px -12px rgba(26, 31, 36, 0.22);
+}
+
+.catalog-card:hover {
+  box-shadow:
+    0 0 0 1px var(--edge-strong),
+    0 6px 10px rgba(26, 31, 36, 0.10),
+    0 18px 32px -12px color-mix(in srgb, var(--card-color, #1a1f24) 58%, transparent);
 }
 
 .catalog-card:active {
@@ -533,10 +543,6 @@
     gap: 10px;
     text-align: left;
     --focus-inner: var(--cover);
-  }
-
-  .catalog-grid--compact .catalog-card::before {
-    display: none;
   }
 
   .catalog-grid--compact .catalog-card:hover {
@@ -620,10 +626,6 @@
     gap: 8px;
     scroll-snap-align: start;
     --focus-inner: var(--cover);
-  }
-
-  .catalog-grid--compact .catalog-card::before {
-    display: none;
   }
 
   .catalog-grid--compact .catalog-card--active {
