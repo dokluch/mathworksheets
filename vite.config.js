@@ -11,7 +11,7 @@ import { injectRoute, homeRoute, findRoute } from './src/seo/render.js'
  */
 export function seoHtml() {
   return {
-    name: 'mathsheets-seo-html',
+    name: 'sam-seo-html',
     transformIndexHtml: {
       order: 'pre',
       handler(html, ctx) {

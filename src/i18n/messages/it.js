@@ -2,25 +2,20 @@
 export default {
   site: {
     tagline: 'Schede di matematica da stampare per le classi 1ª–3ª',
-    description: 'MathSheets: schede di matematica gratuite, stampabili e casuali per le classi 1ª–3ª della primaria. Tabelline, addizioni e sottrazioni, addizione in colonna, moltiplicazione in colonna, confronto, arrotondamento, sequenze numeriche e un esploratore di equazioni interattivo.',
+    description: 'Super Awesome Math: schede di matematica gratuite, stampabili e casuali per le classi 1ª–3ª della primaria. Tabelline, addizioni e sottrazioni, addizione in colonna, moltiplicazione in colonna, confronto, arrotondamento, sequenze numeriche e un esploratore di equazioni interattivo.',
     brandAlt: 'Schede di matematica',
   },
 
   seo: {
     homeTitle: '{brand} – {tagline}',
-    developersTitle: 'Risorse per sviluppatori · {brand}',
     worksheetTitle: 'Schede {label} · {brand}',
-    developersDescription: 'Risorse {brand} per sviluppatori: repository open source, catalogo JSON delle schede, negoziazione dei contenuti Markdown, llms.txt e sitemap.',
     worksheetDescription: 'Schede gratuite da stampare «{labelLower}» per le classi {grades}. {shortDesc}. Esercizi nuovi ogni volta, in una sola pagina.',
     gradeOne: 'Classe {grades}',
     gradeRange: 'Classi {grades}',
     ogAltHome: '{brand} – {tagline}',
     ogAltWorksheet: 'Anteprima della scheda {label} – {brand}',
-    ogAltDevelopers: 'Risorse {brand} per sviluppatori',
     worksheetHeading: 'Schede {label}',
     worksheetName: '{brand} {label}',
-    developersHeading: 'Risorse {brand} per sviluppatori',
-    developersCrumb: 'Risorse per sviluppatori',
     worksheetList: 'Schede {brand}',
     learningResourceWorksheet: 'Scheda di esercizi',
     learningResourceInteractive: 'Esercizio interattivo',
@@ -50,9 +45,11 @@ export default {
       formatInteractive: 'interattivo, a schermo',
       formatPrintable: 'stampabile, casuale a ogni caricamento',
       settings: 'Impostazioni',
+      examples: 'Esempi di esercizi',
+      faq: 'Domande frequenti',
       howToUseWorksheet: 'Come usare questa scheda',
       howToUseActivity: 'Come usare questa attività',
-      step1: 'Apri {url} (richiede JavaScript).',
+      step1: 'Apri {url}.',
       step2: 'Regola le impostazioni qui sopra; vengono salvate nel browser.',
       step3Printable: 'Premi Rigenera per un nuovo set casuale, poi Stampa.',
       step3Interactive: 'Scrivi la risposta e premi Verifica; premi Avanti per una nuova equazione.',
@@ -60,41 +57,13 @@ export default {
       partOf: 'Parte di {link}.',
       url: 'URL',
     },
-    developers: {
-      subtitle: 'Open source, leggibile dalle macchine e pensato per gli agenti.',
-      intro: '{brand} (noto anche come «{brandAlt}») è un’applicazione a pagina singola React 19 + Vite. Non c’è un’API server: le schede vengono generate lato client. Tutto ciò che segue è statico e memorizzabile in cache.',
-      resources: 'Risorse',
-      sourceLink: 'Codice sorgente su GitHub',
-      catalogDesc: 'catalogo leggibile dalle macchine di tutte le schede con slug, URL, classi, abilità e impostazioni',
-      llmsDesc: 'indice llmstxt.org e contenuto completo per i modelli linguistici',
-      indexMdDesc: 'questo sito in Markdown; ogni pagina HTML ha un gemello {code}',
-      negotiationHeading: 'Negoziazione dei contenuti Markdown',
-      negotiationText: 'Ogni URL di pagina risponde a {accept} con {contentType} e {vary}, secondo la convenzione acceptmarkdown.com. Le risposte HTML portano un’intestazione {link} che punta al gemello. I percorsi sconosciuti restituiscono HTTP 404 con un corpo Markdown che indica dove cercare.',
-      languagesHeading: 'Lingue',
-      languagesText: 'Le pagine in inglese si trovano alla radice del sito. Le stesse pagine sono disponibili in {languages} sotto un prefisso di due lettere (per esempio {example}); ogni pagina collega tutte le traduzioni con hreflang e le elenca nella sitemap. llms.txt e llms-full.txt sono solo in inglese.',
-      idsHeading: 'Id e URL delle schede',
-      addingHeading: 'Aggiungere una scheda',
-      adding1: 'Aggiungi una voce in {file} (id, slug, etichetta, descrizioni, classi, abilità, impostazioni) e le sue traduzioni in {messages}.',
-      adding2: 'Crea il componente in {dir} e registralo nelle mappe {components} e {icons} di {app}.',
-      adding3: 'Esegui {test} e {build}; le pagine statiche, i gemelli Markdown, la sitemap, llms.txt e il catalogo JSON vengono rigenerati dal catalogo.',
-    },
-    agentLinks: {
-      text: 'Ogni pagina è disponibile anche in Markdown: aggiungi {code} al percorso o invia {accept}. Vedi {llms}, il {catalog}, la {sitemap} e le {developers}. Il codice sorgente è su {github} con licenza {license}.',
-      llms: 'llms.txt',
-      catalog: 'catalogo delle schede (JSON)',
-      sitemap: 'sitemap',
-      developers: 'risorse per sviluppatori',
-      github: 'GitHub',
-    },
   },
 
   md: {
     agentIntro: 'Ogni pagina è disponibile anche in Markdown: aggiungi `.md` al percorso o richiedila con `Accept: text/markdown`.',
     llmsNote: 'indice per i modelli linguistici',
     catalogNote: 'catalogo delle schede leggibile dalle macchine',
-    developersLink: 'Risorse per sviluppatori',
     sitemapLink: 'Sitemap',
-    sourceLink: 'Codice sorgente su GitHub',
     homeIntro: '{brand} è un generatore gratuito e open source di schede di matematica da stampare per bambini di 6–9 anni (classi 1ª–3ª). Ogni scheda viene generata a caso ogni volta che viene aperta o rigenerata. Scegli una scheda, regola la difficoltà (intervallo di numeri, cifre, disposizione, colonne) e stampala dal browser; le impostazioni vengono ricordate per dispositivo. Le schede vengono generate lato client: nessun account, nessun caricamento, nessun costo.',
     worksheetItem: '{link}: {shortDesc} (classi {grades})',
     howItWorks: 'Come funziona',
@@ -103,10 +72,8 @@ export default {
     step3: 'Premi Rigenera per un nuovo set casuale, poi Stampa. Le schede stanno in una pagina A4 o Letter.',
     forDevelopers: 'Per sviluppatori e agenti IA',
     howToUse: 'Come si usa',
-    wsStep1: 'Apri {url} (richiede JavaScript).',
+    wsStep1: 'Apri {url}.',
     wsStep2: 'Regola le impostazioni; vengono salvate nel browser.',
-    developersIntro: '{brand} (noto anche come «{brandAlt}») è un’applicazione open source a pagina singola React 19 + Vite che genera schede di matematica da stampare lato client. Non c’è un’API server; ogni risorsa qui sotto è un file statico.',
-    devCatalogNote: 'catalogo leggibile dalle macchine di tutte le schede (slug, URL, URL Markdown, classi, abilità, impostazioni)',
     devLlmsNote: 'indice llmstxt.org',
     devLlmsFullNote: 'il Markdown di tutte le pagine in un unico file',
     devIndexNote: 'la pagina iniziale in Markdown',
@@ -131,7 +98,6 @@ export default {
     whereNext: 'Dove cercare',
     home: 'Pagina iniziale di {brand}',
     worksheet: 'Schede {label}',
-    developers: 'Risorse per sviluppatori',
     sitemap: 'Sitemap',
     llms: 'llms.txt',
     catalog: 'Catalogo delle schede (JSON)',
@@ -151,6 +117,7 @@ export default {
     regenerate: 'Rigenera',
     print: 'Stampa',
     printWorksheet: 'Stampa la scheda',
+    printFooterTagline: 'Risorse di matematica gratuite da stampare',
     columns: 'Colonne',
     limit: 'Limite',
     range: 'Intervallo',
@@ -192,6 +159,19 @@ export default {
     title: 'Moltiplicazione in colonna',
     meta: 'moltiplicazione in colonna · {preset}',
     problemAria: '{a} per {b}',
+  },
+
+  coldiv: {
+    preset: '{a} ÷ {b} cifre',
+    title: 'Divisione in colonna',
+    meta: 'divisione in colonna · {preset}',
+    notation: 'Notazione',
+    bracket: 'Parentesi',
+    corner: 'Angolo',
+    allowRemainder: 'Consenti i resti',
+    defaultNotation: 'corner',
+    problemAria: '{dividend} diviso {divisor}',
+    quotientAria: { one: 'quoziente: {n} casella vuota', other: 'quoziente: {n} caselle vuote' },
   },
 
   compare: {
@@ -251,6 +231,11 @@ export default {
         'Precompila la diagonale (1×1, 2×2, …)',
         'Percentuale di celle precompilate a caso',
       ],
+      faq: [
+        { q: 'A che età si imparano le tabelline?', a: 'Le tabelline si affrontano in seconda, verso i 7 anni, e alla fine della terza dovrebbero essere sapute a memoria. Comincia con un intervallo ristretto, da 1 a 5, e allargalo solo quando la risposta arriva senza contare.' },
+        { q: 'A cosa servono le caselle già compilate?', a: 'Precompilare la diagonale (1×1, 2×2, 3×3…) o una percentuale di caselle a caso trasforma una griglia vuota in un rompicapo. I risultati visibili offrono appigli, quindi una tabella riempita a metà è un passaggio più dolce di una vuota.' },
+        { q: 'In che ordine conviene impararle?', a: 'Di solito si parte dal 2, dal 5 e dal 10, i cui schemi si vedono a colpo d’occhio, poi 3, 4 e 6, e infine 7, 8 e 9. Poiché 3 × 4 e 4 × 3 danno lo stesso risultato, imparare una tabellina dimezza il lavoro su un’altra.' },
+      ],
     },
     addsub: {
       label: 'Addizione e sottrazione',
@@ -264,6 +249,11 @@ export default {
         'Colonne: 2, 3 o 4 (20–40 problemi)',
         'Modalità 67: una risposta nascosta di 67 per colonna',
       ],
+      faq: [
+        { q: 'Che cosa allena il formato con il numero mancante?', a: 'Scrivere l’operazione come a + □ = c oppure □ − b = c chiede di ragionare a ritroso invece di calcolare da sinistra a destra. È il primo passo verso l’algebra, ed è il motivo per cui lo spazio vuoto cambia posizione da un esercizio all’altro.' },
+        { q: 'Quale limite numerico scegliere?', a: 'Entro 10 ed entro 20 vanno bene per la prima, entro 100 per la seconda ed entro 1000 per la terza. Se il bambino conta sulle dita invece di ricordare, torna al limite precedente anziché aggiungere esercizi.' },
+        { q: 'Che cos’è la modalità 67?', a: 'Nasconde in ogni colonna esattamente un esercizio il cui risultato è 67, trasformando la scheda in una piccola caccia al tesoro. Così il bambino rilegge le proprie risposte, che è una forma di verifica.' },
+      ],
     },
     coladd: {
       label: 'Addizione in colonna',
@@ -275,6 +265,11 @@ export default {
         'Colonne: numero di colonne di problemi per pagina',
         'Preferisci i problemi che richiedono il riporto',
       ],
+      faq: [
+        { q: 'Per quale classe è l’addizione in colonna?', a: 'L’addizione in colonna con numeri a 2 cifre inizia di solito in seconda, quelle a 3 e 4 cifre arrivano in terza. La competenza su cui si appoggia è il valore posizionale: sapere che il 4 di 348 vale quattro decine.' },
+        { q: 'Che cos’è il riporto?', a: 'Quando una colonna supera 9, la parte delle decine passa alla colonna a sinistra. 8 + 6 fa 14: si scrive 4 e si riporta 1. L’opzione «preferire il riporto» fa sì che la maggior parte degli esercizi richieda questo passaggio.' },
+        { q: 'Perché stampare su quadretti?', a: 'Una cifra per quadretto tiene le unità sotto le unità e le decine sotto le decine. Gran parte degli errori iniziali nasce da un allineamento sbagliato più che dal calcolo, e la quadrettatura elimina questa fonte di errore.' },
+      ],
     },
     colmul: {
       label: 'Moltiplicazione in colonna',
@@ -284,6 +279,28 @@ export default {
       settings: [
         'Preimpostazione: 2 × 2, 3 × 2 o 4 × 2 cifre',
         'Colonne: numero di colonne di problemi per pagina',
+      ],
+      faq: [
+        { q: 'Quando un bambino è pronto per la moltiplicazione in colonna?', a: 'In genere in terza, e solo quando le tabelline si ricordano invece di ricostruirle. Una moltiplicazione in colonna è una serie di piccole moltiplicazioni più un’addizione: se le tabelline vacillano, ogni passaggio diventa più lento e difficile da controllare.' },
+        { q: 'Che cosa sono i prodotti parziali?', a: 'Moltiplicare 34 per 26 significa moltiplicare 34 per 6 e poi per 20, e sommare i due risultati. Ciascuno di questi risultati è un prodotto parziale e occupa una riga tutta sua sulla scheda.' },
+        { q: 'Perché la seconda riga è spostata a sinistra?', a: 'La seconda riga moltiplica per decine e non per unità, quindi il suo risultato è dieci volte più grande e comincia una colonna più a sinistra. Lo spostamento rende visibile il valore posizionale: non è una regola di impaginazione da memorizzare.' },
+      ],
+    },
+    coldiv: {
+      label: 'Divisione in colonna',
+      shortDesc: 'Esercizi di divisione in colonna',
+      longDesc: 'Divisione in colonna di numeri di 3 e 4 cifre per un divisore di 1 o 2 cifre, stampata su una griglia a quadretti con la struttura già tracciata e quadretti vuoti per svolgere i calcoli. La disposizione può seguire l’uso inglese (divisore a sinistra della parentesi e quoziente sopra la linea) o quello continentale (divisore in alto a destra e quoziente sotto), e le divisioni possono essere esatte o lasciare un resto.',
+      skills: ['divisione in colonna', 'resti', 'valore posizionale', 'stima'],
+      settings: [
+        'Preimpostazione: 3 ÷ 1, 4 ÷ 1 o 4 ÷ 2 cifre',
+        'Notazione: parentesi o angolo',
+        'Colonne: numero di colonne di problemi per pagina',
+        'Consentire i resti invece della divisione esatta',
+      ],
+      faq: [
+        { q: 'Quando si impara la divisione in colonna?', a: 'La divisione in colonna arriva di solito a fine terza o in quarta, quando moltiplicazione e sottrazione sono solide. Ogni passaggio richiede di dividere, moltiplicare, sottrarre e abbassare la cifra successiva, perciò ogni fragilità emerge subito.' },
+        { q: 'Qual è la differenza tra le due notazioni?', a: 'La forma con la parentesi mette il divisore a sinistra del dividendo e il quoziente sopra la linea; la forma ad angolo mette il divisore in alto a destra e il quoziente sotto. È lo stesso metodo scritto in modo diverso, e quale forma incontri un bambino dipende dal paese in cui studia.' },
+        { q: 'Conviene permettere i resti?', a: 'Comincia con divisioni esatte, così l’unica novità è il metodo. Attiva i resti quando i quattro passaggi sono automatici: un resto obbliga a controllare che sia davvero minore del divisore.' },
       ],
     },
     compare: {
@@ -295,6 +312,11 @@ export default {
         'Limite: entro 10, 20, 100 o 1000',
         'Colonne: numero di colonne di problemi per pagina',
       ],
+      faq: [
+        { q: 'Come si ricordano > e <?', a: 'Il lato aperto guarda sempre verso il numero più grande: il simbolo si allarga verso il «di più». Leggere la frase intera ad alta voce — «quarantatré è maggiore di trentaquattro» — fissa il senso più in fretta che ripetere il simbolo da solo.' },
+        { q: 'Perché le coppie sono volutamente insidiose?', a: 'Coppie come 43 e 34, oppure 208 e 280, usano le stesse cifre in ordine diverso, e circa una coppia su sette è di numeri uguali. Chi guarda solo la prima cifra sbaglia, ed è proprio l’abitudine che la scheda vuole correggere.' },
+        { q: 'Quale limite per quale classe?', a: 'Entro 10 e 20 per la prima, entro 100 per la seconda ed entro 1000 per la terza. Confrontare numeri più lunghi è soprattutto un esercizio di valore posizionale: alza il limite solo quando le coppie corte sono rapide.' },
+      ],
     },
     rounding: {
       label: 'Arrotondamento',
@@ -305,6 +327,11 @@ export default {
         'Posizione: decina, centinaio o migliaio più vicini',
         'Colonne: numero di colonne di problemi per pagina',
       ],
+      faq: [
+        { q: 'Qual è la regola dell’arrotondamento?', a: 'Si guarda la cifra che sta una posizione a destra di quella a cui si arrotonda. Se è 5 o più si arrotonda per eccesso, se è 4 o meno per difetto. Arrotondare 48 alla decina dà 50, perché l’8 è almeno 5.' },
+        { q: 'Perché compaiono tanti numeri che finiscono per 5?', a: 'Il caso del 5 è l’unico che si risolve per convenzione e non per evidenza, ed è lì che si concentrano gli errori. Il generatore li include di proposito, insieme a un misto di casi per eccesso e per difetto.' },
+        { q: 'Quando si impara ad arrotondare?', a: 'L’arrotondamento alla decina compare di solito in seconda, centinaia e migliaia seguono in terza. È la base della stima, ed è così che un bambino impara ad accorgersi che un risultato è troppo grande.' },
+      ],
     },
     patterns: {
       label: 'Sequenze',
@@ -313,6 +340,11 @@ export default {
       skills: ['sequenze numeriche', 'conteggio a salti', 'successioni', 'pensiero algebrico'],
       settings: [
         'Livello: facile, medio o difficile',
+      ],
+      faq: [
+        { q: 'Che cosa insegnano le sequenze numeriche?', a: 'Trovare la regola dietro 2, 4, 6, □, 10 è pensiero algebrico precoce: il bambino cerca una relazione invece di eseguire un’operazione data. Inoltre rinforza il contare a salti, che sostiene le tabelline.' },
+        { q: 'Che differenza c’è tra i tre livelli?', a: 'Il livello facile usa un passo costante, per esempio aggiungere 3 ogni volta. Il medio moltiplica o alterna due passi. Il difficile combina più regole, quindi occorre provare un’ipotesi su vari termini prima di fidarsene.' },
+        { q: 'Mio figlio si è bloccato su una sequenza. Che faccio?', a: 'Chiedigli che cosa cambia da un numero al successivo e scrivete sotto le differenze. Quando le differenze sono visibili la regola salta fuori da sola, e l’abitudine di annotarle torna utile con le sequenze più difficili.' },
       ],
     },
     eqexplore: {
@@ -323,6 +355,11 @@ export default {
       settings: [
         'Operazione: addizione, sottrazione o entrambe',
         'Intervallo: dimensione dei numeri usati',
+      ],
+      faq: [
+        { q: 'Si può stampare l’esploratore di equazioni?', a: 'No. È l’unica attività del sito pensata per lo schermo: i termini si trascinano oltre il segno di uguale, la retta numerica si anima e la risposta viene controllata mentre la si scrive. Tutte le altre schede si stampano su una pagina.' },
+        { q: 'Che cosa significa spostare un termine oltre l’uguale?', a: 'Un’equazione resta vera finché i due membri cambiano allo stesso modo. Spostare un termine ne inverte il segno: x + 7 = 12 diventa x = 12 − 7. Vedere il segno cambiare nel momento in cui accade rende la regola concreta invece che memorizzata.' },
+        { q: 'A che età è adatto?', a: 'Alla seconda e alla terza, all’incirca tra i 7 e i 9 anni, quando addizione e sottrazione entro 100 sono agevoli. Di solito è la prima volta che un bambino vede una lettera al posto di un numero sconosciuto.' },
       ],
     },
   },
@@ -398,7 +435,7 @@ export default {
         {
           heading: 'Open source',
           paragraphs: [
-            'Il codice sorgente è su {github} con licenza {license}. Puoi usare, condividere e adattare le schede e il codice per scopi non commerciali citando la fonte. Segnalazioni di errori e idee per nuove schede sono benvenute.',
+            'Le schede e il sito sono pubblicati con licenza {license}. Puoi usarli, condividerli e adattarli per scopi non commerciali citando la fonte. Segnalazioni di errori e idee per nuove schede sono benvenute.',
           ],
         },
         {

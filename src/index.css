@@ -64,11 +64,32 @@ body {
 
 @page {
   size: letter landscape;
-  margin: 0.3in;
+  /* Wider bottom margin reserves the band the print footer sits in. */
+  margin: 0.3in 0.3in 0.5in;
 }
+
+/* Hidden on screen; revealed only when printing (mirror of .no-print). */
+.print-only { display: none; }
 
 @media print {
   body { background: white; }
   .no-print { display: none !important; }
   #root { min-height: auto; }
+
+  /* Fixed elements repeat on every printed page, so the brand stamp lands on
+     each sheet of a multi-page worksheet. `bottom` must be 0: a negative offset
+     pushes it into the page margin and Chromium then prints it only once. The
+     widened @page bottom margin is what keeps it clear of the problems. */
+  .print-footer {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 9pt;
+    line-height: 1.2;
+    color: #64748b;
+    background: white;
+  }
 }

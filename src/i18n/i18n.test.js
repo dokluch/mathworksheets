@@ -120,6 +120,17 @@ describe('message files', () => {
           expect(w.longDesc.length).toBeGreaterThan(locale === 'zh' ? 40 : 80)
           expect(w.skills.length, `${locale}:${ws.id}.skills`).toBe(ws.skills.length)
           expect(w.settings.length, `${locale}:${ws.id}.settings`).toBe(ws.settings.length)
+          // FAQ answers are prose and must be translated, unlike examples below.
+          expect(w.faq?.length, `${locale}:${ws.id}.faq`).toBe(ws.faq.length)
+          w.faq.forEach((item, i) => {
+            expect(typeof item.q, `${locale}:${ws.id}.faq[${i}].q`).toBe('string')
+            expect(item.a.length, `${locale}:${ws.id}.faq[${i}].a`).toBeGreaterThan(locale === 'zh' ? 40 : 80)
+            expect(item.q, `${locale}:${ws.id}.faq[${i}] untranslated`).not.toBe(ws.faq[i].q)
+          })
+          // Example problems are mathematical notation and are shared verbatim
+          // across locales; translating them would be a bug, not an omission.
+          expect(w.examples, `${locale}:${ws.id}.examples`).toBeUndefined()
+          expect(localizeWorksheet(ws, locale).examples).toEqual(ws.examples)
         }
         const labels = localizedWorksheets(locale).map(w => w.label)
         expect(new Set(labels).size).toBe(labels.length)

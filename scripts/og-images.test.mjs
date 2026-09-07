@@ -9,7 +9,7 @@ import { OG_IMAGE_PATH } from '../src/seo/site.js'
 describe('scripts/og-images.mjs', () => {
   it('has one target per route (static pages share the home card), mapped to the path renderHead links to', () => {
     const targets = ogTargets()
-    expect(targets.length).toBe(WORKSHEETS.length + 2)
+    expect(targets.length).toBe(WORKSHEETS.length + 1)
     for (const route of routes().filter(r => r.kind === 'page')) expect(ogImagePath(route)).toBe(OG_IMAGE_PATH)
     // Every locale shares the English cards.
     for (const route of routes()) expect(ogImagePath(route)).toBe(ogImagePath(routes('en').find(r => r.kind === route.kind && (r.worksheet?.id ?? r.page?.id) === (route.worksheet?.id ?? route.page?.id))))
@@ -28,8 +28,7 @@ describe('scripts/og-images.mjs', () => {
 
   it('chooses a preview element for every page kind', () => {
     for (const t of ogTargets()) {
-      if (t.route.kind === 'developers') continue
-      expect(previewSelector(t.route)).toMatch(/\.(print-area|eq-explorer|catalog-grid|mult-table)/)
+        expect(previewSelector(t.route)).toMatch(/\.(print-area|eq-explorer|catalog-grid|mult-table)/)
     }
   })
 
@@ -40,8 +39,6 @@ describe('scripts/og-images.mjs', () => {
     expect(html).toContain('a &lt;b&gt; &amp; &quot;c&quot;')
     expect(html).toContain('<img class="shot" src="data:image/png;base64,AAAA"')
     expect(html).not.toContain('<pre class="lines">')
-    const dev = renderCard(ogTargets('developers')[0], null)
-    expect(dev).toContain('<pre class="lines">GET /llms.txt')
   })
 
   it('the PNG icons rendered from favicon.svg are committed (run `npm run og`)', async () => {

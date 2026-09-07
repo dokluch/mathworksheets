@@ -5,6 +5,7 @@ import { join } from 'node:path'
 import { prerender } from './prerender.mjs'
 import { WORKSHEETS } from '../src/worksheets.js'
 import { routes, worksheetRoute, pageTitle } from '../src/seo/render.js'
+import { BRAND } from '../src/seo/site.js'
 import { LOCALES } from '../src/i18n/index.js'
 
 const TEMPLATE = `<!doctype html><html><head><!-- seo:head --><!-- /seo:head --></head>
@@ -21,7 +22,7 @@ describe('scripts/prerender.mjs', () => {
     expect(logs[0]).toContain(`wrote ${written.length} files`)
 
     const root = await readdir(dist)
-    for (const f of ['index.html', 'index.md', 'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', '404.html', 'developers.html', 'developers.md', 'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md']) {
+    for (const f of ['index.html', 'index.md', 'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', '404.html', 'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md']) {
       expect(root).toContain(f)
     }
     const ws = await readdir(join(dist, 'worksheets'))
@@ -31,18 +32,19 @@ describe('scripts/prerender.mjs', () => {
     }
 
     const rounding = await readFile(join(dist, 'worksheets', 'rounding.html'), 'utf8')
-    expect(rounding).toContain('<title>Rounding Worksheets · MathSheets</title>')
+    expect(rounding).toContain(`<title>Rounding Worksheets · ${BRAND}</title>`)
     expect(rounding).toContain('/assets/app.js')
     const llms = await readFile(join(dist, 'llms.txt'), 'utf8')
-    expect(llms.startsWith('# MathSheets\n\n> ')).toBe(true)
+    expect(llms.startsWith(`# ${BRAND}\n\n> `)).toBe(true)
     const json = JSON.parse(await readFile(join(dist, 'worksheets.json'), 'utf8'))
     expect(json.worksheets.length).toBe(WORKSHEETS.length)
     const privacy = await readFile(join(dist, 'privacy.html'), 'utf8')
-    expect(privacy).toContain('<title>Privacy Policy · MathSheets</title>')
+    expect(privacy).toContain(`<title>Privacy Policy · ${BRAND}</title>`)
     expect(privacy).toContain('<footer class="site-footer no-print">')
 
     // Every locale: <locale>.html/.md at the root, the rest under <locale>/
-    expect(written.length).toBe(2 * LOCALES.length * (WORKSHEETS.length + 2 + 3) + 6)
+    // Per locale: html + md for home, every worksheet and the 3 static pages, plus 6 shared files.
+    expect(written.length).toBe(2 * LOCALES.length * (WORKSHEETS.length + 1 + 3) + 6)
     for (const l of LOCALES.filter(x => x !== 'en')) {
       expect(root).toContain(`${l}.html`)
       expect(root).toContain(`${l}.md`)
@@ -52,7 +54,7 @@ describe('scripts/prerender.mjs', () => {
         expect(lws).toContain(`${w.slug}.md`)
       }
       const ldir = await readdir(join(dist, l))
-      for (const f of ['developers.html', 'developers.md', 'about.html', 'privacy.md', 'terms.html']) expect(ldir).toContain(f)
+      for (const f of ['about.html', 'about.md', 'privacy.md', 'terms.html']) expect(ldir).toContain(f)
     }
     const roundingWs = WORKSHEETS.find(w => w.id === 'rounding')
     const fr = await readFile(join(dist, 'fr', 'worksheets', 'rounding.html'), 'utf8')

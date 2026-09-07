@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
 
+// Legacy key, deliberately kept across the rename to Super Awesome Math: this blob
+// holds both worksheet settings and app.locale, and an explicit language choice is
+// stored only here — renaming it would silently reset returning users to English.
 const STORAGE_KEY = 'mathsheets'
 
 function loadState() {

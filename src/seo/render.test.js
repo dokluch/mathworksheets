@@ -1,14 +1,15 @@
 import { describe, it, expect } from 'vitest'
 import { WORKSHEETS } from '../worksheets.js'
 import { PAGES } from '../pages.js'
-import { SITE_URL, BRAND, OPERATOR, CONTACT_EMAIL, OG_IMAGE_PATH } from './site.js'
+import { SITE_URL, BRAND, OPERATOR, CONTACT_EMAIL, OG_IMAGE_PATH, GITHUB_URL } from './site.js'
 import { LOCALES, LOCALE_META, localizeWorksheet, localizePage } from '../i18n/index.js'
 import {
-  routes, findRoute, normalizePath, homeRoute, worksheetRoute, developersRoute, pageRoute, sameRouteIn,
-  renderHead, renderStaticContent, staticBody, footerHtml, siteFooterLinks, injectRoute, structuredData, pageTitle,
+  routes, findRoute, normalizePath, homeRoute, worksheetRoute, pageRoute, sameRouteIn,
+  renderHead, renderStaticContent, footerHtml, siteFooterLinks, injectRoute, structuredData, pageTitle,
   ogImagePath, inlineHtml, inlineMarkdown,
   renderMarkdown, renderLlmsTxt, renderLlmsFullTxt, renderSitemap, renderRobots,
   renderCatalogJson, renderNotFoundMarkdown, renderNotFoundHtml, buildSiteFiles,
+  worksheetDetailsHtml, agesForGrades, lastContentUpdate, escapeHtml,
 } from './render.js'
 
 const TEMPLATE = `<!doctype html><html><head><meta charset="UTF-8" />
@@ -51,20 +52,58 @@ describe('catalog invariants', () => {
       expect(ws.skills.length).toBeGreaterThan(0)
       expect(ws.settings.length).toBeGreaterThan(0)
       expect(ws.color).toMatch(/^#[0-9a-f]{6}$/)
+      expect(ws.examples.length).toBeGreaterThanOrEqual(3)
+      expect(ws.faq.length).toBeGreaterThanOrEqual(3)
+      for (const { q, a } of ws.faq) {
+        expect(q.trim().endsWith('?')).toBe(true)
+        expect(a.length).toBeGreaterThan(80)
+      }
+      expect(ws.updated).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+      expect(ws.updated <= new Date().toISOString().slice(0, 10)).toBe(true)
     }
     const slugs = new Set(WORKSHEETS.map(w => w.slug))
     expect(slugs.size).toBe(WORKSHEETS.length)
   })
+
+  it('examples are mathematical notation only, so they need no translation', () => {
+    // The moment someone writes "Add 348 and 275" here it becomes an English
+    // string rendered on all seven locales' pages. This is the guard.
+    for (const ws of WORKSHEETS) {
+      for (const example of ws.examples) {
+        expect(example).toMatch(/^[0-9x\s+\-−×÷=<>?□→.,()]+$/)
+      }
+    }
+  })
+
+  it('prerequisites and next steps reference real, other worksheets', () => {
+    for (const ws of WORKSHEETS) {
+      for (const id of [...ws.prerequisites, ...ws.nextSteps]) {
+        expect(id).not.toBe(ws.id)
+        expect(WORKSHEETS.some(w => w.id === id)).toBe(true)
+      }
+    }
+  })
+
+  it('lastContentUpdate is the newest date across worksheets and pages', () => {
+    const all = [...WORKSHEETS.map(w => w.updated), ...PAGES.map(p => p.updated)]
+    expect(lastContentUpdate()).toBe(all.sort().pop())
+    expect(lastContentUpdate()).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+  })
+
+  it('agesForGrades derives an age band from every grade value', () => {
+    expect(agesForGrades('2')).toBe('7-8')
+    expect(agesForGrades('1–3')).toBe('6-9')
+    for (const ws of WORKSHEETS) expect(agesForGrades(ws.grades)).toMatch(/^\d-\d$/)
+  })
 })
 
 describe('routes', () => {
-  it('lists home, every worksheet, developers and every static page', () => {
+  it('lists home, every worksheet and every static page', () => {
     const r = routes('en')
-    expect(r.length).toBe(WORKSHEETS.length + 2 + PAGES.length)
+    expect(r.length).toBe(WORKSHEETS.length + 1 + PAGES.length)
     expect(routes().length).toBe(LOCALES.length * r.length)
     expect(routes().slice(0, r.length).map(x => x.path)).toEqual(r.map(x => x.path))
     expect(r[0].path).toBe('/')
-    expect(r.map(x => x.path)).toContain('/developers')
     expect(r.slice(-PAGES.length).map(x => x.path)).toEqual(['/about', '/privacy', '/terms'])
     expect(r.map(x => x.md)).toContain('/worksheets/multiplication.md')
     expect(r.map(x => x.md)).toContain('/privacy.md')
@@ -80,13 +119,12 @@ describe('routes', () => {
       expect(p.sections.length).toBeGreaterThan(2)
       for (const s of p.sections) expect((s.paragraphs?.length || 0) + (s.items?.length || 0)).toBeGreaterThan(0)
     }
-    expect(PAGES.map(p => p.slug)).not.toContain('developers')
   })
 
   it('findRoute resolves known paths and rejects unknown ones', () => {
     expect(findRoute('/').kind).toBe('home')
     expect(findRoute('/index.html').kind).toBe('home')
-    expect(findRoute('/developers/').kind).toBe('developers')
+    expect(findRoute('/developers')).toBeNull()
     expect(findRoute('/about').kind).toBe('page')
     expect(findRoute('/privacy/').page.slug).toBe('privacy')
     expect(findRoute('/terms').path).toBe('/terms')
@@ -152,7 +190,7 @@ describe('renderHead', () => {
   })
 
   it('escapes HTML in attributes and never breaks out of the JSON-LD script', () => {
-    const head = renderHead(developersRoute())
+    const head = renderHead(pageRoute(PAGES[0]))
     expect(head).not.toMatch(/content="[^"]*<[^"]*"/)
     expect(head.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]).not.toContain('</')
   })
@@ -167,8 +205,10 @@ describe('renderStaticContent', () => {
     expect(html).toMatch(new RegExp(`<h1 class="catalog-title"><svg [^>]*aria-hidden="true"[^>]*>[\\s\\S]*?</svg>${BRAND} – Printable Math Worksheets for Grades 1–3</h1>`))
     assertSequential(headingLevels(html))
     for (const ws of WORKSHEETS) expect(html).toContain(`href="/worksheets/${ws.slug}"`)
-    expect(html).toContain('href="/llms.txt"')
-    expect(html).toContain('href="/developers"')
+    // Reader-facing pages no longer carry the agent-links paragraph; agents
+    // find llms.txt at its root path and the .md twin via the Link header.
+    expect(html).not.toContain('href="/llms.txt"')
+    expect(html).not.toContain('href="/developers"')
     expect(html.startsWith('<div id="static-content">')).toBe(true)
   })
 
@@ -184,13 +224,72 @@ describe('renderStaticContent', () => {
     }
   })
 
-  it('developers page names the product and lists resources', () => {
-    const html = renderStaticContent(developersRoute())
-    expect(html).toContain(`${BRAND} Developer Resources</h1>`)
-    expect(html).toContain('href="/worksheets.json"')
-    expect(html).toContain('github.com/dokluch/mathworksheets')
-    assertSequential(headingLevels(html))
-    expect(html).toContain(`<main class="catalog catalog--full static-page">\n      ${staticBody(developersRoute())}`)
+  it('every worksheet page contains worksheetDetailsHtml verbatim', () => {
+    // components/WorksheetDetails.jsx renders this exact string after hydration.
+    // If the prerendered page and the shared fragment ever diverge, the React
+    // view silently drops crawlable copy — which is the bug this guards.
+    for (const locale of LOCALES) {
+      for (const ws of WORKSHEETS) {
+        const route = worksheetRoute(ws, locale)
+        expect(renderStaticContent(route)).toContain(worksheetDetailsHtml(route))
+      }
+    }
+  })
+
+  it('worksheetDetailsHtml carries the prose and sibling links but no heading', () => {
+    const ws = WORKSHEETS[0]
+    const details = worksheetDetailsHtml(worksheetRoute(ws))
+    expect(details).not.toContain('<h1')
+    expect(textOf(details)).toContain(ws.longDesc)
+    for (const s of ws.settings) expect(textOf(details)).toContain(s)
+    for (const other of WORKSHEETS.filter(w => w !== ws)) {
+      expect(details).toContain(`href="/worksheets/${other.slug}"`)
+    }
+    expect(details).not.toContain('href="/llms.txt"')
+  })
+
+  it('example problems reach the HTML and the Markdown twin in every locale', () => {
+    for (const locale of LOCALES) {
+      for (const ws of WORKSHEETS) {
+        const route = worksheetRoute(ws, locale)
+        const html = renderStaticContent(route)
+        const md = renderMarkdown(route)
+        for (const example of ws.examples) {
+          expect(textOf(html)).toContain(example)
+          expect(md).toContain(example)
+        }
+      }
+    }
+  })
+
+  it('every worksheet page carries its FAQ in HTML, Markdown and JSON-LD', () => {
+    for (const locale of LOCALES) {
+      for (const ws of WORKSHEETS) {
+        const route = worksheetRoute(ws, locale)
+        const localized = localizeWorksheet(ws, locale)
+        // Compared escaped: the comparison FAQ legitimately contains > and <.
+        const html = renderStaticContent(route)
+        const md = renderMarkdown(route)
+        const faqNode = structuredData(route)['@graph'].find(n => n['@type'] === 'FAQPage')
+        expect(faqNode.mainEntity.length).toBe(localized.faq.length)
+        localized.faq.forEach((item, i) => {
+          expect(html).toContain(escapeHtml(item.q))
+          expect(html).toContain(escapeHtml(item.a))
+          expect(md).toContain(item.q)
+          expect(faqNode.mainEntity[i].name).toBe(item.q)
+          expect(faqNode.mainEntity[i].acceptedAnswer.text).toBe(item.a)
+        })
+      }
+    }
+  })
+
+  it('worksheetDetailsHtml escapes worksheet copy', () => {
+    const hostile = { ...WORKSHEETS[0], longDesc: '<script>x</script> a "b"', settings: ['<img onerror=1>'] }
+    const details = worksheetDetailsHtml({ ...worksheetRoute(WORKSHEETS[0]), worksheet: hostile })
+    expect(details).not.toContain('<script>')
+    expect(details).not.toContain('<img onerror')
+    expect(details).toContain('&lt;script&gt;x&lt;/script&gt;')
+    expect(details).toContain('&lt;img onerror=1&gt;')
   })
 
   it('each static page has one H1, sequential headings, a breadcrumb, its sections and the operator', () => {
@@ -221,19 +320,29 @@ describe('renderStaticContent', () => {
     }
   })
 
-  it('every kind of page carries the site footer with links to the static pages and GitHub', () => {
+  it('every kind of page carries the site footer with links to the static pages', () => {
     for (const route of routes('en')) {
       const html = renderStaticContent(route)
       expect(html.startsWith('<div id="static-content">')).toBe(true)
       expect(html).toContain('<footer class="site-footer no-print">')
       for (const p of PAGES) expect(html).toContain(`href="/${p.slug}"`)
-      expect(html).toContain('href="https://github.com/dokluch/mathworksheets"')
       expect(html).toContain(OPERATOR)
       expect(html).toContain('creativecommons.org/licenses/by-nc/4.0/')
     }
-    expect(siteFooterLinks().map(l => l.label)).toEqual(['About', 'Privacy', 'Terms', 'GitHub'])
+    expect(siteFooterLinks().map(l => l.label)).toEqual(['About', 'Privacy', 'Terms'])
     expect(footerHtml({ year: 2030 })).toContain('© 2030 ')
     expect(headingLevels(footerHtml())).toEqual([])
+  })
+
+  it('the home page and the About page do not link GitHub', () => {
+    // The repository is going private; only /developers still names it.
+    for (const locale of LOCALES) {
+      const about = PAGES.find(p => p.id === 'about')
+      for (const route of [homeRoute(locale), pageRoute(about, locale), worksheetRoute(WORKSHEETS[0], locale)]) {
+        expect(renderStaticContent(route)).not.toContain(GITHUB_URL)
+        expect(renderMarkdown(route)).not.toContain(GITHUB_URL)
+      }
+    }
   })
 
   it('inline helpers escape HTML and turn [label](url) into links', () => {
@@ -328,6 +437,35 @@ describe('llms.txt (llmstxt.org format)', () => {
     expect(txt).toContain(`${SITE_URL}/worksheets.json`)
   })
 
+  it('carries a generated grade and skill index a model can answer from', () => {
+    const preamble = txt.split(/^## /m)[0]
+    expect(preamble).toContain('Choosing a worksheet — by grade:')
+    expect(preamble).toContain('Choosing a worksheet — by skill:')
+    for (const grade of [1, 2, 3]) expect(preamble).toContain(`- Grade ${grade} (ages `)
+    // The query this exists to answer: "2nd grader learning carrying".
+    expect(preamble).toContain('carrying / regrouping')
+    for (const ws of WORKSHEETS) expect(preamble).toContain(ws.label)
+  })
+
+  it('states how AI answers should cite and reuse the site', () => {
+    const preamble = txt.split(/^## /m)[0]
+    expect(preamble).toContain('CC BY-NC 4.0')
+    expect(preamble).toContain('non-commercial use only')
+    expect(preamble).toContain('AI crawling and AI answers are explicitly permitted')
+    expect(preamble).toMatch(/Last updated: \d{4}-\d{2}-\d{2}/)
+  })
+
+  it('each worksheet note carries the grades, skills and an example', () => {
+    const section = txt.split(/^## Worksheets/m)[1].split(/^## /m)[0]
+    for (const ws of WORKSHEETS) {
+      const line = section.split('\n').find(l => l.includes(`](${SITE_URL}/worksheets/${ws.slug}.md)`))
+      expect(line).toBeTruthy()
+      expect(line).toContain(`(ages ${agesForGrades(ws.grades)})`)
+      expect(line).toContain(`teaches ${ws.skills.join(', ')}`)
+      expect(line).toContain(`example: ${ws.examples[0]}`)
+    }
+  })
+
   it('files the static pages under Optional', () => {
     const optional = txt.split(/^## Optional/m)[1]
     for (const p of PAGES) expect(optional).toContain(`- [${p.title}](${SITE_URL}/${p.slug}.md): `)
@@ -335,6 +473,19 @@ describe('llms.txt (llmstxt.org format)', () => {
 })
 
 describe('llms-full.txt', () => {
+  it('opens with a headingless preamble naming the site, licence and scope', () => {
+    const full = renderLlmsFullTxt()
+    const preamble = full.split('\n\n---\n\n')[0]
+    expect(preamble.startsWith(`${BRAND} — full site content`)).toBe(true)
+    // A `# ` line here would break the one-H1-per-route invariant below.
+    expect(preamble).not.toMatch(/^# /m)
+    expect(preamble).toContain(`${SITE_URL}/`)
+    expect(preamble).toContain('CC BY-NC 4.0')
+    expect(preamble).toContain('Choosing a worksheet — by grade:')
+    expect(preamble).toContain('English only')
+    expect(preamble).toContain(`${SITE_URL}/worksheets.json`)
+  })
+
   it('contains every page in order, separated by horizontal rules', () => {
     const full = renderLlmsFullTxt()
     const h1s = full.match(/^# .+$/gm)
@@ -414,7 +565,7 @@ describe('i18n routes and surfaces', () => {
   it('builds locale-prefixed paths and files, English at the root', () => {
     expect(homeRoute('fr')).toMatchObject({ kind: 'home', locale: 'fr', path: '/fr', md: '/fr.md', html: 'fr.html', mdFile: 'fr.md' })
     expect(worksheetRoute(ws, 'de')).toMatchObject({ locale: 'de', path: '/de/worksheets/rounding', md: '/de/worksheets/rounding.md', html: 'de/worksheets/rounding.html', mdFile: 'de/worksheets/rounding.md' })
-    expect(developersRoute('zh').path).toBe('/zh/developers')
+    expect(pageRoute(PAGES[0], 'zh').path).toBe('/zh/about')
     expect(pageRoute(PAGES[1], 'it')).toMatchObject({ kind: 'page', locale: 'it', path: '/it/privacy', html: 'it/privacy.html' })
     expect(worksheetRoute(ws, 'fr').worksheet).toEqual(localizeWorksheet(ws, 'fr'))
     expect(worksheetRoute(ws, 'fr').worksheet.slug).toBe(ws.slug)
@@ -431,8 +582,8 @@ describe('i18n routes and surfaces', () => {
     expect(findRoute('/fr/index.html').path).toBe('/fr')
     expect(findRoute('/fr/worksheets/rounding/').worksheet.id).toBe('rounding')
     expect(findRoute('/en')).toBeNull()
-    expect(findRoute('/en/developers')).toBeNull()
-    expect(findRoute('/xx/developers')).toBeNull()
+    expect(findRoute('/en/about')).toBeNull()
+    expect(findRoute('/xx/about')).toBeNull()
     expect(findRoute('/fr/worksheets/nope')).toBeNull()
     expect(findRoute('/fr/nope')).toBeNull()
     expect(sameRouteIn(findRoute('/fr/privacy'), 'en').path).toBe('/privacy')
@@ -441,7 +592,7 @@ describe('i18n routes and surfaces', () => {
 
   it('head carries hreflang for every locale plus x-default, og:locale(:alternate), inLanguage and a shared og:image', () => {
     for (const locale of LOCALES) {
-      for (const route of [homeRoute(locale), worksheetRoute(ws, locale), developersRoute(locale), pageRoute(PAGES[0], locale)]) {
+      for (const route of [homeRoute(locale), worksheetRoute(ws, locale), pageRoute(PAGES[0], locale)]) {
         const head = renderHead(route)
         const hreflangs = [...head.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)" \/>/g)].map(m => [m[1], m[2]])
         expect(hreflangs.length).toBe(LOCALES.length + 1)
@@ -490,8 +641,8 @@ describe('i18n routes and surfaces', () => {
       }
       const home = renderStaticContent(homeRoute(locale))
       for (const w of WORKSHEETS) expect(home).toContain(`href="/${locale}/worksheets/${w.slug}"`)
-      expect(home).toContain('href="/llms.txt"')
-      expect(home).toContain(`href="/${locale}/developers"`)
+      expect(home).not.toContain('href="/llms.txt"')
+      expect(home).toContain(`href="/${locale}/about"`)
       expect(home).not.toContain(homeRoute().path === '/' ? 'href="/worksheets/' : 'x')
       const page = renderStaticContent(pageRoute(PAGES[0], locale))
       expect(page).toContain(`href="/${locale}/privacy"`)
@@ -530,7 +681,7 @@ describe('i18n routes and surfaces', () => {
     const urls = xml.split('<url>').slice(1)
     expect(urls.length).toBe(routes().length)
     for (const u of urls) expect((u.match(/<xhtml:link /g) || []).length).toBe(LOCALES.length + 1)
-    expect(xml).toContain(`<loc>${SITE_URL}/zh/developers</loc>`)
+    expect(xml).toContain(`<loc>${SITE_URL}/zh/about</loc>`)
     expect(xml).toContain(`<xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}/worksheets/rounding" />`)
     const json = JSON.parse(renderCatalogJson({ now: new Date('2026-09-04T12:00:00Z') }))
     expect(json.locales.map(l => l.code)).toEqual(LOCALES)
@@ -551,7 +702,7 @@ describe('i18n routes and surfaces', () => {
 
   it('buildSiteFiles writes every locale', () => {
     const names = Object.keys(buildSiteFiles(TEMPLATE, { now: new Date('2026-09-04T12:00:00Z') }))
-    expect(names).toEqual(expect.arrayContaining(['fr.html', 'fr.md', 'fr/worksheets/rounding.html', 'fr/worksheets/rounding.md', 'zh/developers.md', 'ru/privacy.html']))
+    expect(names).toEqual(expect.arrayContaining(['fr.html', 'fr.md', 'fr/worksheets/rounding.html', 'fr/worksheets/rounding.md', 'zh/about.md', 'ru/privacy.html']))
     expect(names.length).toBe(2 * routes().length + 6)
   })
 })
@@ -561,7 +712,7 @@ describe('buildSiteFiles', () => {
     const files = buildSiteFiles(TEMPLATE, { now: new Date('2026-09-04T12:00:00Z') })
     const names = Object.keys(files)
     expect(names).toEqual(expect.arrayContaining([
-      'index.html', 'index.md', 'developers.html', 'developers.md',
+      'index.html', 'index.md',
       'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md',
       'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', '404.html',
       ...WORKSHEETS.flatMap(w => [`worksheets/${w.slug}.html`, `worksheets/${w.slug}.md`]),

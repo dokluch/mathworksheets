@@ -22,6 +22,16 @@ describe('initAnalytics', () => {
     expect(document.head.querySelector('script')).toBeNull()
   })
 
+  it('defaults to the production measurement id only on a production hostname', () => {
+    // jsdom's hostname is localhost, so the no-argument call above stays a no-op.
+    const win = { location: { hostname: 'superawesomemath.com', origin: 'https://superawesomemath.com' } }
+    const doc = document.implementation.createHTMLDocument('')
+    expect(initAnalytics(undefined, { win, doc })).toBe(true)
+    const dl = win.dataLayer.map(args => Array.from(args))
+    expect(dl[2].slice(0, 2)).toEqual(['config', 'G-G7HL4RG2GM'])
+    expect(doc.head.querySelectorAll('script[src*="id=G-G7HL4RG2GM"]').length).toBe(1)
+  })
+
   it('pushes Consent Mode v2 defaults (denied) before config and loads gtag.js once', () => {
     expect(initAnalytics('G-TEST123')).toBe(true)
     expect(isAnalyticsEnabled()).toBe(true)

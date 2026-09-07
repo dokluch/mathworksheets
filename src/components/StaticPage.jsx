@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { staticBody, findRoute, pageTitle } from '../seo/render'
+import { staticBody, pageTitle } from '../seo/render'
+import { useInAppLinks } from '../hooks/useInAppLinks'
 
 /**
  * Renders a non-worksheet page (About, Privacy, Terms, Developer Resources)
@@ -11,20 +11,7 @@ import { staticBody, findRoute, pageTitle } from '../seo/render'
  * .md/.json/.txt files and external sites stay native.
  */
 export default function StaticPage({ route, navigate }) {
-  useEffect(() => {
-    try { window.scrollTo({ top: 0 }) } catch { /* not implemented in jsdom */ }
-  }, [route.path])
-
-  const onClick = (e) => {
-    const a = e.target.closest?.('a[href]')
-    if (!a || e.defaultPrevented) return
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
-    if (a.target && a.target !== '_self') return
-    const url = new URL(a.getAttribute('href'), window.location.href)
-    if (url.origin !== window.location.origin || !findRoute(url.pathname)) return
-    e.preventDefault()
-    navigate(url.pathname)
-  }
+  const onClick = useInAppLinks(navigate)
 
   return (
     <main

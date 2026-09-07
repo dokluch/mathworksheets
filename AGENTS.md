@@ -1,11 +1,11 @@
-# AGENTS.md — MathSheets
+# AGENTS.md — Super Awesome Math
 
 Guidance for coding agents (Claude Code, Codex, Cursor, …) working in this repository.
 
 ## What this is
 
-MathSheets ("Math Worksheets") is a React 19 + Vite single-page app that generates printable,
-randomized math worksheets for grades 1–3 client-side. Live site: https://mathworksheets-eight.vercel.app
+Super Awesome Math (formerly "MathSheets") is a React 19 + Vite single-page app that generates printable,
+randomized math worksheets for grades 1–3 client-side. Live site: https://superawesomemath.com
 (hosted on Vercel, zero-config Vite preset plus `vercel.json` and a Routing Middleware).
 
 ## Commands
@@ -26,9 +26,9 @@ Node 24, npm 11. No TypeScript.
 - `src/worksheets.js` — **the catalog**: id, slug, label, descriptions, grades, skills, settings, color (English). Everything SEO-related derives from it.
 - `src/i18n/` — **i18n**: `locales.js` (`LOCALES` = en, fr, es, de, it, ru, zh; `LOCALE_META`; `splitLocale`/`localizePath`), `index.js` (`t(locale, key, params)` with `{param}` interpolation and `Intl.PluralRules` plural objects, `localizeWorksheet`/`localizePage`), `context.js` (`useT()`/`useLocale()` for React), `messages/<locale>.js` (one nested tree per language; `en.js` is the reference key set, the others add `worksheets.<id>` and `pages.<id>` blocks). English is served at the root, every other locale under `/<locale>/…`.
 - `src/pages.js` — static pages (About `/about`, Privacy `/privacy`, Terms `/terms`): title, description, `updated`, sections of paragraphs/items with `[label](url)` links. HTML, Markdown twin, sitemap, llms.txt and the React view all derive from it; operator/contact constants live in `src/seo/site.js`.
-- `src/App.jsx` — catalog UI + worksheet switcher. `ICONS` and `COMPONENTS` maps keyed by worksheet id. Provides `LocaleContext`; renders `components/SiteHeader.jsx` (brand link home, About link, `components/LanguageSwitcher.jsx` globe button + `role="menu"` of real links; `.no-print`) above every view, with the brand as the `<h1>` only on the catalog, `components/StaticPage.jsx` (innerHTML from `staticBody()` in `render.js`) for `/about`, `/privacy`, `/terms`, `/developers`, and `components/SiteFooter.jsx` (`.no-print`) on the catalog, static pages and, in compact form, the worksheet sidebar.
-- `src/components/*.jsx` — one component per worksheet; each uses `usePersistedState(tabId, key, default)` for settings (localStorage key `mathsheets`) and renders them with the shared panel in `src/components/controls/SettingsPanel.jsx` (`SettingsPanel` card, one `SettingRow` per setting, `SegmentedControl` / `CheckboxOption` controls, `PanelActions` = Regenerate via `setSeed` + Print via `window.print()`). `App.css` holds the global `.btn*` / `.btn-group` / `.btn-toggle` primitives; the panel's own layout (two settings per row ≥ 769px with over-wide controls dropping to a full row, full-width 44px controls ≤ 768px) lives in `SettingsPanel.css`.
-- `src/hooks/useRoute.js` — tiny history router returning `[activeSheet, navigate, activePage, locale, setLocale, pathInLocale]`: `/worksheets/<slug>` selects a sheet, `/about`, `/privacy`, `/terms`, `/developers` select a static page, an optional `/<locale>` prefix selects the language (`/en/…` is a 404), unprefixed URLs are moved to the remembered locale and `/` restores the remembered sheet via `replaceState`. `navigate()` takes a worksheet id, a site path or `null` and keeps the locale; `setLocale(code)` pushes the same page under another prefix and syncs `<html lang>`, canonical and hreflang links.
+- `src/App.jsx` — catalog UI + worksheet switcher. `ICONS` and `COMPONENTS` maps keyed by worksheet id. Provides `LocaleContext`; renders `components/SiteHeader.jsx` (brand link home, About link, `components/LanguageSwitcher.jsx` globe button + `role="menu"` of real links; `.no-print`) above every view, with the brand as the `<h1>` only on the catalog, `components/StaticPage.jsx` (innerHTML from `staticBody()` in `render.js`) for `/about`, `/privacy`, `/terms`, and `components/SiteFooter.jsx` (`.no-print`) on the catalog, static pages and, in compact form, the worksheet sidebar.
+- `src/components/*.jsx` — one component per worksheet; each uses `usePersistedState(tabId, key, default)` for settings (localStorage key `mathsheets` — the legacy key, kept intentionally across the rename) and renders them with the shared panel in `src/components/controls/SettingsPanel.jsx` (`SettingsPanel` card, one `SettingRow` per setting, `SegmentedControl` / `CheckboxOption` controls, `PanelActions` = Regenerate via `setSeed` + Print via `window.print()`). `App.css` holds the global `.btn*` / `.btn-group` / `.btn-toggle` primitives; the panel's own layout (two settings per row ≥ 769px with over-wide controls dropping to a full row, full-width 44px controls ≤ 768px) lives in `SettingsPanel.css`.
+- `src/hooks/useRoute.js` — tiny history router returning `[activeSheet, navigate, activePage, locale, setLocale, pathInLocale]`: `/worksheets/<slug>` selects a sheet, `/about`, `/privacy`, `/terms` select a static page, an optional `/<locale>` prefix selects the language (`/en/…` is a 404), unprefixed URLs are moved to the remembered locale and `/` restores the remembered sheet via `replaceState`. `navigate()` takes a worksheet id, a site path or `null` and keeps the locale; `setLocale(code)` pushes the same page under another prefix and syncs `<html lang>`, canonical and hreflang links.
 - `src/seo/site.js` — brand, `SITE_URL` (`VITE_SITE_URL` env), author, license.
 - `src/seo/render.js` — pure string renderers: `<head>` metadata + JSON-LD, crawlable static HTML, Markdown twins, llms.txt, sitemap, robots, catalog JSON, 404 bodies, `buildSiteFiles()`.
 - `src/seo/negotiate.js` — RFC 9110 `Accept` negotiation (q-values, specificity).
@@ -56,10 +56,10 @@ Node 24, npm 11. No TypeScript.
 ## Invariants (tests enforce these)
 
 - Home HTML without JavaScript has ≥ 500 characters of text, exactly one `<h1>`, sequential heading levels, and a link to every worksheet.
-- `llms.txt` follows llmstxt.org: `# MathSheets`, a `>` blockquote, then `## Worksheets`, `## Developers`, `## Optional` lists of `- [title](absolute url): notes`.
+- `llms.txt` follows llmstxt.org: `# Super Awesome Math`, a `>` blockquote, then `## Worksheets`, `## Developers`, `## Optional` lists of `- [title](absolute url): notes`.
 - Every page URL has a `.md` twin and is listed once in `sitemap.xml`; `llms.txt` lists every static page under `## Optional`.
 - Every page (static HTML and React) carries the site footer linking About, Privacy, Terms and GitHub; the footer is `.no-print`.
-- Every worksheet, the home and developers pages have a committed 1200×630 PNG under `public/og/` that their `og:image` points to; static pages reuse `home.png`.
+- Every worksheet and the home page have a committed 1200×630 PNG under `public/og/` that their `og:image` points to; static pages reuse `home.png`.
 - Unknown extensionless paths return HTTP 404 with a Markdown body (HTML for browsers), in the language of the path's locale prefix.
 - Languages: English at the root; the same pages under `/fr`, `/es`, `/de`, `/it`, `/ru`, `/zh` (`/<locale>` home is `<locale>.html` + `<locale>.md`, the rest under `<locale>/`); `/en/*` is a 404. Every locale × page is prerendered with its `.md` twin, appears once in `sitemap.xml` with `xhtml:link` alternates, and carries `<html lang>`, hreflang for every locale plus `x-default`, `og:locale` + `og:locale:alternate` and JSON-LD `inLanguage`. OG PNGs are shared across locales. `llms.txt`/`llms-full.txt` stay English (llms.txt links the localized home pages under `## Optional`).
 - Message files have identical key sets and `{param}` sets (`labelLower` counts as `label`), a `worksheets.<id>` block for every worksheet and a `pages.<id>` block for every static page.

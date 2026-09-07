@@ -491,9 +491,9 @@
 .worksheet-topbar {
   padding: 16px 24px 0;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
 }
 
 @media (max-width: 768px) {
@@ -510,11 +510,35 @@
   gap: 8px;
 }
 
+.worksheet-subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
 .worksheet-content {
   flex: 1;
   padding: 20px 24px 32px;
   max-width: 960px;
   width: 100%;
+}
+
+/* The crawlable worksheet prose, kept in the DOM after hydration (see
+   components/WorksheetDetails.jsx). Reuses .static-page typography. */
+.worksheet-details {
+  width: 100%;
+  max-width: 680px;
+  margin: 8px 24px 32px;
+  padding: 20px 24px 8px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+  .worksheet-details {
+    margin: 8px 12px 24px;
+    padding: 16px 16px 4px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -678,7 +702,7 @@ a.back-btn {
   text-decoration: none;
 }
 
-/* Static pages (About, Privacy, Terms, Developers) and the no-JS fallback
+/* Static pages (About, Privacy, Terms) and the no-JS fallback
    content share this typography; React renders the same HTML string. */
 .static-page .static-intro,
 .static-page h2,
@@ -722,6 +746,78 @@ a.back-btn {
 
 .static-page .catalog-grid {
   margin-top: 8px;
+}
+
+/* Collapsible worksheet sections (see fold() in src/seo/render.js). The <h2>
+   lives inside the <summary>, so it is styled as a heading but laid out inline
+   next to the marker. */
+.static-fold {
+  width: 100%;
+  max-width: 680px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.static-fold > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  cursor: pointer;
+  list-style: none;
+  color: var(--color-text-muted);
+}
+
+.worksheet-details .static-fold:last-of-type {
+  border-bottom: none;
+}
+
+.static-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Chevron, rotated when the section is open. */
+.static-fold > summary::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  margin-left: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.15s ease;
+}
+
+.static-fold[open] > summary::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+.static-page .static-fold h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.static-page .static-fold > ul,
+.static-page .static-fold > ol,
+.static-page .static-fold > dl {
+  margin: 0 0 16px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* FAQ: the question carries the weight, the answer sits under it. */
+.worksheet-faq dt {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-top: 20px;
+}
+
+.worksheet-faq dt:first-child {
+  margin-top: 0;
+}
+
+.worksheet-faq dd {
+  margin: 6px 0 0;
 }
 
 /* =============================================

@@ -2,7 +2,7 @@
 /**
  * Generate the Open Graph preview image for every page from the real app:
  *
- *   npm run og            # writes public/og/<slug>.png, home.png, developers.png
+ *   npm run og            # writes public/og/<slug>.png and home.png
  *   npm run og -- rounding   # only the pages whose slug matches
  *
  * Each worksheet is opened in headless Chromium (Playwright), its printable
@@ -21,7 +21,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { WORKSHEETS } from '../src/worksheets.js'
 import { BRAND, TAGLINE, THEME_COLOR } from '../src/seo/site.js'
-import { escapeHtml, homeRoute, worksheetRoute, developersRoute, ogImagePath, brandIcon } from '../src/seo/render.js'
+import { escapeHtml, homeRoute, worksheetRoute, ogImagePath, brandIcon } from '../src/seo/render.js'
 
 export const OG_WIDTH = 1200
 export const OG_HEIGHT = 630
@@ -57,14 +57,6 @@ export function ogTargets(filter = '') {
       badges: [`Grades ${ws.grades}`, ws.interactive ? 'Interactive' : 'Printable', ...ws.skills.slice(0, 2)],
       color: ws.color,
     })),
-    {
-      route: developersRoute(),
-      title: 'Developer Resources',
-      subtitle: 'Markdown twins, llms.txt and a JSON catalog for agents and crawlers',
-      badges: ['llms.txt', 'worksheets.json', 'Markdown'],
-      color: '#0f766e',
-      lines: ['GET /llms.txt', 'GET /worksheets.json', 'GET /worksheets/<slug>.md', 'Accept: text/markdown'],
-    },
   ]
   return all
     .map(t => ({ ...t, file: ogImagePath(t.route).replace(/^\//, '') }))
@@ -208,7 +200,7 @@ export async function generate({ filter = '', log = console.log } = {}) {
     if (!filter || 'icons'.includes(filter)) written.push(...await renderIcons(browser, log))
     for (const target of ogTargets(filter)) {
       let shot = null
-      if (target.route.kind !== 'developers') {
+      {
         const context = await browser.newContext({ viewport: { width: 1180, height: 900 }, deviceScaleFactor: 2 })
         await context.addInitScript(seedScript(hashSeed(target.route.path)))
         const page = await context.newPage()

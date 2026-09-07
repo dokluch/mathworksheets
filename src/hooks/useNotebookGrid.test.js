@@ -47,6 +47,20 @@ describe('notebookLayout', () => {
     }
   })
 
+  it('fits nine squares four to a row, but not ten', () => {
+    // Nine squares is the widest a problem can be and still print four to a
+    // row; ColumnDivision.jsx offers its column counts on this basis rather
+    // than shrinking the square below 1/4in.
+    const fits = (columns, cellsWide) => !notebookLayout({
+      width: PRINT_WIDTH, columns, cellsWide, square: PRINT_SQUARE, minSquare: PRINT_SQUARE,
+    }).overflow
+
+    expect(fits(4, 9)).toBe(true)
+    expect(fits(4, 10)).toBe(false)
+    expect(fits(3, 10)).toBe(true)
+    expect(fits(2, 10)).toBe(true)
+  })
+
   it('caps the gap at one problem width so two columns are not flung apart', () => {
     const layout = notebookLayout({ width: PRINT_WIDTH, columns: 2, cellsWide: 6, square: PRINT_SQUARE })
     expect(layout.gap).toBe(6)

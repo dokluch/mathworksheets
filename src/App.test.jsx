@@ -11,6 +11,7 @@ import { trackEvent } from './lib/analytics.js'
 import { WORKSHEETS } from './worksheets.js'
 import { PAGES } from './pages.js'
 import { t, localizeWorksheet, localizePage } from './i18n/index.js'
+import { BRAND } from './seo/site.js'
 import App from './App.jsx'
 
 beforeEach(() => {
@@ -24,7 +25,7 @@ beforeEach(() => {
 describe('App', () => {
   it('renders the catalog with a real link for every worksheet', () => {
     render(<App />)
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
     const links = screen.getAllByRole('link')
     for (const ws of WORKSHEETS) {
       const link = links.find(l => l.getAttribute('href') === `/worksheets/${ws.slug}`)
@@ -60,17 +61,66 @@ describe('App', () => {
     render(<App />)
     fireEvent.click(screen.getByRole('link', { name: /All sheets/ }))
     expect(window.location.pathname).toBe('/')
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
   })
 
-  it('shows a footer with About, Privacy, Terms and GitHub links that is never printed', () => {
+  it('keeps the crawlable worksheet prose in the DOM after hydration', () => {
+    // src/main.jsx removes the prerendered #static-content before React mounts,
+    // so without WorksheetDetails a JS-executing crawler sees no prose at all.
+    window.history.replaceState(null, '', '/worksheets/column-addition')
+    render(<App />)
+    const ws = WORKSHEETS.find(w => w.slug === 'column-addition')
+
+    const h1s = screen.getAllByRole('heading', { level: 1 })
+    expect(h1s.length).toBe(1)
+    expect(h1s[0].textContent).toBe('Column Addition Worksheets')
+
+    const details = document.querySelector('.worksheet-details')
+    expect(details).toBeTruthy()
+    expect(details.className).toContain('no-print')
+    expect(details.textContent).toContain(ws.longDesc)
+    for (const setting of ws.settings) expect(details.textContent).toContain(setting)
+    expect(details.querySelector('a[href="/worksheets/rounding"]')).toBeTruthy()
+    expect(details.querySelector('a[href="/llms.txt"]')).toBeNull()
+    expect(details.querySelector('.worksheet-faq')).toBeTruthy()
+  })
+
+  it('a sibling worksheet link inside the details block navigates in-app', () => {
+    window.history.replaceState(null, '', '/worksheets/column-addition')
+    render(<App />)
+    const details = document.querySelector('.worksheet-details')
+    fireEvent.click(within(details).getByRole('link', { name: 'Rounding' }))
+    expect(window.location.pathname).toBe('/worksheets/rounding')
+    expect(screen.getAllByRole('heading', { level: 1 })[0].textContent).toBe('Rounding Worksheets')
+  })
+
+  it('the details block is localized with the rest of the page', () => {
+    window.history.replaceState(null, '', '/fr/worksheets/column-addition')
+    render(<App />)
+    const details = document.querySelector('.worksheet-details')
+    expect(details.querySelector('a[href="/fr/worksheets/rounding"]')).toBeTruthy()
+    expect(details.textContent).toContain(localizeWorksheet(WORKSHEETS.find(w => w.slug === 'column-addition'), 'fr').longDesc)
+  })
+
+  it('stamps the brand on printed sheets only', () => {
+    window.history.replaceState(null, '', '/fr/worksheets/column-addition')
+    render(<App />)
+    const stamp = document.querySelector('.print-footer')
+    expect(stamp).toBeTruthy()
+    expect(stamp.className).toContain('print-only')
+    expect(stamp.textContent).toContain('Super Awesome Math (superawesomemath.com)')
+    expect(stamp.textContent).toContain(t('fr', 'common.printFooterTagline'))
+  })
+
+  it('shows a footer with About, Privacy and Terms links that is never printed', () => {
     render(<App />)
     const footer = screen.getByRole('contentinfo')
     expect(footer.className).toContain('no-print')
     for (const [name, href] of [['About', '/about'], ['Privacy', '/privacy'], ['Terms', '/terms']]) {
       expect(within(footer).getByRole('link', { name }).getAttribute('href')).toBe(href)
     }
-    expect(within(footer).getByRole('link', { name: /GitHub/ }).getAttribute('href')).toContain('github.com/dokluch')
+    // The repository is going private, so the footer no longer links it.
+    expect(within(footer).queryByRole('link', { name: /GitHub/ })).toBeNull()
     expect(footer.textContent).toContain('Superposition Labs Inc.')
   })
 
@@ -91,7 +141,7 @@ describe('App', () => {
     localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'rounding' } }))
     window.history.replaceState(null, '', '/about')
     render(<App />)
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('About MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(`About ${BRAND}`)
     expect(window.location.pathname).toBe('/about')
     // In-page link to the Terms page
     fireEvent.click(screen.getByRole('main').querySelector('a[href="/terms"]'))
@@ -100,14 +150,7 @@ describe('App', () => {
     // Breadcrumb back home restores the remembered worksheet
     fireEvent.click(screen.getByRole('main').querySelector('nav[aria-label="Breadcrumb"] a[href="/"]'))
     expect(window.location.pathname).toBe('/')
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
-  })
-
-  it('renders /developers in-app instead of bouncing to the catalog', () => {
-    window.history.replaceState(null, '', '/developers')
-    render(<App />)
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('MathSheets Developer Resources')
-    expect(window.location.pathname).toBe('/developers')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
   })
 
   it('the worksheet sidebar carries the compact footer links', () => {
@@ -245,7 +288,7 @@ describe('App', () => {
     expect(header.contains(h1)).toBe(true)
     const brand = h1.querySelector('a')
     expect(brand.getAttribute('href')).toBe('/')
-    expect(brand.textContent).toBe('MathSheets')
+    expect(brand.textContent).toBe(BRAND)
     const about = header.querySelector('a[href="/about"]')
     expect(about.textContent).toBe('About')
     expect(header.contains(screen.getByRole('button', { name: /Language/ }))).toBe(true)
@@ -261,11 +304,11 @@ describe('App', () => {
     expect(header.querySelector('h1')).toBeNull()
     fireEvent.click(header.querySelector('a[href="/about"]'))
     expect(window.location.pathname).toBe('/about')
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('About MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(`About ${BRAND}`)
 
     fireEvent.click(header.querySelector('a.site-brand'))
     expect(window.location.pathname).toBe('/')
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
 
     fireEvent.click(screen.getByRole('link', { name: /Rounding/ }))
     expect(window.location.pathname).toBe('/worksheets/rounding')
@@ -276,7 +319,7 @@ describe('App', () => {
     fireEvent.click(header.querySelector('a.site-brand'))
     expect(window.location.pathname).toBe('/')
     expect(screen.queryByRole('tabpanel')).toBeNull()
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
   })
 
   it('the header links follow the locale', () => {

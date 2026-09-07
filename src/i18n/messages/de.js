@@ -2,25 +2,20 @@
 export default {
   site: {
     tagline: 'Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3',
-    description: 'MathSheets: kostenlose, zufällig erzeugte Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3. Einmaleins, Addition und Subtraktion, schriftliche Addition, schriftliche Multiplikation, Zahlenvergleich, Runden, Zahlenfolgen und ein interaktiver Gleichungs-Explorer.',
+    description: 'Super Awesome Math: kostenlose, zufällig erzeugte Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3. Einmaleins, Addition und Subtraktion, schriftliche Addition, schriftliche Multiplikation, Zahlenvergleich, Runden, Zahlenfolgen und ein interaktiver Gleichungs-Explorer.',
     brandAlt: 'Mathe-Arbeitsblätter',
   },
 
   seo: {
     homeTitle: '{brand} – {tagline}',
-    developersTitle: 'Ressourcen für Entwickler · {brand}',
     worksheetTitle: 'Arbeitsblätter {label} · {brand}',
-    developersDescription: '{brand}-Ressourcen für Entwickler: Open-Source-Repository, JSON-Katalog der Arbeitsblätter, Markdown-Inhaltsaushandlung, llms.txt und Sitemap.',
     worksheetDescription: 'Kostenlose {label}-Arbeitsblätter zum Ausdrucken für die Klassen {grades}. {shortDesc}. Jedes Mal neu gemischt, passt auf eine Seite.',
     gradeOne: 'Klasse {grades}',
     gradeRange: 'Klassen {grades}',
     ogAltHome: '{brand} – {tagline}',
     ogAltWorksheet: 'Vorschau des Arbeitsblatts {label} – {brand}',
-    ogAltDevelopers: '{brand}-Ressourcen für Entwickler',
     worksheetHeading: 'Arbeitsblätter {label}',
     worksheetName: '{brand} {label}',
-    developersHeading: '{brand} – Ressourcen für Entwickler',
-    developersCrumb: 'Ressourcen für Entwickler',
     worksheetList: '{brand}-Arbeitsblätter',
     learningResourceWorksheet: 'Arbeitsblatt',
     learningResourceInteractive: 'Interaktive Übung',
@@ -50,9 +45,11 @@ export default {
       formatInteractive: 'interaktiv, am Bildschirm',
       formatPrintable: 'zum Ausdrucken, bei jedem Laden neu gemischt',
       settings: 'Einstellungen',
+      examples: 'Beispielaufgaben',
+      faq: 'Häufige Fragen',
       howToUseWorksheet: 'So verwendest du dieses Arbeitsblatt',
       howToUseActivity: 'So verwendest du diese Übung',
-      step1: 'Öffne {url} (JavaScript erforderlich).',
+      step1: 'Öffne {url}.',
       step2: 'Passe die Einstellungen oben an; sie werden in deinem Browser gespeichert.',
       step3Printable: 'Klicke auf Neu erzeugen für einen neuen Zufallssatz und dann auf Drucken.',
       step3Interactive: 'Gib die Antwort ein und klicke auf Prüfen; klicke auf Weiter für eine neue Gleichung.',
@@ -60,41 +57,13 @@ export default {
       partOf: 'Teil von {link}.',
       url: 'URL',
     },
-    developers: {
-      subtitle: 'Open Source, maschinenlesbar und agentenfreundlich.',
-      intro: '{brand} (auch „{brandAlt}“) ist eine Single-Page-App mit React 19 + Vite. Es gibt keine Server-API: Die Arbeitsblätter werden clientseitig erzeugt. Alles Folgende ist statisch und cachebar.',
-      resources: 'Ressourcen',
-      sourceLink: 'Quellcode auf GitHub',
-      catalogDesc: 'maschinenlesbarer Katalog aller Arbeitsblätter mit Slugs, URLs, Klassen, Fähigkeiten und Einstellungen',
-      llmsDesc: 'llmstxt.org-Index und vollständiger Inhalt für Sprachmodelle',
-      indexMdDesc: 'diese Website als Markdown; jede HTML-Seite hat einen {code}-Zwilling',
-      negotiationHeading: 'Markdown-Inhaltsaushandlung',
-      negotiationText: 'Jede Seiten-URL beantwortet {accept} mit {contentType} und {vary} nach der Konvention von acceptmarkdown.com. HTML-Antworten tragen einen {link}-Header, der auf den Zwilling zeigt. Unbekannte Pfade liefern HTTP 404 mit einem Markdown-Text, der zeigt, wo man weitersuchen kann.',
-      languagesHeading: 'Sprachen',
-      languagesText: 'Englische Seiten liegen im Stammverzeichnis der Website. Dieselben Seiten gibt es auf {languages} unter einem zweibuchstabigen Pfadpräfix (zum Beispiel {example}); jede Seite verlinkt alle Übersetzungen per hreflang und führt sie in der Sitemap auf. llms.txt und llms-full.txt gibt es nur auf Englisch.',
-      idsHeading: 'IDs und URLs der Arbeitsblätter',
-      addingHeading: 'Ein Arbeitsblatt hinzufügen',
-      adding1: 'Füge einen Eintrag in {file} hinzu (id, slug, label, Beschreibungen, Klassen, Fähigkeiten, Einstellungen) und seine Übersetzungen in {messages}.',
-      adding2: 'Erstelle die Komponente in {dir} und registriere sie in den Maps {components} und {icons} in {app}.',
-      adding3: 'Führe {test} und {build} aus; die statischen Seiten, Markdown-Zwillinge, Sitemap, llms.txt und der JSON-Katalog werden aus dem Katalog neu erzeugt.',
-    },
-    agentLinks: {
-      text: 'Jede Seite gibt es auch als Markdown: Hänge {code} an den Pfad an oder sende {accept}. Siehe {llms}, den {catalog}, die {sitemap} und die {developers}. Der Quellcode liegt auf {github} unter {license}.',
-      llms: 'llms.txt',
-      catalog: 'Arbeitsblatt-Katalog (JSON)',
-      sitemap: 'Sitemap',
-      developers: 'Ressourcen für Entwickler',
-      github: 'GitHub',
-    },
   },
 
   md: {
     agentIntro: 'Jede Seite gibt es auch als Markdown: Hänge `.md` an den Pfad an oder fordere sie mit `Accept: text/markdown` an.',
     llmsNote: 'Index für Sprachmodelle',
     catalogNote: 'maschinenlesbarer Arbeitsblatt-Katalog',
-    developersLink: 'Ressourcen für Entwickler',
     sitemapLink: 'Sitemap',
-    sourceLink: 'Quellcode auf GitHub',
     homeIntro: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3 (6–9 Jahre). Jedes Blatt wird bei jedem Öffnen oder Neu-Erzeugen zufällig zusammengestellt. Wähle ein Arbeitsblatt, stelle den Schwierigkeitsgrad ein (Zahlenraum, Stellen, Layout, Spalten) und drucke es aus dem Browser; die Einstellungen werden pro Gerät gespeichert. Die Arbeitsblätter entstehen clientseitig: kein Konto, kein Upload, keine Kosten.',
     worksheetItem: '{link}: {shortDesc} (Klassen {grades})',
     howItWorks: 'So funktioniert es',
@@ -103,10 +72,8 @@ export default {
     step3: 'Klicke auf Neu erzeugen für einen neuen Zufallssatz und dann auf Drucken. Die Blätter passen auf eine A4- oder Letter-Seite.',
     forDevelopers: 'Für Entwickler und KI-Agenten',
     howToUse: 'Anleitung',
-    wsStep1: 'Öffne {url} (JavaScript erforderlich).',
+    wsStep1: 'Öffne {url}.',
     wsStep2: 'Passe die Einstellungen an; sie werden im Browser gespeichert.',
-    developersIntro: '{brand} (auch „{brandAlt}“) ist eine Open-Source-Single-Page-App mit React 19 + Vite, die Mathe-Arbeitsblätter zum Ausdrucken clientseitig erzeugt. Es gibt keine Server-API; jede Ressource unten ist eine statische Datei.',
-    devCatalogNote: 'maschinenlesbarer Katalog aller Arbeitsblätter (Slug, URL, Markdown-URL, Klassen, Fähigkeiten, Einstellungen)',
     devLlmsNote: 'llmstxt.org-Index',
     devLlmsFullNote: 'das Markdown aller Seiten in einer Datei',
     devIndexNote: 'die Startseite als Markdown',
@@ -131,7 +98,6 @@ export default {
     whereNext: 'Wo du weitersuchen kannst',
     home: '{brand}-Startseite',
     worksheet: 'Arbeitsblätter {label}',
-    developers: 'Ressourcen für Entwickler',
     sitemap: 'Sitemap',
     llms: 'llms.txt',
     catalog: 'Arbeitsblatt-Katalog (JSON)',
@@ -151,6 +117,7 @@ export default {
     regenerate: 'Neu erzeugen',
     print: 'Drucken',
     printWorksheet: 'Arbeitsblatt drucken',
+    printFooterTagline: 'Kostenlose Mathe-Materialien zum Ausdrucken',
     columns: 'Spalten',
     limit: 'Zahlenraum',
     range: 'Bereich',
@@ -192,6 +159,19 @@ export default {
     title: 'Schriftliche Multiplikation',
     meta: 'schriftliche Multiplikation · {preset}',
     problemAria: '{a} mal {b}',
+  },
+
+  coldiv: {
+    preset: '{a} ÷ {b} Stellen',
+    title: 'Schriftliche Division',
+    meta: 'schriftliche Division · {preset}',
+    notation: 'Schreibweise',
+    bracket: 'Klammer',
+    corner: 'Winkel',
+    allowRemainder: 'Reste zulassen',
+    defaultNotation: 'corner',
+    problemAria: '{dividend} geteilt durch {divisor}',
+    quotientAria: { one: 'Ergebnis: {n} leeres Kästchen', other: 'Ergebnis: {n} leere Kästchen' },
   },
 
   compare: {
@@ -251,6 +231,11 @@ export default {
         'Diagonale vorausfüllen (1×1, 2×2, …)',
         'Anteil zufällig vorausgefüllter Felder',
       ],
+      faq: [
+        { q: 'Ab welchem Alter lernt man das Einmaleins?', a: 'Das Einmaleins kommt in der 2. Klasse dran, etwa mit 7 Jahren, und soll bis zum Ende der 3. Klasse sicher abrufbar sein. Beginne mit einem kleinen Bereich von 1 bis 5 und erweitere ihn erst, wenn die Antwort ohne Nachzählen kommt.' },
+        { q: 'Wozu dienen die vorausgefüllten Felder?', a: 'Wenn die Diagonale (1×1, 2×2, 3×3 …) oder ein Teil der Felder zufällig vorausgefüllt ist, wird aus dem leeren Gitter ein Rätsel. Die sichtbaren Ergebnisse geben Anhaltspunkte, deshalb ist eine halb gefüllte Tabelle ein sanfterer Einstieg als eine leere.' },
+        { q: 'In welcher Reihenfolge lernt man die Reihen?', a: 'Üblich ist zuerst die 2er-, 5er- und 10er-Reihe, deren Muster gut sichtbar sind, dann 3, 4 und 6 und zuletzt 7, 8 und 9. Da 3 × 4 und 4 × 3 dasselbe ergeben, halbiert eine gelernte Reihe die Arbeit an einer anderen.' },
+      ],
     },
     addsub: {
       label: 'Plus und Minus',
@@ -264,6 +249,11 @@ export default {
         'Spalten: 2, 3 oder 4 (20–40 Aufgaben)',
         '67-Modus: ein verstecktes Ergebnis 67 pro Spalte',
       ],
+      faq: [
+        { q: 'Was übt die Form mit der Lücke?', a: 'Eine Aufgabe als a + □ = c oder □ − b = c zu schreiben verlangt Rückwärtsdenken statt bloßem Rechnen von links nach rechts. Das ist der erste Schritt zur Algebra, und deshalb wandert die Lücke von Aufgabe zu Aufgabe.' },
+        { q: 'Welchen Zahlenraum soll ich wählen?', a: 'Bis 10 und bis 20 passen zur 1. Klasse, bis 100 zur 2. und bis 1000 zur 3. Zählt ein Kind an den Fingern, statt sich zu erinnern, geh einen Zahlenraum zurück, statt mehr Aufgaben zu geben.' },
+        { q: 'Was ist der 67-Modus?', a: 'Er versteckt in jeder Spalte genau eine Aufgabe mit dem Ergebnis 67 und macht aus dem Blatt eine kleine Schatzsuche. So liest das Kind seine eigenen Ergebnisse noch einmal durch — eine Form der Kontrolle.' },
+      ],
     },
     coladd: {
       label: 'Schriftliche Addition',
@@ -275,6 +265,11 @@ export default {
         'Spalten: Anzahl der Aufgabenspalten pro Seite',
         'Aufgaben mit Übertrag bevorzugen',
       ],
+      faq: [
+        { q: 'Für welche Klasse ist die schriftliche Addition?', a: 'Die schriftliche Addition mit zweistelligen Zahlen beginnt meist in der 2. Klasse, drei- und vierstellige folgen in der 3. Die Grundlage dafür ist das Stellenwertverständnis: zu wissen, dass die 4 in 348 vier Zehner bedeutet.' },
+        { q: 'Was ist der Übertrag?', a: 'Ergibt eine Spalte mehr als 9, wandert der Zehnerteil in die Spalte links daneben. 8 + 6 ist 14, also wird die 4 geschrieben und die 1 übertragen. Mit „Aufgaben mit Übertrag bevorzugen“ brauchen die meisten Aufgaben diesen Schritt.' },
+        { q: 'Warum auf kariertem Papier?', a: 'Eine Ziffer pro Kästchen hält die Einer unter den Einern und die Zehner unter den Zehnern. Die meisten Fehler am Anfang entstehen durch falsches Untereinanderschreiben und nicht durch Rechnen, und das Karo beseitigt diese Fehlerquelle.' },
+      ],
     },
     colmul: {
       label: 'Schriftliche Multiplikation',
@@ -284,6 +279,28 @@ export default {
       settings: [
         'Voreinstellung: 2 × 2, 3 × 2 oder 4 × 2 Stellen',
         'Spalten: Anzahl der Aufgabenspalten pro Seite',
+      ],
+      faq: [
+        { q: 'Wann ist ein Kind bereit für die schriftliche Multiplikation?', a: 'Meist in der 3. Klasse und erst dann, wenn das Einmaleins abgerufen und nicht hergeleitet wird. Eine schriftliche Multiplikation besteht aus mehreren kleinen Multiplikationen plus einer Addition — bei unsicherem Einmaleins wird jeder Schritt langsamer und schwerer zu prüfen.' },
+        { q: 'Was sind Teilprodukte?', a: '34 mal 26 heißt: 34 mal 6 und dann 34 mal 20, und beide Ergebnisse addieren. Jedes dieser Ergebnisse ist ein Teilprodukt und bekommt auf dem Blatt eine eigene Zeile.' },
+        { q: 'Warum ist die zweite Zeile nach links versetzt?', a: 'Die zweite Zeile multipliziert mit Zehnern statt mit Einern, ihr Ergebnis ist also zehnmal so groß und beginnt eine Spalte weiter links. Der Versatz macht den Stellenwert sichtbar; er ist keine Formregel zum Auswendiglernen.' },
+      ],
+    },
+    coldiv: {
+      label: 'Schriftliche Division',
+      shortDesc: 'Schriftliches Dividieren üben',
+      longDesc: 'Schriftliche Division von 3- und 4-stelligen Zahlen durch einen ein- oder zweistelligen Divisor, gedruckt auf einem Rechenkaro-Raster mit fertig gezeichnetem Rahmen und leeren Kästchen für den Rechenweg. Der Rahmen lässt sich in der englischen Schreibweise (Divisor links der Klammer, Ergebnis über dem Strich) oder in der kontinentalen (Divisor rechts oben, Ergebnis darunter) setzen, und die Aufgaben gehen wahlweise glatt auf oder lassen einen Rest.',
+      skills: ['schriftliche Division', 'Reste', 'Stellenwert', 'Überschlag'],
+      settings: [
+        'Voreinstellung: 3 ÷ 1, 4 ÷ 1 oder 4 ÷ 2 Stellen',
+        'Schreibweise: Klammer oder Winkel',
+        'Spalten: Anzahl der Aufgabenspalten pro Seite',
+        'Reste statt glatt aufgehender Division zulassen',
+      ],
+      faq: [
+        { q: 'Wann lernt man die schriftliche Division?', a: 'Die schriftliche Division kommt meist am Ende der 3. oder in der 4. Klasse, wenn Multiplikation und Subtraktion sitzen. Jeder Schritt verlangt Teilen, Multiplizieren, Subtrahieren und Herunterholen — jede Schwäche zeigt sich sofort.' },
+        { q: 'Was unterscheidet die beiden Schreibweisen?', a: 'Bei der Klammerform steht der Divisor links vom Dividenden und der Quotient über dem Strich; bei der Winkelform steht der Divisor rechts oben und der Quotient darunter. Es ist dieselbe Methode, nur anders notiert, und welche ein Kind kennt, hängt vom Land ab, in dem es zur Schule geht.' },
+        { q: 'Soll ich Reste zulassen?', a: 'Beginne mit Aufgaben, die glatt aufgehen, damit nur die Methode neu ist. Schalte Reste dazu, sobald die vier Schritte automatisch laufen: ein Rest zwingt zur Kontrolle, ob er wirklich kleiner als der Divisor ist.' },
       ],
     },
     compare: {
@@ -295,6 +312,11 @@ export default {
         'Zahlenraum: bis 10, 20, 100 oder 1000',
         'Spalten: Anzahl der Aufgabenspalten pro Seite',
       ],
+      faq: [
+        { q: 'Wie merkt sich ein Kind > und <?', a: 'Die offene Seite zeigt immer zur größeren Zahl — das Zeichen wird zum „Mehr“ hin breiter. Den ganzen Satz laut zu lesen — „dreiundvierzig ist größer als vierunddreißig“ — prägt sich schneller ein als das Zeichen allein.' },
+        { q: 'Warum sind die Zahlenpaare absichtlich tückisch?', a: 'Paare wie 43 und 34 oder 208 und 280 verwenden dieselben Ziffern in anderer Reihenfolge, und etwa jedes siebte Paar ist gleich. Wer nur auf die erste Ziffer schaut, liegt falsch — genau diese Gewohnheit soll das Blatt abtrainieren.' },
+        { q: 'Welcher Zahlenraum passt zu welcher Klasse?', a: 'Bis 10 und 20 für die 1. Klasse, bis 100 für die 2. und bis 1000 für die 3. Längere Zahlen zu vergleichen ist vor allem eine Stellenwertübung: erhöhe den Zahlenraum erst, wenn kurze Paare schnell gehen.' },
+      ],
     },
     rounding: {
       label: 'Runden',
@@ -305,6 +327,11 @@ export default {
         'Stelle: Zehner, Hunderter oder Tausender',
         'Spalten: Anzahl der Aufgabenspalten pro Seite',
       ],
+      faq: [
+        { q: 'Wie lautet die Rundungsregel?', a: 'Man schaut auf die Ziffer eine Stelle rechts von der Stelle, auf die gerundet wird. Ist sie 5 oder größer, wird aufgerundet; ist sie 4 oder kleiner, abgerundet. 48 auf Zehner gerundet ergibt 50, weil die 8 mindestens 5 ist.' },
+        { q: 'Warum enden so viele Zahlen auf 5?', a: 'Der Fall mit der 5 beruht als einziger auf einer Vereinbarung statt auf einer offensichtlichen Antwort, und dort passieren die meisten Fehler. Der Generator nimmt sie bewusst auf, gemischt mit Fällen zum Auf- und Abrunden.' },
+        { q: 'Wann lernt man Runden?', a: 'Das Runden auf Zehner erscheint meist in der 2. Klasse, Hunderter und Tausender folgen in der 3. Es ist die Grundlage des Schätzens, und darüber merkt ein Kind, dass ein Ergebnis viel zu groß ist.' },
+      ],
     },
     patterns: {
       label: 'Zahlenfolgen',
@@ -313,6 +340,11 @@ export default {
       skills: ['Zahlenmuster', 'Zählen in Schritten', 'Folgen', 'algebraisches Denken'],
       settings: [
         'Stufe: leicht, mittel oder schwer',
+      ],
+      faq: [
+        { q: 'Was üben Zahlenfolgen?', a: 'Die Regel hinter 2, 4, 6, □, 10 zu finden ist frühes algebraisches Denken: Das Kind sucht eine Beziehung, statt eine vorgegebene Rechnung auszuführen. Nebenbei festigt es das Zählen in Schritten, das dem Einmaleins zugutekommt.' },
+        { q: 'Worin unterscheiden sich die drei Stufen?', a: 'Leicht arbeitet mit gleichbleibendem Schritt, etwa immer plus 3. Mittel multipliziert oder wechselt zwischen zwei Schritten. Schwer kombiniert Regeln, sodass eine Vermutung erst an mehreren Gliedern geprüft werden muss.' },
+        { q: 'Mein Kind kommt bei einer Folge nicht weiter. Was tun?', a: 'Frag, was sich von einer Zahl zur nächsten ändert, und schreibt die Abstände darunter. Sind die Abstände sichtbar, zeigt sich die Regel meist von selbst — und die Gewohnheit, sie aufzuschreiben, hilft auch bei schwereren Folgen.' },
       ],
     },
     eqexplore: {
@@ -323,6 +355,11 @@ export default {
       settings: [
         'Rechenart: Addition, Subtraktion oder beides',
         'Bereich: Größe der verwendeten Zahlen',
+      ],
+      faq: [
+        { q: 'Kann man den Gleichungs-Explorer ausdrucken?', a: 'Nein. Er ist die einzige Aktivität der Seite, die für den Bildschirm gedacht ist: Terme werden über das Gleichheitszeichen gezogen, der Zahlenstrahl bewegt sich, und die Antwort wird beim Tippen geprüft. Alle anderen Blätter passen gedruckt auf eine Seite.' },
+        { q: 'Was bedeutet es, einen Term über das Gleichheitszeichen zu bringen?', a: 'Eine Gleichung bleibt wahr, solange sich beide Seiten gleich verändern. Wandert ein Term hinüber, dreht sich sein Vorzeichen um: aus x + 7 = 12 wird x = 12 − 7. Den Vorzeichenwechsel im Moment zu sehen macht die Regel anschaulich statt auswendig gelernt.' },
+        { q: 'Für welches Alter ist er gedacht?', a: 'Für die 2. und 3. Klasse, etwa 7 bis 9 Jahre, sobald Addition und Subtraktion bis 100 sicher sitzen. Meist ist es das erste Mal, dass ein Kind einen Buchstaben für eine unbekannte Zahl sieht.' },
       ],
     },
   },
@@ -398,7 +435,7 @@ export default {
         {
           heading: 'Open Source',
           paragraphs: [
-            'Der Quellcode liegt auf {github} unter der Lizenz {license}. Du darfst die Arbeitsblätter und den Code für nicht-kommerzielle Zwecke mit Namensnennung nutzen, teilen und anpassen. Fehlermeldungen und Ideen für neue Arbeitsblätter sind willkommen.',
+            'Die Arbeitsblätter und die Website stehen unter der Lizenz {license}. Du darfst sie für nicht-kommerzielle Zwecke mit Namensnennung nutzen, teilen und anpassen. Fehlermeldungen und Ideen für neue Arbeitsblätter sind willkommen.',
           ],
         },
         {

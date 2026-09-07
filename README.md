@@ -1,8 +1,8 @@
-# MathSheets
+# Super Awesome Math
 
 Free, printable, randomized math worksheets for grades 1–3. An open-source web app I built to supplement my daughters' math curriculum.
 
-**Live:** https://mathworksheets-eight.vercel.app
+**Live:** https://superawesomemath.com
 
 ![Catalog](screenshots/catalog.png)
 
@@ -40,9 +40,8 @@ Optional environment (see `.env.example`): `VITE_GA_MEASUREMENT_ID` enables GA4 
 
 ## For developers and AI agents
 
-- [/developers](https://mathworksheets-eight.vercel.app/developers) — resources overview
-- [/llms.txt](https://mathworksheets-eight.vercel.app/llms.txt) and [/llms-full.txt](https://mathworksheets-eight.vercel.app/llms-full.txt)
-- [/worksheets.json](https://mathworksheets-eight.vercel.app/worksheets.json) — machine-readable catalog
+- [/llms.txt](https://superawesomemath.com/llms.txt) and [/llms-full.txt](https://superawesomemath.com/llms-full.txt)
+- [/worksheets.json](https://superawesomemath.com/worksheets.json) — machine-readable catalog
 - Every page answers `Accept: text/markdown` with its Markdown twin (or append `.md`)
 - [AGENTS.md](AGENTS.md) — notes for coding agents working on this repo
 

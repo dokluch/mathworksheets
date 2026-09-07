@@ -2,7 +2,7 @@
 /**
  * Post-deploy smoke test for SEO / agent-readiness surfaces.
  *
- *   node scripts/verify-live.mjs https://mathworksheets-eight.vercel.app
+ *   node scripts/verify-live.mjs https://superawesomemath.com
  *   npm run verify:live -- https://my-preview.vercel.app
  *
  * Exits 1 if any check fails. Read-only: only GET requests.
@@ -11,8 +11,11 @@ import { WORKSHEETS } from '../src/worksheets.js'
 import { PAGES } from '../src/pages.js'
 import { LOCALES, LOCALE_META } from '../src/i18n/index.js'
 import { worksheetRoute, pageTitle, escapeHtml } from '../src/seo/render.js'
+import { SITE_URL, BRAND } from '../src/seo/site.js'
 
-const base = (process.argv[2] || process.env.SITE_URL || 'https://mathworksheets-eight.vercel.app').replace(/\/+$/, '')
+const base = (process.argv[2] || process.env.SITE_URL || SITE_URL).replace(/\/+$/, '')
+// Brand-derived so a rename never silently skips these checks.
+const brandHeading = new RegExp(`^# ${BRAND}`)
 
 const results = []
 function record(name, ok, detail = '') {
@@ -94,6 +97,9 @@ async function main() {
     const p = `/worksheets/${ws.slug}`
     const r = await get(p, { accept: 'text/html' })
     record(`GET ${p} → 200 with title`, r.status === 200 && r.text.includes(`${ws.label} Worksheets`), String(r.status))
+    record(`GET ${p} has one <h1>, sequential headings and enough text`,
+      (r.text.match(/<h1\b/gi) || []).length === 1 && headingsSequential(r.text) && textLength(r.text) >= 500,
+      `${textLength(r.text)} chars`)
     await checkOgImage(p, r.text)
     const m = await get(`${p}.md`)
     record(`GET ${p}.md → 200 text/markdown`, m.status === 200 && /^text\/markdown/.test(m.headers.get('content-type') || ''), `${m.status} ${m.headers.get('content-type')}`)
@@ -101,14 +107,14 @@ async function main() {
 
   // 3. Discovery files
   for (const [path, re] of [
-    ['/llms.txt', /^# MathSheets/],
-    ['/llms-full.txt', /^# MathSheets/],
-    ['/index.md', /^# MathSheets/],
-    ['/developers', /Developer Resources/],
+    ['/llms.txt', brandHeading],
+    // Headingless by design: a `# ` line in the preamble would break the
+    // one-H1-per-route invariant inside the file.
+    ['/llms-full.txt', new RegExp(`^${BRAND} — full site content`)],
+    ['/index.md', brandHeading],
     ['/favicon.svg', /^<svg/],
-    ['/developers.md', /^# MathSheets Developer Resources/],
     ...PAGES.flatMap(p => [
-      [`/${p.slug}`, new RegExp(`<title>${p.title} · MathSheets</title>`)],
+      [`/${p.slug}`, new RegExp(`<title>${p.title} · ${BRAND}</title>`)],
       [`/${p.slug}.md`, new RegExp(`^# ${p.title}`)],
     ]),
     ['/sitemap.xml', /<urlset/],
@@ -117,15 +123,25 @@ async function main() {
     const r = await get(path)
     record(`GET ${path} → 200 and looks right`, r.status === 200 && re.test(r.text.trimStart()), String(r.status))
   }
-  for (const path of ['/og/developers.png', '/favicon.png', '/apple-touch-icon.png']) {
+  for (const path of ['/og/home.png', '/favicon.png', '/apple-touch-icon.png']) {
     const img = await head(path)
     record(`GET ${path} → 200 image/png`, img.status === 200 && /^image\/png/.test(img.type) && isPng(img.bytes), `${img.status} ${img.type}`)
   }
+  // The agent-facing surfaces: a scraper must be able to pick a worksheet and
+  // learn how to cite the site from llms.txt alone.
+  for (const path of ['/llms.txt', '/llms-full.txt']) {
+    const r = await get(path)
+    const ok = r.status === 200 && /Choosing a worksheet/.test(r.text) && /CC BY-NC 4.0/.test(r.text) && /carrying \/ regrouping/.test(r.text)
+    record(`GET ${path} carries the grade/skill index and licence terms`, ok, String(r.status))
+  }
+
   const cat = await get('/worksheets.json')
   let catOk = false
   try {
     const json = JSON.parse(cat.text)
     catOk = cat.status === 200 && json.worksheets.length === WORKSHEETS.length && json.locales.length === LOCALES.length
+      && json.usage?.aiCrawlingAllowed === true && json.usage?.commercialUse === false
+      && json.worksheets.every(w => Array.isArray(w.examples) && w.examples.length >= 3 && /^\d{4}-\d{2}-\d{2}$/.test(w.updated))
   } catch { catOk = false }
   record('GET /worksheets.json → valid catalog with locales', catOk, String(cat.status))
 
@@ -145,8 +161,6 @@ async function main() {
     record(`GET ${wsPath} → 200 with localized title`, lws.status === 200 && lws.text.includes(`<title>${escapeHtml(pageTitle(worksheetRoute(rounding, l)))}</title>`), String(lws.status))
     const lwsMd = await get(`${wsPath}.md`)
     record(`GET ${wsPath}.md → 200 text/markdown`, lwsMd.status === 200 && /^text\/markdown/.test(lwsMd.headers.get('content-type') || ''), String(lwsMd.status))
-    const ldev = await get(`/${l}/developers`, { accept: 'text/html' })
-    record(`GET /${l}/developers → 200`, ldev.status === 200 && ldev.text.includes(`<html lang="${lang}">`), String(ldev.status))
     const lpage = await get(`/${l}/${PAGES[0].slug}`, { accept: 'text/html' })
     record(`GET /${l}/${PAGES[0].slug} → 200`, lpage.status === 200 && lpage.text.includes(`<html lang="${lang}">`), String(lpage.status))
     const lnf = await get(`/${l}/nope`, { accept: 'text/html' })
@@ -155,7 +169,7 @@ async function main() {
   const enPrefix = await get('/en')
   record('GET /en → 404 (English lives at the root)', enPrefix.status === 404, String(enPrefix.status))
   const sitemap = await get('/sitemap.xml')
-  record('sitemap.xml lists localized URLs with xhtml:link alternates', sitemap.text.includes('/zh/developers</loc>') && sitemap.text.includes('<xhtml:link ') && sitemap.text.includes('hreflang="x-default"'))
+  record('sitemap.xml lists localized URLs with xhtml:link alternates', sitemap.text.includes('/zh/about</loc>') && sitemap.text.includes('<xhtml:link ') && sitemap.text.includes('hreflang="x-default"'))
 
   // 4. Agent-friendly 404s
   const nf = await get('/some-path-that-does-not-exist')
