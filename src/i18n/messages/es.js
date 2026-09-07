@@ -2,7 +2,7 @@
 export default {
   site: {
     tagline: 'Fichas de matemáticas para imprimir de 1.º a 3.º de primaria',
-    description: 'MathSheets: fichas de matemáticas gratuitas, imprimibles y aleatorias para 1.º a 3.º de primaria. Tablas de multiplicar, sumas y restas, suma en columna, multiplicación en columna, comparación, redondeo, series numéricas y un explorador de ecuaciones interactivo.',
+    description: 'Super Awesome Math: fichas de matemáticas gratuitas, imprimibles y aleatorias para 1.º a 3.º de primaria. Tablas de multiplicar, sumas y restas, suma en columna, multiplicación en columna, comparación, redondeo, series numéricas y un explorador de ecuaciones interactivo.',
     brandAlt: 'Fichas de matemáticas',
   },
 

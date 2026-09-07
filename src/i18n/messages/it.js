@@ -2,7 +2,7 @@
 export default {
   site: {
     tagline: 'Schede di matematica da stampare per le classi 1ª–3ª',
-    description: 'MathSheets: schede di matematica gratuite, stampabili e casuali per le classi 1ª–3ª della primaria. Tabelline, addizioni e sottrazioni, addizione in colonna, moltiplicazione in colonna, confronto, arrotondamento, sequenze numeriche e un esploratore di equazioni interattivo.',
+    description: 'Super Awesome Math: schede di matematica gratuite, stampabili e casuali per le classi 1ª–3ª della primaria. Tabelline, addizioni e sottrazioni, addizione in colonna, moltiplicazione in colonna, confronto, arrotondamento, sequenze numeriche e un esploratore di equazioni interattivo.',
     brandAlt: 'Schede di matematica',
   },
 

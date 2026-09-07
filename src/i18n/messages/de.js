@@ -2,7 +2,7 @@
 export default {
   site: {
     tagline: 'Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3',
-    description: 'MathSheets: kostenlose, zufällig erzeugte Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3. Einmaleins, Addition und Subtraktion, schriftliche Addition, schriftliche Multiplikation, Zahlenvergleich, Runden, Zahlenfolgen und ein interaktiver Gleichungs-Explorer.',
+    description: 'Super Awesome Math: kostenlose, zufällig erzeugte Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3. Einmaleins, Addition und Subtraktion, schriftliche Addition, schriftliche Multiplikation, Zahlenvergleich, Runden, Zahlenfolgen und ein interaktiver Gleichungs-Explorer.',
     brandAlt: 'Mathe-Arbeitsblätter',
   },
 

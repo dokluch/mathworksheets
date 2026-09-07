@@ -5,7 +5,8 @@ import { renderHook, act } from '@testing-library/react'
 vi.mock('../lib/analytics.js', () => ({ trackPageView: vi.fn(), trackEvent: vi.fn() }))
 import { trackPageView } from '../lib/analytics.js'
 import { useRoute, pathToSheetId, sheetIdToPath, titleForSheet, localeFromPath } from './useRoute.js'
-import { pageTitle, worksheetRoute } from '../seo/render.js'
+import { pageTitle, worksheetRoute, homeRoute } from '../seo/render.js'
+import { BRAND } from '../seo/site.js'
 import { findWorksheetById } from '../worksheets.js'
 
 function setPath(path) {
@@ -29,8 +30,8 @@ describe('path helpers', () => {
     expect(sheetIdToPath('multiply')).toBe('/worksheets/multiplication')
     expect(sheetIdToPath(null)).toBe('/')
     expect(sheetIdToPath('bogus')).toBe('/')
-    expect(titleForSheet(null)).toBe('MathSheets – Printable Math Worksheets for Grades 1–3')
-    expect(titleForSheet('compare')).toBe('Comparison Worksheets · MathSheets')
+    expect(titleForSheet(null)).toBe(pageTitle(homeRoute()))
+    expect(titleForSheet('compare')).toBe(`Comparison Worksheets · ${BRAND}`)
   })
 })
 
@@ -39,8 +40,8 @@ describe('useRoute', () => {
     const { result } = renderHook(() => useRoute(null))
     expect(result.current[0]).toBeNull()
     expect(window.location.pathname).toBe('/')
-    expect(document.title).toContain('MathSheets')
-    expect(trackPageView).toHaveBeenCalledWith('/', expect.stringContaining('MathSheets'))
+    expect(document.title).toContain(BRAND)
+    expect(trackPageView).toHaveBeenCalledWith('/', expect.stringContaining(BRAND))
   })
 
   it('the URL wins over the remembered sheet', () => {
@@ -56,7 +57,7 @@ describe('useRoute', () => {
     expect(result.current[0]).toBe('rounding')
     expect(window.location.pathname).toBe('/worksheets/rounding')
     expect(window.history.length).toBe(lengthBefore)
-    expect(document.title).toBe('Rounding Worksheets · MathSheets')
+    expect(document.title).toBe(`Rounding Worksheets · ${BRAND}`)
     expect(document.querySelector('link[rel="canonical"]').getAttribute('href')).toMatch(/\/worksheets\/rounding$/)
     expect(document.querySelector('link[rel="alternate"]').getAttribute('href')).toMatch(/\/worksheets\/rounding\.md$/)
   })
@@ -69,10 +70,10 @@ describe('useRoute', () => {
     expect(page.kind).toBe('page')
     expect(page.page.slug).toBe('privacy')
     expect(window.location.pathname).toBe('/privacy')
-    expect(document.title).toBe('Privacy Policy · MathSheets')
+    expect(document.title).toBe(`Privacy Policy · ${BRAND}`)
     expect(document.querySelector('link[rel="canonical"]').getAttribute('href')).toMatch(/\/privacy$/)
     expect(document.querySelector('link[rel="alternate"]').getAttribute('href')).toMatch(/\/privacy\.md$/)
-    expect(trackPageView).toHaveBeenCalledWith('/privacy', 'Privacy Policy · MathSheets')
+    expect(trackPageView).toHaveBeenCalledWith('/privacy', `Privacy Policy · ${BRAND}`)
   })
 
   it('treats /developers as a static page too', () => {
@@ -80,7 +81,7 @@ describe('useRoute', () => {
     const { result } = renderHook(() => useRoute(null))
     expect(result.current[2].kind).toBe('developers')
     expect(window.location.pathname).toBe('/developers/')
-    expect(document.title).toBe('Developer Resources · MathSheets')
+    expect(document.title).toBe(`Developer Resources · ${BRAND}`)
   })
 
   it('falls back to the catalog (and rewrites the URL) for an unknown path', () => {
@@ -97,7 +98,7 @@ describe('useRoute', () => {
     expect(result.current[2].page.slug).toBe('about')
     expect(result.current[0]).toBeNull()
     expect(window.location.pathname).toBe('/about')
-    expect(trackPageView).toHaveBeenLastCalledWith('/about', 'About MathSheets · MathSheets')
+    expect(trackPageView).toHaveBeenLastCalledWith('/about', `About ${BRAND} · ${BRAND}`)
 
     act(() => result.current[1]('multiply'))
     expect(result.current[0]).toBe('multiply')
@@ -232,8 +233,8 @@ describe('locales', () => {
     act(() => result.current[1]('multiply'))
     expect(result.current[0]).toBe('multiply')
     expect(window.location.pathname).toBe('/worksheets/multiplication')
-    expect(document.title).toBe('Multiplication Worksheets · MathSheets')
-    expect(trackPageView).toHaveBeenLastCalledWith('/worksheets/multiplication', 'Multiplication Worksheets · MathSheets')
+    expect(document.title).toBe(`Multiplication Worksheets · ${BRAND}`)
+    expect(trackPageView).toHaveBeenLastCalledWith('/worksheets/multiplication', `Multiplication Worksheets · ${BRAND}`)
 
     act(() => result.current[1](null))
     expect(result.current[0]).toBeNull()

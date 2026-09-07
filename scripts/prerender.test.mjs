@@ -5,6 +5,7 @@ import { join } from 'node:path'
 import { prerender } from './prerender.mjs'
 import { WORKSHEETS } from '../src/worksheets.js'
 import { routes, worksheetRoute, pageTitle } from '../src/seo/render.js'
+import { BRAND } from '../src/seo/site.js'
 import { LOCALES } from '../src/i18n/index.js'
 
 const TEMPLATE = `<!doctype html><html><head><!-- seo:head --><!-- /seo:head --></head>
@@ -31,14 +32,14 @@ describe('scripts/prerender.mjs', () => {
     }
 
     const rounding = await readFile(join(dist, 'worksheets', 'rounding.html'), 'utf8')
-    expect(rounding).toContain('<title>Rounding Worksheets · MathSheets</title>')
+    expect(rounding).toContain(`<title>Rounding Worksheets · ${BRAND}</title>`)
     expect(rounding).toContain('/assets/app.js')
     const llms = await readFile(join(dist, 'llms.txt'), 'utf8')
-    expect(llms.startsWith('# MathSheets\n\n> ')).toBe(true)
+    expect(llms.startsWith(`# ${BRAND}\n\n> `)).toBe(true)
     const json = JSON.parse(await readFile(join(dist, 'worksheets.json'), 'utf8'))
     expect(json.worksheets.length).toBe(WORKSHEETS.length)
     const privacy = await readFile(join(dist, 'privacy.html'), 'utf8')
-    expect(privacy).toContain('<title>Privacy Policy · MathSheets</title>')
+    expect(privacy).toContain(`<title>Privacy Policy · ${BRAND}</title>`)
     expect(privacy).toContain('<footer class="site-footer no-print">')
 
     // Every locale: <locale>.html/.md at the root, the rest under <locale>/

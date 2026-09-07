@@ -2,7 +2,7 @@
 export default {
   site: {
     tagline: 'Fiches de maths à imprimer pour le CP, CE1 et CE2',
-    description: 'MathSheets : fiches de mathématiques gratuites, imprimables et aléatoires pour les 6–9 ans (CP à CE2). Tables de multiplication, additions et soustractions, addition posée, multiplication posée, comparaison, arrondi, suites de nombres et un explorateur d’équations interactif.',
+    description: 'Super Awesome Math : fiches de mathématiques gratuites, imprimables et aléatoires pour les 6–9 ans (CP à CE2). Tables de multiplication, additions et soustractions, addition posée, multiplication posée, comparaison, arrondi, suites de nombres et un explorateur d’équations interactif.',
     brandAlt: 'Fiches de maths',
   },
 

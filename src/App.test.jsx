@@ -11,6 +11,7 @@ import { trackEvent } from './lib/analytics.js'
 import { WORKSHEETS } from './worksheets.js'
 import { PAGES } from './pages.js'
 import { t, localizeWorksheet, localizePage } from './i18n/index.js'
+import { BRAND } from './seo/site.js'
 import App from './App.jsx'
 
 beforeEach(() => {
@@ -24,7 +25,7 @@ beforeEach(() => {
 describe('App', () => {
   it('renders the catalog with a real link for every worksheet', () => {
     render(<App />)
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
     const links = screen.getAllByRole('link')
     for (const ws of WORKSHEETS) {
       const link = links.find(l => l.getAttribute('href') === `/worksheets/${ws.slug}`)
@@ -60,7 +61,7 @@ describe('App', () => {
     render(<App />)
     fireEvent.click(screen.getByRole('link', { name: /All sheets/ }))
     expect(window.location.pathname).toBe('/')
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
   })
 
   it('shows a footer with About, Privacy, Terms and GitHub links that is never printed', () => {
@@ -91,7 +92,7 @@ describe('App', () => {
     localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'rounding' } }))
     window.history.replaceState(null, '', '/about')
     render(<App />)
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('About MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(`About ${BRAND}`)
     expect(window.location.pathname).toBe('/about')
     // In-page link to the Terms page
     fireEvent.click(screen.getByRole('main').querySelector('a[href="/terms"]'))
@@ -100,13 +101,13 @@ describe('App', () => {
     // Breadcrumb back home restores the remembered worksheet
     fireEvent.click(screen.getByRole('main').querySelector('nav[aria-label="Breadcrumb"] a[href="/"]'))
     expect(window.location.pathname).toBe('/')
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
   })
 
   it('renders /developers in-app instead of bouncing to the catalog', () => {
     window.history.replaceState(null, '', '/developers')
     render(<App />)
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('MathSheets Developer Resources')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(`${BRAND} Developer Resources`)
     expect(window.location.pathname).toBe('/developers')
   })
 
@@ -245,7 +246,7 @@ describe('App', () => {
     expect(header.contains(h1)).toBe(true)
     const brand = h1.querySelector('a')
     expect(brand.getAttribute('href')).toBe('/')
-    expect(brand.textContent).toBe('MathSheets')
+    expect(brand.textContent).toBe(BRAND)
     const about = header.querySelector('a[href="/about"]')
     expect(about.textContent).toBe('About')
     expect(header.contains(screen.getByRole('button', { name: /Language/ }))).toBe(true)
@@ -261,11 +262,11 @@ describe('App', () => {
     expect(header.querySelector('h1')).toBeNull()
     fireEvent.click(header.querySelector('a[href="/about"]'))
     expect(window.location.pathname).toBe('/about')
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('About MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(`About ${BRAND}`)
 
     fireEvent.click(header.querySelector('a.site-brand'))
     expect(window.location.pathname).toBe('/')
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
 
     fireEvent.click(screen.getByRole('link', { name: /Rounding/ }))
     expect(window.location.pathname).toBe('/worksheets/rounding')
@@ -276,7 +277,7 @@ describe('App', () => {
     fireEvent.click(header.querySelector('a.site-brand'))
     expect(window.location.pathname).toBe('/')
     expect(screen.queryByRole('tabpanel')).toBeNull()
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('MathSheets')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
   })
 
   it('the header links follow the locale', () => {

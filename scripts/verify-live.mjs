@@ -2,7 +2,7 @@
 /**
  * Post-deploy smoke test for SEO / agent-readiness surfaces.
  *
- *   node scripts/verify-live.mjs https://mathworksheets-eight.vercel.app
+ *   node scripts/verify-live.mjs https://superawesomemath.com
  *   npm run verify:live -- https://my-preview.vercel.app
  *
  * Exits 1 if any check fails. Read-only: only GET requests.
@@ -11,8 +11,11 @@ import { WORKSHEETS } from '../src/worksheets.js'
 import { PAGES } from '../src/pages.js'
 import { LOCALES, LOCALE_META } from '../src/i18n/index.js'
 import { worksheetRoute, pageTitle, escapeHtml } from '../src/seo/render.js'
+import { SITE_URL, BRAND } from '../src/seo/site.js'
 
-const base = (process.argv[2] || process.env.SITE_URL || 'https://mathworksheets-eight.vercel.app').replace(/\/+$/, '')
+const base = (process.argv[2] || process.env.SITE_URL || SITE_URL).replace(/\/+$/, '')
+// Brand-derived so a rename never silently skips these checks.
+const brandHeading = new RegExp(`^# ${BRAND}`)
 
 const results = []
 function record(name, ok, detail = '') {
@@ -101,14 +104,14 @@ async function main() {
 
   // 3. Discovery files
   for (const [path, re] of [
-    ['/llms.txt', /^# MathSheets/],
-    ['/llms-full.txt', /^# MathSheets/],
-    ['/index.md', /^# MathSheets/],
+    ['/llms.txt', brandHeading],
+    ['/llms-full.txt', brandHeading],
+    ['/index.md', brandHeading],
     ['/developers', /Developer Resources/],
     ['/favicon.svg', /^<svg/],
-    ['/developers.md', /^# MathSheets Developer Resources/],
+    ['/developers.md', new RegExp(`^# ${BRAND} Developer Resources`)],
     ...PAGES.flatMap(p => [
-      [`/${p.slug}`, new RegExp(`<title>${p.title} · MathSheets</title>`)],
+      [`/${p.slug}`, new RegExp(`<title>${p.title} · ${BRAND}</title>`)],
       [`/${p.slug}.md`, new RegExp(`^# ${p.title}`)],
     ]),
     ['/sitemap.xml', /<urlset/],
