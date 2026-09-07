@@ -1,0 +1,61 @@
+/* ── Long division ──
+   The division frame needs a partial-width rule and a rule that crosses rows,
+   neither of which the .colarith-row stack can express, so a problem is a CSS
+   grid of whole squares with the two rules painted over it. Every offset is a
+   multiple of --nb-sq, which ColumnAddition.css already swaps for the print
+   square, so nothing here may carry a hard-coded pixel offset. */
+@import './ColumnAddition.css';
+
+/* Division frames grow downward as the child works, so the spare square of the
+   item goes below the frame rather than above it. */
+.colarith-notebook .coldiv-item {
+  align-items: flex-start;
+}
+
+.coldiv-problem {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--cd-cols), var(--nb-sq));
+  grid-template-rows: repeat(var(--cd-rows), var(--nb-sq));
+  --colarith-cell-size: var(--nb-sq);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: calc(var(--nb-sq) * 0.77);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.coldiv-quotient {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--nb-sq);
+}
+
+/* 2px strokes straddling a grid line, the same idiom as .colarith-line::before. */
+.coldiv-rule {
+  position: absolute;
+  background: var(--color-text);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.coldiv-rule-v {
+  left: calc(var(--cd-vx) * var(--nb-sq) - 1px);
+  top: calc(var(--cd-vy0) * var(--nb-sq));
+  width: 2px;
+  height: calc((var(--cd-vy1) - var(--cd-vy0)) * var(--nb-sq));
+}
+
+.coldiv-rule-h {
+  left: calc(var(--cd-hx0) * var(--nb-sq));
+  top: calc(var(--cd-hy) * var(--nb-sq) - 1px);
+  width: calc((var(--cd-hx1) - var(--cd-hx0)) * var(--nb-sq));
+  height: 2px;
+}
+
+@media print {
+  .coldiv-rule {
+    background: #333;
+  }
+}

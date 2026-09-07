@@ -91,9 +91,32 @@ export const WORKSHEETS = [
     ],
     examples: ['34 × 26 = □', '218 × 47 = □', '1305 × 62 = □'],
     prerequisites: ['multiply'],
-    nextSteps: [],
+    nextSteps: ['coldiv'],
     updated: '2026-09-07',
     color: '#7c2d12',
+    interactive: false,
+  },
+  {
+    id: 'coldiv',
+    slug: 'long-division',
+    label: 'Long Division',
+    shortDesc: 'Long division practice',
+    longDesc:
+      'Long division of 3- and 4-digit numbers by a 1- or 2-digit divisor, printed on a notebook grid with the frame drawn and empty squares for the working. ' +
+      'The frame can be written the English way (divisor outside the bracket, quotient above the overbar) or the continental way (divisor top right, quotient beneath it), and problems can divide exactly or leave a remainder.',
+    grades: '3',
+    skills: ['long division', 'remainders', 'place value', 'estimation'],
+    settings: [
+      'Preset: 3 ÷ 1, 4 ÷ 1 or 4 ÷ 2 digits',
+      'Notation: bracket or corner frame',
+      'Columns: number of problem columns per page',
+      'Allow remainders instead of exact division',
+    ],
+    examples: ['864 ÷ 6 = □', '3172 ÷ 4 = □', '4164 ÷ 12 = □'],
+    prerequisites: ['colmul'],
+    nextSteps: [],
+    updated: '2026-09-07',
+    color: '#be185d',
     interactive: false,
   },
   {

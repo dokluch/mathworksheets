@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useMemo } from 'react'
-import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator } from '@tabler/icons-react'
+import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator, IconDivide } from '@tabler/icons-react'
 import { usePersistedState, getPersistedTab } from './hooks/usePersistedState'
 import { useRoute, sheetIdToPath } from './hooks/useRoute'
 import { worksheetRoute, gradeLevelText } from './seo/render'
@@ -23,12 +23,14 @@ import Patterns from './components/Patterns'
 import EquationExplorer from './components/EquationExplorer'
 import ColumnAddition from './components/ColumnAddition'
 import ColumnMultiplication from './components/ColumnMultiplication'
+import ColumnDivision from './components/ColumnDivision'
 
 const ICONS = {
   multiply: IconGrid3x3,
   addsub: IconPlusMinus,
   coladd: IconColumns3,
   colmul: IconCalculator,
+  coldiv: IconDivide,
   compare: IconArrowsLeftRight,
   rounding: IconTargetArrow,
   patterns: IconTrendingUp,
@@ -40,6 +42,7 @@ const COMPONENTS = {
   addsub: AddSubtract,
   coladd: ColumnAddition,
   colmul: ColumnMultiplication,
+  coldiv: ColumnDivision,
   compare: Comparison,
   rounding: Rounding,
   patterns: Patterns,
