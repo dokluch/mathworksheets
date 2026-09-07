@@ -108,7 +108,9 @@ async function main() {
   // 3. Discovery files
   for (const [path, re] of [
     ['/llms.txt', brandHeading],
-    ['/llms-full.txt', brandHeading],
+    // Headingless by design: a `# ` line in the preamble would break the
+    // one-H1-per-route invariant inside the file.
+    ['/llms-full.txt', new RegExp(`^${BRAND} — full site content`)],
     ['/index.md', brandHeading],
     ['/developers', /Developer Resources/],
     ['/favicon.svg', /^<svg/],
