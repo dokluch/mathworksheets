@@ -1,0 +1,225 @@
+/**
+ * A miniature of the sheet each worksheet actually prints.
+ *
+ * The catalog used to show a stock line icon in a tinted rounded square, which
+ * told a parent nothing about what would come out of the printer. These are
+ * drawn from the real thing: squared paper, the same digit forms, and the
+ * arrangement that worksheet uses — a stacked sum for column addition, a
+ * division frame for long division, a sequence with gaps for patterns.
+ *
+ * Everything is placed in the ruling's own coordinates, never in free pixels:
+ * a digit is centred in a cell, a rule falls on a grid line, a blank is ink
+ * inside a cell. That is the whole claim the preview makes — this is a page of
+ * squared paper with marks on it — and the marks used to sit at arbitrary
+ * offsets that broke it. Use `cx`/`cy`/`ln` below and it cannot drift again.
+ */
+
+/* Drawing coordinates: 13 × 8 squares. The rendered size is set in CSS and the
+   viewBox scales to it, so the marks keep their positions at any display size.
+   8 is the largest pitch that divides both W and H exactly. */
+const SQ = 8
+const COLS = 13
+const ROWS = 8
+const W = COLS * SQ
+const H = ROWS * SQ
+
+/** Centre of column `c` / row `r`, and the grid line at index `n`. */
+const cx = c => c * SQ + SQ / 2
+const cy = r => r * SQ + SQ / 2
+const ln = n => n * SQ
+/** Centre of a run of cells, for a table column two squares wide. */
+const span = (c0, c1) => (ln(c0) + ln(c1)) / 2
+
+/* The sheet sets its digits at 0.77 of a square (`.colarith-problem`); the
+   preview uses the same ratio so the miniature is to scale, not just to shape. */
+const DIGIT = SQ * 0.77
+
+/** Squared-paper ruling, drawn once and reused by every thumbnail. */
+function Ruling({ id }) {
+  return (
+    <pattern id={id} width={SQ} height={SQ} patternUnits="userSpaceOnUse">
+      <path d={`M ${SQ} 0 L 0 0 0 ${SQ}`} fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.28" />
+    </pattern>
+  )
+}
+
+/**
+ * One glyph, dead centre in cell (c, r). `dominant-baseline: central` rather
+ * than a hand-tuned baseline offset: the fallback stack is not metrically
+ * identical to JetBrains Mono, and a tuned offset would only be centred on the
+ * machines that happen to have the webfont.
+ */
+const digit = (c, r, text, opts = {}) => (
+  <text
+    key={`d${c}-${r}`}
+    x={opts.x ?? cx(c)}
+    y={cy(r)}
+    fontFamily="'JetBrains Mono', ui-monospace, monospace"
+    fontSize={opts.size ?? DIGIT}
+    fontWeight={opts.weight ?? 600}
+    textAnchor="middle"
+    dominantBaseline="central"
+    fill="currentColor"
+    opacity={opts.opacity ?? 1}
+  >
+    {text}
+  </text>
+)
+
+/** A blank a child writes into: ink inside the cell, so it reads over the ruling. */
+const blank = (c, r, span = 1) => (
+  <line
+    key={`b${c}-${r}`}
+    x1={ln(c) + 1.5}
+    y1={ln(r) + SQ - 1.5}
+    x2={ln(c + span) - 1.5}
+    y2={ln(r) + SQ - 1.5}
+    stroke="currentColor"
+    strokeWidth="1.2"
+    opacity="0.6"
+  />
+)
+
+/** An answer bar, table head, or overbar: always on a grid line. */
+const rule = (c0, c1, r, weight = 1.3) => (
+  <line key={`h${c0}-${r}`} x1={ln(c0)} y1={ln(r)} x2={ln(c1)} y2={ln(r)} stroke="currentColor" strokeWidth={weight} />
+)
+
+const vrule = (c, r0, r1, weight = 1.3) => (
+  <line key={`v${c}-${r0}`} x1={ln(c)} y1={ln(r0)} x2={ln(c)} y2={ln(r1)} stroke="currentColor" strokeWidth={weight} />
+)
+
+/** An empty box to fill in — one cell, inset so the ruling still shows around it. */
+const box = (c, r) => (
+  <rect
+    key={`x${c}-${r}`}
+    x={ln(c) + 1.5}
+    y={ln(r) + 1.5}
+    width={SQ - 3}
+    height={SQ - 3}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.1"
+    opacity="0.7"
+  />
+)
+
+/* Which products the times table prints and which it leaves to the child:
+   roughly the half-filled scatter the prefill slider defaults to. */
+const MULT_FILLED = new Set(['0-0', '0-1', '0-3', '1-1', '1-2', '2-0', '2-3'])
+
+/* Each mark set mirrors the arrangement of the sheet it stands for. */
+const MARKS = {
+  // A times table. Its cells are two squares wide, because the real sheet's are
+  // wider than a notebook square too — a two-digit product has to fit one cell.
+  multiply: () => {
+    const factors = [2, 3, 4, 5]
+    const multipliers = [2, 3, 4]
+    const col = i => span(3 + i * 2, 5 + i * 2)
+    return (
+      <>
+        {digit(2, 2, '×', { opacity: 0.7 })}
+        {rule(2, 11, 3, 1)}
+        {vrule(3, 2, 6, 1)}
+        {factors.map((n, i) => digit(0, 2, String(n), { x: col(i), opacity: 0.8 }))}
+        {multipliers.map((n, i) => digit(2, 3 + i, String(n), { opacity: 0.8 }))}
+        {multipliers.flatMap((m, r) => factors.map((f, c) => (
+          MULT_FILLED.has(`${r}-${c}`)
+            ? digit(c, 3 + r, String(m * f), { x: col(c), opacity: 0.5 })
+            : null
+        )))}
+      </>
+    )
+  },
+  // A single horizontal sum with the answer left blank.
+  addsub: () => (
+    <>
+      {digit(3, 2, '7')}{digit(4, 2, '+')}{digit(5, 2, '5')}{digit(6, 2, '=')}{blank(7, 2, 2)}
+      {digit(3, 5, '9')}{digit(4, 5, '−')}{digit(5, 5, '4')}{digit(6, 5, '=')}{blank(7, 5, 2)}
+    </>
+  ),
+  // Two addends stacked over a rule, the sum blank.
+  coladd: () => (
+    <>
+      {digit(6, 2, '2')}{digit(7, 2, '4')}{digit(8, 2, '8')}
+      {digit(5, 3, '+')}
+      {digit(6, 3, '1')}{digit(7, 3, '7')}{digit(8, 3, '5')}
+      {rule(5, 9, 4, 1.5)}
+      {blank(6, 4)}{blank(7, 4)}{blank(8, 4)}
+    </>
+  ),
+  // Multiplicand over multiplier, then a partial product and the total.
+  colmul: () => (
+    <>
+      {digit(6, 2, '3')}{digit(7, 2, '6')}{digit(8, 2, '4')}
+      {digit(5, 3, '×')}{digit(7, 3, '2')}{digit(8, 3, '7')}
+      {rule(5, 9, 4, 1.5)}
+      {[5, 6, 7, 8].map(c => blank(c, 4))}
+      {[4, 5, 6, 7, 8].map(c => blank(c, 5))}
+    </>
+  ),
+  // The long-division frame: the divisor, the upright, and the overbar with the
+  // quotient written above it — the shape frameLayout() actually renders.
+  coldiv: () => (
+    <>
+      {blank(6, 3)}{blank(7, 3)}{blank(8, 3)}
+      {rule(6, 9, 4, 1.5)}
+      {vrule(6, 4, 5, 1.5)}
+      {digit(4, 4, '8')}
+      {digit(6, 4, '4')}{digit(7, 4, '9')}{digit(8, 4, '6')}
+    </>
+  ),
+  // Two numbers with the comparison sign left open.
+  compare: () => (
+    <>
+      {digit(3, 2, '2')}{digit(4, 2, '3')}{box(6, 2)}{digit(8, 2, '3')}{digit(9, 2, '2')}
+      {digit(3, 5, '9')}{digit(4, 5, '1')}{box(6, 5)}{digit(8, 5, '8')}{digit(9, 5, '9')}
+    </>
+  ),
+  // A number and its rounded form, with the arrow between.
+  rounding: () => (
+    <>
+      {digit(2, 2, '4')}{digit(3, 2, '7')}
+      <path d={`M ${ln(5)} ${cy(2)} H ${ln(7)} m -3 -3 l 3 3 l -3 3`} fill="none" stroke="currentColor" strokeWidth="1.1" opacity="0.7" />
+      {blank(9, 2, 2)}
+      {digit(2, 5, '8')}{digit(3, 5, '3')}
+      <path d={`M ${ln(5)} ${cy(5)} H ${ln(7)} m -3 -3 l 3 3 l -3 3`} fill="none" stroke="currentColor" strokeWidth="1.1" opacity="0.7" />
+      {blank(9, 5, 2)}
+    </>
+  ),
+  // A sequence that runs out into blanks.
+  patterns: () => (
+    <>
+      {digit(2, 2, '2')}{digit(4, 2, '4')}{digit(6, 2, '6')}{blank(8, 2)}{blank(10, 2)}
+      {digit(2, 5, '3')}{digit(4, 5, '6')}{digit(6, 5, '9')}{blank(8, 5)}{blank(10, 5)}
+    </>
+  ),
+  // The one screen-only sheet: an equation with a movable term.
+  eqexplore: () => (
+    <>
+      {box(4, 2)}{digit(5, 2, '+')}{digit(6, 2, '3')}{digit(7, 2, '=')}{digit(8, 2, '8')}
+      {rule(3, 10, 5, 1)}
+      <circle cx={ln(6)} cy={ln(5)} r="2.6" fill="currentColor" opacity="0.85" />
+    </>
+  ),
+}
+
+export default function SheetThumb({ id, className = '' }) {
+  const marks = MARKS[id]
+  const patternId = `ruling-${id}`
+  return (
+    <svg
+      className={`sheet-thumb ${className}`.trim()}
+      viewBox={`0 0 ${W} ${H}`}
+      width={W}
+      height={H}
+      role="presentation"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs><Ruling id={patternId} /></defs>
+      <rect width={W} height={H} fill={`url(#${patternId})`} />
+      {marks ? marks() : null}
+    </svg>
+  )
+}

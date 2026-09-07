@@ -25,3 +25,9 @@ dist-ssr
 
 # Claude Code worktrees
 .claude/worktrees/
+
+# Impeccable working captures (screenshots, PDFs) — the records that matter
+# are DESIGN.md, PRODUCT.md and .impeccable/surfaces/
+.impeccable/review/
+.impeccable/questions/
+.impeccable/critique/

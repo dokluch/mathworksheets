@@ -123,15 +123,26 @@ describe('generateProblems', () => {
 })
 
 describe('one printed page', () => {
-  it('fits three rows of problems for every notation and preset', () => {
+  // The budget is the shorter of the two supported papers. Landscape A4 is
+  // 8.27in tall against Letter's 8.5in, which is one square less of working
+  // room: the taller `bracket` frame needs 30 squares for three rows and A4
+  // offers 29, so it takes two. Rounding that up is what used to put a sliced
+  // third row on a second sheet for every A4 printer in Europe.
+  const EXPECTED_ROWS = { bracket: 2, corner: 3 }
+
+  it('fits its rows on the shorter of the two supported papers', () => {
     for (const notation of ['bracket', 'corner']) {
       for (const [dividendDigits, divisorDigits] of [[3, 1], [4, 1], [4, 2]]) {
         const frame = frameLayout(notation, dividendDigits, divisorDigits)
         const label = `${notation} ${dividendDigits}/${divisorDigits}`
-        expect(rowsPerPage(frame.rows, SPACING), label).toBe(3)
-        // Three items plus the header band must still clear the printed page.
-        const squares = HEADER_BAND + 3 * (frame.rows + 1)
+        const rows = rowsPerPage(frame.rows, SPACING)
+        expect(rows, label).toBe(EXPECTED_ROWS[notation])
+        // Those rows plus the header band must still clear the printed page.
+        const squares = HEADER_BAND + rows * (frame.rows + 1)
         expect(squares, label).toBeLessThanOrEqual(Math.floor(PRINT_HEIGHT / PRINT_SQUARE))
+        // And one more row must not fit, or the budget is leaving a row unused.
+        expect(HEADER_BAND + (rows + 1) * (frame.rows + 1), label)
+          .toBeGreaterThan(Math.floor(PRINT_HEIGHT / PRINT_SQUARE))
         // Widest frame four to a row must not overflow the printed page.
         expect(notebookLayout({
           width: PRINT_WIDTH, columns: 4, cellsWide: frame.cols,

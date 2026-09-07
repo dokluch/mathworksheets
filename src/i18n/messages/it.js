@@ -111,6 +111,8 @@ export default {
     worksheetTypes: 'Tipi di schede',
     sourceOnGitHub: 'Codice sorgente su GitHub',
     language: 'Lingua',
+    resume: 'Riprendi da dove eri rimasto',
+    skipToContent: 'Vai al contenuto',
   },
 
   common: {
@@ -118,6 +120,9 @@ export default {
     print: 'Stampa',
     printWorksheet: 'Stampa la scheda',
     printFooterTagline: 'Risorse di matematica gratuite da stampare',
+    screenOnly: "L’Esploratore di equazioni è pensato per lo schermo, quindi non c’è nulla da stampare. Scegli un’altra scheda per un foglio stampabile.",
+    answerKey: "Soluzioni",
+    answerKeyOption: "Stampa il foglio delle soluzioni",
     columns: 'Colonne',
     limit: 'Limite',
     range: 'Intervallo',
@@ -128,6 +133,9 @@ export default {
     options: 'Opzioni',
     within: 'Entro {n}',
     withinMeta: 'entro {n}',
+    fieldName: 'Nome',
+    fieldDate: 'Data',
+    fieldSet: 'Serie',
   },
 
   multiply: {
@@ -136,8 +144,12 @@ export default {
     rangeEnd: 'Fine intervallo',
     fillDiagonal: 'Riempi la diagonale',
     shuffleHeaders: 'Mescola righe e colonne',
+    emptyRange: "L’intervallo è invertito, quindi non c’è nulla da stampare. Imposta il secondo numero più alto del primo, per esempio da 1 a 10.",
+    tooWide: "Questo intervallo produce una tabella troppo larga per una sola pagina. Tieni i due numeri entro 15 l’uno dall’altro, per esempio da 1 a 12.",
     prefill: 'Precompila {pct}%',
     tableAria: 'Tavola pitagorica',
+    title: "Moltiplicazione",
+    meta: "da {start} a {end}",
   },
 
   addsub: {
@@ -350,7 +362,7 @@ export default {
     eqexplore: {
       label: 'Esploratore di equazioni',
       shortDesc: 'Risolvi equazioni in modo interattivo',
-      longDesc: 'Un risolutore di equazioni a schermo (non stampabile): trascina i termini oltre il segno di uguale e guarda il segno cambiare, segui i salti su una linea dei numeri, poi scrivi la risposta sul tastierino integrato. Le risposte giuste allungano la serie e fanno partire i coriandoli; quelle sbagliate ripropongono una spiegazione animata.',
+      longDesc: 'Un risolutore di equazioni a schermo (non stampabile): trascina i termini oltre il segno di uguale e guarda il segno cambiare, segui i salti su una linea dei numeri, poi scrivi la risposta sul tastierino integrato. Le risposte giuste allungano la serie; quelle sbagliate ripropongono una spiegazione animata.',
       skills: ['equazioni', 'operazioni inverse', 'linea dei numeri', 'calcolo mentale'],
       settings: [
         'Operazione: addizione, sottrazione o entrambe',

@@ -79,13 +79,15 @@ export function PanelActions({ worksheetId, onRegenerate, showPrint = true }) {
     <>
       <button
         type="button"
-        className="btn btn-primary"
+        className="btn btn-secondary"
         onClick={() => { trackEvent('regenerate_worksheet', { worksheet_id: worksheetId }); onRegenerate() }}
       >
         <IconRefresh size={16} stroke={2} /> {t('common.regenerate')}
       </button>
+      {/* Print is the goal of the visit and carries the primary weight;
+          Regenerate is the step you may take on the way there. */}
       {showPrint && (
-        <button type="button" className="btn btn-secondary" onClick={() => window.print()}>
+        <button type="button" className="btn btn-primary" onClick={() => window.print()}>
           <IconPrinter size={16} stroke={2} /> {t('common.print')}
         </button>
       )}

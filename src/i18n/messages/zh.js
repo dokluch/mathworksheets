@@ -111,6 +111,8 @@ export default {
     worksheetTypes: '练习题类型',
     sourceOnGitHub: 'GitHub 上的源代码',
     language: '语言',
+    resume: '继续上次的练习',
+    skipToContent: '跳到主要内容',
   },
 
   common: {
@@ -118,6 +120,9 @@ export default {
     print: '打印',
     printWorksheet: '打印练习页',
     printFooterTagline: '免费可打印的数学学习资源',
+    screenOnly: "方程探索器是为屏幕设计的，没有可打印的内容。请选择其他练习以获得可打印的页面。",
+    answerKey: "答案",
+    answerKeyOption: "打印答案页",
     columns: '列数',
     limit: '范围',
     range: '范围',
@@ -128,6 +133,9 @@ export default {
     options: '选项',
     within: '{n} 以内',
     withinMeta: '{n} 以内',
+    fieldName: '姓名',
+    fieldDate: '日期',
+    fieldSet: '编号',
   },
 
   multiply: {
@@ -136,8 +144,12 @@ export default {
     rangeEnd: '范围终点',
     fillDiagonal: '填满对角线',
     shuffleHeaders: '打乱行列顺序',
+    emptyRange: "范围颠倒了，没有可打印的内容。请把第二个数设得比第一个大，例如 1 到 10。",
+    tooWide: "这个范围生成的表格太宽，无法打印在一页上。请让两个数相差不超过 15，例如 1 到 12。",
     prefill: '预填 {pct}%',
     tableAria: '乘法表',
+    title: "乘法",
+    meta: "{start} 到 {end}",
   },
 
   addsub: {

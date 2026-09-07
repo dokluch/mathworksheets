@@ -16,6 +16,7 @@ export default function StaticPage({ route, navigate }) {
   return (
     <main
       className="catalog catalog--full static-page"
+      id="main"
       aria-label={pageTitle(route)}
       onClick={onClick}
       dangerouslySetInnerHTML={{ __html: staticBody(route) }}

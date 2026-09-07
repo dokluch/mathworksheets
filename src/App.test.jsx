@@ -38,22 +38,34 @@ describe('App', () => {
     render(<App />)
     fireEvent.click(screen.getByRole('link', { name: /Rounding/ }))
     expect(window.location.pathname).toBe('/worksheets/rounding')
-    expect(screen.getByRole('tabpanel', { name: 'Rounding' })).toBeTruthy()
+    expect(screen.getByRole('main', { name: 'Rounding' })).toBeTruthy()
     expect(JSON.parse(localStorage.getItem('mathsheets')).app.activeTab).toBe('rounding')
     expect(trackEvent).toHaveBeenCalledWith('select_worksheet', { worksheet_id: 'rounding' })
   })
 
-  it('restores the remembered worksheet when landing on /', () => {
+  // The remembered sheet is offered on the catalog, not redirected to: typing
+  // the domain must still reach the catalog, and Back must still return here.
+  it('offers the remembered worksheet on / without leaving the catalog', () => {
     localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'patterns' }, patterns: { level: 2 } }))
     render(<App />)
-    expect(screen.getByRole('tabpanel', { name: 'Patterns' })).toBeTruthy()
-    expect(window.location.pathname).toBe('/worksheets/patterns')
+    expect(document.querySelector('.worksheet-main')).toBeNull()
+    expect(window.location.pathname).toBe('/')
+
+    const resume = document.querySelector('.resume-card')
+    expect(resume).toBeTruthy()
+    expect(resume.getAttribute('href')).toBe('/worksheets/patterns')
+    expect(resume.textContent).toContain('Patterns')
+  })
+
+  it('offers no resume card when nothing is remembered', () => {
+    render(<App />)
+    expect(document.querySelector('.resume-card')).toBeNull()
   })
 
   it('opens the worksheet named in the URL', () => {
     window.history.replaceState(null, '', '/worksheets/comparison')
     render(<App />)
-    expect(screen.getByRole('tabpanel', { name: 'Comparison' })).toBeTruthy()
+    expect(screen.getByRole('main', { name: 'Comparison' })).toBeTruthy()
   })
 
   it('"All sheets" goes back to the catalog at /', () => {
@@ -131,7 +143,7 @@ describe('App', () => {
     fireEvent.click(screen.getByRole('link', { name: 'Privacy' }))
     expect(window.location.pathname).toBe('/privacy')
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Privacy Policy')
-    expect(screen.queryByRole('tabpanel')).toBeNull()
+    expect(document.querySelector('.worksheet-main')).toBeNull()
     expect(screen.getByRole('main').className).toContain('static-page')
     expect(JSON.parse(localStorage.getItem('mathsheets')).app.activeTab).toBe('patterns')
     expect(window.scrollTo).toHaveBeenCalled()
@@ -197,7 +209,7 @@ describe('App', () => {
     expect(window.location.pathname).toBe('/fr/worksheets/rounding')
     expect(document.documentElement.lang).toBe('fr')
     const rounding = WORKSHEETS.find(w => w.id === 'rounding')
-    expect(screen.getByRole('tabpanel', { name: localizeWorksheet(rounding, 'fr').label })).toBeTruthy()
+    expect(screen.getByRole('main', { name: localizeWorksheet(rounding, 'fr').label })).toBeTruthy()
     expect(screen.getByRole('link', { name: new RegExp(t('fr', 'app.allSheets')) }).getAttribute('href')).toBe('/fr')
     expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('fr')
     expect(JSON.parse(localStorage.getItem('mathsheets')).app.activeTab).toBe('rounding')
@@ -259,24 +271,32 @@ describe('App', () => {
     expect(screen.queryByRole('button', { name: /Print worksheet/ })).toBeNull()
   })
 
-  it('every printable worksheet renders the shared settings panel, hidden from print', () => {
+  // Every worksheet, including the interactive one: its settings used to sit
+  // in a bare unlabelled strip floating on the board, so the one surface a
+  // child touches was the one that did not look like the rest of the product.
+  it('every worksheet renders the shared settings panel, hidden from print', () => {
     for (const ws of WORKSHEETS) {
       cleanup()
       window.history.replaceState(null, '', `/worksheets/${ws.slug}`)
       render(<App />)
       const panel = document.querySelector('.settings-panel')
-      if (ws.interactive) {
-        expect(panel, ws.slug).toBeNull()
-        continue
-      }
       expect(panel, ws.slug).toBeTruthy()
       expect(panel.className).toContain('no-print')
       expect(document.querySelector('.controls'), ws.slug).toBeNull()
-      expect(within(panel).getByRole('button', { name: /Regenerate/ })).toBeTruthy()
-      expect(within(panel).getByRole('button', { name: /Print/ })).toBeTruthy()
+      // Every setting is labelled, on every worksheet.
+      expect(panel.querySelectorAll('.setting-label').length, ws.slug).toBeGreaterThan(0)
       if (panel.querySelector('.btn-group')) {
         expect(within(panel).getAllByRole('button', { pressed: true }).length, ws.slug).toBeGreaterThan(0)
       }
+      if (ws.interactive) {
+        // The interactive sheet has nothing to print, so it offers a new
+        // problem where the others offer Regenerate and Print.
+        expect(within(panel).getByRole('button', { name: /New/ })).toBeTruthy()
+        expect(within(panel).queryByRole('button', { name: /Print/ }), ws.slug).toBeNull()
+        continue
+      }
+      expect(within(panel).getByRole('button', { name: /Regenerate/ })).toBeTruthy()
+      expect(within(panel).getByRole('button', { name: /Print/ })).toBeTruthy()
     }
   })
 
@@ -318,7 +338,7 @@ describe('App', () => {
 
     fireEvent.click(header.querySelector('a.site-brand'))
     expect(window.location.pathname).toBe('/')
-    expect(screen.queryByRole('tabpanel')).toBeNull()
+    expect(document.querySelector('.worksheet-main')).toBeNull()
     expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
   })
 
@@ -332,6 +352,8 @@ describe('App', () => {
 
   it('tracks print_worksheet with the sheet id and its settings on beforeprint', () => {
     localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'addsub' }, addsub: { ops: 'add', maxVal: 20 } }))
+    // The URL selects the sheet now that / stays on the catalog.
+    window.history.replaceState(null, '', '/worksheets/add-subtract')
     render(<App />)
     window.dispatchEvent(new Event('beforeprint'))
     expect(trackEvent).toHaveBeenCalledWith('print_worksheet', expect.objectContaining({ worksheet_id: 'addsub', setting_ops: 'add', setting_maxVal: 20 }))

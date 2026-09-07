@@ -1,0 +1,697 @@
+{
+ "schemaVersion": 2,
+ "generatedAt": "2026-09-07T00:00:00Z",
+ "title": "Design System: Super Awesome Math",
+ "extensions": {
+  "colorMeta": {
+   "cover": {
+    "role": "neutral",
+    "displayName": "Page Tint",
+    "canonical": "#f5f5f0",
+    "tonalRamp": [
+     "#2f2b1d",
+     "#524c33",
+     "#746b49",
+     "#968b5f",
+     "#aea57f",
+     "#c4bda1",
+     "#ddd9ca",
+     "#f5f4f0"
+    ]
+   },
+   "cover-deep": {
+    "role": "neutral",
+    "displayName": "Header White",
+    "canonical": "#ffffff",
+    "tonalRamp": [
+     "#2d2a1f",
+     "#4e4836",
+     "#70674d",
+     "#918664",
+     "#aaa082",
+     "#c1baa4",
+     "#dcd8cb",
+     "#f5f4f0"
+    ]
+   },
+   "cover-raised": {
+    "role": "neutral",
+    "displayName": "Raised White",
+    "canonical": "#ffffff",
+    "tonalRamp": [
+     "#332c19",
+     "#584d2c",
+     "#7e6e3f",
+     "#a38f52",
+     "#b9a773",
+     "#ccbf99",
+     "#e2dbc5",
+     "#f7f5ee"
+    ]
+   },
+   "on-cover": {
+    "role": "neutral",
+    "displayName": "Ink",
+    "canonical": "#1a1f24",
+    "tonalRamp": [
+     "#20262c",
+     "#38424d",
+     "#4f5e6e",
+     "#677a8e",
+     "#8696a7",
+     "#a6b2bf",
+     "#cdd4db",
+     "#f0f2f4"
+    ]
+   },
+   "on-cover-muted": {
+    "role": "neutral",
+    "displayName": "Faded Board",
+    "canonical": "#5a6570",
+    "tonalRamp": [
+     "#242529",
+     "#3e4146",
+     "#595c64",
+     "#737882",
+     "#90949d",
+     "#aeb1b7",
+     "#d1d3d6",
+     "#f1f2f3"
+    ]
+   },
+   "mark": {
+    "role": "secondary",
+    "displayName": "Marking Red",
+    "canonical": "#d0452f",
+    "tonalRamp": [
+     "#3e150e",
+     "#6c2418",
+     "#9a3323",
+     "#c8422d",
+     "#d86654",
+     "#e38f82",
+     "#efc0b8",
+     "#faecea"
+    ]
+   },
+   "mark-deep": {
+    "role": "secondary",
+    "displayName": "Deep Marking Red",
+    "canonical": "#ab331f",
+    "tonalRamp": [
+     "#41130c",
+     "#702114",
+     "#a0301d",
+     "#cf3e26",
+     "#df634e",
+     "#e88d7d",
+     "#f2beb6",
+     "#fbece9"
+    ]
+   },
+   "paper": {
+    "role": "neutral",
+    "displayName": "Sheet Paper",
+    "canonical": "#ffffff",
+    "tonalRamp": [
+     "#3c3311",
+     "#67581d",
+     "#937e2a",
+     "#bea336",
+     "#d1b95c",
+     "#ddcc88",
+     "#ece2bc",
+     "#f9f7eb"
+    ]
+   },
+   "paper-edge": {
+    "role": "neutral",
+    "displayName": "Paper Edge",
+    "canonical": "#e6e4dd",
+    "tonalRamp": [
+     "#2d291f",
+     "#4e4837",
+     "#6f664e",
+     "#908465",
+     "#a99f84",
+     "#c0b9a5",
+     "#dbd7cc",
+     "#f5f4f0"
+    ]
+   },
+   "ink": {
+    "role": "neutral",
+    "displayName": "Ink",
+    "canonical": "#1a1f24",
+    "tonalRamp": [
+     "#20262c",
+     "#38424d",
+     "#4f5e6e",
+     "#677a8e",
+     "#8696a7",
+     "#a6b2bf",
+     "#cdd4db",
+     "#f0f2f4"
+    ]
+   },
+   "graphite": {
+    "role": "neutral",
+    "displayName": "Graphite",
+    "canonical": "#5a6570",
+    "tonalRamp": [
+     "#22262a",
+     "#3b424a",
+     "#545e69",
+     "#6d7a88",
+     "#8b96a2",
+     "#aab2bb",
+     "#cfd4d8",
+     "#f1f2f4"
+    ]
+   },
+   "control-navy": {
+    "role": "primary",
+    "displayName": "Control Navy",
+    "canonical": "#23282e",
+    "tonalRamp": [
+     "#0e263f",
+     "#17426d",
+     "#215e9b",
+     "#2b7ac9",
+     "#5396da",
+     "#81b2e4",
+     "#b8d4f0",
+     "#eaf2fa"
+    ]
+   },
+   "border-dark": {
+    "role": "neutral",
+    "displayName": "Writable Rule",
+    "canonical": "#7c7770",
+    "tonalRamp": [
+     "#292723",
+     "#48433c",
+     "#676056",
+     "#857c70",
+     "#9f988e",
+     "#b9b4ac",
+     "#d7d4d0",
+     "#f3f2f1"
+    ]
+   },
+   "ink-multiply": {
+    "role": "tertiary",
+    "displayName": "Multiplication Blue",
+    "canonical": "#2d6cb5",
+    "tonalRamp": [
+     "#0f253d",
+     "#1a3f6a",
+     "#265a97",
+     "#3175c4",
+     "#5892d5",
+     "#84afe1",
+     "#bad2ee",
+     "#ebf2fa"
+    ]
+   },
+   "ink-addsub": {
+    "role": "tertiary",
+    "displayName": "Add & Subtract Green",
+    "canonical": "#2e7d5b",
+    "tonalRamp": [
+     "#153829",
+     "#246147",
+     "#338a64",
+     "#42b382",
+     "#66c79d",
+     "#8fd6b7",
+     "#c0e8d6",
+     "#ecf8f3"
+    ]
+   },
+   "ink-coladd": {
+    "role": "tertiary",
+    "displayName": "Column Addition Teal",
+    "canonical": "#17706b",
+    "tonalRamp": [
+     "#0d3f3d",
+     "#176e69",
+     "#209d96",
+     "#2acbc2",
+     "#52dbd4",
+     "#80e5df",
+     "#b7f0ed",
+     "#eafbfa"
+    ]
+   },
+   "ink-colmul": {
+    "role": "tertiary",
+    "displayName": "Column Multiplication Umber",
+    "canonical": "#8a4b2a",
+    "tonalRamp": [
+     "#3b2012",
+     "#66371f",
+     "#914f2c",
+     "#bc6639",
+     "#ce855f",
+     "#dba68a",
+     "#ebccbd",
+     "#f9f0eb"
+    ]
+   },
+   "ink-coldiv": {
+    "role": "tertiary",
+    "displayName": "Long Division Wine",
+    "canonical": "#a83a5b",
+    "tonalRamp": [
+     "#39141f",
+     "#632235",
+     "#8c304c",
+     "#b63f63",
+     "#c96482",
+     "#d88da4",
+     "#e9bfcb",
+     "#f8ecf0"
+    ]
+   },
+   "ink-compare": {
+    "role": "tertiary",
+    "displayName": "Comparison Amber",
+    "canonical": "#9a6212",
+    "tonalRamp": [
+     "#422c0a",
+     "#734c12",
+     "#a36c19",
+     "#d48c21",
+     "#e3a64a",
+     "#eabe7b",
+     "#f3dab4",
+     "#fcf4e9"
+    ]
+   },
+   "ink-rounding": {
+    "role": "tertiary",
+    "displayName": "Rounding Red",
+    "canonical": "#8f3b6e",
+    "tonalRamp": [
+     "#3f110e",
+     "#6d1e18",
+     "#9b2b22",
+     "#c9372c",
+     "#d95d54",
+     "#e38982",
+     "#efbcb8",
+     "#faebea"
+    ]
+   },
+   "ink-patterns": {
+    "role": "tertiary",
+    "displayName": "Patterns Violet",
+    "canonical": "#5b4a91",
+    "tonalRamp": [
+     "#201a33",
+     "#372d58",
+     "#4e407d",
+     "#6653a2",
+     "#8575b8",
+     "#a69acb",
+     "#ccc6e2",
+     "#f0eef6"
+    ]
+   },
+   "ink-eqexplore": {
+    "role": "tertiary",
+    "displayName": "Equation Explorer Cyan",
+    "canonical": "#1f7a8c",
+    "tonalRamp": [
+     "#0e373f",
+     "#185f6d",
+     "#22879a",
+     "#2cafc8",
+     "#54c3d9",
+     "#82d3e3",
+     "#b8e6ef",
+     "#eaf8fa"
+    ]
+   }
+  },
+  "typographyMeta": {
+   "display": {
+    "displayName": "Display",
+    "purpose": "The catalog hero sentence only, balanced and capped at 32ch."
+   },
+   "headline": {
+    "displayName": "Headline",
+    "purpose": "The worksheet page h1 on the board, beside its subject icon."
+   },
+   "title": {
+    "displayName": "Title",
+    "purpose": "Static-page h2, more space above than below."
+   },
+   "subtitle": {
+    "displayName": "Subtitle",
+    "purpose": "Catalog card labels, resume-card label, site wordmark."
+   },
+   "lead": {
+    "displayName": "Lead",
+    "purpose": "The opening paragraph of a static page."
+   },
+   "body": {
+    "displayName": "Body",
+    "purpose": "Prose, constrained to an absolute 686px measure (~68 characters)."
+   },
+   "ui": {
+    "displayName": "UI",
+    "purpose": "Nav links, setting labels, toggles, buttons, card descriptions."
+   },
+   "label": {
+    "displayName": "Label",
+    "purpose": "Ruled document field captions on the sheet (NAME / DATE / SET NO.) only. Never an editorial kicker."
+   },
+   "figure": {
+    "displayName": "Figure",
+    "purpose": "Every problem, digit, stamp and answer, in tabular mono."
+   }
+  },
+  "shadows": [
+   {
+    "name": "sheet-keyline",
+    "value": "0 0 0 1px rgba(26, 31, 36, 0.20)",
+    "purpose": "The hairline that separates a paper plate from the light board. Load-bearing, not garnish: the two grounds are only 1.15:1 apart in tone."
+   },
+   {
+    "name": "sheet-keyline-strong",
+    "value": "0 0 0 1px rgba(26, 31, 36, 0.34)",
+    "purpose": "The same edge on hover, and on the brand label in the header band."
+   },
+   {
+    "name": "shadow-sm",
+    "value": "0 1px 2px rgba(16, 47, 77, 0.12)",
+    "purpose": "Settings panel, worksheet-details plate, brand label, active sidebar row."
+   },
+   {
+    "name": "shadow-md",
+    "value": "0 2px 4px rgba(16, 47, 77, 0.10), 0 8px 18px -8px rgba(16, 47, 77, 0.28)",
+    "purpose": "Catalog cards, worksheet sheet, language menu, skip link."
+   },
+   {
+    "name": "card-hover",
+    "value": "0 0 0 1px rgba(26, 31, 36, 0.34), 0 6px 10px rgba(26, 31, 36, 0.10), 0 18px 30px -12px rgba(26, 31, 36, 0.22)",
+    "purpose": "The sheet lifted 3px off the board on catalog-card hover."
+   },
+   {
+    "name": "input-focus",
+    "value": "0 0 0 3px rgba(26, 31, 36, 0.12)",
+    "purpose": "Numeric input focus halo, paired with a control-navy border."
+   }
+  ],
+  "motion": [
+   {
+    "name": "stamp-down",
+    "value": "0.42s cubic-bezier(0.16, 1, 0.3, 1)",
+    "purpose": "The one authored moment: the set number lands like a rubber stamp, confirming Regenerate. Disabled under reduced-motion and in print."
+   },
+   {
+    "name": "lift",
+    "value": "0.18s cubic-bezier(0.2, 0.8, 0.3, 1)",
+    "purpose": "Catalog card lift and the skip-link slide (0.16s)."
+   },
+   {
+    "name": "state",
+    "value": "0.12s-0.15s ease",
+    "purpose": "Button colour, nav wash, border colour, fold chevron."
+   }
+  ],
+  "breakpoints": [
+   {
+    "name": "narrow",
+    "value": "380px"
+   },
+   {
+    "name": "mobile",
+    "value": "768px"
+   },
+   {
+    "name": "desktop",
+    "value": "769px"
+   }
+  ],
+  "module": [
+   {
+    "name": "notebook-square",
+    "value": "26px",
+    "purpose": "SCREEN_SQUARE in useNotebookGrid.js. Governs block rhythm (grid gap, section padding, heading rhythm), not component-internal padding."
+   },
+   {
+    "name": "print-square",
+    "value": "24px",
+    "purpose": "Quarter inch at 96dpi: the printed quad ruling."
+   },
+   {
+    "name": "print-box",
+    "value": "10.4in x 7.47in",
+    "purpose": "The Letter/A4 landscape intersection minus @page margins; the sheet is laid out to it so one page stays one page in either tray."
+   }
+  ]
+ },
+ "components": [
+  {
+   "name": "Primary Button (Print)",
+   "kind": "button",
+   "refersTo": "button-primary",
+   "description": "The product's one real action, wearing the only warm colour in the system.",
+   "html": "<button class=\"ds-btn ds-btn-primary\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M17 17h2a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2\"/><path d=\"M17 9V5a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v4\"/><rect x=\"7\" y=\"13\" width=\"10\" height=\"8\" rx=\"1\"/></svg>Print</button>",
+   "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 10px 20px; border: none; border-radius: 8px; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; font-weight: 700; line-height: 1.25; letter-spacing: 0.01em; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease; } .ds-btn:active { transform: translateY(1px); } .ds-btn-primary { background: #d0452f; color: #fff; } .ds-btn-primary:hover { background: #ab331f; } .ds-btn-primary:focus-visible { outline: 3px solid #d0452f; outline-offset: 2px; }"
+  },
+  {
+   "name": "Secondary Button (Regenerate)",
+   "kind": "button",
+   "refersTo": "button-secondary",
+   "description": "Outlined on paper: the action that changes the sheet without making paper.",
+   "html": "<button class=\"ds-btn ds-btn-secondary\">Regenerate</button>",
+   "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 10px 20px; border-radius: 8px; background: transparent; color: #1a1f24; border: 1.5px solid #7c7770; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease; } .ds-btn-secondary:hover { background: rgba(26, 31, 36, 0.06); border-color: #23282e; } .ds-btn-secondary:active { transform: translateY(1px); } .ds-btn-secondary:focus-visible { outline: 3px solid #d0452f; outline-offset: 2px; }"
+  },
+  {
+   "name": "Segmented Toggle",
+   "kind": "chip",
+   "refersTo": "button-toggle",
+   "description": "The worksheet setting primitive. Never wraps; the active segment fills control navy.",
+   "html": "<div class=\"ds-btn-group\"><button class=\"ds-btn-toggle\">2-digit</button><button class=\"ds-btn-toggle ds-active\">3-digit</button><button class=\"ds-btn-toggle\">4-digit</button></div>",
+   "css": ".ds-btn-group { display: inline-flex; flex-wrap: nowrap; } .ds-btn-toggle { padding: 7px 14px; border: 1px solid #7c7770; background: transparent; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; color: #1a1f24; white-space: nowrap; cursor: pointer; transition: background-color 0.12s ease, color 0.12s ease; } .ds-btn-toggle:not(:first-child) { border-left: none; } .ds-btn-toggle:first-child { border-radius: 8px 0 0 8px; } .ds-btn-toggle:last-child { border-radius: 0 8px 8px 0; } .ds-btn-toggle:hover { background: #f6f6f2; } .ds-btn-toggle.ds-active { background: #23282e; color: #fff; border-color: #23282e; } .ds-btn-toggle.ds-active + .ds-btn-toggle { border-left: 1px solid #23282e; } .ds-btn-toggle:focus-visible { position: relative; z-index: 1; outline: 3px solid #d0452f; outline-offset: 2px; }"
+  },
+  {
+   "name": "Catalog Card",
+   "kind": "card",
+   "refersTo": "catalog-card",
+   "description": "A sheet lying on the board: paper stock, subject band across the head, a drawn miniature of the real worksheet, then label and description.",
+   "html": "<a class=\"ds-card\" href=\"#\" style=\"--card-color:#17706b\"><span class=\"ds-card-sheet\"><svg class=\"ds-card-thumb\" viewBox=\"0 0 104 64\" fill=\"none\"><defs><pattern id=\"dsr\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><path d=\"M 8 0 L 0 0 0 8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"0.5\" opacity=\"0.28\"/></pattern></defs><rect width=\"104\" height=\"64\" fill=\"url(#dsr)\"/><text x=\"56\" y=\"26\" font-family=\"'JetBrains Mono', monospace\" font-size=\"9\" font-weight=\"600\" text-anchor=\"middle\" fill=\"currentColor\">3 1 2</text><text x=\"40\" y=\"38\" font-family=\"'JetBrains Mono', monospace\" font-size=\"9\" font-weight=\"600\" text-anchor=\"middle\" fill=\"currentColor\">+</text><text x=\"56\" y=\"38\" font-family=\"'JetBrains Mono', monospace\" font-size=\"9\" font-weight=\"600\" text-anchor=\"middle\" fill=\"currentColor\">7 5 8</text><path d=\"M40 42 H72\" stroke=\"currentColor\" stroke-width=\"1\"/></svg></span><span class=\"ds-card-text\"><span class=\"ds-card-label\">Column Addition</span><span class=\"ds-card-desc\">Vertical multi-digit addition</span></span></a>",
+   "css": ".ds-card { position: relative; display: flex; flex-direction: column; width: 296px; padding: 0; overflow: hidden; border: none; border-radius: 12px; background: #ffffff; color: #1a1f24; text-decoration: none; cursor: pointer; box-shadow: 0 0 0 1px rgba(26,31,36,0.20), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); transition: transform 0.18s cubic-bezier(0.2,0.8,0.3,1), box-shadow 0.18s ease; } .ds-card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 5px; background: var(--card-color, #f5f5f0); } .ds-card:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px rgba(26,31,36,0.34), 0 6px 10px rgba(26,31,36,0.10), 0 18px 30px -12px rgba(26,31,36,0.22); } .ds-card:focus-visible { outline: 3px solid #d0452f; outline-offset: 2px; } .ds-card-sheet { display: block; padding: 22px 0 13px; border-bottom: 1px solid #e6e4dd; background: linear-gradient(to bottom, rgba(23,65,107,0.05), transparent 60%); } .ds-card-thumb { display: block; width: 100%; max-width: 208px; margin: 0 auto; aspect-ratio: 104 / 64; } .ds-card-text { display: flex; flex-direction: column; gap: 3px; padding: 13px 16px 18px; } .ds-card-label { font-family: 'Archivo', 'Inter', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; } .ds-card-desc { font-size: 13px; line-height: 1.4; color: #5a6570; }"
+  },
+  {
+   "name": "Sidebar Row (compact catalog)",
+   "kind": "nav",
+   "refersTo": "sidebar-row",
+   "description": "Dense list row on the board: a subject-tinted stroked icon plus a label. Active is the sheet pulled out of the book — it fills with paper and takes the edge keyline.",
+   "html": "<nav class=\"ds-rail\"><a class=\"ds-row\" href=\"#\" style=\"--card-color:#2d6cb5\"><span class=\"ds-row-icon\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 4h16v16H4z\"/><path d=\"M4 9h16M4 15h16M9 4v16M15 4v16\"/></svg></span><span class=\"ds-row-label\">Multiplication</span></a><a class=\"ds-row ds-row-active\" href=\"#\" style=\"--card-color:#17706b\"><span class=\"ds-row-icon\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 4h4v16H4zM10 4h4v16h-4zM16 4h4v16h-4z\"/></svg></span><span class=\"ds-row-label\">Column Addition</span></a></nav>",
+   "css": ".ds-rail { display: flex; flex-direction: column; gap: 2px; width: 220px; padding: 0 8px; } .ds-row { display: flex; flex-direction: row; align-items: center; gap: 10px; min-height: 44px; padding: 9px 12px; border-radius: 8px; background: transparent; color: #1a1f24; text-decoration: none; transition: background 0.15s ease; } .ds-row:hover { background: rgba(26,31,36,0.055); } .ds-row-active { background: #ffffff; box-shadow: 0 0 0 1px rgba(26,31,36,0.20), 0 1px 2px rgba(16,47,77,0.12); } .ds-row:focus-visible { outline: 3px solid #d0452f; outline-offset: 2px; } .ds-row-icon { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; color: var(--card-color, #1a1f24); } .ds-row-label { font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; } .ds-row-active .ds-row-label { font-weight: 700; }"
+  },
+  {
+   "name": "Numeric Input",
+   "kind": "input",
+   "refersTo": "input-number",
+   "description": "The worksheet range control: 72px of paper with a warm-grey stroke, centred figures.",
+   "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Number range</span><span class=\"ds-range\"><input class=\"ds-num\" type=\"number\" value=\"10\"><span class=\"ds-sep\">to</span><input class=\"ds-num\" type=\"number\" value=\"99\"></span></label>",
+   "css": ".ds-field { display: flex; flex-direction: column; gap: 6px; } .ds-field-label { font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; color: #5a6570; } .ds-range { display: flex; align-items: center; gap: 8px; } .ds-sep { font-size: 13px; color: #5a6570; } .ds-num { width: 72px; padding: 7px 10px; border: 1px solid #7c7770; border-radius: 8px; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; text-align: center; color: #1a1f24; background: #ffffff; } .ds-num:focus { outline: none; border-color: #23282e; box-shadow: 0 0 0 3px rgba(26,31,36,0.12); }"
+  },
+  {
+   "name": "Settings Panel",
+   "kind": "custom",
+   "refersTo": "settings-panel",
+   "description": "The shared control primitive for every printable worksheet, holding the same positions on every sheet. Never clips: no overflow hidden, or focus rings die at the edge.",
+   "html": "<section class=\"ds-panel\"><div class=\"ds-panel-body\"><label class=\"ds-field\"><span class=\"ds-field-label\">Number size</span><div class=\"ds-btn-group\"><button class=\"ds-btn-toggle\">2-digit</button><button class=\"ds-btn-toggle ds-active\">3-digit</button></div></label></div><footer class=\"ds-panel-foot\"><button class=\"ds-btn-secondary\">Regenerate</button><button class=\"ds-btn ds-btn-primary\">Print</button></footer></section>",
+   "css": ".ds-panel { background: #ffffff; color: #1a1f24; border: 1px solid #e0dcd1; border-radius: 12px; box-shadow: 0 1px 2px rgba(16,47,77,0.12); } .ds-panel-body { display: flex; flex-direction: row; flex-wrap: wrap; gap: 18px 32px; align-items: flex-start; padding: 18px 24px 20px; } .ds-panel-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 12px 24px; border-top: 1px solid #e0dcd1; border-radius: 0 0 12px 12px; background: #ffffff; }"
+  },
+  {
+   "name": "Worksheet Sheet Header",
+   "kind": "custom",
+   "refersTo": "worksheet-sheet",
+   "description": "Signature. The sheet is a document, so it carries a document's head: title, a ruled Name/Date block a child fills in by hand, and the set stamp that identifies this generated page. Renders identically on screen and on paper.",
+   "html": "<div class=\"ds-sheet\"><div class=\"ds-ws-header\"><div class=\"ds-ws-headline\"><div class=\"ds-ws-title\">Column Addition<span class=\"ds-ws-meta\">3-digit numbers</span></div><dl class=\"ds-ws-fields\"><div class=\"ds-ws-field\"><dt>Name</dt><dd class=\"ds-rule\"></dd></div><div class=\"ds-ws-field\"><dt>Date</dt><dd class=\"ds-rule\"></dd></div><div class=\"ds-ws-field\"><dt>Set no.</dt><dd class=\"ds-stamp\">669</dd></div></dl></div></div></div>",
+   "css": ".ds-sheet { background: #ffffff; color: #1a1f24; border-radius: 12px; padding: 32px 36px; box-shadow: 0 0 0 1px rgba(26,31,36,0.20), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); } .ds-ws-header { padding-bottom: 16px; border-bottom: 2px solid #dcd7cb; } .ds-ws-headline { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; } .ds-ws-title { font-family: 'Inter', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .ds-ws-meta { font-size: 14px; font-weight: 400; color: #5a6570; margin-left: 8px; } .ds-ws-fields { display: flex; align-items: baseline; gap: 16px; margin: 0; } .ds-ws-field { display: flex; align-items: baseline; gap: 6px; } .ds-ws-field dt { font-family: 'Inter', -apple-system, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #5a6570; white-space: nowrap; } .ds-rule { width: 104px; height: 1.15em; border-bottom: 1px solid #7c7770; } .ds-stamp { padding: 1px 7px; border: 1.5px solid #7c7770; border-radius: 6px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #1a1f24; animation: ds-stamp-down 0.42s cubic-bezier(0.16,1,0.3,1) both; transform-origin: center; } @keyframes ds-stamp-down { 0% { transform: scale(1.32); border-color: #d0452f; color: #d0452f; } 60% { border-color: #d0452f; } 100% { transform: scale(1); border-color: #7c7770; color: #1a1f24; } } @media (prefers-reduced-motion: reduce) { .ds-stamp { animation: none; } }"
+  },
+  {
+   "name": "Site Header",
+   "kind": "nav",
+   "refersTo": "brand-label",
+   "description": "The top of the cover: the scored board tone, ruled off below, with the wordmark in the paper label a school book carries — the one place paper shows through the chrome.",
+   "html": "<header class=\"ds-header\"><a class=\"ds-brand\" href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z\" transform=\"rotate(45 12 12)\"/><path d=\"M7 12h3M7 9h2M7 15h2\"/></svg>Super Awesome Math</a><nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\">About</a><button class=\"ds-lang\">EN</button></nav></header>",
+   "css": ".ds-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 20px; background: #ffffff; border-bottom: 1px solid rgba(26,31,36,0.16); } .ds-brand { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 0 4px; font-family: 'Archivo', 'Inter', sans-serif; font-size: 19px; font-weight: 800; letter-spacing: -0.022em; color: #1a1f24; text-decoration: none; } .ds-brand span { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 4px; transition: text-decoration-color 0.15s ease; } .ds-brand:hover span { text-decoration-color: rgba(26,31,36,0.34); } .ds-nav { display: flex; align-items: center; gap: 6px; } .ds-nav-link { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; text-decoration: none; border-radius: 8px; transition: background 0.15s; } .ds-nav-link:hover { background: rgba(26,31,36,0.055); } .ds-lang { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; padding: 7px 12px; border: 1px solid rgba(26,31,36,0.16); background: transparent; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; border-radius: 8px; cursor: pointer; } .ds-lang:hover { background: rgba(26,31,36,0.055); border-color: rgba(26,31,36,0.34); }",
+   "purpose": "The top of the cover: deeper stock, ruled off from the page below. The wordmark is a masthead printed straight onto that stock — cover face plus the drawn ruler mark, no plate. It was a paper plate with a keyline, lift and hover rise, which made it read as a sibling of the bordered language button; the only boxed thing in the header is the one real control."
+  },
+  {
+   "name": "Resume Card",
+   "kind": "card",
+   "refersTo": "sidebar-row",
+   "description": "The remembered sheet, offered not forced: a board-side link on an ink wash with a subject tab.",
+   "html": "<a class=\"ds-resume\" href=\"#\" style=\"--card-color:#5b4a91\"><span class=\"ds-resume-tab\"></span><span class=\"ds-resume-text\"><span class=\"ds-resume-label\">Patterns</span><span>where you left off</span></span></a>",
+   "css": ".ds-resume { display: inline-flex; align-items: stretch; gap: 12px; padding: 10px 18px 10px 12px; background: rgba(26,31,36,0.055); border: 1px solid rgba(26,31,36,0.16); border-radius: 8px; color: #1a1f24; text-decoration: none; transition: background 0.15s ease, border-color 0.15s ease; } .ds-resume:hover { background: rgba(26,31,36,0.10); border-color: rgba(26,31,36,0.34); } .ds-resume-tab { width: 4px; border-radius: 2px; background: var(--card-color, #d0452f); } .ds-resume-text { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; font-family: 'Inter', -apple-system, sans-serif; font-size: 15px; } .ds-resume-label { font-family: 'Archivo', 'Inter', sans-serif; font-size: 16px; font-weight: 700; }"
+  }
+ ],
+ "narrative": {
+  "northStar": "The Exercise Book",
+  "overview": "The site is the exercise book it prints. The interface is the cover — a light board stock (#f5f5f0), a shade heavier than the sheet it holds, the way a school notebook's cover is a field and not a white page. Squared paper (#ffffff) appears only where real paper appears: the printable worksheet, the static prose plate, the settings panel and the answer key. Everything else stands on the board.\n\nThe Governing Rule: cover carries the interface; paper is reserved for where real paper is. There is no dark field to do the separating, so the split is carried by three things together, and all three are load-bearing: TONE (the board is a shade darker than the sheet, and the two must never converge — they ship only 1.15:1 apart, so this carrier is the weakest of the three), EDGE (a 1px ink hairline drawn around every paper plate), and LIFT (a tight, short-throw shadow under the sheet). Remove any one and the page collapses into a single cream expanse.\n\nMode is Operate: a hurried adult picks a worksheet, adjusts it, and prints. Density is moderate and legibility outranks it — the screen is read over a shoulder by a six-year-old. The world refuses the pastel kids-edu register: no rounded illustration icons in tinted squares, no chimes, no stars, no gradient candy. It also refuses a dark ground: this is stationery, and stationery is light.",
+  "keyCharacteristics": [
+   "One light board field, one warm mark colour, one paper stock, held apart by tone + edge + lift.",
+   "Paper surfaces sit on the board as square-cut plates with a hairline keyline plus a tight shadow — stapled stock, not floating glass.",
+   "Nine subject inks, carried as a 4–5px edge tab, as a card head band, and as the tint on the dense-context icons — never as text.",
+   "Type is Archivo for cover/display, Inter for UI and prose, JetBrains Mono for every figure.",
+   "The notebook square (--sq: 26px) is the shared module between the sheet and the chrome that configures it.",
+   "Motion is one authored moment: the set stamp coming down."
+  ],
+  "rules": [
+   {
+    "name": "The Cover/Paper Rule",
+    "body": "No surface is both, and the two never converge in tone. Cover and paper are only 1.15:1 apart; a new paper plate must therefore state its own color: var(--color-text) and carry box-shadow: 0 0 0 1px var(--edge) plus --shadow-sm/--shadow-md. A paper surface without its edge and lift is invisible.",
+    "section": "colors"
+   },
+   {
+    "name": "The One Warm Mark Rule",
+    "body": "Marking red is the product's single warm colour and it belongs to the act of making paper. Do not use it for chips, badges, headings, dividers, or decoration.",
+    "section": "colors"
+   },
+   {
+    "name": "The Grayscale Rule",
+    "body": "On paper, colour is never the sole carrier of meaning. Every printed distinction survives a grayscale inkjet: states are named in words, and the sheet's marks are ink-black, not tinted.",
+    "section": "colors"
+   },
+   {
+    "name": "The Ink Discipline Rule",
+    "body": "No decorative grey on paper. Print overrides push every screen grey to a real ink value — field labels #333, rules #333, problem numbers #555, the stamp #111 — so every printed mark carries information.",
+    "section": "colors"
+   },
+   {
+    "name": "The Tabular Rule",
+    "body": "Every number a reader compares or aligns is font-variant-numeric: tabular-nums in JetBrains Mono: problem values, the set stamp, problem counters, answer-key numbers and values. Digits never render through toLocaleString().",
+    "section": "typography"
+   },
+   {
+    "name": "The Named Face Rule",
+    "body": "Three loaded families and no fourth. No system display face, and no icon font — every icon is inline stroked SVG.",
+    "section": "typography"
+   },
+   {
+    "name": "The 44px Rule",
+    "body": "Every interactive element declares min-height: 44px — nav links, footer links, brand label, back button, language button and menu items, catalog rows and chips, buttons, checkbox rows, sliders, fold summaries.",
+    "section": "layout"
+   },
+   {
+    "name": "The Keyline-First Rule",
+    "body": "Separation on the board is a 1px ink ring at low alpha, not a border and not a heavier shadow. A paper plate that drops its keyline has broken the governing rule, not just lost a detail.",
+    "section": "elevation"
+   },
+   {
+    "name": "The Flat Cover Rule",
+    "body": "Nothing on the board is elevated except paper. Board-side controls (nav links, back button, sidebar rows, resume card, empty state) use cover-wash / cover-wash-strong tonal washes instead of shadow.",
+    "section": "elevation"
+   },
+   {
+    "name": "The Stroked-Mark Rule",
+    "body": "Every mark in the interface is drawn: sheet miniatures are hand-authored SVG at one stroke weight and one 8px grid pitch (SheetThumb.jsx); interface icons are inline stroked SVG (Tabler, stroke 1.7–2.0, 19–26px), tinted with the subject ink. No icon font, no emoji, no raster glyph, no illustration-in-a-tinted-square.",
+    "section": "shapes"
+   },
+   {
+    "name": "The Two-Cue Rule",
+    "body": "In a dense list the icon is the faster cue and the colour is the second one. Colour alone carries nothing for a viewer who cannot separate the hues, so a subject ink never travels without either its icon or its label. The full catalog keeps the drawn sheet miniatures instead: at card size the real sheet is more informative than any icon.",
+    "section": "components"
+   },
+   {
+    "name": "The Reduced-Motion Guarantee",
+    "body": "A global prefers-reduced-motion: reduce block clamps every animation and transition to 0.01ms with a single iteration, and the stamp explicitly sets animation: none. Paper never animates: the stamp is also disabled in @media print.",
+    "section": "motion"
+   },
+   {
+    "name": "The Print Shorthand Rule",
+    "body": "Inside @media print, never use the `background` shorthand on a surface another rule paints a background-image onto. The shorthand also resets background-size/origin/position/repeat, and at equal specificity it wins those longhands even when a later rule wins the image — which is how every notebook worksheet came to print with `background-size: auto` and no ruling at all. Restate the geometry longhands next to the print background-image.",
+    "section": "print"
+   },
+   {
+    "name": "The Ruled-To-The-Edge Rule",
+    "body": "A printed notebook sheet is ruled to the bottom margin, not to the last problem. The sheet carries min-height: calc(var(--nb-page-sq) * var(--nb-sq)); --nb-page-sq is PAGE_SQUARES from useNotebookGrid, the page’s own square budget, so the ruling fills the page and can never push a second one.",
+    "section": "print"
+   },
+   {
+    "name": "The Preview-On-Its-Ruling Rule",
+    "body": "A catalog preview draws squared paper, so every mark in it is placed in the ruling’s coordinates — never in free pixels. Use cx/cy/ln/span in SheetThumb: a digit is centred in a cell at the sheet’s own 0.77 digit-to-square ratio, a rule falls on a grid line, a blank is ink inside a cell. A mark at an arbitrary offset breaks the only claim the preview makes.",
+    "section": "components"
+   },
+   {
+    "name": "The Masthead Rule",
+    "body": "The wordmark is set on the cover stock, never on a paper plate. Paper is reserved for where real paper is, and a wordmark is not a sheet — giving it a keyline, a lift and a hover rise put it beside the language button and made the pair read as two buttons. Identity is carried by the cover face and the drawn ruler mark. It is still a link home, so it owes an affordance: a ruled underline on the wordmark only, in --cover-line-strong, never a colour shift or a lift.",
+    "section": "components"
+   },
+   {
+    "name": "The Three-Step Radius Rule",
+    "body": "Every corner in the app is --radius-sm (6px), --radius (8px) or --radius-lg (12px). Plates take the large step, controls the default, small marks the small one. A 2-3px scale was tried and read as too sharp for a product a six-year-old sits in front of. A literal px radius in a component file is drift in either direction.",
+    "section": "shapes"
+   }
+  ],
+  "dos": [
+   "Do put paper only where a sheet, a leaf, or a sheet's control panel is; everything else stands on the board.",
+   "Do give every new paper surface all three separators: its own color: var(--color-text), a 1px var(--edge) keyline, and --shadow-sm/--shadow-md. On a light board, one of the three is not enough.",
+   "Do keep cover and paper apart in tone. They ship 1.15:1 apart — the whole remaining margin; any change that closes that gap deletes the system.",
+   "Do build board-side hover and raised states from cover-wash / cover-wash-strong, tinted from the ground's own ink.",
+   "Do spend marking red only on the Print action, the focus ring, prose links (mark-deep) and the set stamp.",
+   "Do pair every subject ink with an icon or a text label — colour is the second cue, never the only one.",
+   "Do set every figure in JetBrains Mono with tabular-nums.",
+   "Do give every interactive element min-height: 44px.",
+   "Do measure block rhythm in --sq / --half-sq.",
+   "Do convert every screen grey to a real ink value inside @media print.",
+   "Do budget the tallest translation when computing rows per printed page."
+  ],
+  "donts": [
+   "Don't introduce a dark ground. The world is stationery and stationery is light; the ink-navy field was tried and rejected outright.",
+   "Don't ship a paper plate without its keyline. Without the edge it is a cream shape on a cream field.",
+   "Don't use white-tinted washes on the board. White on light board is invisible; washes are ink-tinted.",
+   "Don't use a subject ink as text, as a fill, or as the only signal of state.",
+   "Don't use marking red for badges, headings, dividers or decoration.",
+   "Don't treat control-navy as a ground. It is a control accent (toggle fill, accent-color, focus border) and nothing larger.",
+   "Don't put on-cover-muted text on cover-deep — it measures 4.40:1 there.",
+   "Don't put decorative grey on paper: every printed mark carries information and must survive grayscale on a cheap inkjet.",
+   "Don't round anything past 3px.",
+   "Don't use an icon font, emoji, or a raster glyph. Interface icons are inline stroked SVG at 1.7–2.0 stroke; sheet miniatures are drawn SVG at one weight and one grid pitch.",
+   "Don't put an icon in the full catalog in place of the sheet miniature — at card size the real sheet is the argument.",
+   "Don't add a second authored animation. The set stamp is the product's one moment; feedback that rewards a tap is the thing this product argues against.",
+   "Don't add uppercase editorial kickers or eyebrows above titles. The 11px uppercase style belongs to ruled document field captions (NAME / DATE / SET NO.) only.",
+   "Don't clip focus rings: no overflow: hidden on control containers.",
+   "Don't force a paper size in @page. Orientation only; lay out to the Letter/A4 intersection.",
+   "Don't rule a coloured band across the head of a card. The subject colour belongs in the shadow the sheet casts (color-mix on --card-color, declared after a neutral shadow), not in a strip between the card edge and its content.",
+   "Don't leave a cool hue on the paper. The ruling was slate-400 long after the palette went warm and read lavender on cream; screen and print ruling are neutral ink at the same blended lightness.",
+   "Don't put the brand on a paper plate, or give it a hover lift. In the header the only boxed element is the language switcher, because it is the only control.",
+   "Don't paint a coloured board behind the interface. An ink-navy field and a cream one were both built and both rejected — the navy for being dark, the cream for reading as aged paper. Chrome is white; the page tint is #f5f5f0 and nothing else."
+  ],
+  "contrast": [
+   "ink on paper 16.17:1",
+   "ink on board 12.86:1",
+   "ink on header band 11.58:1",
+   "ink on cover-wash-strong 10.58:1",
+   "faded board text on board 4.89:1 (4.40:1 on cover-deep — do not use it there)",
+   "graphite on paper 5.79:1",
+   "white on control-navy 10.47:1",
+   "white on marking red 4.59:1",
+   "mark-deep links on paper 6.34:1",
+   "focus ring on board 3.56:1 / on paper 4.47:1",
+   "print footer on paper 7.41:1",
+   "cover vs paper 1.15:1 — tone alone is nowhere near the separator; edge and lift are"
+  ],
+  "deviations": [
+   "The direction contract's FIRST VIEWPORT called for the catalog as cover label-strips; the build shipped a paper card grid (repeat(auto-fill, minmax(268px, 1fr)), 940px). The label-strip form survives only in the compact sidebar/chip mode.",
+   "Equation Explorer's controls sit outside the shared settings panel (.eq-controls, its own layout), breaking the FIXED PANEL discipline that holds for the other eight worksheets."
+  ],
+  "notCanonized": [
+   "The mobile hero at 14px (.catalog-hero, <=768px), a step below body size and far under the desktop 30px. Drift, not a ramp step; do not derive a mobile display size from it.",
+   "Resolved: ink-compare was #c07f1e at 2.58:1 on the board, under the 3:1 non-text floor. It is now #9a6212 (3.94:1 board, 4.95:1 paper); all nine subject inks clear 3:1 on both grounds and a new one must too.",
+   "The navy-tinted --shadow-sm / --shadow-md values (rgba(16,47,77,...)), left over from the dark-ground build. The ink tint (rgba(26,31,36,...)) used by --edge and the card-hover shadow is the rule.",
+   "The .worksheet keyline written as a literal rgba(16,47,77,0.16) rather than var(--edge), and the faint navy gradient wash on .catalog-card-sheet. Pre-relight residue, not tokens to copy."
+  ]
+ }
+}

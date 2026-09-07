@@ -111,6 +111,8 @@ export default {
     worksheetTypes: 'Arten von Arbeitsblättern',
     sourceOnGitHub: 'Quellcode auf GitHub',
     language: 'Sprache',
+    resume: 'Dort weitermachen, wo Sie aufgehört haben',
+    skipToContent: 'Zum Inhalt springen',
   },
 
   common: {
@@ -118,6 +120,9 @@ export default {
     print: 'Drucken',
     printWorksheet: 'Arbeitsblatt drucken',
     printFooterTagline: 'Kostenlose Mathe-Materialien zum Ausdrucken',
+    screenOnly: "Der Gleichungs-Explorer ist für den Bildschirm gemacht, es gibt nichts zu drucken. Wählen Sie ein anderes Arbeitsblatt für eine druckbare Seite.",
+    answerKey: "Lösungsblatt",
+    answerKeyOption: "Lösungsblatt drucken",
     columns: 'Spalten',
     limit: 'Zahlenraum',
     range: 'Bereich',
@@ -128,6 +133,9 @@ export default {
     options: 'Optionen',
     within: 'Bis {n}',
     withinMeta: 'bis {n}',
+    fieldName: 'Name',
+    fieldDate: 'Datum',
+    fieldSet: 'Satz',
   },
 
   multiply: {
@@ -136,8 +144,12 @@ export default {
     rangeEnd: 'Ende des Bereichs',
     fillDiagonal: 'Diagonale ausfüllen',
     shuffleHeaders: 'Zeilen und Spalten mischen',
+    emptyRange: "Der Bereich läuft rückwärts, es gibt nichts zu drucken. Setzen Sie die zweite Zahl höher als die erste, zum Beispiel 1 bis 10.",
+    tooWide: "Dieser Bereich ergibt eine Tabelle, die nicht auf eine Seite passt. Halten Sie die beiden Zahlen höchstens 15 auseinander, zum Beispiel 1 bis 12.",
     prefill: 'Vorausfüllen {pct} %',
     tableAria: 'Einmaleins-Tabelle',
+    title: "Multiplikation",
+    meta: "{start} bis {end}",
   },
 
   addsub: {
@@ -350,7 +362,7 @@ export default {
     eqexplore: {
       label: 'Gleichungs-Explorer',
       shortDesc: 'Gleichungen interaktiv lösen',
-      longDesc: 'Ein Gleichungslöser am Bildschirm (nicht druckbar): Ziehe Terme über das Gleichheitszeichen und sieh zu, wie das Vorzeichen wechselt, folge den Sprüngen am Zahlenstrahl und tippe die Antwort auf der eingebauten Tastatur ein. Richtige Antworten verlängern die Serie und lösen Konfetti aus; falsche spielen eine animierte Erklärung ab.',
+      longDesc: 'Ein Gleichungslöser am Bildschirm (nicht druckbar): Ziehe Terme über das Gleichheitszeichen und sieh zu, wie das Vorzeichen wechselt, folge den Sprüngen am Zahlenstrahl und tippe die Antwort auf der eingebauten Tastatur ein. Richtige Antworten verlängern die Serie; falsche spielen eine animierte Erklärung ab.',
       skills: ['Gleichungen', 'Umkehroperationen', 'Zahlenstrahl', 'Kopfrechnen'],
       settings: [
         'Rechenart: Addition, Subtraktion oder beides',

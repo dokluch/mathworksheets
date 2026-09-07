@@ -1,8 +1,12 @@
 import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useT } from '../i18n/context'
-import { SettingsPanel, SettingRow, SegmentedControl, PanelActions } from './controls/SettingsPanel'
+import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './Rounding.css'
+import WorksheetHeader from './WorksheetHeader'
+import { setStamp } from '../lib/setStamp'
+import AnswerKey from './AnswerKey'
+import { usePreviewScale } from '../hooks/usePreviewScale'
 
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -32,7 +36,9 @@ export default function Rounding() {
   const t = useT()
   const [place, setPlace] = usePersistedState('rounding', 'place', 10)
   const [columns, setColumns] = usePersistedState('rounding', 'columns', 3)
+  const [answerKey, setAnswerKey] = usePersistedState('rounding', 'answerKey', false)
   const [seed, setSeed] = useState(0)
+  const [fitRef, fitStyle] = usePreviewScale()
 
   const problemCount = columns === 2 ? 20 : columns === 3 ? 30 : 40
 
@@ -58,31 +64,43 @@ export default function Rounding() {
         <SettingRow label={t('common.columns')}>
           <SegmentedControl value={columns} onChange={setColumns} options={[2, 3, 4].map(c => ({ value: c, label: c }))} />
         </SettingRow>
+        <SettingRow label={t('common.options')}>
+          <CheckboxOption checked={answerKey} onChange={setAnswerKey}>
+            {t('common.answerKeyOption')}
+          </CheckboxOption>
+        </SettingRow>
       </SettingsPanel>
 
-      <div className={`worksheet print-area cols-${columns}`}>
-        <div className="worksheet-header">
-          <div className="ws-title">
-            {t('rounding.title')}
-            <span className="ws-meta">
-              {t('rounding.meta', { n: place })}
-            </span>
+      <div className="sheet-fit" ref={fitRef} style={fitStyle}>
+        <div className={`worksheet print-area cols-${columns}`}>
+          <WorksheetHeader
+            title={t('rounding.title')}
+            meta={t('rounding.meta', { n: place })}
+            stamp={setStamp(problems)}
+          />
+
+          <div
+            className="rounding-grid"
+            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+          >
+            {problems.map((p, i) => (
+              <div key={i} className="rounding-item">
+                <span className="rounding-number">{String(p.n)}</span>
+                <span className="rounding-arrow">≈</span>
+                <span className="blank-slot" />
+              </div>
+            ))}
           </div>
         </div>
-
-        <div
-          className="rounding-grid"
-          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-        >
-          {problems.map((p, i) => (
-            <div key={i} className="rounding-item">
-              <span className="rounding-number">{String(p.n)}</span>
-              <span className="rounding-arrow">≈</span>
-              <span className="blank-slot" />
-            </div>
-          ))}
-        </div>
       </div>
+
+      {answerKey && (
+        <AnswerKey
+          title={t('rounding.title')}
+          stamp={setStamp(problems)}
+          answers={problems.map(p => String(p.rounded))}
+        />
+      )}
     </div>
   )
 }

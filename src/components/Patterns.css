@@ -3,23 +3,32 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  counter-reset: problem;
 }
 
+/* Numbered with the same corner counter every other sheet uses (see
+   AddSubtract.css), so a parent saying "look at number 7" reads one
+   convention across the whole book. */
 .pattern-row {
+  position: relative;
+  counter-increment: problem;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 0;
+  padding: 10px 0 10px 28px;
   border-bottom: 1px solid var(--color-border-light);
 }
 
-.pattern-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
+.pattern-row::before {
+  content: counter(problem);
+  position: absolute;
+  top: 2px;
+  left: 0;
+  font-size: 10px;
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
   color: var(--color-text-muted);
-  min-width: 2em;
-  text-align: right;
 }
 
 .pattern-seq {
@@ -36,7 +45,7 @@
 }
 
 .pattern-val {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-figure);
   font-size: 16px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
@@ -45,9 +54,9 @@
 }
 
 .pattern-comma {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-figure);
   font-size: 16px;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   margin-right: 8px;
 }
 
@@ -60,7 +69,23 @@
 
 /* ── Print styles ── */
 @media print {
+  /* Height is pinned so listRowsPerPage() in hooks/useNotebookGrid.js can do
+     exact arithmetic against it; PRINT_LIST_ROW must match this value. */
   .pattern-row {
+    height: 49px;
+    padding-top: 0;
+    padding-bottom: 0;
     border-bottom-color: #ddd;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .pattern-row::before {
+    color: #555;
+  }
+
+  .pattern-comma,
+  .ws-instructions {
+    color: #333;
   }
 }

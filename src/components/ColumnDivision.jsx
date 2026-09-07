@@ -5,6 +5,9 @@ import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import { frameLayout, generateProblems } from '../lib/longDivision'
 import './ColumnDivision.css'
+import WorksheetHeader from './WorksheetHeader'
+import { setStamp } from '../lib/setStamp'
+import AnswerKey from './AnswerKey'
 
 const PRESETS = [
   { value: '3x1', dividendDigits: 3, divisorDigits: 1 },
@@ -101,6 +104,7 @@ export default function ColumnDivision() {
   const [notation, setNotation] = usePersistedState('coldiv', 'notation', t('coldiv.defaultNotation'))
   const [columns, setColumns] = usePersistedState('coldiv', 'columns', 3)
   const [allowRemainder, setAllowRemainder] = usePersistedState('coldiv', 'allowRemainder', false)
+  const [answerKey, setAnswerKey] = usePersistedState('coldiv', 'answerKey', false)
   const [seed, setSeed] = useState(0)
 
   const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[0]
@@ -119,9 +123,13 @@ export default function ColumnDivision() {
   const columnOptions = useMemo(() => COLUMN_OPTIONS.filter(c => fitsPrint(c, frame.cols)), [frame.cols])
   const activeColumns = columnOptions.includes(columns) ? columns : columnOptions[columnOptions.length - 1]
 
-  // Frames are tall, so they sit directly under the header and directly under
-  // each other; the spare square each item carries is the only separator.
-  const spacing = { rowGap: 0, headerGap: 0 }
+  // Frames are tall, so they sit directly under each other; the spare square
+  // each item carries is the only separator. The one square below the header is
+  // not decoration: a division frame grows *upward* into its quotient row
+  // (.coldiv-item is flex-start, unlike the carry-space above a column sum), so
+  // without it the first row's quotient boxes butt against the header rule. It
+  // is free — rowsPerPage returns the same count for every preset and notation.
+  const spacing = { rowGap: 0, headerGap: 1 }
   const problemCount = problemsPerPage({ columns: activeColumns, rows: frame.rows, ...spacing })
   const presetLabel = (a, b) => t('coldiv.preset', { a, b })
 
@@ -165,6 +173,9 @@ export default function ColumnDivision() {
           />
         </SettingRow>
         <SettingRow label={t('common.options')}>
+          <CheckboxOption checked={answerKey} onChange={setAnswerKey}>
+            {t('common.answerKeyOption')}
+          </CheckboxOption>
           <CheckboxOption checked={allowRemainder} onChange={setAllowRemainder}>
             {t('coldiv.allowRemainder')}
           </CheckboxOption>
@@ -176,14 +187,11 @@ export default function ColumnDivision() {
         className={`worksheet notebook-grid-bg colarith-notebook coldiv-notebook print-area cols-${activeColumns}`}
         style={sheetStyle}
       >
-        <div className="worksheet-header">
-          <div className="ws-title">
-            {t('coldiv.title')}
-            <span className="ws-meta">
-              {t('coldiv.meta', { preset: presetLabel(dividendDigits, divisorDigits) })}
-            </span>
-          </div>
-        </div>
+        <WorksheetHeader
+          title={t('coldiv.title')}
+          meta={t('coldiv.meta', { preset: presetLabel(dividendDigits, divisorDigits) })}
+          stamp={setStamp(problems)}
+        />
 
         <div className="colarith-grid">
           {problems.map((problem, idx) => (
@@ -193,6 +201,16 @@ export default function ColumnDivision() {
           ))}
         </div>
       </div>
+
+      {answerKey && (
+        <AnswerKey
+          title={t('coldiv.title')}
+          stamp={setStamp(problems)}
+          answers={problems.map(p => (
+            p.remainder ? `${p.quotient} r${p.remainder}` : String(p.quotient)
+          ))}
+        />
+      )}
     </div>
   )
 }

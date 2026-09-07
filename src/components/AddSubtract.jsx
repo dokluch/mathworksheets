@@ -3,6 +3,10 @@ import { usePersistedState } from '../hooks/usePersistedState'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
+import WorksheetHeader from './WorksheetHeader'
+import { setStamp } from '../lib/setStamp'
+import AnswerKey from './AnswerKey'
+import { usePreviewScale } from '../hooks/usePreviewScale'
 
 const PRESETS = [10, 20, 100, 1000]
 
@@ -141,7 +145,9 @@ export default function AddSubtract() {
   const [columns, setColumns] = usePersistedState('addsub', 'columns', 3)
   const [layout, setLayout] = usePersistedState('addsub', 'layout', 'inline')
   const [sixtySevenMode, setSixtySevenMode] = usePersistedState('addsub', 'sixtySevenMode', true)
+  const [answerKey, setAnswerKey] = usePersistedState('addsub', 'answerKey', false)
   const [seed, setSeed] = useState(0)
+  const [fitRef, fitStyle] = usePreviewScale()
 
   const stackedCounts = { 2: 14, 3: 18, 4: 24 }
   const inlineCounts = { 2: 20, 3: 30, 4: 40 }
@@ -208,35 +214,44 @@ export default function AddSubtract() {
           <CheckboxOption checked={sixtySevenMode} onChange={setSixtySevenMode}>
             {t('addsub.sixtySeven')}
           </CheckboxOption>
+          <CheckboxOption checked={answerKey} onChange={setAnswerKey}>
+            {t('common.answerKeyOption')}
+          </CheckboxOption>
         </SettingRow>
       </SettingsPanel>
 
       {problems && (
-        <div className={`worksheet print-area cols-${columns}`}>
-          <div className="worksheet-header">
-            <div className="ws-title">
-              {t('addsub.title')}
-              <span className="ws-meta">
-                {ops === 'add' ? '(+)' : ops === 'sub' ? '(−)' : '(+ / −)'}
-                {' · '}{t('common.withinMeta', { n: maxVal })}
-              </span>
+        <div className="sheet-fit" ref={fitRef} style={fitStyle}>
+          <div className={`worksheet print-area cols-${columns}`}>
+            <WorksheetHeader
+              title={t('addsub.title')}
+              meta={`${ops === 'add' ? '(+)' : ops === 'sub' ? '(−)' : '(+ / −)'} · ${t('common.withinMeta', { n: maxVal })}`}
+              stamp={setStamp(problems)}
+            />
+
+            <div
+              className={`problem-grid ${layout === 'stacked' ? 'stacked-grid' : ''}`}
+              style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+            >
+              {problems.map((p, i) => (
+                <div key={i} className={`problem-item ${layout === 'stacked' ? 'problem-item-stacked' : ''}`}>
+                  {layout === 'stacked'
+                    ? renderStackedProblem(p)
+                    : <span className="problem-text">{renderProblem(p)}</span>
+                  }
+                </div>
+              ))}
             </div>
           </div>
-
-          <div
-            className={`problem-grid ${layout === 'stacked' ? 'stacked-grid' : ''}`}
-            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-          >
-            {problems.map((p, i) => (
-              <div key={i} className={`problem-item ${layout === 'stacked' ? 'problem-item-stacked' : ''}`}>
-                {layout === 'stacked'
-                  ? renderStackedProblem(p)
-                  : <span className="problem-text">{renderProblem(p)}</span>
-                }
-              </div>
-            ))}
-          </div>
         </div>
+      )}
+
+      {answerKey && problems && (
+        <AnswerKey
+          title={t('addsub.title')}
+          stamp={setStamp(problems)}
+          answers={problems.map(p => String(getBlankAnswer(p)))}
+        />
       )}
     </div>
   )

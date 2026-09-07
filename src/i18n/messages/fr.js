@@ -111,6 +111,8 @@ export default {
     worksheetTypes: 'Types de fiches',
     sourceOnGitHub: 'Code source sur GitHub',
     language: 'Langue',
+    resume: 'Reprendre où vous en étiez',
+    skipToContent: 'Aller au contenu',
   },
 
   common: {
@@ -118,6 +120,9 @@ export default {
     print: 'Imprimer',
     printWorksheet: 'Imprimer la fiche',
     printFooterTagline: 'Ressources de maths gratuites à imprimer',
+    screenOnly: "L’Explorateur d’équations est conçu pour l’écran : il n’y a rien à imprimer. Choisissez une autre fiche pour obtenir une feuille imprimable.",
+    answerKey: "Corrigé",
+    answerKeyOption: "Imprimer un corrigé",
     columns: 'Colonnes',
     limit: 'Limite',
     range: 'Plage',
@@ -128,6 +133,9 @@ export default {
     options: 'Options',
     within: 'Jusqu’à {n}',
     withinMeta: 'jusqu’à {n}',
+    fieldName: 'Nom',
+    fieldDate: 'Date',
+    fieldSet: 'Série',
   },
 
   multiply: {
@@ -136,8 +144,12 @@ export default {
     rangeEnd: 'Fin de la plage',
     fillDiagonal: 'Remplir la diagonale',
     shuffleHeaders: 'Mélanger lignes et colonnes',
+    emptyRange: "La plage est inversée : il n’y a rien à imprimer. Choisissez un second nombre plus grand que le premier, par exemple 1 à 10.",
+    tooWide: "Cette plage donne une table trop large pour tenir sur une page. Gardez un écart d’au plus 15 entre les deux nombres, par exemple de 1 à 12.",
     prefill: 'Pré-remplir {pct} %',
     tableAria: 'Table de multiplication',
+    title: "Multiplication",
+    meta: "{start} à {end}",
   },
 
   addsub: {
@@ -350,7 +362,7 @@ export default {
     eqexplore: {
       label: 'Explorateur d’équations',
       shortDesc: 'Résoudre des équations de façon interactive',
-      longDesc: 'Un résolveur d’équations à l’écran (non imprimable) : fais glisser les termes de l’autre côté du signe égal et regarde le signe changer, suis les sauts sur une droite numérique, puis tape la réponse sur le pavé intégré. Les bonnes réponses font monter une série et déclenchent des confettis ; les erreurs rejouent une explication animée.',
+      longDesc: 'Un résolveur d’équations à l’écran (non imprimable) : fais glisser les termes de l’autre côté du signe égal et regarde le signe changer, suis les sauts sur une droite numérique, puis tape la réponse sur le pavé intégré. Les bonnes réponses font monter une série ; les erreurs rejouent une explication animée.',
       skills: ['équations', 'opérations inverses', 'droite numérique', 'calcul mental'],
       settings: [
         'Opération : addition, soustraction ou les deux',

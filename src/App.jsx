@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo } from 'react'
+import { useEffect, useCallback, useMemo, useState } from 'react'
 import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator, IconDivide } from '@tabler/icons-react'
 import { usePersistedState, getPersistedTab } from './hooks/usePersistedState'
 import { useRoute, sheetIdToPath } from './hooks/useRoute'
@@ -14,6 +14,8 @@ import SiteFooter from './components/SiteFooter'
 import PrintCta from './components/PrintCta'
 import PrintFooter from './components/PrintFooter'
 import StaticPage from './components/StaticPage'
+import SheetThumb from './components/SheetThumb'
+import { SheetStateContext } from './components/SheetState'
 import WorksheetDetails from './components/WorksheetDetails'
 import MultiplicationTable from './components/MultiplicationTable'
 import AddSubtract from './components/AddSubtract'
@@ -25,6 +27,13 @@ import ColumnAddition from './components/ColumnAddition'
 import ColumnMultiplication from './components/ColumnMultiplication'
 import ColumnDivision from './components/ColumnDivision'
 
+/*
+ * Icons for the dense contexts — the desktop sidebar and the mobile chip row —
+ * where a sheet preview would shrink into mush. They carry the subject colour
+ * as a tint, so the colour is a second cue rather than the only one.
+ * The full catalog keeps the real sheet previews; an icon there would be the
+ * stock-illustration-in-a-tinted-square this redesign exists to remove.
+ */
 const ICONS = {
   multiply: IconGrid3x3,
   addsub: IconPlusMinus,
@@ -52,16 +61,24 @@ const COMPONENTS = {
 export default function App() {
   const [persistedSheet, setPersistedSheet] = usePersistedState('app', 'activeTab', null)
   const [persistedLocale, setPersistedLocale] = usePersistedState('app', 'locale', DEFAULT_LOCALE)
-  const [activeSheet, navigate, activePage, locale, setLocale, pathInLocale] = useRoute(persistedSheet, persistedLocale)
+  const [activeSheet, navigate, activePage, locale, setLocale, pathInLocale] = useRoute(persistedLocale)
 
-  // Keep "pick up where you left off" working across sessions. Reading a
-  // static page (About, Privacy, …) must not forget the remembered sheet.
+  // Keep "pick up where you left off" working across sessions. Only ever
+  // record a sheet: reading a static page must not forget it, and neither
+  // must returning to the catalog — which is where the offer is now shown.
   useEffect(() => {
-    if (!activePage) setPersistedSheet(activeSheet)
-  }, [activeSheet, activePage, setPersistedSheet])
+    if (activeSheet) setPersistedSheet(activeSheet)
+  }, [activeSheet, setPersistedSheet])
 
   const localeCtx = useMemo(() => ({ locale, t: (key, params) => translate(locale, key, params) }), [locale])
   const t = localeCtx.t
+
+  // A worksheet with impossible settings has nothing to print; the shell hides
+  // its Print call to action rather than offering a blank page.
+  // Reset is owned by useReportEmpty's cleanup, which fires when the previous
+  // worksheet unmounts on a sheet change.
+  const [sheetEmpty, setSheetEmpty] = useState(false)
+  const sheetState = useMemo(() => ({ empty: sheetEmpty, setEmpty: setSheetEmpty }), [sheetEmpty])
 
   // Catalog data lives in src/worksheets.js (shared with SEO/build), translated per locale; icons are UI-only.
   const worksheets = useMemo(
@@ -94,6 +111,23 @@ export default function App() {
   const ActiveComponent = activeSheet ? COMPONENTS[activeSheet] : null
   const activeInfo = worksheets.find(w => w.id === activeSheet)
 
+  // On phones the sheet list is a horizontal rail: bring the open sheet into
+  // view, or the rail shows Multiplication and Add & Subtract and no
+  // indication of which sheet is actually open.
+  useEffect(() => {
+    if (!activeSheet) return
+    const el = document.querySelector('.catalog-grid--compact .catalog-card--active')
+    if (el && typeof el.scrollIntoView === 'function') {
+      el.scrollIntoView({ inline: 'center', block: 'nearest' })
+    }
+  }, [activeSheet])
+
+  // Offered on the catalog rather than redirected to, so the front door stays
+  // the front door and Back still returns here.
+  const resumeSheet = !activeSheet && !activePage && persistedSheet
+    ? worksheets.find(w => w.id === persistedSheet)
+    : null
+
   // Same route object the prerender step uses, so WorksheetDetails renders the
   // identical HTML and the crawlable copy survives hydration.
   const activeRoute = useMemo(
@@ -115,6 +149,8 @@ export default function App() {
   return (
     <LocaleContext.Provider value={localeCtx}>
       <div className={`app ${activeSheet ? 'has-active' : 'catalog-only'}`}>
+        {/* On a worksheet page this skips 12+ header and sidebar stops. */}
+        <a className="skip-link no-print" href="#main">{t('app.skipToContent')}</a>
         <SiteHeader navigate={navigate} isHome={!activeSheet && !activePage}>
           {switcher}
         </SiteHeader>
@@ -135,18 +171,19 @@ export default function App() {
               </a>
             </header>
 
-            <nav className="catalog-grid catalog-grid--compact" role="tablist" aria-label={t('app.worksheetTypes')}>
+            {/* A list of links, described as one. It used to claim
+                role="tablist" without the arrow-key behaviour tabs owe. */}
+            <nav className="catalog-grid catalog-grid--compact" aria-label={t('app.worksheetTypes')}>
               {worksheets.map(ws => (
                 <a
                   key={ws.id}
-                  role="tab"
-                  aria-selected={activeSheet === ws.id}
+                  aria-current={activeSheet === ws.id ? 'page' : undefined}
                   className={`catalog-card ${activeSheet === ws.id ? 'catalog-card--active' : ''}`}
                   style={{ '--card-color': ws.color }}
                   {...cardLink(ws)}
                 >
-                  <span className="catalog-card-icon">
-                    <ws.Icon size={20} stroke={1.6} />
+                  <span className="catalog-card-icon" aria-hidden="true">
+                    <ws.Icon size={19} stroke={1.7} />
                   </span>
                   <span className="catalog-card-text">
                     <span className="catalog-card-label">{ws.label}</span>
@@ -158,8 +195,19 @@ export default function App() {
             <SiteFooter navigate={navigate} variant="sidebar" />
           </aside>
         ) : (
-          <main className="catalog no-print catalog--full">
+          <main className="catalog no-print catalog--full" id="main">
             <p className="catalog-hero">{t('app.subtitle')}</p>
+
+            {resumeSheet && (
+              <a className="resume-card" {...cardLink(resumeSheet)}>
+                <span className="resume-card-tab" style={{ '--card-color': resumeSheet.color }} aria-hidden="true" />
+                {/* One line, no eyebrow: the sentence carries the label
+                    rather than a label carrying a sentence. */}
+                <span className="resume-card-text">
+                  {t('app.resume')} <b className="resume-card-label">{resumeSheet.label}</b>
+                </span>
+              </a>
+            )}
 
             <nav className="catalog-grid" aria-label={t('app.worksheetTypes')}>
               {worksheets.map(ws => (
@@ -169,8 +217,8 @@ export default function App() {
                   style={{ '--card-color': ws.color }}
                   {...cardLink(ws)}
                 >
-                  <span className="catalog-card-icon">
-                    <ws.Icon size={32} stroke={1.6} />
+                  <span className="catalog-card-sheet">
+                    <SheetThumb id={ws.id} />
                   </span>
                   <span className="catalog-card-text">
                     <span className="catalog-card-label">{ws.label}</span>
@@ -186,10 +234,14 @@ export default function App() {
 
         {/* ── Worksheet Content ── */}
         {ActiveComponent && (
-          <main className="worksheet-main" role="tabpanel" aria-label={activeInfo?.label}>
+          <main className="worksheet-main" id="main" aria-label={activeInfo?.label}>
             <div className="worksheet-topbar no-print">
-              <h1 className="worksheet-title" style={{ color: activeInfo?.color }}>
-                {activeInfo && <activeInfo.Icon size={22} stroke={1.8} />}
+              <h1 className="worksheet-title" style={{ '--card-color': activeInfo?.color }}>
+                {activeInfo && (
+                  <span className="worksheet-title-icon" aria-hidden="true">
+                    <activeInfo.Icon size={22} stroke={1.8} />
+                  </span>
+                )}
                 {activeInfo && t('seo.worksheetHeading', { label: activeInfo.label })}
               </h1>
               {activeInfo && (
@@ -199,8 +251,13 @@ export default function App() {
               )}
             </div>
             <div className="worksheet-content">
-              <ActiveComponent />
-              {!activeInfo?.interactive && <PrintCta />}
+              <SheetStateContext.Provider value={sheetState}>
+                <ActiveComponent />
+                {!activeInfo?.interactive && !sheetEmpty && <PrintCta />}
+                {activeInfo?.interactive && (
+                  <p className="eq-print-note print-only">{t('common.screenOnly')}</p>
+                )}
+              </SheetStateContext.Provider>
             </div>
             <PrintFooter />
             {activeRoute && <WorksheetDetails route={activeRoute} navigate={navigate} />}

@@ -1,8 +1,12 @@
 import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useT } from '../i18n/context'
-import { SettingsPanel, SettingRow, SegmentedControl, PanelActions } from './controls/SettingsPanel'
+import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './Comparison.css'
+import WorksheetHeader from './WorksheetHeader'
+import { setStamp } from '../lib/setStamp'
+import AnswerKey from './AnswerKey'
+import { usePreviewScale } from '../hooks/usePreviewScale'
 
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -109,7 +113,9 @@ export default function Comparison() {
   const t = useT()
   const [maxVal, setMaxVal] = usePersistedState('compare', 'maxVal', 100)
   const [columns, setColumns] = usePersistedState('compare', 'columns', 3)
+  const [answerKey, setAnswerKey] = usePersistedState('compare', 'answerKey', false)
   const [seed, setSeed] = useState(0)
+  const [fitRef, fitStyle] = usePreviewScale()
 
   const problemCount = columns === 2 ? 20 : columns === 3 ? 30 : 40
 
@@ -142,31 +148,43 @@ export default function Comparison() {
         <SettingRow label={t('common.columns')}>
           <SegmentedControl value={columns} onChange={setColumns} options={[2, 3, 4].map(c => ({ value: c, label: c }))} />
         </SettingRow>
+        <SettingRow label={t('common.options')}>
+          <CheckboxOption checked={answerKey} onChange={setAnswerKey}>
+            {t('common.answerKeyOption')}
+          </CheckboxOption>
+        </SettingRow>
       </SettingsPanel>
 
-      <div className={`worksheet print-area cols-${columns}`}>
-        <div className="worksheet-header">
-          <div className="ws-title">
-            {t('compare.title')}
-            <span className="ws-meta">
-              {'<  >  ='} · {t('common.withinMeta', { n: maxVal })}
-            </span>
+      <div className="sheet-fit" ref={fitRef} style={fitStyle}>
+        <div className={`worksheet print-area cols-${columns}`}>
+          <WorksheetHeader
+            title={t('compare.title')}
+            meta={`<  >  = · ${t('common.withinMeta', { n: maxVal })}`}
+            stamp={setStamp(problems)}
+          />
+
+          <div
+            className="compare-grid"
+            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+          >
+            {problems.map((p, i) => (
+              <div key={i} className="compare-item">
+                <span className="compare-val">{p.a}</span>
+                <span className="blank-slot" />
+                <span className="compare-val">{p.b}</span>
+              </div>
+            ))}
           </div>
         </div>
-
-        <div
-          className="compare-grid"
-          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-        >
-          {problems.map((p, i) => (
-            <div key={i} className="compare-item">
-              <span className="compare-val">{p.a}</span>
-              <span className="blank-slot" />
-              <span className="compare-val">{p.b}</span>
-            </div>
-          ))}
-        </div>
       </div>
+
+      {answerKey && (
+        <AnswerKey
+          title={t('compare.title')}
+          stamp={setStamp(problems)}
+          answers={problems.map(p => p.answer)}
+        />
+      )}
     </div>
   )
 }

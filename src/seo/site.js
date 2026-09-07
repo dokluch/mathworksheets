@@ -22,7 +22,14 @@ export const GITHUB_URL = 'https://github.com/dokluch/mathworksheets'
 export const LICENSE_URL = 'https://creativecommons.org/licenses/by-nc/4.0/'
 export const LICENSE_NAME = 'CC BY-NC 4.0'
 export const OG_IMAGE_PATH = '/og/home.png'
-export const THEME_COLOR = '#2563eb'
+/**
+ * Browser chrome tint. Matches the site header, which is white, so the phone's
+ * address bar continues the page rather than announcing a colour the site does
+ * not use. (Was Tailwind's #2563eb, then the cream board stock.)
+ */
+export const THEME_COLOR = '#ffffff'
+/** The one warm mark: links and the accent on generated preview cards. */
+export const ACCENT_COLOR = '#d0452f'
 
 export function absoluteUrl(path = '/') {
   if (/^https?:\/\//.test(path)) return path

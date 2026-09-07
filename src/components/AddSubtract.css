@@ -1,10 +1,14 @@
 /* ── Worksheet (print-ready) ── */
+/* The sheet is white on the page tint, separated by a hairline and a lift
+   rather than by a change of stock. It states its own colour rather than
+   inheriting the page's. */
 .worksheet {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  color: var(--color-text);
+  border: none;
+  border-radius: var(--radius-lg);
   padding: 32px 36px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 0 0 1px var(--edge), var(--shadow-md);
 }
 
 /*
@@ -53,6 +57,149 @@
   margin-left: 8px;
 }
 
+/* ── Sheet identity block: Name / Date / Set no. ──
+   The sheet is a document a child owns, so it carries the fields a document
+   carries. Rendered on screen as well as on paper: what the parent approves
+   is what prints. */
+.ws-headline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+}
+
+.ws-fields {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin: 0;
+}
+
+.ws-field {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.ws-field dt {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* A rule to write on, not a decorative underline: it is sized to hold a
+   child's handwriting, and it prints as real ink. */
+.ws-field--rule dd {
+  width: 104px;
+  height: 1.15em;
+  border-bottom: 1px solid var(--color-border-dark);
+}
+
+.ws-field--stamp dd {
+  padding: 1px 7px;
+  border: 1.5px solid var(--color-border-dark);
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+/*
+ * The one authored moment in the product.
+ *
+ * Regenerate is the highest-frequency action and it used to swap twenty-odd
+ * random numbers for twenty different ones with nothing to confirm it fired.
+ * The set number is the thing that provably changed, so the stamp is what
+ * announces the change: it comes down like a rubber stamp — over-scaled and
+ * ink-dark for an instant, settling to rest on an exponential ease-out from
+ * an already-visible default, so nothing flashes in from nothing.
+ *
+ * Keyed on the stamp value in WorksheetHeader.jsx, so it fires exactly when
+ * the sheet's content actually changed and never on an unrelated re-render.
+ */
+@keyframes ws-stamp-down {
+  0% {
+    transform: scale(1.32);
+    border-color: var(--mark);
+    color: var(--mark);
+  }
+  60% {
+    border-color: var(--mark);
+  }
+  100% {
+    transform: scale(1);
+    border-color: var(--color-border-dark);
+    color: var(--color-text);
+  }
+}
+
+.ws-field--stamp dd {
+  animation: ws-stamp-down 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-field--stamp dd {
+    animation: none;
+  }
+}
+
+/* Paper never animates. */
+@media print {
+  .ws-field--stamp dd {
+    animation: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .ws-field--rule dd {
+    width: 72px;
+  }
+  .ws-fields {
+    gap: 12px;
+  }
+}
+
+/* ── Problem numbering ──
+   Every problem on a sheet is numbered, so a grown-up checking the page can
+   say "have another look at number 7" and the child knows which one. The
+   counter is absolutely positioned so it adds no height: the notebook sheets
+   are laid out in whole squares and any extra flow would break the grid. */
+.problem-grid,
+.colarith-grid,
+.compare-grid,
+.rounding-grid {
+  counter-reset: problem;
+}
+
+.problem-item,
+.colarith-item,
+.compare-item,
+.rounding-item {
+  counter-increment: problem;
+  position: relative;
+}
+
+.problem-item::before,
+.colarith-item::before,
+.compare-item::before,
+.rounding-item::before {
+  content: counter(problem);
+  position: absolute;
+  top: 2px;
+  left: 0;
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--color-text-muted);
+}
+
 /* ── Problem grid ── */
 .problem-grid {
   display: grid;
@@ -69,7 +216,7 @@
 }
 
 .problem-text {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-figure);
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.3px;
@@ -86,7 +233,7 @@
 }
 
 .problem-text .op {
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-weight: 600;
   font-size: 20px;
   line-height: 1;
@@ -114,7 +261,7 @@
 }
 
 .stacked-problem {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-figure);
   font-size: 16px;
   font-weight: 500;
   display: inline-flex;
@@ -132,7 +279,7 @@
 }
 
 .stacked-row .op {
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-weight: 600;
   font-size: 18px;
   line-height: 1;
@@ -157,14 +304,29 @@
 
 /* ── Print styles ── */
 @media print {
+  /* White, not the cream screen stock: a tinted rectangle that stops where
+     the content stops read as a second paper over the white page, and it
+     spends ink on nothing. */
   .worksheet {
+    /* `background-color`, never the `background` shorthand: the shorthand also
+       resets background-size/origin/repeat, and it was silently flattening the
+       squared ruling below to `auto` — one stray rule at the edge of the sheet
+       instead of a printed notebook page. */
+    background-color: #fff;
+    background-image: none;
     border: none;
     border-radius: 0;
     box-shadow: none;
-    padding: 0.4in 0.5in;
+    /* No bottom padding: the @page bottom margin already reserves 0.5in for
+       the print footer, and adding it again here pushed the sheet's box past
+       the page even when its last row still fitted. */
+    padding: 0.4in 0.5in 0;
     width: 100%;
   }
 
+  /* Darker ruling for paper. The geometry longhands are repeated rather than
+     inherited from the screen rule: `.worksheet` above is the same specificity,
+     so anything it resets has to be restated here or it wins. */
   .notebook-grid-bg {
     background-image:
       linear-gradient(
@@ -177,10 +339,47 @@
         transparent calc(100% - var(--notebook-grid-line-width)),
         var(--notebook-grid-line-color-print) calc(100% - var(--notebook-grid-line-width))
       );
+    background-size: var(--notebook-grid-size) var(--notebook-grid-size);
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
   }
 
   .worksheet-header {
     border-bottom-color: #999;
+  }
+
+  /* Ink discipline: on paper every mark carries information, so the field
+     labels and rules print as real ink rather than as decorative grey, and
+     the sheet stays fully legible in pure grayscale on a cheap inkjet. */
+  .ws-field dt {
+    color: #333;
+  }
+
+  .ws-field--rule dd {
+    border-bottom-color: #333;
+  }
+
+  .ws-field--stamp dd {
+    border-color: #333;
+    color: #111;
+  }
+
+  .problem-item::before,
+  .colarith-item::before,
+  .compare-item::before,
+  .rounding-item::before {
+    color: #555;
+  }
+
+  /* Ink discipline: operators and the meta line print as ink, never grey. */
+  .problem-text .op,
+  .stacked-row .op {
+    color: #111;
+  }
+
+  .ws-meta {
+    color: #333;
   }
 
   .problem-item {

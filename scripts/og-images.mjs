@@ -20,7 +20,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { WORKSHEETS } from '../src/worksheets.js'
-import { BRAND, TAGLINE, THEME_COLOR } from '../src/seo/site.js'
+import { BRAND, TAGLINE, ACCENT_COLOR } from '../src/seo/site.js'
 import { escapeHtml, homeRoute, worksheetRoute, ogImagePath, brandIcon } from '../src/seo/render.js'
 
 export const OG_WIDTH = 1200
@@ -48,7 +48,7 @@ export function ogTargets(filter = '') {
       title: BRAND,
       subtitle: 'Printable math worksheets for grades 1–3',
       badges: ['Free', 'Randomized', 'Print-ready'],
-      color: THEME_COLOR,
+      color: ACCENT_COLOR,
     },
     ...WORKSHEETS.map(ws => ({
       route: worksheetRoute(ws),
@@ -101,7 +101,7 @@ export function renderCard({ title, subtitle, badges, color, lines = [] }, shot)
     font-weight: 700;
     font-size: 22px;
     letter-spacing: -0.01em;
-    color: ${THEME_COLOR};
+    color: ${ACCENT_COLOR};
   }
   .brand svg { width: 26px; height: 26px; }
   h1 { font-size: 56px; line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; color: ${color}; }

@@ -1,30 +1,106 @@
+/*
+ * THE EXERCISE BOOK
+ *
+ * The site is the exercise book it prints: squared paper, real ink, one warm
+ * marking colour, and a preview that shows what comes out of the printer.
+ *
+ * The grounds are white chrome on a lightly tinted page. Two coloured board
+ * stocks were tried before this — an ink-navy field and then a cream one —
+ * and both were rejected: the navy for being dark, the cream for reading as
+ * aged paper. What ships is the arrangement the product had before either:
+ * the site header, the catalog and every panel are WHITE, and a quiet tint
+ * shows through behind them in the worksheet area and under the footer. The
+ * chrome is separated from the page by a hairline and a lift, never by a
+ * change of stock.
+ */
 :root {
-  --color-bg: #f5f5f0;
-  --color-surface: #ffffff;
-  --color-surface-hover: #f8fafc;
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-light: rgba(37, 99, 235, 0.1);
-  --color-primary-faint: rgba(37, 99, 235, 0.04);
-  --color-text: #1e293b;
-  --color-text-muted: #64748b;
-  --color-border: #e2e8f0;
-  --color-border-dark: #cbd5e1;
-  --color-border-light: #f1f5f9;
-  --color-border-worksheet: #e5e7eb;
-  --color-accent-green: #059669;
-  --color-accent-orange: #d97706;
-  --color-accent-red: #dc2626;
-  --color-accent-purple: #7c3aed;
-  --color-header-bg: #eef2ff;
+  /* ── Grounds ──
+     The token names are historical — they are used in ~200 declarations, so
+     renaming them would be churn with no benefit. What they mean is this:
+       --cover        the tinted page ground; what shows through "inside"
+       --cover-deep   the site header, which is white and ruled off
+       --cover-raised raised chrome standing on the ground */
+  --cover: #f5f5f0;
+  --cover-deep: #ffffff;
+  --cover-raised: #ffffff;
+  --cover-line: rgba(26, 31, 36, 0.16);
+  --cover-line-strong: rgba(26, 31, 36, 0.34);
+  /* Washes for hover and raised states, tinted from the ink rather than from
+     white, so a hover never introduces a second hue. */
+  --cover-wash: rgba(26, 31, 36, 0.055);
+  --cover-wash-strong: rgba(26, 31, 36, 0.10);
+  --on-cover: #1a1f24;
+  /* One muted grey for one role: 5.44:1 on the page tint, 5.95:1 on white. */
+  --on-cover-muted: #5a6570;
+
+  /* ── The teacher's marking pencil: the product's one warm colour ── */
+  --mark: #d0452f;
+  --mark-deep: #ab331f;
+
+  /* ── Paper: the sheet, the panels, the chrome ── */
+  --paper: #ffffff;
+  --paper-edge: #e6e4dd;
+
+  /* White chrome on a 1.09:1 tint cannot be told apart by tone, so the
+     hairline and the lift are the separation, not a garnish. Every plate
+     carries both. */
+  --edge: rgba(26, 31, 36, 0.20);
+  --edge-strong: rgba(26, 31, 36, 0.34);
+
+  --color-bg: var(--cover);
+  --color-surface: var(--paper);
+  --color-surface-hover: #f6f6f2;
+  /* The control accent is ink, not a second hue. Selected toggles, the
+     checkbox and slider `accent-color`, and the current locale all use it;
+     the marking red stays reserved for Print, so the system keeps exactly one
+     warm mark. (This was the last navy left from the rejected dark ground.) */
+  --color-primary: #23282e;
+  --color-primary-hover: #14181c;
+  --color-primary-light: rgba(26, 31, 36, 0.12);
+  --color-primary-faint: rgba(26, 31, 36, 0.05);
+  /* Ink and graphite, not slate: these sit on paper and must print. */
+  --color-text: #1a1f24;
+  --color-text-muted: #5a6570;
+  --color-border: #e0dcd1;
+  /* Control strokes (toggles, inputs, the Name/Date rules) must clear the
+     3:1 non-text floor on paper AND on the board; #b9b0a0 measured 2.09 and
+     1.66. This clears both (4.33 and 3.75) at the board's own chroma. */
+  --color-border-dark: #7c7770;
+  --color-border-light: #eeebe2;
+  --color-border-worksheet: #dcd7cb;
+  --color-accent-green: #3f7a5e;
+  --color-accent-red: var(--mark);
+
+  /* ── Type ── */
+  --font-cover: 'Archivo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-figure: 'JetBrains Mono', ui-monospace, monospace;
   --notebook-grid-size: 10px;
   --notebook-grid-line-width: 1px;
-  --notebook-grid-line-color: rgba(148, 163, 184, 0.28);
-  --notebook-grid-line-color-print: rgba(107, 114, 128, 0.42);
+  /* The ruling is drawn in the sheet's own ink, tinted right down. It used to
+     be slate-400 — the last cool hue left anywhere on the paper after the
+     palette went warm, and on a cream sheet it read distinctly lavender. Both
+     replacements hold the previous blended lightness (≈223 on paper, ≈196 on
+     white) so the ruling is no heavier, only neutral. */
+  --notebook-grid-line-color: rgba(26, 31, 36, 0.14);
+  --notebook-grid-line-color-print: rgba(114, 114, 114, 0.42);
+  /* ── One module ──
+     The notebook square is the product's own unit (SCREEN_SQUARE in
+     hooks/useNotebookGrid.js). The interface is measured in it too, so the
+     chrome sits on the same ruling as the sheet it configures. */
+  --sq: 26px;
+  --half-sq: 13px;
+
+  /* Radii. The 2–3px scale the redesign shipped read as too sharp for a
+     product a six-year-old sits in front of; these are the softer steps the
+     product had before it. Three steps, and every corner in the app uses one
+     of them — a literal px radius in a component file is drift. */
+  --radius-sm: 6px;
   --radius: 8px;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-  --focus-ring: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-primary);
+  --radius-lg: 12px;
+  /* Stapled stock, not floating glass: a tight offset shadow with real blur. */
+  --shadow-sm: 0 1px 2px rgba(26, 31, 36, 0.10);
+  --shadow-md: 0 2px 4px rgba(26, 31, 36, 0.09), 0 8px 18px -8px rgba(26, 31, 36, 0.20);
 }
 
 *, *::before, *::after {
@@ -34,23 +110,50 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--color-bg);
-  color: var(--color-text);
+  font-family: var(--font-ui);
+  background: var(--cover);
+  color: var(--on-cover);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+/* Every paper surface states its ink explicitly: the page ground is the cover
+   and its type is light, so anything that inherits silently comes out cream
+   on cream. */
+.worksheet,
+.settings-panel,
+.static-page,
+.worksheet-details,
+.lang-menu,
+.catalog-card,
+.mult-table-wrap {
+  color: var(--color-text);
+}
+
+/* Browser surfaces the design still owns. */
+::selection {
+  background: var(--mark);
+  color: #fff;
+}
+
+.static-page ::selection,
+.worksheet ::selection {
+  background: rgba(208, 69, 47, 0.24);
+  color: inherit;
 }
 
 #root {
   min-height: 100vh;
 }
 
-/* ── Focus styles ── */
+/* ── Focus styles ──
+   An outline, not a box-shadow: it follows each element's own border-radius,
+   so the ring no longer squares off the corners of the mobile chips and the
+   catalog cards. The marking red reads against both the cover and paper. */
 :focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-  border-radius: var(--radius);
+  outline: 3px solid var(--mark);
+  outline-offset: 2px;
 }
 
 /* ── Reduced motion ── */
@@ -63,7 +166,12 @@ body {
 }
 
 @page {
-  size: letter landscape;
+  /* Orientation only: the paper itself is the user's. Five of the seven
+     locales are A4 countries, and forcing `letter` made Chrome scale or crop
+     on A4 stock. Sheets are laid out to the Letter/A4 intersection instead
+     (see PRINT_WIDTH / PRINT_HEIGHT in hooks/useNotebookGrid.js), so one page
+     stays one page in either tray. */
+  size: landscape;
   /* Wider bottom margin reserves the band the print footer sits in. */
   margin: 0.3in 0.3in 0.5in;
 }
@@ -89,7 +197,8 @@ body {
     text-align: center;
     font-size: 9pt;
     line-height: 1.2;
-    color: #64748b;
-    background: white;
+    /* Ink, not the old slate: a printed mark on the child's page. */
+    color: #4a5560;
+    background: #fff;
   }
 }

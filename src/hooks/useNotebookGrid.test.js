@@ -73,7 +73,7 @@ describe('problemsPerPage', () => {
     return HEADER_BAND + headerGap + n * (rows + 1) + (n - 1) * rowGap
   }
 
-  it('fills a letter landscape page without spilling over', () => {
+  it('fills one landscape page without spilling over', () => {
     for (const rows of [3, 4, 5, 6]) {
       for (const spacing of [{}, { rowGap: 0, headerGap: 0 }, { rowGap: 2, headerGap: 1 }]) {
         const n = rowsPerPage(rows, spacing)
@@ -83,10 +83,20 @@ describe('problemsPerPage', () => {
     }
   })
 
-  it('gives 4 rows of long multiplication and 7 rows of packed column addition per page', () => {
-    expect(rowsPerPage(5)).toBe(4)
-    expect(rowsPerPage(3, { rowGap: 0, headerGap: 0 })).toBe(7)
-    expect(problemsPerPage({ columns: 3, rows: 5 })).toBe(12)
-    expect(problemsPerPage({ columns: 4, rows: 3, rowGap: 0, headerGap: 0 })).toBe(28)
+  it('gives 3 rows of long multiplication and 6 rows of packed column addition per page', () => {
+    expect(rowsPerPage(5)).toBe(3)
+    expect(rowsPerPage(3, { rowGap: 0, headerGap: 0 })).toBe(6)
+    expect(problemsPerPage({ columns: 3, rows: 5 })).toBe(9)
+    expect(problemsPerPage({ columns: 4, rows: 3, rowGap: 0, headerGap: 0 })).toBe(24)
+  })
+
+  // Regression: the budget used to assume symmetric 0.3in margins while @page
+  // reserved 0.5in at the bottom, so column addition generated 21 problems and
+  // printed 18 plus three orphans on a sliced second page.
+  it('never budgets more rows than the shortest supported paper holds', () => {
+    const usable = (8.27 - 0.3 - 0.5) * 96
+    expect(PRINT_HEIGHT).toBeLessThanOrEqual(usable)
+    const n = rowsPerPage(3, { rowGap: 0, headerGap: 0 })
+    expect(pageSquares(3, n, 0, 0) * PRINT_SQUARE).toBeLessThanOrEqual(PRINT_HEIGHT)
   })
 })

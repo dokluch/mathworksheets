@@ -14,7 +14,7 @@ import { WORKSHEETS, findWorksheetBySlug, findWorksheetById } from '../worksheet
 import { PAGES, findPageBySlug, findPageById } from '../pages.js'
 import {
   SITE_URL, BRAND, AUTHOR, GITHUB_URL,
-  LICENSE_URL, LICENSE_NAME, OG_IMAGE_PATH, THEME_COLOR, OPERATOR, absoluteUrl,
+  LICENSE_URL, LICENSE_NAME, OG_IMAGE_PATH, THEME_COLOR, ACCENT_COLOR, OPERATOR, absoluteUrl,
 } from './site.js'
 import {
   t, interpolate, localizeWorksheet, localizedWorksheets, localizePage, localizedPages,
@@ -1034,11 +1034,11 @@ export function renderNotFoundHtml(pathname = '', locale = DEFAULT_LOCALE) {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>${h('notFound.title')} · ${BRAND}</title>
     <style>
-      body { margin: 0; padding: 48px 20px; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #1f2937; background: #f8fafc; }
+      body { margin: 0; padding: 48px 20px; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #1f2937; background: #f5f5f0; }
       main { max-width: 640px; margin: 0 auto; }
       h1 { font-size: 26px; margin: 0 0 8px; }
       h2 { font-size: 18px; margin: 28px 0 8px; }
-      a { color: ${THEME_COLOR}; }
+      a { color: ${ACCENT_COLOR}; }
       code { background: #e5e7eb; padding: 1px 5px; border-radius: 4px; }
       ul { padding-left: 20px; line-height: 1.7; }
     </style>
