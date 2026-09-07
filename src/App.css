@@ -745,6 +745,57 @@ a.back-btn {
   margin-top: 8px;
 }
 
+/* Collapsible worksheet sections (see fold() in src/seo/render.js). The <h2>
+   lives inside the <summary>, so it is styled as a heading but laid out inline
+   next to the marker. */
+.static-fold {
+  width: 100%;
+  max-width: 680px;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.static-fold > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  cursor: pointer;
+  list-style: none;
+  color: var(--color-text-muted);
+}
+
+.static-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Chevron, rotated when the section is open. */
+.static-fold > summary::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  margin-left: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 0.15s ease;
+}
+
+.static-fold[open] > summary::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+.static-page .static-fold h2 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.static-page .static-fold > ul,
+.static-page .static-fold > ol {
+  margin: 0 0 16px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
 /* =============================================
    BUTTONS (global primitives: settings panel, Equation Explorer, print CTA)
    ============================================= */

@@ -579,25 +579,33 @@ export function worksheetDetailsHtml(route) {
         <p>${escapeHtml(ws.longDesc)}</p>
         <p><strong>${h('static.worksheet.skills')}:</strong> ${ws.skills.map(escapeHtml).join(', ')}. <strong>${h('static.worksheet.format')}:</strong> ${h(ws.interactive ? 'static.worksheet.formatInteractive' : 'static.worksheet.formatPrintable')}.</p>
       </section>
-      <h2>${h('static.worksheet.settings')}</h2>
-      <ul>
+      ${fold(h('static.worksheet.settings'), `<ul>
         ${settings}
-      </ul>
-      <h2>${h('static.worksheet.examples')}</h2>
-      <ul class="worksheet-examples">
+      </ul>`)}
+      ${fold(h('static.worksheet.examples'), `<ul class="worksheet-examples">
         ${examples}
-      </ul>
-      <h2>${h(ws.interactive ? 'static.worksheet.howToUseActivity' : 'static.worksheet.howToUseWorksheet')}</h2>
-      <ol>
+      </ul>`)}
+      ${fold(h(ws.interactive ? 'static.worksheet.howToUseActivity' : 'static.worksheet.howToUseWorksheet'), `<ol>
         <li>${h('static.worksheet.step1', { url: link(route.path, absoluteUrl(route.path)) })}</li>
         <li>${h('static.worksheet.step2')}</li>
         <li>${h(ws.interactive ? 'static.worksheet.step3Interactive' : 'static.worksheet.step3Printable')}</li>
-      </ol>
-      <h2>${h('static.worksheet.others', { brand: BRAND })}</h2>
-      <ul>
+      </ol>`)}
+      ${fold(h('static.worksheet.others', { brand: BRAND }), `<ul>
         ${related}
-      </ul>
+      </ul>`)}
       ${agentLinksHtml(locale)}`
+}
+
+/**
+ * A collapsed section: the heading stays an <h2> inside the <summary>, so the
+ * document outline and the heading-level invariant are unchanged, and the body
+ * stays in the HTML for crawlers. Markdown twins are unaffected.
+ */
+function fold(heading, body) {
+  return `<details class="static-fold">
+        <summary><h2>${heading}</h2></summary>
+        ${body}
+      </details>`
 }
 
 function worksheetContent(route) {
