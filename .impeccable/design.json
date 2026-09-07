@@ -7,46 +7,46 @@
    "cover": {
     "role": "neutral",
     "displayName": "Board Stock",
-    "canonical": "#e8e2d5",
+    "canonical": "#eeece4",
     "tonalRamp": [
-     "#312a1b",
-     "#56492f",
-     "#7a6943",
-     "#9e8857",
-     "#b5a278",
-     "#c9bb9c",
-     "#e0d8c7",
-     "#f6f4ef"
+     "#2f2b1d",
+     "#524c33",
+     "#746b49",
+     "#968b5f",
+     "#aea57f",
+     "#c4bda1",
+     "#ddd9ca",
+     "#f5f4f0"
     ]
    },
    "cover-deep": {
     "role": "neutral",
     "displayName": "Scored Board",
-    "canonical": "#ded7c7",
+    "canonical": "#e5e2d9",
     "tonalRamp": [
-     "#302a1c",
-     "#534931",
-     "#776846",
-     "#9a875b",
-     "#b1a17b",
-     "#c6ba9f",
-     "#dfd8c8",
-     "#f6f4ef"
+     "#2d2a1f",
+     "#4e4836",
+     "#70674d",
+     "#918664",
+     "#aaa082",
+     "#c1baa4",
+     "#dcd8cb",
+     "#f5f4f0"
     ]
    },
    "cover-raised": {
     "role": "neutral",
     "displayName": "Raised Board",
-    "canonical": "#f1ece1",
+    "canonical": "#f7f5ef",
     "tonalRamp": [
-     "#342b18",
-     "#5a4b2a",
-     "#816b3c",
-     "#a78b4e",
-     "#bca570",
-     "#cebd97",
-     "#e3dac4",
-     "#f7f4ee"
+     "#332c19",
+     "#584d2c",
+     "#7e6e3f",
+     "#a38f52",
+     "#b9a773",
+     "#ccbf99",
+     "#e2dbc5",
+     "#f7f5ee"
     ]
    },
    "on-cover": {
@@ -127,16 +127,16 @@
    "paper-edge": {
     "role": "neutral",
     "displayName": "Paper Edge",
-    "canonical": "#e3ddcf",
+    "canonical": "#e5e2da",
     "tonalRamp": [
-     "#302a1c",
-     "#544931",
-     "#776846",
-     "#9b875a",
-     "#b2a17b",
-     "#c7bb9e",
-     "#dfd8c8",
-     "#f6f4ef"
+     "#2d291f",
+     "#4e4837",
+     "#6f664e",
+     "#908465",
+     "#a99f84",
+     "#c0b9a5",
+     "#dbd7cc",
+     "#f5f4f0"
     ]
    },
    "ink": {
@@ -187,16 +187,16 @@
    "border-dark": {
     "role": "neutral",
     "displayName": "Writable Rule",
-    "canonical": "#7f776a",
+    "canonical": "#7c7770",
     "tonalRamp": [
-     "#2c2820",
-     "#4c4538",
-     "#6d6250",
-     "#8d8068",
-     "#a69b87",
-     "#beb6a7",
-     "#dad5cd",
-     "#f4f3f0"
+     "#292723",
+     "#48433c",
+     "#676056",
+     "#857c70",
+     "#9f988e",
+     "#b9b4ac",
+     "#d7d4d0",
+     "#f3f2f1"
     ]
    },
    "ink-multiply": {
@@ -377,7 +377,7 @@
    {
     "name": "sheet-keyline",
     "value": "0 0 0 1px rgba(26, 31, 36, 0.20)",
-    "purpose": "The hairline that separates a paper plate from the light board. Load-bearing, not garnish: the two grounds are only 1.26:1 apart in tone."
+    "purpose": "The hairline that separates a paper plate from the light board. Load-bearing, not garnish: the two grounds are only 1.15:1 apart in tone."
    },
    {
     "name": "sheet-keyline-strong",
@@ -469,7 +469,7 @@
    "refersTo": "button-secondary",
    "description": "Outlined on paper: the action that changes the sheet without making paper.",
    "html": "<button class=\"ds-btn ds-btn-secondary\">Regenerate</button>",
-   "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 10px 20px; border-radius: 2px; background: transparent; color: #1a1f24; border: 1.5px solid #7f776a; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease; } .ds-btn-secondary:hover { background: rgba(26, 31, 36, 0.06); border-color: #23282e; } .ds-btn-secondary:active { transform: translateY(1px); } .ds-btn-secondary:focus-visible { outline: 3px solid #d0452f; outline-offset: 2px; }"
+   "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 10px 20px; border-radius: 2px; background: transparent; color: #1a1f24; border: 1.5px solid #7c7770; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease; } .ds-btn-secondary:hover { background: rgba(26, 31, 36, 0.06); border-color: #23282e; } .ds-btn-secondary:active { transform: translateY(1px); } .ds-btn-secondary:focus-visible { outline: 3px solid #d0452f; outline-offset: 2px; }"
   },
   {
    "name": "Segmented Toggle",
@@ -477,7 +477,7 @@
    "refersTo": "button-toggle",
    "description": "The worksheet setting primitive. Never wraps; the active segment fills control navy.",
    "html": "<div class=\"ds-btn-group\"><button class=\"ds-btn-toggle\">2-digit</button><button class=\"ds-btn-toggle ds-active\">3-digit</button><button class=\"ds-btn-toggle\">4-digit</button></div>",
-   "css": ".ds-btn-group { display: inline-flex; flex-wrap: nowrap; } .ds-btn-toggle { padding: 7px 14px; border: 1px solid #7f776a; background: transparent; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; color: #1a1f24; white-space: nowrap; cursor: pointer; transition: background-color 0.12s ease, color 0.12s ease; } .ds-btn-toggle:not(:first-child) { border-left: none; } .ds-btn-toggle:first-child { border-radius: 3px 0 0 3px; } .ds-btn-toggle:last-child { border-radius: 0 3px 3px 0; } .ds-btn-toggle:hover { background: #f3efe6; } .ds-btn-toggle.ds-active { background: #23282e; color: #fff; border-color: #23282e; } .ds-btn-toggle.ds-active + .ds-btn-toggle { border-left: 1px solid #23282e; } .ds-btn-toggle:focus-visible { position: relative; z-index: 1; outline: 3px solid #d0452f; outline-offset: 2px; }"
+   "css": ".ds-btn-group { display: inline-flex; flex-wrap: nowrap; } .ds-btn-toggle { padding: 7px 14px; border: 1px solid #7c7770; background: transparent; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; color: #1a1f24; white-space: nowrap; cursor: pointer; transition: background-color 0.12s ease, color 0.12s ease; } .ds-btn-toggle:not(:first-child) { border-left: none; } .ds-btn-toggle:first-child { border-radius: 3px 0 0 3px; } .ds-btn-toggle:last-child { border-radius: 0 3px 3px 0; } .ds-btn-toggle:hover { background: #f5f3ed; } .ds-btn-toggle.ds-active { background: #23282e; color: #fff; border-color: #23282e; } .ds-btn-toggle.ds-active + .ds-btn-toggle { border-left: 1px solid #23282e; } .ds-btn-toggle:focus-visible { position: relative; z-index: 1; outline: 3px solid #d0452f; outline-offset: 2px; }"
   },
   {
    "name": "Catalog Card",
@@ -485,7 +485,7 @@
    "refersTo": "catalog-card",
    "description": "A sheet lying on the board: paper stock, subject band across the head, a drawn miniature of the real worksheet, then label and description.",
    "html": "<a class=\"ds-card\" href=\"#\" style=\"--card-color:#17706b\"><span class=\"ds-card-sheet\"><svg class=\"ds-card-thumb\" viewBox=\"0 0 104 64\" fill=\"none\"><defs><pattern id=\"dsr\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><path d=\"M 8 0 L 0 0 0 8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"0.5\" opacity=\"0.28\"/></pattern></defs><rect width=\"104\" height=\"64\" fill=\"url(#dsr)\"/><text x=\"56\" y=\"26\" font-family=\"'JetBrains Mono', monospace\" font-size=\"9\" font-weight=\"600\" text-anchor=\"middle\" fill=\"currentColor\">3 1 2</text><text x=\"40\" y=\"38\" font-family=\"'JetBrains Mono', monospace\" font-size=\"9\" font-weight=\"600\" text-anchor=\"middle\" fill=\"currentColor\">+</text><text x=\"56\" y=\"38\" font-family=\"'JetBrains Mono', monospace\" font-size=\"9\" font-weight=\"600\" text-anchor=\"middle\" fill=\"currentColor\">7 5 8</text><path d=\"M40 42 H72\" stroke=\"currentColor\" stroke-width=\"1\"/></svg></span><span class=\"ds-card-text\"><span class=\"ds-card-label\">Column Addition</span><span class=\"ds-card-desc\">Vertical multi-digit addition</span></span></a>",
-   "css": ".ds-card { position: relative; display: flex; flex-direction: column; width: 296px; padding: 0; overflow: hidden; border: none; border-radius: 2px; background: #fdfcf8; color: #1a1f24; text-decoration: none; cursor: pointer; box-shadow: 0 0 0 1px rgba(26,31,36,0.20), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); transition: transform 0.18s cubic-bezier(0.2,0.8,0.3,1), box-shadow 0.18s ease; } .ds-card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 5px; background: var(--card-color, #e8e2d5); } .ds-card:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px rgba(26,31,36,0.34), 0 6px 10px rgba(26,31,36,0.10), 0 18px 30px -12px rgba(26,31,36,0.22); } .ds-card:focus-visible { outline: 3px solid #d0452f; outline-offset: 2px; } .ds-card-sheet { display: block; padding: 22px 0 13px; border-bottom: 1px solid #e3ddcf; background: linear-gradient(to bottom, rgba(23,65,107,0.05), transparent 60%); } .ds-card-thumb { display: block; width: 100%; max-width: 208px; margin: 0 auto; aspect-ratio: 104 / 64; } .ds-card-text { display: flex; flex-direction: column; gap: 3px; padding: 13px 16px 18px; } .ds-card-label { font-family: 'Archivo', 'Inter', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; } .ds-card-desc { font-size: 13px; line-height: 1.4; color: #5a6570; }"
+   "css": ".ds-card { position: relative; display: flex; flex-direction: column; width: 296px; padding: 0; overflow: hidden; border: none; border-radius: 2px; background: #fdfcf8; color: #1a1f24; text-decoration: none; cursor: pointer; box-shadow: 0 0 0 1px rgba(26,31,36,0.20), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); transition: transform 0.18s cubic-bezier(0.2,0.8,0.3,1), box-shadow 0.18s ease; } .ds-card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 5px; background: var(--card-color, #eeece4); } .ds-card:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px rgba(26,31,36,0.34), 0 6px 10px rgba(26,31,36,0.10), 0 18px 30px -12px rgba(26,31,36,0.22); } .ds-card:focus-visible { outline: 3px solid #d0452f; outline-offset: 2px; } .ds-card-sheet { display: block; padding: 22px 0 13px; border-bottom: 1px solid #e5e2da; background: linear-gradient(to bottom, rgba(23,65,107,0.05), transparent 60%); } .ds-card-thumb { display: block; width: 100%; max-width: 208px; margin: 0 auto; aspect-ratio: 104 / 64; } .ds-card-text { display: flex; flex-direction: column; gap: 3px; padding: 13px 16px 18px; } .ds-card-label { font-family: 'Archivo', 'Inter', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; } .ds-card-desc { font-size: 13px; line-height: 1.4; color: #5a6570; }"
   },
   {
    "name": "Sidebar Row (compact catalog)",
@@ -501,7 +501,7 @@
    "refersTo": "input-number",
    "description": "The worksheet range control: 72px of paper with a warm-grey stroke, centred figures.",
    "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Number range</span><span class=\"ds-range\"><input class=\"ds-num\" type=\"number\" value=\"10\"><span class=\"ds-sep\">to</span><input class=\"ds-num\" type=\"number\" value=\"99\"></span></label>",
-   "css": ".ds-field { display: flex; flex-direction: column; gap: 6px; } .ds-field-label { font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; color: #5a6570; } .ds-range { display: flex; align-items: center; gap: 8px; } .ds-sep { font-size: 13px; color: #5a6570; } .ds-num { width: 72px; padding: 7px 10px; border: 1px solid #7f776a; border-radius: 3px; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; text-align: center; color: #1a1f24; background: #fdfcf8; } .ds-num:focus { outline: none; border-color: #23282e; box-shadow: 0 0 0 3px rgba(26,31,36,0.12); }"
+   "css": ".ds-field { display: flex; flex-direction: column; gap: 6px; } .ds-field-label { font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; color: #5a6570; } .ds-range { display: flex; align-items: center; gap: 8px; } .ds-sep { font-size: 13px; color: #5a6570; } .ds-num { width: 72px; padding: 7px 10px; border: 1px solid #7c7770; border-radius: 3px; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; text-align: center; color: #1a1f24; background: #fdfcf8; } .ds-num:focus { outline: none; border-color: #23282e; box-shadow: 0 0 0 3px rgba(26,31,36,0.12); }"
   },
   {
    "name": "Settings Panel",
@@ -509,7 +509,7 @@
    "refersTo": "settings-panel",
    "description": "The shared control primitive for every printable worksheet, holding the same positions on every sheet. Never clips: no overflow hidden, or focus rings die at the edge.",
    "html": "<section class=\"ds-panel\"><div class=\"ds-panel-body\"><label class=\"ds-field\"><span class=\"ds-field-label\">Number size</span><div class=\"ds-btn-group\"><button class=\"ds-btn-toggle\">2-digit</button><button class=\"ds-btn-toggle ds-active\">3-digit</button></div></label></div><footer class=\"ds-panel-foot\"><button class=\"ds-btn-secondary\">Regenerate</button><button class=\"ds-btn ds-btn-primary\">Print</button></footer></section>",
-   "css": ".ds-panel { background: #fdfcf8; color: #1a1f24; border: 1px solid #ddd6c8; border-radius: 3px; box-shadow: 0 1px 2px rgba(16,47,77,0.12); } .ds-panel-body { display: flex; flex-direction: row; flex-wrap: wrap; gap: 18px 32px; align-items: flex-start; padding: 18px 24px 20px; } .ds-panel-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 12px 24px; border-top: 1px solid #ddd6c8; border-radius: 0 0 3px 3px; background: #fdfcf8; }"
+   "css": ".ds-panel { background: #fdfcf8; color: #1a1f24; border: 1px solid #e0dcd1; border-radius: 3px; box-shadow: 0 1px 2px rgba(16,47,77,0.12); } .ds-panel-body { display: flex; flex-direction: row; flex-wrap: wrap; gap: 18px 32px; align-items: flex-start; padding: 18px 24px 20px; } .ds-panel-foot { display: flex; justify-content: flex-end; gap: 10px; padding: 12px 24px; border-top: 1px solid #e0dcd1; border-radius: 0 0 3px 3px; background: #fdfcf8; }"
   },
   {
    "name": "Worksheet Sheet Header",
@@ -517,7 +517,7 @@
    "refersTo": "worksheet-sheet",
    "description": "Signature. The sheet is a document, so it carries a document's head: title, a ruled Name/Date block a child fills in by hand, and the set stamp that identifies this generated page. Renders identically on screen and on paper.",
    "html": "<div class=\"ds-sheet\"><div class=\"ds-ws-header\"><div class=\"ds-ws-headline\"><div class=\"ds-ws-title\">Column Addition<span class=\"ds-ws-meta\">3-digit numbers</span></div><dl class=\"ds-ws-fields\"><div class=\"ds-ws-field\"><dt>Name</dt><dd class=\"ds-rule\"></dd></div><div class=\"ds-ws-field\"><dt>Date</dt><dd class=\"ds-rule\"></dd></div><div class=\"ds-ws-field\"><dt>Set no.</dt><dd class=\"ds-stamp\">669</dd></div></dl></div></div></div>",
-   "css": ".ds-sheet { background: #fdfcf8; color: #1a1f24; border-radius: 2px; padding: 32px 36px; box-shadow: 0 0 0 1px rgba(26,31,36,0.20), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); } .ds-ws-header { padding-bottom: 16px; border-bottom: 2px solid #d8d1c3; } .ds-ws-headline { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; } .ds-ws-title { font-family: 'Inter', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .ds-ws-meta { font-size: 14px; font-weight: 400; color: #5a6570; margin-left: 8px; } .ds-ws-fields { display: flex; align-items: baseline; gap: 16px; margin: 0; } .ds-ws-field { display: flex; align-items: baseline; gap: 6px; } .ds-ws-field dt { font-family: 'Inter', -apple-system, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #5a6570; white-space: nowrap; } .ds-rule { width: 104px; height: 1.15em; border-bottom: 1px solid #7f776a; } .ds-stamp { padding: 1px 7px; border: 1.5px solid #7f776a; border-radius: 3px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #1a1f24; animation: ds-stamp-down 0.42s cubic-bezier(0.16,1,0.3,1) both; transform-origin: center; } @keyframes ds-stamp-down { 0% { transform: scale(1.32); border-color: #d0452f; color: #d0452f; } 60% { border-color: #d0452f; } 100% { transform: scale(1); border-color: #7f776a; color: #1a1f24; } } @media (prefers-reduced-motion: reduce) { .ds-stamp { animation: none; } }"
+   "css": ".ds-sheet { background: #fdfcf8; color: #1a1f24; border-radius: 2px; padding: 32px 36px; box-shadow: 0 0 0 1px rgba(26,31,36,0.20), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); } .ds-ws-header { padding-bottom: 16px; border-bottom: 2px solid #dcd7cb; } .ds-ws-headline { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; } .ds-ws-title { font-family: 'Inter', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .ds-ws-meta { font-size: 14px; font-weight: 400; color: #5a6570; margin-left: 8px; } .ds-ws-fields { display: flex; align-items: baseline; gap: 16px; margin: 0; } .ds-ws-field { display: flex; align-items: baseline; gap: 6px; } .ds-ws-field dt { font-family: 'Inter', -apple-system, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #5a6570; white-space: nowrap; } .ds-rule { width: 104px; height: 1.15em; border-bottom: 1px solid #7c7770; } .ds-stamp { padding: 1px 7px; border: 1.5px solid #7c7770; border-radius: 3px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #1a1f24; animation: ds-stamp-down 0.42s cubic-bezier(0.16,1,0.3,1) both; transform-origin: center; } @keyframes ds-stamp-down { 0% { transform: scale(1.32); border-color: #d0452f; color: #d0452f; } 60% { border-color: #d0452f; } 100% { transform: scale(1); border-color: #7c7770; color: #1a1f24; } } @media (prefers-reduced-motion: reduce) { .ds-stamp { animation: none; } }"
   },
   {
    "name": "Site Header",
@@ -525,7 +525,7 @@
    "refersTo": "brand-label",
    "description": "The top of the cover: the scored board tone, ruled off below, with the wordmark in the paper label a school book carries — the one place paper shows through the chrome.",
    "html": "<header class=\"ds-header\"><a class=\"ds-brand\" href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z\" transform=\"rotate(45 12 12)\"/><path d=\"M7 12h3M7 9h2M7 15h2\"/></svg>Super Awesome Math</a><nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\">About</a><button class=\"ds-lang\">EN</button></nav></header>",
-   "css": ".ds-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 20px; background: #ded7c7; border-bottom: 2px solid rgba(26,31,36,0.16); } .ds-brand { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 5px 14px; font-family: 'Archivo', 'Inter', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: -0.015em; color: #1a1f24; background: #fdfcf8; text-decoration: none; border-radius: 2px; box-shadow: 0 0 0 1px rgba(26,31,36,0.34), 0 1px 2px rgba(16,47,77,0.12); transition: transform 0.15s ease, box-shadow 0.15s ease; } .ds-brand:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(26,31,36,0.34), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); } .ds-nav { display: flex; align-items: center; gap: 6px; } .ds-nav-link { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; text-decoration: none; border-radius: 3px; transition: background 0.15s; } .ds-nav-link:hover { background: rgba(26,31,36,0.055); } .ds-lang { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; padding: 7px 12px; border: 1px solid rgba(26,31,36,0.16); background: transparent; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; border-radius: 3px; cursor: pointer; } .ds-lang:hover { background: rgba(26,31,36,0.055); border-color: rgba(26,31,36,0.34); }"
+   "css": ".ds-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 20px; background: #e5e2d9; border-bottom: 2px solid rgba(26,31,36,0.16); } .ds-brand { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 5px 14px; font-family: 'Archivo', 'Inter', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: -0.015em; color: #1a1f24; background: #fdfcf8; text-decoration: none; border-radius: 2px; box-shadow: 0 0 0 1px rgba(26,31,36,0.34), 0 1px 2px rgba(16,47,77,0.12); transition: transform 0.15s ease, box-shadow 0.15s ease; } .ds-brand:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(26,31,36,0.34), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); } .ds-nav { display: flex; align-items: center; gap: 6px; } .ds-nav-link { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; text-decoration: none; border-radius: 3px; transition: background 0.15s; } .ds-nav-link:hover { background: rgba(26,31,36,0.055); } .ds-lang { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; padding: 7px 12px; border: 1px solid rgba(26,31,36,0.16); background: transparent; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; border-radius: 3px; cursor: pointer; } .ds-lang:hover { background: rgba(26,31,36,0.055); border-color: rgba(26,31,36,0.34); }"
   },
   {
    "name": "Resume Card",
@@ -538,7 +538,7 @@
  ],
  "narrative": {
   "northStar": "The Exercise Book",
-  "overview": "The site is the exercise book it prints. The interface is the cover — a light board stock (#e8e2d5), a shade heavier and warmer than the sheet it holds, the way a school notebook's cover is a field and not a white page. Squared paper (#fdfcf8) appears only where real paper appears: the printable worksheet, the static prose plate, the settings panel and the answer key. Everything else stands on the board.\n\nThe Governing Rule: cover carries the interface; paper is reserved for where real paper is. There is no dark field to do the separating, so the split is carried by three things together, and all three are load-bearing: TONE (the board is warmer and darker than the sheet, and the two must never converge — they ship 1.26:1 apart), EDGE (a 1px ink hairline drawn around every paper plate), and LIFT (a tight, short-throw shadow under the sheet). Remove any one and the page collapses into a single cream expanse.\n\nMode is Operate: a hurried adult picks a worksheet, adjusts it, and prints. Density is moderate and legibility outranks it — the screen is read over a shoulder by a six-year-old. The world refuses the pastel kids-edu register: no rounded illustration icons in tinted squares, no chimes, no stars, no gradient candy. It also refuses a dark ground: this is stationery, and stationery is light.",
+  "overview": "The site is the exercise book it prints. The interface is the cover — a light board stock (#eeece4), a shade heavier than the sheet it holds, the way a school notebook's cover is a field and not a white page. Squared paper (#fdfcf8) appears only where real paper appears: the printable worksheet, the static prose plate, the settings panel and the answer key. Everything else stands on the board.\n\nThe Governing Rule: cover carries the interface; paper is reserved for where real paper is. There is no dark field to do the separating, so the split is carried by three things together, and all three are load-bearing: TONE (the board is a shade darker than the sheet, and the two must never converge — they ship only 1.15:1 apart, so this carrier is the weakest of the three), EDGE (a 1px ink hairline drawn around every paper plate), and LIFT (a tight, short-throw shadow under the sheet). Remove any one and the page collapses into a single cream expanse.\n\nMode is Operate: a hurried adult picks a worksheet, adjusts it, and prints. Density is moderate and legibility outranks it — the screen is read over a shoulder by a six-year-old. The world refuses the pastel kids-edu register: no rounded illustration icons in tinted squares, no chimes, no stars, no gradient candy. It also refuses a dark ground: this is stationery, and stationery is light.",
   "keyCharacteristics": [
    "One light board field, one warm mark colour, one paper stock, held apart by tone + edge + lift.",
    "Paper surfaces sit on the board as square-cut plates with a hairline keyline plus a tight shadow — stapled stock, not floating glass.",
@@ -550,7 +550,7 @@
   "rules": [
    {
     "name": "The Cover/Paper Rule",
-    "body": "No surface is both, and the two never converge in tone. Cover and paper are 1.26:1 apart; a new paper plate must therefore state its own color: var(--color-text) and carry box-shadow: 0 0 0 1px var(--edge) plus --shadow-sm/--shadow-md. A paper surface without its edge and lift is invisible.",
+    "body": "No surface is both, and the two never converge in tone. Cover and paper are only 1.15:1 apart; a new paper plate must therefore state its own color: var(--color-text) and carry box-shadow: 0 0 0 1px var(--edge) plus --shadow-sm/--shadow-md. A paper surface without its edge and lift is invisible.",
     "section": "colors"
    },
    {
@@ -632,7 +632,7 @@
   "dos": [
    "Do put paper only where a sheet, a leaf, or a sheet's control panel is; everything else stands on the board.",
    "Do give every new paper surface all three separators: its own color: var(--color-text), a 1px var(--edge) keyline, and --shadow-sm/--shadow-md. On a light board, one of the three is not enough.",
-   "Do keep cover and paper apart in tone. They ship 1.26:1 apart; any change that closes that gap deletes the system.",
+   "Do keep cover and paper apart in tone. They ship 1.15:1 apart — the whole remaining margin; any change that closes that gap deletes the system.",
    "Do build board-side hover and raised states from cover-wash / cover-wash-strong, tinted from the ground's own ink.",
    "Do spend marking red only on the Print action, the focus ring, prose links (mark-deep) and the set stamp.",
    "Do pair every subject ink with an icon or a text label — colour is the second cue, never the only one.",
@@ -673,7 +673,7 @@
    "mark-deep links on paper 6.34:1",
    "focus ring on board 3.56:1 / on paper 4.47:1",
    "print footer on paper 7.41:1",
-   "cover vs paper 1.26:1 — tone alone is not the separator; edge and lift are"
+   "cover vs paper 1.15:1 — tone alone is nowhere near the separator; edge and lift are"
   ],
   "deviations": [
    "The direction contract's FIRST VIEWPORT called for the catalog as cover label-strips; the build shipped a paper card grid (repeat(auto-fill, minmax(268px, 1fr)), 940px). The label-strip form survives only in the compact sidebar/chip mode.",

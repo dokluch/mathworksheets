@@ -12,9 +12,9 @@
      field to separate them, the cover/paper rule is carried by tone, edge and
      lift instead: the ground is stock, the sheet is paper, and the sheet has
      a real edge and sits above it. Cover and paper must never converge. */
-  --cover: #e8e2d5;
-  --cover-deep: #ded7c7;
-  --cover-raised: #f1ece1;
+  --cover: #eeece4;
+  --cover-deep: #e5e2d9;
+  --cover-raised: #f7f5ef;
   --cover-line: rgba(26, 31, 36, 0.16);
   --cover-line-strong: rgba(26, 31, 36, 0.34);
   /* Washes for hover and raised states, tinted from the ground rather than
@@ -22,7 +22,7 @@
   --cover-wash: rgba(26, 31, 36, 0.055);
   --cover-wash-strong: rgba(26, 31, 36, 0.10);
   --on-cover: #1a1f24;
-  /* One muted grey for one role, on both grounds (4.61:1 on the board). */
+  /* One muted grey for one role, on both grounds (5.03:1 on the board). */
   --on-cover-muted: #5a6570;
 
   /* ── The teacher's marking pencil: the one warm mark on a cool cover ── */
@@ -31,7 +31,7 @@
 
   /* ── Paper: the sheet, and nothing else ── */
   --paper: #fdfcf8;
-  --paper-edge: #e3ddcf;
+  --paper-edge: #e5e2da;
 
   /* The paper's edge against the cover. With both surfaces light, this line
      and the lift below it are what say "a sheet lying on the stock" — they
@@ -41,7 +41,7 @@
 
   --color-bg: var(--cover);
   --color-surface: var(--paper);
-  --color-surface-hover: #f3efe6;
+  --color-surface-hover: #f5f3ed;
   /* The control accent is ink, not a second hue. Selected toggles, the
      checkbox and slider `accent-color`, and the current locale all use it;
      the marking red stays reserved for Print, so the system keeps exactly one
@@ -53,13 +53,13 @@
   /* Ink and graphite, not slate: these sit on paper and must print. */
   --color-text: #1a1f24;
   --color-text-muted: #5a6570;
-  --color-border: #ddd6c8;
+  --color-border: #e0dcd1;
   /* Control strokes (toggles, inputs, the Name/Date rules) must clear the
      3:1 non-text floor on paper AND on the board; #b9b0a0 measured 2.09 and
-     1.66. This is the lightest value that clears both and the header band. */
-  --color-border-dark: #7f776a;
-  --color-border-light: #ece7db;
-  --color-border-worksheet: #d8d1c3;
+     1.66. This clears both (4.33 and 3.75) at the board's own chroma. */
+  --color-border-dark: #7c7770;
+  --color-border-light: #eeebe2;
+  --color-border-worksheet: #dcd7cb;
   --color-accent-green: #3f7a5e;
   --color-accent-red: var(--mark);
 

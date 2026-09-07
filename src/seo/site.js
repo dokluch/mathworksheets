@@ -27,7 +27,7 @@ export const OG_IMAGE_PATH = '/og/home.png'
  * address bar continues the page rather than announcing a colour the site no
  * longer uses. (Was Tailwind's #2563eb, left over from before the redesign.)
  */
-export const THEME_COLOR = '#ded7c7'
+export const THEME_COLOR = '#e5e2d9'
 /** The one warm mark: links and the accent on generated preview cards. */
 export const ACCENT_COLOR = '#d0452f'
 

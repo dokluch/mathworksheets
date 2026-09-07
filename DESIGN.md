@@ -2,9 +2,9 @@
 name: Super Awesome Math
 description: The site is the exercise book it prints — light board stock for the interface, squared paper only where real paper is.
 colors:
-  cover: "#e8e2d5"
-  cover-deep: "#ded7c7"
-  cover-raised: "#f1ece1"
+  cover: "#eeece4"
+  cover-deep: "#e5e2d9"
+  cover-raised: "#f7f5ef"
   cover-line: "rgba(26, 31, 36, 0.16)"
   cover-line-strong: "rgba(26, 31, 36, 0.34)"
   cover-wash: "rgba(26, 31, 36, 0.055)"
@@ -14,18 +14,18 @@ colors:
   mark: "#d0452f"
   mark-deep: "#ab331f"
   paper: "#fdfcf8"
-  paper-edge: "#e3ddcf"
-  paper-hover: "#f3efe6"
+  paper-edge: "#e5e2da"
+  paper-hover: "#f5f3ed"
   edge: "rgba(26, 31, 36, 0.20)"
   edge-strong: "rgba(26, 31, 36, 0.34)"
   ink: "#1a1f24"
   graphite: "#5a6570"
   control-ink: "#23282e"
   control-ink-deep: "#14181c"
-  border: "#ddd6c8"
-  border-dark: "#7f776a"
-  border-light: "#ece7db"
-  border-worksheet: "#d8d1c3"
+  border: "#e0dcd1"
+  border-dark: "#7c7770"
+  border-light: "#eeebe2"
+  border-worksheet: "#dcd7cb"
   ink-multiply: "#2d6cb5"
   ink-addsub: "#2e7d5b"
   ink-coladd: "#17706b"
@@ -180,11 +180,11 @@ components:
 
 **Creative North Star: "The Exercise Book"**
 
-The site *is* the exercise book it prints. The interface is the cover — a light board stock (`#e8e2d5`), a shade heavier and warmer than the sheet it holds, the way a school notebook's cover is a field and not a white page. Squared paper (`#fdfcf8`) appears only where real paper appears: the printable worksheet, the static prose plate, the settings panel and the answer key. Everything else stands on the board.
+The site *is* the exercise book it prints. The interface is the cover — a light board stock (`#eeece4`), a shade heavier than the sheet it holds, the way a school notebook's cover is a field and not a white page. Squared paper (`#fdfcf8`) appears only where real paper appears: the printable worksheet, the static prose plate, the settings panel and the answer key. Everything else stands on the board.
 
 **The Governing Rule.** Cover carries the interface; paper is reserved for where real paper is. A surface earns the sheet stock only if it is a sheet, a leaf, or a control panel that configures a sheet. Chrome, catalog ground, headers, footers and empty states stay on the cover.
 
-**How the rule is carried now.** There is no dark field to do the separating. Cover and paper sit 1.26:1 apart in tone, so the split is carried by three things together, and all three are load-bearing: **TONE** (the board is warmer and darker than the sheet, and the two must never converge), **EDGE** (`--edge` / `--edge-strong` — a 1px ink hairline drawn around every paper plate, 1.48:1 and 2.03:1 against the board), and **LIFT** (a tight, short-throw shadow under the sheet). Remove any one and the page collapses into a single cream expanse.
+**How the rule is carried now.** There is no dark field to do the separating, and since the board was lightened and de-yellowed the tone step is small: cover and paper sit **1.15:1** apart. That makes the other two carriers more load-bearing, not less. **TONE** (the board is a shade darker than the sheet, and the two must never converge), **EDGE** (`--edge` / `--edge-strong` — a 1px ink hairline drawn around every paper plate, 1.49:1 and 2.06:1 against the board), and **LIFT** (a tight, short-throw shadow under the sheet). At this tone step a paper plate without its edge and lift is not merely weak — it is invisible.
 
 Mode is Operate: a hurried adult picks a worksheet, adjusts it, and prints. Density is moderate and legibility outranks it — the screen is read over a shoulder by a six-year-old. The world refuses the pastel kids-edu register: no rounded illustration icons in tinted squares, no chimes, no stars, no gradient candy. It also refuses a dark ground: this is stationery, and stationery is light.
 
@@ -225,7 +225,7 @@ Each worksheet carries its own ink (`ink-multiply` … `ink-eqexplore`), assigne
 - **Ruling** (`ruling-screen`, `ruling-print`): the squared-paper grid lines, darkened for print because inkjets lose the screen value.
 
 ### Named Rules
-**The Cover/Paper Rule.** No surface is both, and the two never converge in tone. Cover and paper are 1.26:1 apart; a new paper plate must therefore state its own `color: var(--color-text)` *and* carry `box-shadow: 0 0 0 1px var(--edge)` plus `--shadow-sm`/`--shadow-md`. A paper surface without its edge and lift is invisible.
+**The Cover/Paper Rule.** No surface is both, and the two never converge in tone. Cover and paper are only 1.15:1 apart; a new paper plate must therefore state its own `color: var(--color-text)` *and* carry `box-shadow: 0 0 0 1px var(--edge)` plus `--shadow-sm`/`--shadow-md`. A paper surface without its edge and lift is invisible.
 
 **The One Warm Mark Rule.** Marking red is the product's single warm colour and it belongs to the act of making paper. Do not use it for chips, badges, headings, dividers, or decoration.
 
@@ -350,7 +350,7 @@ Sheet paper with the squared ruling painted as two gradients at `--notebook-grid
 ### Do:
 - **Do** put paper only where a sheet, a leaf, or a sheet's control panel is; everything else stands on the board.
 - **Do** give every new paper surface all three separators: its own `color: var(--color-text)`, a 1px `var(--edge)` keyline, and `--shadow-sm`/`--shadow-md`. On a light board, one of the three is not enough.
-- **Do** keep cover and paper apart in tone. They ship 1.26:1 apart; any change that closes that gap deletes the system.
+- **Do** keep cover and paper apart in tone. They ship 1.15:1 apart — the whole remaining margin; any change that closes that gap deletes the system.
 - **Do** build board-side hover and raised states from `cover-wash` / `cover-wash-strong`, tinted from the ground's own ink.
 - **Do** spend marking red only on the Print action, the focus ring, prose links (`mark-deep`) and the set stamp.
 - **Do** pair every subject ink with an icon or a text label — colour is the second cue, never the only one.
@@ -525,3 +525,33 @@ Verified: 195 tests, lint and build clean; 8 print configurations at
 page in A4 and Letter (two with the answer key); 21 route × viewport
 combinations with zero contrast failures and no horizontal overflow; detector
 clean of non-advisory findings on every touched file.
+
+## Revision — the board gets lighter and loses the yellow
+
+The board stock read as aged paper. Two things caused it, and lightness was
+the smaller one: `--cover` was `#e8e2d5` at **chroma 19** — a real yellow cast,
+not a neutral warm — and it sat at L 0.764, a full step below the sheet.
+
+The ground is now `#eeece4`: **L 0.764 → 0.838, chroma 19 → 10**. Every
+cream-adjacent neutral moved with it rather than being left behind, so the
+board does not now sit lighter than its own borders and washes —
+`--cover-deep`, `--cover-raised`, `--paper-edge`, `--color-surface-hover`,
+`--color-border`, `--color-border-light`, `--color-border-worksheet`, and
+`--color-border-dark` (`#7f776a` → `#7c7770`, chroma 21 → 12). `THEME_COLOR`
+in `seo/site.js` tracks `--cover-deep`, and the no-JS fallback body in
+`seo/render.js` tracks `--cover`.
+
+Text contrast improves everywhere on the ground: ink 12.86 → **14.03**, muted
+grey 4.61 → **5.03**, and `--color-border-dark` clears the 3:1 non-text floor
+on both grounds by a wider margin than before (paper 4.33, board 3.75).
+
+**The cost, stated plainly.** Cover and paper now sit **1.15:1** apart, down
+from 1.26:1. TONE is now the weakest of the three carriers, not the first. The
+consequence is a hard rule, not a preference: **a paper plate that ships
+without `box-shadow: 0 0 0 1px var(--edge)` and a lift is invisible at this
+tone step.** Any further lightening of the board has to come with a
+correspondingly stronger edge, or the page becomes one flat field.
+
+Verified: 195 tests, lint and build clean; 21 route × viewport combinations
+with **zero contrast failures** and no horizontal overflow; the 8 print
+configurations unchanged (ruled, 696px, one page each).
