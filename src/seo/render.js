@@ -1034,7 +1034,7 @@ export function renderNotFoundHtml(pathname = '', locale = DEFAULT_LOCALE) {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>${h('notFound.title')} · ${BRAND}</title>
     <style>
-      body { margin: 0; padding: 48px 20px; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #1f2937; background: #eeece4; }
+      body { margin: 0; padding: 48px 20px; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #1f2937; background: #f5f5f0; }
       main { max-width: 640px; margin: 0 auto; }
       h1 { font-size: 26px; margin: 0 0 8px; }
       h2 { font-size: 18px; margin: 28px 0 8px; }

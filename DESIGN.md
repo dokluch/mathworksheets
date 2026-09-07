@@ -1,10 +1,10 @@
 ---
 name: Super Awesome Math
-description: The site is the exercise book it prints — light board stock for the interface, squared paper only where real paper is.
+description: The site is the exercise book it prints — white chrome on a lightly tinted page, squared paper and real ink where the worksheet is.
 colors:
-  cover: "#eeece4"
-  cover-deep: "#e5e2d9"
-  cover-raised: "#f7f5ef"
+  cover: "#f5f5f0"
+  cover-deep: "#ffffff"
+  cover-raised: "#ffffff"
   cover-line: "rgba(26, 31, 36, 0.16)"
   cover-line-strong: "rgba(26, 31, 36, 0.34)"
   cover-wash: "rgba(26, 31, 36, 0.055)"
@@ -13,9 +13,9 @@ colors:
   on-cover-muted: "#5a6570"
   mark: "#d0452f"
   mark-deep: "#ab331f"
-  paper: "#fdfcf8"
-  paper-edge: "#e5e2da"
-  paper-hover: "#f5f3ed"
+  paper: "#ffffff"
+  paper-edge: "#e6e4dd"
+  paper-hover: "#f6f6f2"
   edge: "rgba(26, 31, 36, 0.20)"
   edge-strong: "rgba(26, 31, 36, 0.34)"
   ink: "#1a1f24"
@@ -180,11 +180,11 @@ components:
 
 **Creative North Star: "The Exercise Book"**
 
-The site *is* the exercise book it prints. The interface is the cover — a light board stock (`#eeece4`), a shade heavier than the sheet it holds, the way a school notebook's cover is a field and not a white page. Squared paper (`#fdfcf8`) appears only where real paper appears: the printable worksheet, the static prose plate, the settings panel and the answer key. Everything else stands on the board.
+The site *is* the exercise book it prints. The chrome is white — the site header, the catalog, every panel and the sheet — and a quiet page tint (`#f5f5f0`) shows through behind it in the worksheet area and under the footer. Two coloured board stocks were tried before this, an ink-navy field and then a cream one, and both were rejected by the maintainer: the navy for being dark, the cream for reading as aged paper. What ships is the arrangement the product had before either. The landing view is white end to end; the tint is what says "you are inside a sheet now".
 
 **The Governing Rule.** Cover carries the interface; paper is reserved for where real paper is. A surface earns the sheet stock only if it is a sheet, a leaf, or a control panel that configures a sheet. Chrome, catalog ground, headers, footers and empty states stay on the cover.
 
-**How the rule is carried now.** There is no dark field to do the separating, and since the board was lightened and de-yellowed the tone step is small: cover and paper sit **1.15:1** apart. That makes the other two carriers more load-bearing, not less. **TONE** (the board is a shade darker than the sheet, and the two must never converge), **EDGE** (`--edge` / `--edge-strong` — a 1px ink hairline drawn around every paper plate, 1.49:1 and 2.06:1 against the board), and **LIFT** (a tight, short-throw shadow under the sheet). At this tone step a paper plate without its edge and lift is not merely weak — it is invisible.
+**How the rule is carried now.** The page tint and the white chrome are **1.09:1** apart — no separation at all by tone. **EDGE** and **LIFT** are therefore the whole system: a 1px ink hairline (`--edge`, 1.51:1 on white) around every plate plus a tight, short-throw shadow under it. A plate that ships without both does not read as a plate; it disappears. Tone's only remaining job is to say which side of the boundary you are on — white means chrome, tint means you are looking at the page a sheet sits on.
 
 Mode is Operate: a hurried adult picks a worksheet, adjusts it, and prints. Density is moderate and legibility outranks it — the screen is read over a shoulder by a six-year-old. The world refuses the pastel kids-edu register: no rounded illustration icons in tinted squares, no chimes, no stars, no gradient candy. It also refuses a dark ground: this is stationery, and stationery is light.
 
@@ -225,7 +225,7 @@ Each worksheet carries its own ink (`ink-multiply` … `ink-eqexplore`), assigne
 - **Ruling** (`ruling-screen`, `ruling-print`): the squared-paper grid lines, darkened for print because inkjets lose the screen value.
 
 ### Named Rules
-**The Cover/Paper Rule.** No surface is both, and the two never converge in tone. Cover and paper are only 1.15:1 apart; a new paper plate must therefore state its own `color: var(--color-text)` *and* carry `box-shadow: 0 0 0 1px var(--edge)` plus `--shadow-sm`/`--shadow-md`. A paper surface without its edge and lift is invisible.
+**The Plate Rule.** Every white plate on the page tint states its own `color: var(--color-text)` *and* carry `box-shadow: 0 0 0 1px var(--edge)` plus `--shadow-sm`/`--shadow-md`. A paper surface without its edge and lift is invisible.
 
 **The One Warm Mark Rule.** Marking red is the product's single warm colour and it belongs to the act of making paper. Do not use it for chips, badges, headings, dividers, or decoration.
 
@@ -293,18 +293,18 @@ Because both grounds are light, the keyline is not optional garnish: it is the p
 
 ## Shapes
 
-Square-cut. Radii are functionally zero-feeling: **2px** on paper surfaces (worksheet, catalog card, brand label, language menu, buttons, skip link), **3px** (`--radius`) on board-side controls, the settings panel, inputs and the segmented toggle's outer corners, **2px** on subject tabs. A segmented group rounds only its first and last children; interior seams are shared 1px borders with the left border removed.
+Softly cut, on a three-step scale and nothing else: `--radius-sm` **6px** for small marks, `--radius` **8px** for every control (buttons, inputs, the segmented toggle's outer corners, chips, the language menu, the skip link), and `--radius-lg` **12px** for plates (worksheet, catalog card, settings panel, static page). A literal pixel radius in a component file is drift. A segmented group rounds only its first and last children; interior seams are shared 1px borders with the left border removed.
 
 Form language: rules and bands, not pills or blobs. Subject identity is a 4–5px straight bar or a stroked icon. The writable field is a 104px underline (72px on mobile) sized for a child's handwriting. The set stamp is a 1.5px stroked box with 3px corners. The empty state is the only dashed border in the system (`1px dashed cover-line-strong`).
 
-**The Square-Cut Rule.** Nothing in this world is more than 3px rounded.
+**The Three-Step Radius Rule.** Every corner in the app is `--radius-sm`, `--radius` or `--radius-lg`. A 2–3px scale was tried and read as too sharp for a product a six-year-old sits in front of; a literal px value is drift in either direction.
 
 **The Stroked-Mark Rule.** Every mark in the interface is drawn: sheet miniatures are hand-authored SVG at one stroke weight and one 8px grid pitch (`SheetThumb.jsx`); interface icons are inline stroked SVG (Tabler, `stroke` 1.7–2.0, 19–26px), tinted with the subject ink. No icon font, no emoji, no raster glyph, no illustration-in-a-tinted-square.
 
 ## Components
 
 ### Buttons
-- **Shape:** square-cut (2px), 44px minimum height, Inter 700 at 14px, `translateY(1px)` on press.
+- **Shape:** `--radius` (8px), 44px minimum height, Inter 700 at 14px, `translateY(1px)` on press.
 - **Primary:** marking red on white (`10px 20px`); hovers to `mark-deep`. This is the Print action and, at the sheet's foot, widens to full width on mobile (`12px 28px`, 15px).
 - **Secondary:** transparent with a 1.5px `border-dark` stroke and ink text; hovers to a 6% ink wash with a `control-ink` border.
 - **Toggle (segmented):** 1px `border-dark`, transparent, Inter 500 13px, `7px 14px`; active fills `control-ink` with white text; focused segment raises `z-index` so its ring is not clipped. Never wraps; on mobile the group is full-width with equal flex children and wrapping labels.
@@ -350,7 +350,7 @@ Sheet paper with the squared ruling painted as two gradients at `--notebook-grid
 ### Do:
 - **Do** put paper only where a sheet, a leaf, or a sheet's control panel is; everything else stands on the board.
 - **Do** give every new paper surface all three separators: its own `color: var(--color-text)`, a 1px `var(--edge)` keyline, and `--shadow-sm`/`--shadow-md`. On a light board, one of the three is not enough.
-- **Do** keep cover and paper apart in tone. They ship 1.15:1 apart — the whole remaining margin; any change that closes that gap deletes the system.
+- **Do** give every plate its 1px `--edge` keyline and its lift. At 1.09:1 the tint cannot separate anything on its own; the hairline is the boundary.
 - **Do** build board-side hover and raised states from `cover-wash` / `cover-wash-strong`, tinted from the ground's own ink.
 - **Do** spend marking red only on the Print action, the focus ring, prose links (`mark-deep`) and the set stamp.
 - **Do** pair every subject ink with an icon or a text label — colour is the second cue, never the only one.
@@ -578,3 +578,33 @@ Verified: the wordmark, About and the switcher fit one line at 390px in every
 locale including German (`Über uns`) and Russian (`О сайте`) with no
 horizontal overflow; 21 route × viewport combinations still report zero
 contrast failures; 195 tests, lint and build clean.
+
+## Revision — back to white chrome on a tinted page
+
+The maintainer rejected the cream board outright. Restored, at their direction,
+is the ground arrangement the product had before the redesign — and only the
+grounds and the radii; the ink, the marking red, the drawn sheet previews, the
+masthead and all of the print work stay.
+
+- **Grounds.** `--cover` `#eeece4` → **`#f5f5f0`** (the page tint), `--cover-deep`
+  → **white** (the site header, ruled off with a 1px hairline instead of a 2px
+  score), `--cover-raised` and `--paper` → **white**. `.catalog` is painted
+  white, so the landing view reads as one clean sheet and the tint shows only
+  under the footer; the worksheet area leaves the tint exposed behind its white
+  panels. `THEME_COLOR` and the no-JS fallback body track the new values.
+- **Radii.** The 2–3px scale read as too sharp. Three steps now, all tokens:
+  `--radius-sm` 6px, `--radius` 8px, `--radius-lg` 12px. 34 literal 2px/3px
+  radii across five files were replaced.
+- **The card wash is gone.** `.catalog-card-sheet` carried a top-down ink
+  gradient that separated the preview from its label on cream stock; on a white
+  card it read as a grey smudge over the top half. The 1px rule under the
+  preview does that job on its own.
+
+Contrast improves again on both grounds: ink **15.17** on the tint and **16.60**
+on white; muted grey **5.44** / **5.95**; `--color-border-dark` **4.06** / **4.44**
+against a 3:1 floor.
+
+Verified: 195 tests, lint and build clean; 21 route × viewport combinations with
+zero contrast failures and no horizontal overflow; the 8 notebook print
+configurations unchanged (ruled, 696px, one page each) and the full 10-sheet
+sweep still one page in A4 and Letter, two with the answer key.

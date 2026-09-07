@@ -55,7 +55,7 @@
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
-  border-radius: 2px;
+  border-radius: var(--radius);
   box-shadow: var(--shadow-md);
   transform: translateY(calc(-100% - 20px));
   transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.3, 1);
@@ -77,7 +77,7 @@
   padding: 10px 18px 10px 12px;
   background: var(--cover-wash);
   border: 1px solid var(--cover-line);
-  border-radius: 3px;
+  border-radius: var(--radius);
   color: var(--on-cover);
   text-decoration: none;
   transition: background 0.15s ease, border-color 0.15s ease;
@@ -91,6 +91,8 @@
 
 .resume-card-tab {
   width: 4px;
+  /* A 4px bar takes the cap, not a corner step: --radius would round it into
+     a lozenge. This is the one place a raw radius is the right answer. */
   border-radius: 2px;
   background: var(--card-color, var(--mark));
 }
@@ -124,7 +126,7 @@
   gap: 12px;
   padding: var(--half-sq) 20px;
   background: var(--cover-deep);
-  border-bottom: 2px solid var(--cover-line);
+  border-bottom: 1px solid var(--cover-line);
   flex-shrink: 0;
   --focus-inner: var(--cover-deep);
 }
@@ -220,8 +222,10 @@
 
 /* The catalog is the cover: colour field, not a white page. Paper appears
    below, in the cards, because those are the sheets. */
+/* Chrome, not page: white, so the landing view reads as a clean sheet and the
+   tint shows only under the footer. As a sidebar it is the same white rail. */
 .catalog {
-  background: transparent;
+  background: var(--paper);
 }
 
 /* — Full catalog (landing page) — */
@@ -379,7 +383,7 @@
   list-style: none;
   background: var(--paper);
   border: none;
-  border-radius: 2px;
+  border-radius: var(--radius);
   box-shadow: 0 0 0 1px var(--edge-strong), var(--shadow-md);
   z-index: 40;
   --focus-inner: var(--paper);
@@ -389,7 +393,7 @@
   display: block;
   min-height: 44px;
   padding: 11px 12px;
-  border-radius: 2px;
+  border-radius: var(--radius);
   font-size: 14px;
   color: var(--color-text);
   text-decoration: none;
@@ -449,7 +453,7 @@
   padding: 0;
   overflow: hidden;
   border: none;
-  border-radius: 2px;
+  border-radius: var(--radius-lg);
   background: var(--paper);
   cursor: pointer;
   font-family: inherit;
@@ -488,13 +492,13 @@
   transform: translateY(-1px);
 }
 
-/* The miniature of the real sheet. */
+/* The miniature of the real sheet. No wash behind it: on the cream card a
+   top-down tint separated the preview from its label, but on a white card it
+   reads as a grey smudge over the top half. The rule below does that job. */
 .catalog-card-sheet {
   display: block;
   padding: calc(var(--sq) * 0.85) 0 var(--half-sq);
   color: var(--color-text);
-  background:
-    linear-gradient(to bottom, rgba(26, 31, 36, 0.045), transparent 60%);
   border-bottom: 1px solid var(--paper-edge);
 }
 
@@ -549,7 +553,7 @@
     align-items: center;
     padding: 9px 12px;
     min-height: 44px;
-    border-radius: 3px;
+    border-radius: var(--radius);
     background: transparent;
     box-shadow: none;
     gap: 10px;
@@ -632,7 +636,7 @@
     flex-shrink: 0;
     padding: 8px 14px;
     min-height: 44px;
-    border-radius: 3px;
+    border-radius: var(--radius);
     background: var(--cover-wash);
     box-shadow: none;
     gap: 8px;
@@ -744,7 +748,7 @@
   padding: var(--sq) calc(var(--sq) * 0.9) calc(var(--sq) * 1.2);
   margin: var(--half-sq) 24px calc(var(--sq) * 1.2);
   background: var(--paper);
-  border-radius: 2px;
+  border-radius: var(--radius);
   box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
   --focus-inner: var(--paper);
 }
@@ -775,7 +779,7 @@
   padding: var(--sq) calc(var(--sq) * 0.9);
   background: var(--cover-wash);
   border: 1px dashed var(--cover-line-strong);
-  border-radius: 3px;
+  border-radius: var(--radius);
   color: var(--on-cover);
   font-size: 15px;
   line-height: 1.55;
@@ -814,7 +818,7 @@
     /* Square-cut, like the sheet it stands for: the 12px rounding here was
        drift from the old card world. */
     padding: 0;
-    border-radius: 2px;
+    border-radius: var(--radius);
     gap: 0;
   }
 
@@ -980,7 +984,7 @@ a.back-btn {
   max-width: 856px;
   margin-inline: auto;
   margin-block: var(--sq) calc(var(--sq) * 1.5);
-  border-radius: 2px;
+  border-radius: var(--radius-lg);
   box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
 }
 
@@ -1179,7 +1183,7 @@ a.back-btn {
   min-height: 44px;
   padding: 10px 20px;
   border: none;
-  border-radius: 2px;
+  border-radius: var(--radius);
   font-family: inherit;
   font-size: 14px;
   font-weight: 700;
@@ -1347,7 +1351,7 @@ a.back-btn {
   margin-left: auto;
   padding: 1px 7px;
   border: 1.5px solid #333;
-  border-radius: 3px;
+  border-radius: var(--radius);
   font-size: 10pt;
   font-weight: 600;
   font-variant-numeric: tabular-nums;

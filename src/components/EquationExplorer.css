@@ -84,7 +84,7 @@
   padding: 0 14px;
   background: var(--color-surface);
   border: none;
-  border-radius: 2px;
+  border-radius: var(--radius);
   box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
   transition: box-shadow 0.2s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -222,7 +222,7 @@
 .eq-btn {
   padding: 12px 28px;
   border: none;
-  border-radius: 2px;
+  border-radius: var(--radius);
   font-family: inherit;
   font-size: 16px;
   font-weight: 700;
@@ -304,7 +304,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px;
-  border-radius: 2px;
+  border-radius: var(--radius);
   transition: background 0.2s;
   flex-shrink: 1;
   min-width: 0;
@@ -321,7 +321,7 @@
   width: 44px;
   height: 44px;
   border: 2px solid var(--color-border-dark);
-  border-radius: 2px;
+  border-radius: var(--radius);
   background: var(--color-primary-faint);
   animation: eq-ghost-pulse 0.8s ease-in-out infinite;
 }
@@ -409,7 +409,7 @@
 .eq-explain-inner {
   background: var(--color-surface);
   border: none;
-  border-radius: 2px;
+  border-radius: var(--radius);
   padding: 24px;
   box-shadow: 0 0 0 1px var(--edge), var(--shadow-md);
 }
@@ -426,7 +426,7 @@
   padding: 8px 16px;
   border: 1.5px solid var(--color-border);
   background: var(--color-surface);
-  border-radius: 2px;
+  border-radius: var(--radius);
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
@@ -553,7 +553,7 @@
   position: relative;
   height: 28px;
   background: var(--color-border-light);
-  border-radius: 2px;
+  border-radius: var(--radius);
   overflow: hidden;
 }
 
@@ -562,7 +562,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  border-radius: 2px;
+  border-radius: var(--radius);
 }
 
 .eq-bar-fill--base {
@@ -619,7 +619,7 @@
   font-size: 13px;
   padding: 6px 14px;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: var(--radius);
   font-family: inherit;
   font-weight: 600;
   transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
@@ -657,14 +657,14 @@
     min-width: 52px;
     height: 56px;
     padding: 0 10px;
-    border-radius: 2px;
+    border-radius: var(--radius);
   }
 
   .eq-blank {
     width: 62px;
     height: 56px;
     font-size: 32px;
-    border-radius: 2px;
+    border-radius: var(--radius);
   }
 
   .eq-op {
@@ -779,7 +779,7 @@
   margin: 12px auto 0;
   padding: 10px;
   background: var(--cover);
-  border-radius: 2px;
+  border-radius: var(--radius);
   width: fit-content;
 }
 
@@ -794,7 +794,7 @@
   font-size: clamp(20px, calc(var(--_key) * 0.38), 32px);
   font-weight: 600;
   border: none;
-  border-radius: 2px;
+  border-radius: var(--radius);
   background: var(--paper);
   color: var(--color-text);
   cursor: pointer;
@@ -832,7 +832,7 @@
   font-weight: 700;
   letter-spacing: 0.02em;
   border: none;
-  border-radius: 2px;
+  border-radius: var(--radius);
   background: var(--color-primary);
   color: #fff;
   cursor: pointer;

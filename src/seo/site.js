@@ -23,11 +23,11 @@ export const LICENSE_URL = 'https://creativecommons.org/licenses/by-nc/4.0/'
 export const LICENSE_NAME = 'CC BY-NC 4.0'
 export const OG_IMAGE_PATH = '/og/home.png'
 /**
- * Browser chrome tint. Matches the site header's cover stock, so the phone's
- * address bar continues the page rather than announcing a colour the site no
- * longer uses. (Was Tailwind's #2563eb, left over from before the redesign.)
+ * Browser chrome tint. Matches the site header, which is white, so the phone's
+ * address bar continues the page rather than announcing a colour the site does
+ * not use. (Was Tailwind's #2563eb, then the cream board stock.)
  */
-export const THEME_COLOR = '#e5e2d9'
+export const THEME_COLOR = '#ffffff'
 /** The one warm mark: links and the accent on generated preview cards. */
 export const ACCENT_COLOR = '#d0452f'
 

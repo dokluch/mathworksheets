@@ -1,11 +1,12 @@
 /* ── Worksheet (print-ready) ── */
-/* Paper carries ink. The body colour is the cover's light type, so every
-   paper surface states its own colour rather than inheriting cream on cream. */
+/* The sheet is white on the page tint, separated by a hairline and a lift
+   rather than by a change of stock. It states its own colour rather than
+   inheriting the page's. */
 .worksheet {
   background: var(--color-surface);
   color: var(--color-text);
   border: none;
-  border-radius: 2px;
+  border-radius: var(--radius-lg);
   padding: 32px 36px;
   box-shadow: 0 0 0 1px var(--edge), var(--shadow-md);
 }
@@ -101,7 +102,7 @@
 .ws-field--stamp dd {
   padding: 1px 7px;
   border: 1.5px solid var(--color-border-dark);
-  border-radius: 3px;
+  border-radius: var(--radius);
   font-size: 13px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
