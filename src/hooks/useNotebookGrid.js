@@ -13,10 +13,30 @@ export const SCREEN_SQUARE = 26
 export const MIN_SQUARE = 18
 /** 1/4 inch at 96 dpi: standard quad ruling on printed sheets. */
 export const PRINT_SQUARE = 24
-/** Letter landscape (11in × 8.5in) minus the 0.3in margins declared by `@page` in index.css. */
-export const PRINT_WIDTH = (11 - 0.6) * 96
-export const PRINT_HEIGHT = (8.5 - 0.6) * 96
-/** Squares taken by the header band (top padding + title); see ColumnAddition.css. */
+
+/* Page margins declared by `@page` in index.css. The bottom is wider than the
+   top because it reserves the band the print footer sits in — budgeting the
+   symmetric 0.3in here is what used to overflow a row onto a second sheet. */
+export const PAGE_MARGIN_X = 0.3
+export const PAGE_MARGIN_TOP = 0.3
+export const PAGE_MARGIN_BOTTOM = 0.5
+
+/* The sheet must fit Letter *or* A4, because `@page` no longer forces a paper
+   size and five of the seven locales are A4 countries. Landscape Letter is
+   11 × 8.5in and landscape A4 is 11.69 × 8.27in, so the printable box is the
+   intersection: Letter's width and A4's height. A sheet laid out to this fits
+   either tray without scaling. */
+const PAPER_WIDTH_IN = 11
+const PAPER_HEIGHT_IN = 8.27
+
+export const PRINT_WIDTH = (PAPER_WIDTH_IN - PAGE_MARGIN_X * 2) * 96
+export const PRINT_HEIGHT = (PAPER_HEIGHT_IN - PAGE_MARGIN_TOP - PAGE_MARGIN_BOTTOM) * 96
+
+/**
+ * Squares taken by the header band: the title line and the ruled
+ * Name / Date / Set no. block sit side by side, so the band measures 72px —
+ * exactly three squares — on a printed notebook sheet.
+ */
 export const HEADER_BAND = 3
 /** Default empty squares below the header band and between rows of problems (each problem also has one spare square above it). */
 export const ROW_GAP = 1
@@ -24,6 +44,21 @@ export const ROW_GAP = 1
 export const PAD = 1
 /** Width assumed until the sheet has been measured (also used in jsdom). */
 const DEFAULT_WIDTH = 910
+
+/** Top padding the sheet adds inside the @page box (`.worksheet` in AddSubtract.css). */
+export const SHEET_PAD_TOP = 0.4 * 96
+/** Fixed print height of one row in a flat list worksheet (`.pattern-row`). */
+export const PRINT_LIST_ROW = 49
+
+/**
+ * Rows of a fixed-height list that fit one printed page, for worksheets laid
+ * out as a flat list rather than on the notebook grid. `headerPx` must budget
+ * the tallest translation of the header, since a wrapped instruction line in
+ * German or Russian is what would otherwise spill a row onto a second sheet.
+ */
+export function listRowsPerPage(rowPx = PRINT_LIST_ROW, headerPx = 112) {
+  return Math.max(1, Math.floor((PRINT_HEIGHT - SHEET_PAD_TOP - headerPx) / rowPx))
+}
 
 /**
  * Pure layout maths, exported for tests.

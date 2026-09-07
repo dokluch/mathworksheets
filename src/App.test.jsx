@@ -43,11 +43,23 @@ describe('App', () => {
     expect(trackEvent).toHaveBeenCalledWith('select_worksheet', { worksheet_id: 'rounding' })
   })
 
-  it('restores the remembered worksheet when landing on /', () => {
+  // The remembered sheet is offered on the catalog, not redirected to: typing
+  // the domain must still reach the catalog, and Back must still return here.
+  it('offers the remembered worksheet on / without leaving the catalog', () => {
     localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'patterns' }, patterns: { level: 2 } }))
     render(<App />)
-    expect(screen.getByRole('tabpanel', { name: 'Patterns' })).toBeTruthy()
-    expect(window.location.pathname).toBe('/worksheets/patterns')
+    expect(screen.queryByRole('tabpanel')).toBeNull()
+    expect(window.location.pathname).toBe('/')
+
+    const resume = document.querySelector('.resume-card')
+    expect(resume).toBeTruthy()
+    expect(resume.getAttribute('href')).toBe('/worksheets/patterns')
+    expect(resume.textContent).toContain('Patterns')
+  })
+
+  it('offers no resume card when nothing is remembered', () => {
+    render(<App />)
+    expect(document.querySelector('.resume-card')).toBeNull()
   })
 
   it('opens the worksheet named in the URL', () => {
@@ -332,6 +344,8 @@ describe('App', () => {
 
   it('tracks print_worksheet with the sheet id and its settings on beforeprint', () => {
     localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'addsub' }, addsub: { ops: 'add', maxVal: 20 } }))
+    // The URL selects the sheet now that / stays on the catalog.
+    window.history.replaceState(null, '', '/worksheets/add-subtract')
     render(<App />)
     window.dispatchEvent(new Event('beforeprint'))
     expect(trackEvent).toHaveBeenCalledWith('print_worksheet', expect.objectContaining({ worksheet_id: 'addsub', setting_ops: 'add', setting_maxVal: 20 }))

@@ -111,6 +111,8 @@ export default {
     worksheetTypes: 'Типы рабочих листов',
     sourceOnGitHub: 'Исходный код на GitHub',
     language: 'Язык',
+    resume: 'Продолжить с того же места',
+    skipToContent: 'Перейти к содержимому',
   },
 
   common: {
@@ -118,6 +120,9 @@ export default {
     print: 'Печать',
     printWorksheet: 'Распечатать лист',
     printFooterTagline: 'Бесплатные материалы по математике для печати',
+    screenOnly: "«Исследователь уравнений» сделан для экрана, печатать нечего. Выберите любой другой лист, чтобы получить страницу для печати.",
+    answerKey: "Ответы",
+    answerKeyOption: "Печатать лист с ответами",
     columns: 'Столбцы',
     limit: 'Предел',
     range: 'Диапазон',
@@ -128,6 +133,9 @@ export default {
     options: 'Дополнительно',
     within: 'До {n}',
     withinMeta: 'до {n}',
+    fieldName: 'Имя',
+    fieldDate: 'Дата',
+    fieldSet: 'Набор',
   },
 
   multiply: {
@@ -136,8 +144,11 @@ export default {
     rangeEnd: 'Конец диапазона',
     fillDiagonal: 'Заполнить диагональ',
     shuffleHeaders: 'Перемешать строки и столбцы',
+    emptyRange: "Диапазон задан наоборот, печатать нечего. Сделайте второе число больше первого — например, от 1 до 10.",
     prefill: 'Заполнить {pct} %',
     tableAria: 'Таблица умножения',
+    title: "Умножение",
+    meta: "от {start} до {end}",
   },
 
   addsub: {

@@ -2,8 +2,11 @@ import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useNotebookGrid, problemsPerPage } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
-import { SettingsPanel, SettingRow, SegmentedControl, PanelActions } from './controls/SettingsPanel'
+import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './ColumnMultiplication.css'
+import WorksheetHeader from './WorksheetHeader'
+import { setStamp } from '../lib/setStamp'
+import AnswerKey from './AnswerKey'
 
 const PRESETS = [
   { value: '2x2', aDigits: 2, bDigits: 2 },
@@ -115,6 +118,7 @@ export default function ColumnMultiplication() {
   const t = useT()
   const [preset, setPreset] = usePersistedState('colmul', 'preset', '4x2')
   const [columns, setColumns] = usePersistedState('colmul', 'columns', 3)
+  const [answerKey, setAnswerKey] = usePersistedState('colmul', 'answerKey', false)
   const [seed, setSeed] = useState(0)
 
   const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[PRESETS.length - 1]
@@ -150,6 +154,11 @@ export default function ColumnMultiplication() {
         <SettingRow label={t('common.columns')}>
           <SegmentedControl value={columns} onChange={setColumns} options={[2, 3, 4].map(c => ({ value: c, label: c }))} />
         </SettingRow>
+        <SettingRow label={t('common.options')}>
+          <CheckboxOption checked={answerKey} onChange={setAnswerKey}>
+            {t('common.answerKeyOption')}
+          </CheckboxOption>
+        </SettingRow>
       </SettingsPanel>
 
       <div
@@ -157,14 +166,11 @@ export default function ColumnMultiplication() {
         className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${columns}`}
         style={sheetStyle}
       >
-        <div className="worksheet-header">
-          <div className="ws-title">
-            {t('colmul.title')}
-            <span className="ws-meta">
-              {t('colmul.meta', { preset: presetLabel(aDigits, bDigits) })}
-            </span>
-          </div>
-        </div>
+        <WorksheetHeader
+          title={t('colmul.title')}
+          meta={t('colmul.meta', { preset: presetLabel(aDigits, bDigits) })}
+          stamp={setStamp(problems)}
+        />
 
         <div className="colarith-grid">
           {problems.map((problem, idx) => (
@@ -174,6 +180,14 @@ export default function ColumnMultiplication() {
           ))}
         </div>
       </div>
+
+      {answerKey && (
+        <AnswerKey
+          title={t('colmul.title')}
+          stamp={setStamp(problems)}
+          answers={problems.map(p => String(p.product))}
+        />
+      )}
     </div>
   )
 }

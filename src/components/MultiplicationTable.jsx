@@ -2,6 +2,9 @@ import { useId, useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, CheckboxOption, PanelActions } from './controls/SettingsPanel'
+import { useReportEmpty } from './SheetState'
+import WorksheetHeader from './WorksheetHeader'
+import { setStamp } from '../lib/setStamp'
 import './MultiplicationTable.css'
 
 function shuffleArray(array) {
@@ -22,6 +25,7 @@ export default function MultiplicationTable() {
   const [randomPercent, setRandomPercent] = usePersistedState('multiply', 'randomPercent', 50)
   const [seed, setSeed] = useState(0)
   const sliderId = useId()
+  useReportEmpty(end <= start)
 
   const tableData = useMemo(() => {
     if (end <= start) return null
@@ -109,8 +113,20 @@ export default function MultiplicationTable() {
         </SettingRow>
       </SettingsPanel>
 
+      {!tableData && (
+        <p className="sheet-empty no-print" role="status">
+          {t('multiply.emptyRange')}
+        </p>
+      )}
+
       {tableData && (
-        <div className="mult-table-wrap print-area" tabIndex={0} role="region" aria-label={t('multiply.tableAria')}>
+        <div className="worksheet mult-sheet print-area">
+          <WorksheetHeader
+            title={t('multiply.title')}
+            meta={t('multiply.meta', { start, end })}
+            stamp={setStamp(tableData)}
+          />
+          <div className="mult-table-wrap" tabIndex={0} role="region" aria-label={t('multiply.tableAria')}>
           <table className="mult-table">
             <thead>
               <tr>
@@ -137,6 +153,7 @@ export default function MultiplicationTable() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>

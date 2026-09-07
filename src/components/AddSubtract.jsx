@@ -3,6 +3,9 @@ import { usePersistedState } from '../hooks/usePersistedState'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
+import WorksheetHeader from './WorksheetHeader'
+import { setStamp } from '../lib/setStamp'
+import AnswerKey from './AnswerKey'
 
 const PRESETS = [10, 20, 100, 1000]
 
@@ -141,6 +144,7 @@ export default function AddSubtract() {
   const [columns, setColumns] = usePersistedState('addsub', 'columns', 3)
   const [layout, setLayout] = usePersistedState('addsub', 'layout', 'inline')
   const [sixtySevenMode, setSixtySevenMode] = usePersistedState('addsub', 'sixtySevenMode', true)
+  const [answerKey, setAnswerKey] = usePersistedState('addsub', 'answerKey', false)
   const [seed, setSeed] = useState(0)
 
   const stackedCounts = { 2: 14, 3: 18, 4: 24 }
@@ -208,20 +212,19 @@ export default function AddSubtract() {
           <CheckboxOption checked={sixtySevenMode} onChange={setSixtySevenMode}>
             {t('addsub.sixtySeven')}
           </CheckboxOption>
+          <CheckboxOption checked={answerKey} onChange={setAnswerKey}>
+            {t('common.answerKeyOption')}
+          </CheckboxOption>
         </SettingRow>
       </SettingsPanel>
 
       {problems && (
         <div className={`worksheet print-area cols-${columns}`}>
-          <div className="worksheet-header">
-            <div className="ws-title">
-              {t('addsub.title')}
-              <span className="ws-meta">
-                {ops === 'add' ? '(+)' : ops === 'sub' ? '(−)' : '(+ / −)'}
-                {' · '}{t('common.withinMeta', { n: maxVal })}
-              </span>
-            </div>
-          </div>
+          <WorksheetHeader
+            title={t('addsub.title')}
+            meta={`${ops === 'add' ? '(+)' : ops === 'sub' ? '(−)' : '(+ / −)'} · ${t('common.withinMeta', { n: maxVal })}`}
+            stamp={setStamp(problems)}
+          />
 
           <div
             className={`problem-grid ${layout === 'stacked' ? 'stacked-grid' : ''}`}
@@ -237,6 +240,14 @@ export default function AddSubtract() {
             ))}
           </div>
         </div>
+      )}
+
+      {answerKey && problems && (
+        <AnswerKey
+          title={t('addsub.title')}
+          stamp={setStamp(problems)}
+          answers={problems.map(p => String(getBlankAnswer(p)))}
+        />
       )}
     </div>
   )

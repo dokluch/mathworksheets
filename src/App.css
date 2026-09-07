@@ -38,18 +38,95 @@
 }
 
 /* =============================================
+   SKIP LINK
+   ============================================= */
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  background: var(--paper);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 2px;
+  box-shadow: var(--shadow-md);
+  transform: translateY(calc(-100% - 20px));
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* =============================================
+   RESUME CARD — the remembered sheet, offered not forced
+   ============================================= */
+
+.resume-card {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 12px;
+  margin: 0 0 calc(var(--sq) * 1.2);
+  padding: 10px 18px 10px 12px;
+  background: var(--cover-wash);
+  border: 1px solid var(--cover-line);
+  border-radius: 3px;
+  color: var(--on-cover);
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  --focus-inner: var(--cover);
+}
+
+.resume-card:hover {
+  background: var(--cover-wash-strong);
+  border-color: var(--cover-line-strong);
+}
+
+.resume-card-tab {
+  width: 4px;
+  border-radius: 2px;
+  background: var(--card-color, var(--mark));
+}
+
+.resume-card-text {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 15px;
+  color: var(--on-cover);
+}
+
+.resume-card-label {
+  font-family: var(--font-cover);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* =============================================
    SITE HEADER — brand · About · language
    ============================================= */
 
+/* The header is the top of the cover: deeper stock, ruled off from the page
+   below the way a notebook cover is scored above its first sheet. */
 .site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 20px;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--half-sq) 20px;
+  background: var(--cover-deep);
+  border-bottom: 2px solid var(--cover-line);
   flex-shrink: 0;
+  --focus-inner: var(--cover-deep);
 }
 
 .site-brand-title {
@@ -59,26 +136,28 @@
   display: flex;
 }
 
+/* The wordmark sits in the white ruled label a school book carries on its
+   cover — the one place the paper shows through the chrome. */
 .site-brand {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 4px 6px;
-  margin-left: -6px;
-  font-size: 19px;
-  font-weight: 700;
+  min-height: 44px;
+  padding: 5px 14px;
+  font-family: var(--font-cover);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
   color: var(--color-text);
+  background: var(--paper);
   text-decoration: none;
-  border-radius: var(--radius);
-  transition: color 0.15s;
-}
-
-.site-brand svg {
-  color: var(--color-primary);
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--edge-strong), var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .site-brand:hover {
-  color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px var(--edge-strong), var(--shadow-md);
 }
 
 .site-nav {
@@ -90,17 +169,18 @@
 .site-nav-link {
   display: inline-flex;
   align-items: center;
-  padding: 8px 10px;
+  min-height: 44px;
+  padding: 8px 12px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--on-cover);
   text-decoration: none;
   border-radius: var(--radius);
   transition: background 0.15s, color 0.15s;
 }
 
 .site-nav-link:hover {
-  background: rgba(0,0,0,0.05);
+  background: var(--cover-wash);
   color: var(--color-text);
 }
 
@@ -109,11 +189,14 @@
     padding: 8px 12px;
   }
   .site-brand {
-    font-size: 17px;
+    /* Holds the wordmark on one line beside About and the language button. */
+    font-size: 15px;
+    padding: 5px 10px;
+    white-space: nowrap;
   }
   .site-nav-link {
-    min-height: 40px;
-    padding: 8px;
+    min-height: 44px;
+    padding: 8px 10px;
   }
 }
 
@@ -121,8 +204,10 @@
    CATALOG PANEL
    ============================================= */
 
+/* The catalog is the cover: colour field, not a white page. Paper appears
+   below, in the cards, because those are the sheets. */
 .catalog {
-  background: var(--color-surface);
+  background: transparent;
 }
 
 /* — Full catalog (landing page) — */
@@ -130,16 +215,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 20px 40px;
+  padding: calc(var(--sq) * 1.5) 20px calc(var(--sq) * 2);
   flex: 1;
 }
 
-/* Tagline under the header on the catalog */
+/* The one sentence that has to earn a stranger's trust, set as a statement
+   rather than as a caption. */
 .catalog-hero {
-  color: var(--color-text-muted);
-  font-size: 16px;
+  color: var(--on-cover);
+  font-family: var(--font-cover);
+  font-size: clamp(20px, 2.6vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
   text-align: center;
-  margin: 0 0 28px;
+  text-wrap: balance;
+  max-width: 32ch;
+  margin: 0 0 calc(var(--sq) * 1.5);
 }
 
 /* — Sidebar mode (desktop) — */
@@ -201,6 +293,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  min-height: 44px;
   padding: 8px 12px;
   margin-bottom: 8px;
   border: none;
@@ -208,23 +301,24 @@
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--on-cover);
   cursor: pointer;
   border-radius: var(--radius);
   transition: background 0.15s, color 0.15s;
+  --focus-inner: var(--cover);
 }
 
 .back-btn:hover {
-  background: rgba(0,0,0,0.05);
+  background: var(--cover-wash);
   color: var(--color-text);
 }
 
 @media (max-width: 768px) {
   .back-btn {
     margin-bottom: 4px;
-  }
-  .back-btn-label {
-    display: none;
+    /* The label stays: a bare arrow reads as browser-back, and the control
+       was 42x34, under the touch-target floor. */
+    min-width: 44px;
   }
 }
 
@@ -238,23 +332,25 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 7px 10px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  min-height: 44px;
+  padding: 7px 12px;
+  border: 1px solid var(--cover-line);
+  background: transparent;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--on-cover);
   cursor: pointer;
   border-radius: var(--radius);
   transition: background 0.15s, color 0.15s, border-color 0.15s;
+  --focus-inner: var(--cover-deep);
 }
 
 .lang-btn:hover,
 .lang-btn[aria-expanded="true"] {
-  background: var(--color-surface-hover);
+  background: var(--cover-wash);
   color: var(--color-text);
-  border-color: var(--color-border-dark);
+  border-color: var(--cover-line-strong);
 }
 
 .lang-btn-chevron {
@@ -263,23 +359,25 @@
 
 .lang-menu {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 6px);
   right: 0;
-  min-width: 160px;
+  min-width: 172px;
   margin: 0;
   padding: 4px;
   list-style: none;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  box-shadow: var(--shadow-md);
+  background: var(--paper);
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--edge-strong), var(--shadow-md);
   z-index: 40;
+  --focus-inner: var(--paper);
 }
 
 .lang-menu a {
   display: block;
-  padding: 8px 12px;
-  border-radius: 6px;
+  min-height: 44px;
+  padding: 11px 12px;
+  border-radius: 2px;
   font-size: 14px;
   color: var(--color-text);
   text-decoration: none;
@@ -296,8 +394,8 @@
 
 @media (max-width: 768px) {
   .lang-btn {
-    padding: 8px 9px;
-    min-height: 40px;
+    padding: 8px 10px;
+    min-height: 44px;
   }
 }
 
@@ -307,63 +405,91 @@
 
 .catalog-grid {
   display: grid;
-  gap: 16px;
+  gap: var(--sq);
   width: 100%;
-  max-width: 680px;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  max-width: 940px;
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
 }
 
+/* Each card is a sheet lying on the cover: paper stock, a square-cut corner,
+   and the subject colour on its edge the way a school book is colour-coded by
+   subject. It shows the worksheet it prints, so the choice is made on the
+   thing itself rather than on a label. */
 .catalog-card {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  padding: 28px 16px 24px;
-  border: 2px solid var(--color-border);
-  border-radius: 14px;
-  background: var(--color-surface);
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  border-radius: 2px;
+  background: var(--paper);
   cursor: pointer;
   font-family: inherit;
-  transition: all 0.18s ease;
-  text-align: center;
+  text-align: left;
+  box-shadow: 0 0 0 1px var(--edge), var(--shadow-md);
+  transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow 0.18s ease;
   -webkit-tap-highlight-color: transparent;
+  --focus-inner: var(--paper);
+}
+
+/* The subject band along the head of the sheet. */
+.catalog-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  background: var(--card-color, var(--cover));
 }
 
 .catalog-card:hover {
-  border-color: var(--card-color, var(--color-primary));
-  box-shadow: 0 4px 20px -4px color-mix(in srgb, var(--card-color) 25%, transparent);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 1px var(--edge-strong), 0 6px 10px rgba(26, 31, 36, 0.10), 0 18px 30px -12px rgba(26, 31, 36, 0.22);
 }
 
 .catalog-card:active {
-  transform: translateY(0);
+  transform: translateY(-1px);
 }
 
-.catalog-card-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--card-color) 10%, transparent);
-  color: var(--card-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* The miniature of the real sheet. */
+.catalog-card-sheet {
+  display: block;
+  padding: calc(var(--sq) * 0.85) 0 var(--half-sq);
+  color: var(--color-text);
+  background:
+    linear-gradient(to bottom, rgba(26, 31, 36, 0.045), transparent 60%);
+  border-bottom: 1px solid var(--paper-edge);
+}
+
+/* Rendered at twice the drawing size: at 104px the digits and the ruling
+   collapsed and the preview read as an icon of a sheet rather than the sheet. */
+.sheet-thumb {
+  display: block;
+  width: 100%;
+  max-width: 208px;
+  height: auto;
+  aspect-ratio: 104 / 64;
+  margin: 0 auto;
 }
 
 .catalog-card-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
+  padding: var(--half-sq) 16px calc(var(--sq) * 0.7);
 }
 
 .catalog-card-label {
-  font-size: 15px;
-  font-weight: 600;
+  font-family: var(--font-cover);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--color-text);
 }
 
 .catalog-card-desc {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-text-muted);
   line-height: 1.4;
 }
@@ -384,35 +510,62 @@
 
   .catalog-grid--compact .catalog-card {
     flex-direction: row;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 2px solid transparent;
+    align-items: center;
+    padding: 9px 12px;
+    min-height: 44px;
+    border-radius: 3px;
+    background: transparent;
+    box-shadow: none;
     gap: 10px;
     text-align: left;
+    --focus-inner: var(--cover);
+  }
+
+  .catalog-grid--compact .catalog-card::before {
+    display: none;
   }
 
   .catalog-grid--compact .catalog-card:hover {
-    background: rgba(0,0,0,0.03);
-    border-color: transparent;
+    background: var(--cover-wash);
     box-shadow: none;
     transform: none;
   }
 
+  /* The active sheet is the one pulled out of the book: paper, on the cover. */
   .catalog-grid--compact .catalog-card--active {
-    background: color-mix(in srgb, var(--card-color) 8%, transparent);
-    border-color: color-mix(in srgb, var(--card-color) 30%, transparent);
-  }
-
-  .catalog-grid--compact .catalog-card-icon {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    border-radius: 8px;
+    box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
+    background: var(--paper);
+    --focus-inner: var(--paper);
   }
 
   .catalog-grid--compact .catalog-card-label {
     font-size: 13px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    color: var(--on-cover);
   }
+
+  .catalog-grid--compact .catalog-card--active .catalog-card-label {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .catalog-grid--compact .catalog-card-text {
+    padding: 0;
+  }
+}
+
+/* Dense-context icon: recognisable at a glance where a sheet preview would
+   shrink into mush, and tinted with the subject ink so colour is a second cue
+   rather than the only one. */
+.catalog-card-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  color: var(--card-color, var(--color-text));
 }
 
 /* — Mobile topbar compact (horizontal scroll) — */
@@ -443,31 +596,48 @@
 
   .catalog-grid--compact .catalog-card {
     flex-direction: row;
+    align-items: center;
     flex-shrink: 0;
     padding: 8px 14px;
     min-height: 44px;
-    border-radius: 20px;
-    border: 1.5px solid var(--color-border);
+    border-radius: 3px;
+    background: var(--cover-wash);
+    box-shadow: none;
     gap: 8px;
     scroll-snap-align: start;
+    --focus-inner: var(--cover);
+  }
+
+  .catalog-grid--compact .catalog-card::before {
+    display: none;
   }
 
   .catalog-grid--compact .catalog-card--active {
-    background: color-mix(in srgb, var(--card-color) 10%, transparent);
-    border-color: var(--card-color);
+    box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
+    background: var(--paper);
+    --focus-inner: var(--paper);
   }
 
-  .catalog-grid--compact .catalog-card-icon {
-    width: 28px;
-    height: 28px;
-    min-width: 28px;
-    border-radius: 8px;
-    background: none;
+  .catalog-grid--compact .catalog-card-text {
+    padding: 0;
   }
 
   .catalog-grid--compact .catalog-card-label {
     font-size: 13px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    color: var(--on-cover);
     white-space: nowrap;
+  }
+
+  .catalog-grid--compact .catalog-card--active .catalog-card-label {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  /* The selected chip must never be the one clipped at the edge. */
+  .catalog-grid--compact {
+    scroll-padding-inline: 12px;
   }
 }
 
@@ -502,17 +672,30 @@
   }
 }
 
+/* A real step down from the sheet title below it: the old h1 was 18px against
+   16px h2s, a 1.13:1 ratio that read as no hierarchy at all. */
 .worksheet-title {
-  font-size: 18px;
-  font-weight: 700;
+  font-family: var(--font-cover);
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--on-cover);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.worksheet-title-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  color: var(--card-color, var(--mark));
 }
 
 .worksheet-subtitle {
   font-size: 13px;
-  color: var(--color-text-muted);
+  color: var(--on-cover-muted);
 }
 
 .worksheet-content {
@@ -524,14 +707,18 @@
 
 /* The crawlable worksheet prose, kept in the DOM after hydration (see
    components/WorksheetDetails.jsx). Reuses .static-page typography. */
+/* The prose that explains the sheet is paper too — a second leaf of the book,
+   not a panel floating on the cover. No `width: 100%` beside the horizontal
+   margins: together they made the block its parent's full width *and* inset
+   it, pushing the page 24px wider than a 390px viewport. */
 .worksheet-details {
-  width: 100%;
-  max-width: 680px;
-  margin: 8px 24px 32px;
-  padding: 20px 24px 8px;
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  max-width: 960px;
+  padding: var(--sq) calc(var(--sq) * 0.9) calc(var(--sq) * 1.2);
+  margin: var(--half-sq) 24px calc(var(--sq) * 1.2);
+  background: var(--paper);
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
+  --focus-inner: var(--paper);
 }
 
 @media (max-width: 768px) {
@@ -554,6 +741,18 @@
   gap: 20px;
 }
 
+/* Says what went wrong and how to fix it, where the sheet would have been. */
+.sheet-empty {
+  max-width: 46ch;
+  padding: var(--sq) calc(var(--sq) * 0.9);
+  background: var(--cover-wash);
+  border: 1px dashed var(--cover-line-strong);
+  border-radius: 3px;
+  color: var(--on-cover);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
 /* =============================================
    MOBILE — Full catalog landing
    ============================================= */
@@ -563,9 +762,11 @@
     padding: 20px 16px 28px;
   }
 
+  /* Leftover from the old caption-sized tagline: it overrode the clamp and
+     rendered the hero at 14px on phones, smaller than the card titles under
+     it. The clamp already handles small viewports. */
   .catalog-hero {
-    font-size: 14px;
-    margin-bottom: 20px;
+    margin-bottom: var(--sq);
   }
 
   .catalog-title {
@@ -582,19 +783,15 @@
   }
 
   .catalog-card {
-    padding: 20px 12px 16px;
-    border-radius: 12px;
-    gap: 10px;
-  }
-
-  .catalog-card-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    /* Square-cut, like the sheet it stands for: the 12px rounding here was
+       drift from the old card world. */
+    padding: 0;
+    border-radius: 2px;
+    gap: 0;
   }
 
   .catalog-card-label {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .catalog-card-desc {
@@ -617,9 +814,12 @@
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding: 20px 16px 28px;
+  padding: var(--sq) 16px calc(var(--sq) * 1.2);
   font-size: 13px;
-  color: var(--color-text-muted);
+  /* On the cover, not on a stray band of page tint: the old muted grey on the
+     body colour measured 4.35:1 and failed AA. */
+  color: var(--on-cover-muted);
+  --focus-inner: var(--cover);
 }
 
 .site-footer-links {
@@ -633,8 +833,9 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 6px 4px;
-  color: var(--color-text-muted);
+  min-height: 44px;
+  padding: 6px 8px;
+  color: var(--on-cover);
   text-decoration: none;
   border-radius: var(--radius);
   transition: color 0.15s;
@@ -642,6 +843,8 @@
 
 .site-footer-links a:hover {
   color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .site-footer-legal {
@@ -650,7 +853,12 @@
 }
 
 .site-footer-legal a {
-  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 4px;
+  color: var(--on-cover);
+  text-underline-offset: 2px;
 }
 
 /* Compact form at the bottom of the worksheet sidebar */
@@ -704,6 +912,42 @@ a.back-btn {
 
 /* Static pages (About, Privacy, Terms) and the no-JS fallback
    content share this typography; React renders the same HTML string. */
+/* A static page is a leaf of the book: paper stock, one measure, real ink.
+   The whole About argument — the product's actual differentiation, with ten
+   cited studies — used to be set in muted grey at 13-14px, so the page had no
+   primary text at all and its best content read like a legal footer. */
+/* A leaf of the book, not a white-out of the cover: the paper is a centred
+   column so the cover stock still shows down both margins.
+   The colour is a real `background-color`, not a painted gradient plate — a
+   gradient leaves the resolved background transparent, so contrast tooling
+   (and any context that skips background images) sees ink on the navy body
+   and reads this page as unreadable. A wrapper element is not an option
+   either: the prerenderer emits this markup verbatim (render.test.js), so a
+   React-only wrapper would leave no-JS and crawler users on the cover. */
+.static-page {
+  align-items: center;
+  width: 100%;
+  max-width: 856px;
+  margin-inline: auto;
+  background-color: var(--paper);
+  color: var(--color-text);
+  /* An absolute measure, not `ch`: ch resolves against each element's own
+     font-size, so headings claimed a 890px line while body text got 686px and
+     the two sat on different left edges. ~68 characters at the 16px body. */
+  --measure: 686px;
+  --focus-inner: var(--paper);
+}
+
+/* One measure for every block, so the page has a single left edge. */
+.static-page > * {
+  width: 100%;
+  max-width: var(--measure);
+}
+
+.static-page > .catalog-grid {
+  max-width: 940px;
+}
+
 .static-page .static-intro,
 .static-page h2,
 .static-page ol,
@@ -711,9 +955,18 @@ a.back-btn {
 .static-page nav[aria-label="Breadcrumb"],
 .static-page > p {
   width: 100%;
-  max-width: 680px;
-  color: var(--color-text-muted);
-  line-height: 1.6;
+  /* 68ch of body measure, inside the 65-75ch reading band. */
+  max-width: var(--measure, 686px);
+  color: var(--color-text);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* The opening paragraph carries the page. */
+.static-page .static-intro {
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--color-text);
 }
 
 .static-page nav[aria-label="Breadcrumb"] {
@@ -721,14 +974,20 @@ a.back-btn {
   margin-bottom: 16px;
 }
 
+/* More space above a heading than below it, and a real step over body. */
 .static-page h2 {
+  font-family: var(--font-cover);
   color: var(--color-text);
-  font-size: 18px;
-  margin: 28px 0 8px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  text-wrap: balance;
+  margin: calc(var(--sq) * 1.6) 0 var(--half-sq);
 }
 
 .static-page > p {
-  margin-bottom: 12px;
+  margin-bottom: var(--half-sq);
 }
 
 .static-page ol,
@@ -737,11 +996,27 @@ a.back-btn {
 }
 
 .static-page li {
-  margin: 4px 0;
+  margin: 6px 0;
 }
 
+/* Links in prose get a real target height as well as a colour: the About page
+   carried 13 citation links at 16-20px tall. */
 .static-page a {
-  color: var(--color-primary);
+  color: var(--mark-deep);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  padding: 3px 0;
+}
+
+.static-page a:hover {
+  color: var(--mark);
+}
+
+/* A bare URL as link text is unbreakable and used to push the page 12px wider
+   than a 390px viewport. */
+.static-page a,
+.worksheet-details a {
+  overflow-wrap: anywhere;
 }
 
 .static-page .catalog-grid {
@@ -753,18 +1028,23 @@ a.back-btn {
    next to the marker. */
 .static-fold {
   width: 100%;
-  max-width: 680px;
-  border-bottom: 1px solid var(--color-border-light);
+  max-width: var(--measure, 686px);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .static-fold > summary {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-height: 44px;
   padding: 12px 0;
   cursor: pointer;
   list-style: none;
-  color: var(--color-text-muted);
+  color: var(--color-text);
+}
+
+.static-fold > summary:hover {
+  color: var(--mark-deep);
 }
 
 .worksheet-details .static-fold:last-of-type {
@@ -828,35 +1108,50 @@ a.back-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 9px 20px;
+  gap: 7px;
+  min-height: 44px;
+  padding: 10px 20px;
   border: none;
-  border-radius: var(--radius);
+  border-radius: 2px;
   font-family: inherit;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.25;
+  letter-spacing: 0.01em;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
 }
 
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Print is the product's one real action, so it wears the marking red — the
+   only warm colour in the system, spent on the moment that makes paper. */
 .btn-primary {
-  background: var(--color-primary);
-  color: white;
+  background: var(--mark);
+  color: #fff;
 }
 
 .btn-primary:hover {
-  background: var(--color-primary-hover);
+  background: var(--mark-deep);
 }
 
 .btn-secondary {
-  background: var(--color-surface);
+  background: transparent;
   color: var(--color-text);
-  border: 1px solid var(--color-border-dark);
+  border: 1.5px solid var(--color-border-dark);
 }
 
 .btn-secondary:hover {
-  background: var(--color-surface-hover);
+  background: var(--cover-wash);
+  border-color: var(--color-primary);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Segmented toggle group */
@@ -870,7 +1165,7 @@ a.back-btn {
 .btn-toggle {
   padding: 7px 14px;
   border: 1px solid var(--color-border-dark);
-  background: var(--color-surface);
+  background: transparent;
   font-family: inherit;
   font-size: 13px;
   font-weight: 500;
@@ -899,13 +1194,10 @@ a.back-btn {
   border-left: 1px solid var(--color-primary);
 }
 
-/* Lift the focused segment above its neighbours so the ring is not covered;
-   the end-cap radius rules below win over this square default. */
+/* Lift the focused segment above its neighbours so the ring is not covered. */
 .btn-toggle:focus-visible {
   position: relative;
   z-index: 1;
-  box-shadow: var(--focus-ring);
-  border-radius: 0;
 }
 
 .btn-toggle:first-child {
@@ -936,4 +1228,95 @@ a.back-btn {
     width: 100%;
     justify-content: center;
   }
+}
+
+/* =============================================
+   ANSWER KEY — print only, its own page
+   ============================================= */
+
+/* The same document as the sheet, not a stray white page after it: same paper
+   stock, same ruled header block, same squared ground. It stays a separate
+   page on purpose — a key printed at the foot of the child's own sheet would
+   hand them exactly the instant answer the product exists to withhold. */
+.answer-key {
+  break-before: page;
+  page-break-before: always;
+  padding: 0.35in 0.5in 0;
+  background: var(--paper);
+  color: #111;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* `.print-only` hides it on screen; this is what reveals it on paper. */
+@media print {
+  .answer-key.print-only {
+    display: block;
+  }
+}
+
+.answer-key-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid #333;
+}
+
+.answer-key-title {
+  font-family: var(--font-cover);
+  font-size: 15pt;
+  font-weight: 800;
+}
+
+.answer-key-meta {
+  font-size: 11pt;
+  color: #333;
+}
+
+.answer-key-stamp {
+  margin-left: auto;
+  padding: 1px 7px;
+  border: 1.5px solid #333;
+  border-radius: 3px;
+  font-size: 10pt;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Marking runs down a column, so the answers do too — wide enough to scan and
+   dense enough that a full sheet's worth does not strand a mostly empty page. */
+.answer-key-list {
+  columns: 6;
+  column-gap: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.answer-key-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  break-inside: avoid;
+  padding: 3px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 12pt;
+  line-height: 1.6;
+}
+
+.answer-key-num {
+  min-width: 2.2em;
+  text-align: right;
+  font-size: 9pt;
+  font-weight: 600;
+  color: #555;
+  font-variant-numeric: tabular-nums;
+}
+
+.answer-key-value {
+  font-family: var(--font-figure);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }

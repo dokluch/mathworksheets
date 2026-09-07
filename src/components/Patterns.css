@@ -60,7 +60,13 @@
 
 /* ── Print styles ── */
 @media print {
+  /* Height is pinned so listRowsPerPage() in hooks/useNotebookGrid.js can do
+     exact arithmetic against it; PRINT_LIST_ROW must match this value. */
   .pattern-row {
+    height: 49px;
+    padding: 0;
     border-bottom-color: #ddd;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 }

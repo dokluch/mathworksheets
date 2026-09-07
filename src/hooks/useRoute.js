@@ -66,8 +66,11 @@ function syncDocument(route) {
  * - A remembered language (fallbackLocale, an explicit switcher choice) applies
  *   to every unprefixed URL: /worksheets/x becomes /fr/worksheets/x silently.
  *   A prefixed URL is an explicit request and always wins.
- * - On the catalog page the remembered sheet (fallbackId) is restored and the
- *   URL is replaced silently, preserving the old "pick up where you left off".
+ * - The catalog stays the catalog. The remembered sheet is offered there as a
+ *   "pick up where you left off" card rather than silently replacing the URL:
+ *   typing the domain used to land on last week's worksheet, which made the
+ *   catalog unreachable and, because the swap used replaceState, left Back
+ *   going straight out of the site.
  * - navigate(target) pushes a history entry in the current locale; target is a
  *   worksheet id, a site path ('/privacy') or null for the catalog.
  *   setLocale(code) pushes the same page under the new locale prefix.
@@ -77,14 +80,13 @@ function syncDocument(route) {
  * the worksheet id (or null), the static page route (or null), the current
  * locale and a helper giving the current page's path in another locale.
  */
-export function useRoute(fallbackId = null, fallbackLocale = DEFAULT_LOCALE) {
+export function useRoute(fallbackLocale = DEFAULT_LOCALE) {
   const [route, setRoute] = useState(() => {
     if (typeof window === 'undefined') return homeRoute()
     const pathname = normalizePath(window.location.pathname)
     let fromPath = routeForPath(pathname)
     if (fromPath.locale === DEFAULT_LOCALE && isLocale(fallbackLocale) && fallbackLocale !== DEFAULT_LOCALE) fromPath = sameRouteIn(fromPath, fallbackLocale)
-    const fallback = fromPath.kind === 'home' && fallbackId ? findWorksheetById(fallbackId) : null
-    return fallback ? worksheetRoute(fallback, fromPath.locale) : fromPath
+    return fromPath
   })
 
   const routeRef = useRef(route)

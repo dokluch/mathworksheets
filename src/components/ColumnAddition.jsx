@@ -4,6 +4,9 @@ import { useNotebookGrid, problemsPerPage } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './ColumnAddition.css'
+import WorksheetHeader from './WorksheetHeader'
+import { setStamp } from '../lib/setStamp'
+import AnswerKey from './AnswerKey'
 
 const DIGIT_PRESETS = [2, 3, 4]
 
@@ -92,6 +95,7 @@ export default function ColumnAddition() {
   const [digits, setDigits] = usePersistedState('coladd', 'digits', 3)
   const [columns, setColumns] = usePersistedState('coladd', 'columns', 3)
   const [preferCarry, setPreferCarry] = usePersistedState('coladd', 'preferCarry', true)
+  const [answerKey, setAnswerKey] = usePersistedState('coladd', 'answerKey', false)
   const [seed, setSeed] = useState(0)
 
   // Rows: two addends and the sum. Problems are short, so they sit one blank
@@ -130,6 +134,9 @@ export default function ColumnAddition() {
           <CheckboxOption checked={preferCarry} onChange={setPreferCarry}>
             {t('coladd.preferCarry')}
           </CheckboxOption>
+          <CheckboxOption checked={answerKey} onChange={setAnswerKey}>
+            {t('common.answerKeyOption')}
+          </CheckboxOption>
         </SettingRow>
       </SettingsPanel>
 
@@ -138,14 +145,11 @@ export default function ColumnAddition() {
         className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${columns}`}
         style={sheetStyle}
       >
-        <div className="worksheet-header">
-          <div className="ws-title">
-            {t('coladd.title')}
-            <span className="ws-meta">
-              {t('coladd.meta', { d: digits })}
-            </span>
-          </div>
-        </div>
+        <WorksheetHeader
+          title={t('coladd.title')}
+          meta={t('coladd.meta', { d: digits })}
+          stamp={setStamp(problems)}
+        />
 
         <div className="colarith-grid">
           {problems.map((problem, idx) => (
@@ -155,6 +159,14 @@ export default function ColumnAddition() {
           ))}
         </div>
       </div>
+
+      {answerKey && (
+        <AnswerKey
+          title={t('coladd.title')}
+          stamp={setStamp(problems)}
+          answers={problems.map(p => String(p.sum))}
+        />
+      )}
     </div>
   )
 }

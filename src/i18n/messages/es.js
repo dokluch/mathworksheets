@@ -111,6 +111,8 @@ export default {
     worksheetTypes: 'Tipos de fichas',
     sourceOnGitHub: 'Código fuente en GitHub',
     language: 'Idioma',
+    resume: 'Continuar donde lo dejaste',
+    skipToContent: 'Ir al contenido',
   },
 
   common: {
@@ -118,6 +120,9 @@ export default {
     print: 'Imprimir',
     printWorksheet: 'Imprimir la hoja',
     printFooterTagline: 'Recursos de matemáticas gratuitos para imprimir',
+    screenOnly: "El Explorador de ecuaciones está pensado para la pantalla, así que no hay nada que imprimir. Elige otra ficha para obtener una hoja imprimible.",
+    answerKey: "Solucionario",
+    answerKeyOption: "Imprimir el solucionario",
     columns: 'Columnas',
     limit: 'Límite',
     range: 'Rango',
@@ -128,6 +133,9 @@ export default {
     options: 'Opciones',
     within: 'Hasta {n}',
     withinMeta: 'hasta {n}',
+    fieldName: 'Nombre',
+    fieldDate: 'Fecha',
+    fieldSet: 'Serie',
   },
 
   multiply: {
@@ -136,8 +144,11 @@ export default {
     rangeEnd: 'Fin del rango',
     fillDiagonal: 'Rellenar la diagonal',
     shuffleHeaders: 'Mezclar filas y columnas',
+    emptyRange: "El rango está invertido, así que no hay nada que imprimir. Pon el segundo número más alto que el primero, por ejemplo de 1 a 10.",
     prefill: 'Prerrellenar {pct} %',
     tableAria: 'Tabla de multiplicar',
+    title: "Multiplicación",
+    meta: "{start} a {end}",
   },
 
   addsub: {

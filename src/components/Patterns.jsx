@@ -1,8 +1,11 @@
 import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
+import { listRowsPerPage } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, PanelActions } from './controls/SettingsPanel'
 import './Patterns.css'
+import WorksheetHeader from './WorksheetHeader'
+import { setStamp } from '../lib/setStamp'
 
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -141,7 +144,8 @@ export default function Patterns() {
   const [level, setLevel] = usePersistedState('patterns', 'level', 1)
   const [seed, setSeed] = useState(0)
 
-  const rowCount = 12
+  // Derived, not fixed: the old hard-coded 12 overflowed onto a second page.
+  const rowCount = listRowsPerPage()
 
   const rows = useMemo(() => {
     void seed
@@ -165,15 +169,12 @@ export default function Patterns() {
       </SettingsPanel>
 
       <div className="worksheet print-area">
-        <div className="worksheet-header">
-          <div className="ws-title">
-            {t('patterns.title')}
-            <span className="ws-meta">
-              {t(LEVELS.find(l => l.value === level)?.key ?? 'patterns.easy')}
-            </span>
-          </div>
-          <p className="ws-instructions">{t('patterns.instructions')}</p>
-        </div>
+        <WorksheetHeader
+          title={t('patterns.title')}
+          meta={t(LEVELS.find(l => l.value === level)?.key ?? 'patterns.easy')}
+          instructions={t('patterns.instructions')}
+          stamp={setStamp(rows)}
+        />
 
         <div className="pattern-list">
           {rows.map((row, i) => (

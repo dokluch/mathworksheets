@@ -1,30 +1,87 @@
+/*
+ * THE EXERCISE BOOK
+ *
+ * The site is the exercise book it prints. The cover carries the colour — a
+ * saturated stock field, the way a school notebook's cover is a field and not
+ * a white page — and paper appears only where real paper does: the worksheet.
+ * That split is the whole system. Chrome is cover; content is paper.
+ */
 :root {
-  --color-bg: #f5f5f0;
-  --color-surface: #ffffff;
-  --color-surface-hover: #f8fafc;
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-light: rgba(37, 99, 235, 0.1);
-  --color-primary-faint: rgba(37, 99, 235, 0.04);
-  --color-text: #1e293b;
-  --color-text-muted: #64748b;
-  --color-border: #e2e8f0;
-  --color-border-dark: #cbd5e1;
-  --color-border-light: #f1f5f9;
-  --color-border-worksheet: #e5e7eb;
-  --color-accent-green: #059669;
-  --color-accent-orange: #d97706;
-  --color-accent-red: #dc2626;
-  --color-accent-purple: #7c3aed;
-  --color-header-bg: #eef2ff;
+  /* ── Cover stock: the ground of the interface ──
+     A light board, a shade heavier than the sheet it holds. With no dark
+     field to separate them, the cover/paper rule is carried by tone, edge and
+     lift instead: the ground is stock, the sheet is paper, and the sheet has
+     a real edge and sits above it. Cover and paper must never converge. */
+  --cover: #e8e2d5;
+  --cover-deep: #ded7c7;
+  --cover-raised: #f1ece1;
+  --cover-line: rgba(26, 31, 36, 0.16);
+  --cover-line-strong: rgba(26, 31, 36, 0.34);
+  /* Washes for hover and raised states, tinted from the ground rather than
+     from white, so every interactive surface stays on the same stock. */
+  --cover-wash: rgba(26, 31, 36, 0.055);
+  --cover-wash-strong: rgba(26, 31, 36, 0.10);
+  --on-cover: #1a1f24;
+  --on-cover-muted: #5c6068;
+
+  /* ── The teacher's marking pencil: the one warm mark on a cool cover ── */
+  --mark: #d0452f;
+  --mark-deep: #ab331f;
+
+  /* ── Paper: the sheet, and nothing else ── */
+  --paper: #fdfcf8;
+  --paper-edge: #e3ddcf;
+
+  /* The paper's edge against the cover. With both surfaces light, this line
+     and the lift below it are what say "a sheet lying on the stock" — they
+     are doing the work the dark field used to do, so they are not optional. */
+  --edge: rgba(26, 31, 36, 0.20);
+  --edge-strong: rgba(26, 31, 36, 0.34);
+
+  --color-bg: var(--cover);
+  --color-surface: var(--paper);
+  --color-surface-hover: #f3efe6;
+  /* The control accent is ink, not a second hue. Selected toggles, the
+     checkbox and slider `accent-color`, and the current locale all use it;
+     the marking red stays reserved for Print, so the system keeps exactly one
+     warm mark. (This was the last navy left from the rejected dark ground.) */
+  --color-primary: #23282e;
+  --color-primary-hover: #14181c;
+  --color-primary-light: rgba(26, 31, 36, 0.12);
+  --color-primary-faint: rgba(26, 31, 36, 0.05);
+  /* Ink and graphite, not slate: these sit on paper and must print. */
+  --color-text: #1a1f24;
+  --color-text-muted: #5a6570;
+  --color-border: #ddd6c8;
+  --color-border-dark: #b9b0a0;
+  --color-border-light: #ece7db;
+  --color-border-worksheet: #d8d1c3;
+  --color-accent-green: #3f7a5e;
+  --color-accent-orange: #b06a1f;
+  --color-accent-red: var(--mark);
+  --color-accent-purple: #5b4a91;
+  --color-header-bg: var(--cover);
+
+  /* ── Type ── */
+  --font-cover: 'Archivo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-figure: 'JetBrains Mono', ui-monospace, monospace;
   --notebook-grid-size: 10px;
   --notebook-grid-line-width: 1px;
   --notebook-grid-line-color: rgba(148, 163, 184, 0.28);
   --notebook-grid-line-color-print: rgba(107, 114, 128, 0.42);
-  --radius: 8px;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-  --focus-ring: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-primary);
+  /* ── One module ──
+     The notebook square is the product's own unit (SCREEN_SQUARE in
+     hooks/useNotebookGrid.js). The interface is measured in it too, so the
+     chrome sits on the same ruling as the sheet it configures. */
+  --sq: 26px;
+  --half-sq: 13px;
+
+  --radius: 3px;
+  /* Stapled stock, not floating glass: a tight offset shadow with real blur. */
+  --shadow-sm: 0 1px 2px rgba(26, 31, 36, 0.10);
+  --shadow-md: 0 2px 4px rgba(26, 31, 36, 0.09), 0 8px 18px -8px rgba(26, 31, 36, 0.20);
+  --focus-ring: 0 0 0 2px var(--focus-inner, var(--paper)), 0 0 0 4px var(--mark);
 }
 
 *, *::before, *::after {
@@ -34,23 +91,50 @@
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--color-bg);
-  color: var(--color-text);
+  font-family: var(--font-ui);
+  background: var(--cover);
+  color: var(--on-cover);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+/* Every paper surface states its ink explicitly: the page ground is the cover
+   and its type is light, so anything that inherits silently comes out cream
+   on cream. */
+.worksheet,
+.settings-panel,
+.static-page,
+.worksheet-details,
+.lang-menu,
+.catalog-card,
+.mult-table-wrap {
+  color: var(--color-text);
+}
+
+/* Browser surfaces the design still owns. */
+::selection {
+  background: var(--mark);
+  color: #fff;
+}
+
+.static-page ::selection,
+.worksheet ::selection {
+  background: rgba(208, 69, 47, 0.24);
+  color: inherit;
 }
 
 #root {
   min-height: 100vh;
 }
 
-/* ── Focus styles ── */
+/* ── Focus styles ──
+   An outline, not a box-shadow: it follows each element's own border-radius,
+   so the ring no longer squares off the corners of the mobile chips and the
+   catalog cards. The marking red reads against both the cover and paper. */
 :focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-  border-radius: var(--radius);
+  outline: 3px solid var(--mark);
+  outline-offset: 2px;
 }
 
 /* ── Reduced motion ── */
@@ -63,7 +147,12 @@ body {
 }
 
 @page {
-  size: letter landscape;
+  /* Orientation only: the paper itself is the user's. Five of the seven
+     locales are A4 countries, and forcing `letter` made Chrome scale or crop
+     on A4 stock. Sheets are laid out to the Letter/A4 intersection instead
+     (see PRINT_WIDTH / PRINT_HEIGHT in hooks/useNotebookGrid.js), so one page
+     stays one page in either tray. */
+  size: landscape;
   /* Wider bottom margin reserves the band the print footer sits in. */
   margin: 0.3in 0.3in 0.5in;
 }
@@ -89,7 +178,8 @@ body {
     text-align: center;
     font-size: 9pt;
     line-height: 1.2;
-    color: #64748b;
-    background: white;
+    /* Ink, not the old slate: a printed mark on the child's page. */
+    color: #4a5560;
+    background: var(--paper);
   }
 }

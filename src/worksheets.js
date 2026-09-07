@@ -31,7 +31,7 @@ export const WORKSHEETS = [
       { q: 'What do the pre-filled cells do?', a: 'Pre-filling the diagonal (1×1, 2×2, 3×3 …) or a percentage of random cells turns a blank grid into a puzzle. The visible answers give a child footholds to reason from, so a half-filled table is a gentler step than an empty one.' },
       { q: 'In what order should the tables be learned?', a: 'A common order is 2, 5 and 10 first, because their patterns are visible, then 3, 4 and 6, and finally 7, 8 and 9. Because 3 × 4 and 4 × 3 give the same answer, learning one table halves the work on another.' },
     ],
-    color: '#2563eb',
+    color: '#2d6cb5',
     interactive: false,
   },
   {
@@ -60,7 +60,7 @@ export const WORKSHEETS = [
       { q: 'Which number limit should I choose?', a: 'Within 10 and within 20 suit grade 1, within 100 suits grade 2, and within 1000 suits grade 3. If a child is counting on fingers rather than recalling, drop back one limit rather than adding more problems.' },
       { q: 'What is 67 mode?', a: 'It hides exactly one problem per column whose answer is 67, turning the sheet into a small treasure hunt. It is a way to keep a child scanning their own answers, which is a form of checking.' },
     ],
-    color: '#059669',
+    color: '#2e7d5b',
     interactive: false,
   },
   {
@@ -87,7 +87,7 @@ export const WORKSHEETS = [
       { q: 'What is carrying, or regrouping?', a: 'When a column adds to more than 9, the tens part moves into the next column to the left. 8 + 6 is 14, so the 4 is written and the 1 is carried. Turning on “prefer carrying” makes sure most problems need this step.' },
       { q: 'Why print on a notebook grid?', a: 'One digit per square keeps the ones under the ones and the tens under the tens. Most early column-addition mistakes are misalignment rather than arithmetic, and the grid removes that source of error.' },
     ],
-    color: '#0f766e',
+    color: '#17706b',
     interactive: false,
   },
   {
@@ -113,7 +113,7 @@ export const WORKSHEETS = [
       { q: 'What are partial products?', a: 'Multiplying 34 by 26 means multiplying 34 by 6 and then by 20, and adding the two results. Each of those results is a partial product, and each gets its own row on the sheet.' },
       { q: 'Why is the second row shifted left?', a: 'The second row multiplies by tens, not ones, so its result is ten times larger and starts one column further left. The shift is place value made visible, not a formatting rule to memorise.' },
     ],
-    color: '#7c2d12',
+    color: '#8a4b2a',
     interactive: false,
   },
   {
@@ -141,7 +141,7 @@ export const WORKSHEETS = [
       { q: 'What is the difference between the two notations?', a: 'The bracket form puts the divisor to the left of the dividend with the quotient on an overbar above; the corner form puts the divisor to the top right with the quotient beneath it. They are the same method written differently, and which one a child sees depends on the country they are taught in.' },
       { q: 'Should I allow remainders?', a: 'Start with problems that divide exactly, so the method itself is the only new thing. Turn remainders on once the four steps are automatic, because a leftover forces a child to check that it really is smaller than the divisor.' },
     ],
-    color: '#be185d',
+    color: '#a83a5b',
     interactive: false,
   },
   {
@@ -167,7 +167,7 @@ export const WORKSHEETS = [
       { q: 'Why are the number pairs deliberately awkward?', a: 'Pairs like 43 and 34, or 208 and 280, use the same digits in a different order, and about one pair in seven is equal. A child who compares only the first digit gets those wrong, which is exactly the habit the sheet is meant to break.' },
       { q: 'Which limit suits which grade?', a: 'Within 10 and 20 for grade 1, within 100 for grade 2, and within 1000 for grade 3. Comparing longer numbers is really a place-value exercise, so raise the limit only once shorter pairs are quick.' },
     ],
-    color: '#d97706',
+    color: '#9a6212',
     interactive: false,
   },
   {
@@ -193,7 +193,7 @@ export const WORKSHEETS = [
       { q: 'Why does the sheet keep using numbers ending in 5?', a: 'The 5 boundary is the only case with a convention rather than an obvious answer, and it is where most mistakes happen. The generator deliberately includes those, along with a mix of round-up and round-down cases.' },
       { q: 'When do children learn rounding?', a: 'Rounding to the nearest 10 usually appears in grade 2, with 100 and 1000 following in grade 3. It is the basis of estimation, which is how a child learns to notice that an answer is far too big.' },
     ],
-    color: '#dc2626',
+    color: '#c4362b',
     interactive: false,
   },
   {
@@ -218,7 +218,7 @@ export const WORKSHEETS = [
       { q: 'What is the difference between the three levels?', a: 'Easy uses a constant step, such as adding 3 each time. Medium multiplies or alternates between two steps. Hard combines rules, so a child has to test a guess against several terms before trusting it.' },
       { q: 'My child is stuck on a sequence. What should I do?', a: 'Ask what changes from one number to the next and write the gaps underneath. Once the gaps are visible the rule usually becomes obvious, and the habit of writing them down transfers to harder sequences.' },
     ],
-    color: '#7c3aed',
+    color: '#5b4a91',
     interactive: false,
   },
   {
@@ -244,7 +244,7 @@ export const WORKSHEETS = [
       { q: 'What does moving a term across the equals sign mean?', a: 'An equation stays true as long as both sides change in the same way. Moving a term across flips its sign, so x + 7 = 12 becomes x = 12 − 7. Seeing the sign flip as it happens makes the rule concrete rather than memorised.' },
       { q: 'What age is it for?', a: 'Grades 2 and 3, roughly ages 7 to 9, once addition and subtraction within 100 are comfortable. It is usually a child\'s first sight of a letter standing for an unknown number.' },
     ],
-    color: '#0891b2',
+    color: '#1f7a8c',
     interactive: true,
   },
 ]

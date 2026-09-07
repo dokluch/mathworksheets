@@ -111,6 +111,8 @@ export default {
     worksheetTypes: 'Tipi di schede',
     sourceOnGitHub: 'Codice sorgente su GitHub',
     language: 'Lingua',
+    resume: 'Riprendi da dove eri rimasto',
+    skipToContent: 'Vai al contenuto',
   },
 
   common: {
@@ -118,6 +120,9 @@ export default {
     print: 'Stampa',
     printWorksheet: 'Stampa la scheda',
     printFooterTagline: 'Risorse di matematica gratuite da stampare',
+    screenOnly: "L’Esploratore di equazioni è pensato per lo schermo, quindi non c’è nulla da stampare. Scegli un’altra scheda per un foglio stampabile.",
+    answerKey: "Soluzioni",
+    answerKeyOption: "Stampa il foglio delle soluzioni",
     columns: 'Colonne',
     limit: 'Limite',
     range: 'Intervallo',
@@ -128,6 +133,9 @@ export default {
     options: 'Opzioni',
     within: 'Entro {n}',
     withinMeta: 'entro {n}',
+    fieldName: 'Nome',
+    fieldDate: 'Data',
+    fieldSet: 'Serie',
   },
 
   multiply: {
@@ -136,8 +144,11 @@ export default {
     rangeEnd: 'Fine intervallo',
     fillDiagonal: 'Riempi la diagonale',
     shuffleHeaders: 'Mescola righe e colonne',
+    emptyRange: "L’intervallo è invertito, quindi non c’è nulla da stampare. Imposta il secondo numero più alto del primo, per esempio da 1 a 10.",
     prefill: 'Precompila {pct}%',
     tableAria: 'Tavola pitagorica',
+    title: "Moltiplicazione",
+    meta: "da {start} a {end}",
   },
 
   addsub: {

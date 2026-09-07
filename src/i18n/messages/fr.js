@@ -111,6 +111,8 @@ export default {
     worksheetTypes: 'Types de fiches',
     sourceOnGitHub: 'Code source sur GitHub',
     language: 'Langue',
+    resume: 'Reprendre où vous en étiez',
+    skipToContent: 'Aller au contenu',
   },
 
   common: {
@@ -118,6 +120,9 @@ export default {
     print: 'Imprimer',
     printWorksheet: 'Imprimer la fiche',
     printFooterTagline: 'Ressources de maths gratuites à imprimer',
+    screenOnly: "L’Explorateur d’équations est conçu pour l’écran : il n’y a rien à imprimer. Choisissez une autre fiche pour obtenir une feuille imprimable.",
+    answerKey: "Corrigé",
+    answerKeyOption: "Imprimer un corrigé",
     columns: 'Colonnes',
     limit: 'Limite',
     range: 'Plage',
@@ -128,6 +133,9 @@ export default {
     options: 'Options',
     within: 'Jusqu’à {n}',
     withinMeta: 'jusqu’à {n}',
+    fieldName: 'Nom',
+    fieldDate: 'Date',
+    fieldSet: 'Série',
   },
 
   multiply: {
@@ -136,8 +144,11 @@ export default {
     rangeEnd: 'Fin de la plage',
     fillDiagonal: 'Remplir la diagonale',
     shuffleHeaders: 'Mélanger lignes et colonnes',
+    emptyRange: "La plage est inversée : il n’y a rien à imprimer. Choisissez un second nombre plus grand que le premier, par exemple 1 à 10.",
     prefill: 'Pré-remplir {pct} %',
     tableAria: 'Table de multiplication',
+    title: "Multiplication",
+    meta: "{start} à {end}",
   },
 
   addsub: {

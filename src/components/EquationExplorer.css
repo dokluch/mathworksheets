@@ -877,3 +877,21 @@
 .eq-numpad-action--next:active {
   background: #15803d;
 }
+
+/* ── Print ──
+   This is the one screen-only sheet. Printing it used to emit a near-blank
+   branded page carrying a stray Check button and the drag tip, so it says
+   plainly that there is nothing to print here instead. */
+@media print {
+  .eq-explorer {
+    display: none;
+  }
+
+  .eq-print-note {
+    display: block;
+    padding: 0.6in 0;
+    text-align: center;
+    font-size: 13pt;
+    color: #333;
+  }
+}

@@ -120,6 +120,8 @@ export default {
     worksheetTypes: 'Worksheet types',
     sourceOnGitHub: 'Source on GitHub',
     language: 'Language',
+    resume: 'Pick up where you left off',
+    skipToContent: 'Skip to content',
   },
 
   common: {
@@ -127,6 +129,9 @@ export default {
     print: 'Print',
     printWorksheet: 'Print worksheet',
     printFooterTagline: 'Free printable math resources',
+    screenOnly: "The Equation Explorer is made for the screen, so there is nothing to print. Pick any other worksheet for a sheet you can print.",
+    answerKey: "Answer key",
+    answerKeyOption: "Print an answer key",
     columns: 'Columns',
     limit: 'Limit',
     range: 'Range',
@@ -137,6 +142,9 @@ export default {
     options: 'Options',
     within: 'Within {n}',
     withinMeta: 'within {n}',
+    fieldName: 'Name',
+    fieldDate: 'Date',
+    fieldSet: 'Set',
   },
 
   multiply: {
@@ -145,8 +153,11 @@ export default {
     rangeEnd: 'Range end',
     fillDiagonal: 'Fill diagonal',
     shuffleHeaders: 'Shuffle rows and columns',
+    emptyRange: "The range runs backwards, so there is nothing to print. Set the second number higher than the first — 1 to 10, for example.",
     prefill: 'Pre-fill {pct}%',
     tableAria: 'Multiplication table',
+    title: "Multiplication",
+    meta: "{start} to {end}",
   },
 
   addsub: {
