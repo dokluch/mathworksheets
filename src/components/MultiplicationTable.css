@@ -6,11 +6,13 @@
 .mult-table {
   border-collapse: collapse;
   margin: 0 auto;
+  font-family: var(--font-figure);
+  font-variant-numeric: tabular-nums;
 }
 
 .mult-table th,
 .mult-table td {
-  border: 1px solid #999;
+  border: 1px solid var(--color-border-dark);
   width: 44px;
   height: 44px;
   text-align: center;
@@ -19,18 +21,22 @@
   padding: 0;
 }
 
+/* The head row and column are still paper — ruled off with a heavier line
+   and set in bold, the way a printed table marks its factors. No ground
+   colour is painted onto the sheet: the cover stays on the cover. */
 .mult-table .corner-cell {
-  background: var(--color-primary);
-  color: white;
+  background: transparent;
+  color: var(--color-text);
   font-weight: 700;
   font-size: 18px;
-  border-color: var(--color-primary);
+  border-width: 2px;
+  border-color: var(--color-text);
 }
 
 .mult-table .header-cell {
-  background: var(--color-header-bg);
-  font-weight: 600;
-  color: var(--color-primary);
+  background: var(--paper-edge);
+  font-weight: 700;
+  color: var(--color-text);
   font-size: 15px;
 }
 
@@ -52,11 +58,12 @@
 
   .mult-table th,
   .mult-table td {
-    border: 1px solid #888;
+    border: 1px solid #555;
   }
 
-  /* Browsers drop backgrounds when printing unless told otherwise, which left
-     the top row and left column blank on paper. */
+  /* Browsers drop backgrounds when printing unless told otherwise, which
+     left the head row and column blank on paper. Neutral ink greys only:
+     the old fills were blue-tinted and printed that way. */
   .mult-table .corner-cell,
   .mult-table .header-cell {
     -webkit-print-color-adjust: exact;
@@ -64,13 +71,13 @@
   }
 
   .mult-table .corner-cell {
-    background: #d5dcea;
-    color: #333;
-    border-color: #888;
+    background: transparent;
+    color: #111;
+    border-color: #111;
   }
 
   .mult-table .header-cell {
-    background: #e8edf6;
-    color: #333;
+    background: #eee;
+    color: #111;
   }
 }

@@ -145,6 +145,7 @@ export default {
     fillDiagonal: 'Rellenar la diagonal',
     shuffleHeaders: 'Mezclar filas y columnas',
     emptyRange: "El rango está invertido, así que no hay nada que imprimir. Pon el segundo número más alto que el primero, por ejemplo de 1 a 10.",
+    tooWide: "Ese rango produce una tabla demasiado ancha para imprimir en una página. Mantén los dos números a 15 o menos de distancia, por ejemplo de 1 a 12.",
     prefill: 'Prerrellenar {pct} %',
     tableAria: 'Tabla de multiplicar',
     title: "Multiplicación",

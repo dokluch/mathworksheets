@@ -3,6 +3,7 @@ import { IconRefresh, IconCheck, IconArrowRight, IconPlayerPlay } from '@tabler/
 import { usePersistedState } from '../hooks/usePersistedState'
 import { trackEvent } from '../lib/analytics'
 import { useT } from '../i18n/context'
+import { SettingsPanel, SettingRow, SegmentedControl } from './controls/SettingsPanel'
 import './EquationExplorer.css'
 
 // ── Helpers ──
@@ -331,43 +332,6 @@ function TenFrame({ problem, replayKey }) {
   )
 }
 
-// ── Confetti component ──
-
-const CONFETTI_COLORS = ['#059669', '#2563eb', '#d97706', '#dc2626', '#7c3aed', '#e67e22']
-
-// Pre-computed particle angles/distances so render stays pure
-const CONFETTI_PARTICLES = Array.from({ length: 8 }, (_, i) => {
-  const angle = (i / 8) * Math.PI * 2 + (i % 3) * 0.15
-  const dist = 45 + (i % 4) * 10
-  return {
-    cx: `${Math.cos(angle) * dist}px`,
-    cy: `${Math.sin(angle) * dist - 20}px`,
-    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-    delay: `${i * 0.03}s`,
-  }
-})
-
-function Celebration() {
-  const particles = CONFETTI_PARTICLES
-
-  return (
-    <div className="eq-celebration">
-      {particles.map((p, i) => (
-        <span
-          key={i}
-          className="eq-confetti"
-          style={{
-            '--cx': p.cx,
-            '--cy': p.cy,
-            backgroundColor: p.color,
-            animationDelay: p.delay,
-          }}
-        />
-      ))}
-    </div>
-  )
-}
-
 // ── Main component ──
 
 export default function EquationExplorer() {
@@ -384,7 +348,6 @@ export default function EquationExplorer() {
   const [showExplanation, setShowExplanation] = useState(false)
   const [explainTab, setExplainTab] = useState('numline')
   const [replayKey, setReplayKey] = useState(0)
-  const [showCelebration, setShowCelebration] = useState(false)
   const [signAnimId, setSignAnimId] = useState(null)
   const [dropPreview, setDropPreview] = useState(null) // 'left' | 'right' | null // id of term whose sign is animating
 
@@ -430,7 +393,6 @@ export default function EquationExplorer() {
     setAnswer('')
     setStatus('solving')
     setShowExplanation(false)
-    setShowCelebration(false)
     setSignAnimId(null)
     setTimeout(() => inputRef.current?.focus(), 50)
   }, [])
@@ -442,11 +404,9 @@ export default function EquationExplorer() {
     if (parsed === correctAnswer) {
       setStatus('correct')
       trackEvent('solve_equation', { worksheet_id: 'eqexplore', ops, range })
-      setShowCelebration(true)
       setStreak(s => s + 1)
       setStreakBump(true)
       setTimeout(() => setStreakBump(false), 300)
-      setTimeout(() => setShowCelebration(false), 800)
     } else {
       setStatus('wrong')
       setStreak(0)
@@ -707,25 +667,42 @@ export default function EquationExplorer() {
   }
 
   return (
-    <div className="eq-explorer">
-      {/* Controls */}
-      <div className="eq-controls no-print">
-        <div className="btn-group">
-          <button className={`btn-toggle${ops === 'add' ? ' active' : ''}`} aria-pressed={ops === 'add'} onClick={() => { setOps('add'); handleNextProblem() }}>+</button>
-          <button className={`btn-toggle${ops === 'sub' ? ' active' : ''}`} aria-pressed={ops === 'sub'} onClick={() => { setOps('sub'); handleNextProblem() }}>−</button>
-          <button className={`btn-toggle${ops === 'both' ? ' active' : ''}`} aria-pressed={ops === 'both'} onClick={() => { setOps('both'); handleNextProblem() }}>+ / −</button>
-        </div>
-        <div className="btn-group">
-          <button className={`btn-toggle${range === 10 ? ' active' : ''}`} aria-pressed={range === 10} onClick={() => { setRange(10); handleNextProblem() }}>10</button>
-          <button className={`btn-toggle${range === 100 ? ' active' : ''}`} aria-pressed={range === 100} onClick={() => { setRange(100); handleNextProblem() }}>100</button>
-          <button className={`btn-toggle${range === 1000 ? ' active' : ''}`} aria-pressed={range === 1000} onClick={() => { setRange(1000); handleNextProblem() }}>1000</button>
-        </div>
-        <button className="btn btn-secondary" onClick={handleNextProblem}>
-          <IconRefresh size={16} />
-          {t('eq.newProblem')}
-        </button>
-      </div>
+    // Same shell as every printable worksheet: a full-width settings panel,
+    // then the sheet. The panel used to sit inside the 600px board column, so
+    // it was the one panel on the site that did not span its content area.
+    <div className="tool-panel">
+      {/* Controls live in the same panel, in the same position, with the same
+          labels as every other worksheet — this used to be a bare strip of
+          unlabelled toggles floating on the board. */}
+      <SettingsPanel
+        className="eq-settings"
+        actions={(
+          <button type="button" className="btn btn-secondary" onClick={handleNextProblem}>
+            <IconRefresh size={16} stroke={2} /> {t('eq.newProblem')}
+          </button>
+        )}
+      >
+        <SettingRow label={t('common.operation')}>
+          <SegmentedControl
+            value={ops}
+            onChange={(v) => { setOps(v); handleNextProblem() }}
+            options={[
+              { value: 'add', label: '+' },
+              { value: 'sub', label: '−' },
+              { value: 'both', label: '+ / −' },
+            ]}
+          />
+        </SettingRow>
+        <SettingRow label={t('common.limit')}>
+          <SegmentedControl
+            value={range}
+            onChange={(v) => { setRange(v); handleNextProblem() }}
+            options={[10, 100, 1000].map(n => ({ value: n, label: t('common.within', { n }) }))}
+          />
+        </SettingRow>
+      </SettingsPanel>
 
+      <div className="eq-explorer">
       {/* Streak */}
       <div className={`eq-streak${streak > 0 ? ' eq-streak--active' : ''}`} aria-live="polite">
         {streak > 0 && (() => {
@@ -749,8 +726,6 @@ export default function EquationExplorer() {
         <div className="eq-side">
           {renderSide(display.right, 'right')}
         </div>
-
-        {showCelebration && <Celebration />}
       </div>
 
       {/* Drag hint */}
@@ -843,6 +818,7 @@ export default function EquationExplorer() {
           </div>
         </div>
       )}
+      </div>
     </div>
   )
 }

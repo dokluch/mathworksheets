@@ -145,6 +145,7 @@ export default {
     fillDiagonal: 'Diagonale ausfüllen',
     shuffleHeaders: 'Zeilen und Spalten mischen',
     emptyRange: "Der Bereich läuft rückwärts, es gibt nichts zu drucken. Setzen Sie die zweite Zahl höher als die erste, zum Beispiel 1 bis 10.",
+    tooWide: "Dieser Bereich ergibt eine Tabelle, die nicht auf eine Seite passt. Halten Sie die beiden Zahlen höchstens 15 auseinander, zum Beispiel 1 bis 12.",
     prefill: 'Vorausfüllen {pct} %',
     tableAria: 'Einmaleins-Tabelle',
     title: "Multiplikation",
@@ -361,7 +362,7 @@ export default {
     eqexplore: {
       label: 'Gleichungs-Explorer',
       shortDesc: 'Gleichungen interaktiv lösen',
-      longDesc: 'Ein Gleichungslöser am Bildschirm (nicht druckbar): Ziehe Terme über das Gleichheitszeichen und sieh zu, wie das Vorzeichen wechselt, folge den Sprüngen am Zahlenstrahl und tippe die Antwort auf der eingebauten Tastatur ein. Richtige Antworten verlängern die Serie und lösen Konfetti aus; falsche spielen eine animierte Erklärung ab.',
+      longDesc: 'Ein Gleichungslöser am Bildschirm (nicht druckbar): Ziehe Terme über das Gleichheitszeichen und sieh zu, wie das Vorzeichen wechselt, folge den Sprüngen am Zahlenstrahl und tippe die Antwort auf der eingebauten Tastatur ein. Richtige Antworten verlängern die Serie; falsche spielen eine animierte Erklärung ab.',
       skills: ['Gleichungen', 'Umkehroperationen', 'Zahlenstrahl', 'Kopfrechnen'],
       settings: [
         'Rechenart: Addition, Subtraktion oder beides',

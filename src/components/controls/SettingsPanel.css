@@ -1,9 +1,12 @@
 /* ── Settings panel (shared by every printable worksheet) ── */
+/* A paper plate on the board, separated the way every paper plate is: a
+   1px ink keyline plus a short-throw lift, square-cut. A grey `border` here
+   read softer than the sheet's edge 20px below it. */
 .settings-panel {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
   /* No overflow: hidden — it would clip focus rings at the card edge. */
 }
 
@@ -36,10 +39,13 @@
   gap: 8px;
 }
 
+/* 44px at every width, not only under 768px: an 820px tablet is served the
+   desktop layout and was getting 17px rows. */
 .checkbox-option {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-height: 44px;
   font-size: 14px;
   font-weight: 500;
   color: var(--color-text);
@@ -73,12 +79,15 @@
   color: var(--color-text-muted);
 }
 
+/* Figures the parent compares, so they are set as figures. */
 .num-input {
   width: 72px;
+  min-height: 44px;
   padding: 7px 10px;
   border: 1px solid var(--color-border-dark);
-  border-radius: var(--radius);
-  font-family: inherit;
+  border-radius: 2px;
+  font-family: var(--font-figure);
+  font-variant-numeric: tabular-nums;
   font-size: 14px;
   text-align: center;
   color: var(--color-text);
@@ -103,7 +112,7 @@
   gap: 10px;
   padding: 12px 24px;
   border-top: 1px solid var(--color-border);
-  border-radius: 0 0 var(--radius) var(--radius);
+  border-radius: 0 0 2px 2px;
   background: var(--color-surface);
 }
 
@@ -176,5 +185,18 @@
   .settings-footer .btn {
     width: 100%;
     min-height: 44px;
+  }
+
+  /* One red Print within a thumb-scroll, not two: the sheet-foot CTA keeps
+     the marking red on phones, and the panel's Print steps back to the
+     secondary weight. */
+  .settings-footer .btn-primary {
+    background: transparent;
+    color: var(--color-text);
+    border: 1.5px solid var(--color-border-dark);
+  }
+
+  .settings-footer .btn-primary:hover {
+    background: var(--color-surface-hover);
   }
 }

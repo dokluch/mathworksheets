@@ -67,7 +67,7 @@
       "on-cover-muted": {
         "role": "neutral",
         "displayName": "Faded Board",
-        "canonical": "#5c6068",
+        "canonical": "#5a6570",
         "tonalRamp": [
           "#242529",
           "#3e4146",
@@ -187,7 +187,7 @@
       "border-dark": {
         "role": "neutral",
         "displayName": "Writable Rule",
-        "canonical": "#b9b0a0",
+        "canonical": "#7f776a",
         "tonalRamp": [
           "#2c2820",
           "#4c4538",
@@ -292,7 +292,7 @@
       "ink-rounding": {
         "role": "tertiary",
         "displayName": "Rounding Red",
-        "canonical": "#c4362b",
+        "canonical": "#8f3b6e",
         "tonalRamp": [
           "#3f110e",
           "#6d1e18",
@@ -469,7 +469,7 @@
       "refersTo": "button-secondary",
       "description": "Outlined on paper: the action that changes the sheet without making paper.",
       "html": "<button class=\"ds-btn ds-btn-secondary\">Regenerate</button>",
-      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 10px 20px; border-radius: 2px; background: transparent; color: #1a1f24; border: 1.5px solid #b9b0a0; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease; } .ds-btn-secondary:hover { background: rgba(26, 31, 36, 0.06); border-color: #23282e; } .ds-btn-secondary:active { transform: translateY(1px); } .ds-btn-secondary:focus-visible { outline: 3px solid #d0452f; outline-offset: 2px; }"
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 10px 20px; border-radius: 2px; background: transparent; color: #1a1f24; border: 1.5px solid #7f776a; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease; } .ds-btn-secondary:hover { background: rgba(26, 31, 36, 0.06); border-color: #23282e; } .ds-btn-secondary:active { transform: translateY(1px); } .ds-btn-secondary:focus-visible { outline: 3px solid #d0452f; outline-offset: 2px; }"
     },
     {
       "name": "Segmented Toggle",
@@ -477,7 +477,7 @@
       "refersTo": "button-toggle",
       "description": "The worksheet setting primitive. Never wraps; the active segment fills control navy.",
       "html": "<div class=\"ds-btn-group\"><button class=\"ds-btn-toggle\">2-digit</button><button class=\"ds-btn-toggle ds-active\">3-digit</button><button class=\"ds-btn-toggle\">4-digit</button></div>",
-      "css": ".ds-btn-group { display: inline-flex; flex-wrap: nowrap; } .ds-btn-toggle { padding: 7px 14px; border: 1px solid #b9b0a0; background: transparent; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; color: #1a1f24; white-space: nowrap; cursor: pointer; transition: background-color 0.12s ease, color 0.12s ease; } .ds-btn-toggle:not(:first-child) { border-left: none; } .ds-btn-toggle:first-child { border-radius: 3px 0 0 3px; } .ds-btn-toggle:last-child { border-radius: 0 3px 3px 0; } .ds-btn-toggle:hover { background: #f3efe6; } .ds-btn-toggle.ds-active { background: #23282e; color: #fff; border-color: #23282e; } .ds-btn-toggle.ds-active + .ds-btn-toggle { border-left: 1px solid #23282e; } .ds-btn-toggle:focus-visible { position: relative; z-index: 1; outline: 3px solid #d0452f; outline-offset: 2px; }"
+      "css": ".ds-btn-group { display: inline-flex; flex-wrap: nowrap; } .ds-btn-toggle { padding: 7px 14px; border: 1px solid #7f776a; background: transparent; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; color: #1a1f24; white-space: nowrap; cursor: pointer; transition: background-color 0.12s ease, color 0.12s ease; } .ds-btn-toggle:not(:first-child) { border-left: none; } .ds-btn-toggle:first-child { border-radius: 3px 0 0 3px; } .ds-btn-toggle:last-child { border-radius: 0 3px 3px 0; } .ds-btn-toggle:hover { background: #f3efe6; } .ds-btn-toggle.ds-active { background: #23282e; color: #fff; border-color: #23282e; } .ds-btn-toggle.ds-active + .ds-btn-toggle { border-left: 1px solid #23282e; } .ds-btn-toggle:focus-visible { position: relative; z-index: 1; outline: 3px solid #d0452f; outline-offset: 2px; }"
     },
     {
       "name": "Catalog Card",
@@ -501,7 +501,7 @@
       "refersTo": "input-number",
       "description": "The worksheet range control: 72px of paper with a warm-grey stroke, centred figures.",
       "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Number range</span><span class=\"ds-range\"><input class=\"ds-num\" type=\"number\" value=\"10\"><span class=\"ds-sep\">to</span><input class=\"ds-num\" type=\"number\" value=\"99\"></span></label>",
-      "css": ".ds-field { display: flex; flex-direction: column; gap: 6px; } .ds-field-label { font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; color: #5a6570; } .ds-range { display: flex; align-items: center; gap: 8px; } .ds-sep { font-size: 13px; color: #5a6570; } .ds-num { width: 72px; padding: 7px 10px; border: 1px solid #b9b0a0; border-radius: 3px; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; text-align: center; color: #1a1f24; background: #fdfcf8; } .ds-num:focus { outline: none; border-color: #23282e; box-shadow: 0 0 0 3px rgba(26,31,36,0.12); }"
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 6px; } .ds-field-label { font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 500; line-height: 1.3; color: #5a6570; } .ds-range { display: flex; align-items: center; gap: 8px; } .ds-sep { font-size: 13px; color: #5a6570; } .ds-num { width: 72px; padding: 7px 10px; border: 1px solid #7f776a; border-radius: 3px; font-family: 'Inter', -apple-system, sans-serif; font-size: 14px; text-align: center; color: #1a1f24; background: #fdfcf8; } .ds-num:focus { outline: none; border-color: #23282e; box-shadow: 0 0 0 3px rgba(26,31,36,0.12); }"
     },
     {
       "name": "Settings Panel",
@@ -517,7 +517,7 @@
       "refersTo": "worksheet-sheet",
       "description": "Signature. The sheet is a document, so it carries a document's head: title, a ruled Name/Date block a child fills in by hand, and the set stamp that identifies this generated page. Renders identically on screen and on paper.",
       "html": "<div class=\"ds-sheet\"><div class=\"ds-ws-header\"><div class=\"ds-ws-headline\"><div class=\"ds-ws-title\">Column Addition<span class=\"ds-ws-meta\">3-digit numbers</span></div><dl class=\"ds-ws-fields\"><div class=\"ds-ws-field\"><dt>Name</dt><dd class=\"ds-rule\"></dd></div><div class=\"ds-ws-field\"><dt>Date</dt><dd class=\"ds-rule\"></dd></div><div class=\"ds-ws-field\"><dt>Set no.</dt><dd class=\"ds-stamp\">669</dd></div></dl></div></div></div>",
-      "css": ".ds-sheet { background: #fdfcf8; color: #1a1f24; border-radius: 2px; padding: 32px 36px; box-shadow: 0 0 0 1px rgba(26,31,36,0.20), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); } .ds-ws-header { padding-bottom: 16px; border-bottom: 2px solid #d8d1c3; } .ds-ws-headline { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; } .ds-ws-title { font-family: 'Inter', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .ds-ws-meta { font-size: 14px; font-weight: 400; color: #5a6570; margin-left: 8px; } .ds-ws-fields { display: flex; align-items: baseline; gap: 16px; margin: 0; } .ds-ws-field { display: flex; align-items: baseline; gap: 6px; } .ds-ws-field dt { font-family: 'Inter', -apple-system, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #5a6570; white-space: nowrap; } .ds-rule { width: 104px; height: 1.15em; border-bottom: 1px solid #b9b0a0; } .ds-stamp { padding: 1px 7px; border: 1.5px solid #b9b0a0; border-radius: 3px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #1a1f24; animation: ds-stamp-down 0.42s cubic-bezier(0.16,1,0.3,1) both; transform-origin: center; } @keyframes ds-stamp-down { 0% { transform: scale(1.32); border-color: #d0452f; color: #d0452f; } 60% { border-color: #d0452f; } 100% { transform: scale(1); border-color: #b9b0a0; color: #1a1f24; } } @media (prefers-reduced-motion: reduce) { .ds-stamp { animation: none; } }"
+      "css": ".ds-sheet { background: #fdfcf8; color: #1a1f24; border-radius: 2px; padding: 32px 36px; box-shadow: 0 0 0 1px rgba(26,31,36,0.20), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); } .ds-ws-header { padding-bottom: 16px; border-bottom: 2px solid #d8d1c3; } .ds-ws-headline { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; } .ds-ws-title { font-family: 'Inter', -apple-system, sans-serif; font-size: 20px; font-weight: 700; } .ds-ws-meta { font-size: 14px; font-weight: 400; color: #5a6570; margin-left: 8px; } .ds-ws-fields { display: flex; align-items: baseline; gap: 16px; margin: 0; } .ds-ws-field { display: flex; align-items: baseline; gap: 6px; } .ds-ws-field dt { font-family: 'Inter', -apple-system, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #5a6570; white-space: nowrap; } .ds-rule { width: 104px; height: 1.15em; border-bottom: 1px solid #7f776a; } .ds-stamp { padding: 1px 7px; border: 1.5px solid #7f776a; border-radius: 3px; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; color: #1a1f24; animation: ds-stamp-down 0.42s cubic-bezier(0.16,1,0.3,1) both; transform-origin: center; } @keyframes ds-stamp-down { 0% { transform: scale(1.32); border-color: #d0452f; color: #d0452f; } 60% { border-color: #d0452f; } 100% { transform: scale(1); border-color: #7f776a; color: #1a1f24; } } @media (prefers-reduced-motion: reduce) { .ds-stamp { animation: none; } }"
     },
     {
       "name": "Site Header",

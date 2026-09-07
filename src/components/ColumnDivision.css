@@ -18,7 +18,7 @@
   grid-template-columns: repeat(var(--cd-cols), var(--nb-sq));
   grid-template-rows: repeat(var(--cd-rows), var(--nb-sq));
   --colarith-cell-size: var(--nb-sq);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-figure);
   font-size: calc(var(--nb-sq) * 0.77);
   font-weight: 600;
   font-variant-numeric: tabular-nums;

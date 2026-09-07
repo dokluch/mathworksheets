@@ -7,6 +7,30 @@ function currentLocale() {
   return typeof window === 'undefined' ? 'en' : localeFromPath(window.location.pathname)
 }
 
+/*
+ * The crash screen is the one surface that renders when everything else has
+ * failed, so it carries no component classes and no imported stylesheet —
+ * only the tokens from index.css, which are on the root regardless of what
+ * fell over. It used to hard-code the old blue and slate.
+ */
+const styles = {
+  wrap: { padding: '48px 20px', textAlign: 'center', fontFamily: 'var(--font-ui)', color: 'var(--color-text)' },
+  title: { fontFamily: 'var(--font-cover)', fontSize: 25, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 8 },
+  hint: { color: 'var(--color-text-muted)', marginBottom: 20 },
+  button: {
+    minHeight: 44,
+    padding: '10px 20px',
+    borderRadius: 2,
+    border: 'none',
+    background: 'var(--mark)',
+    color: '#fff',
+    fontFamily: 'inherit',
+    fontWeight: 700,
+    fontSize: 14,
+    cursor: 'pointer',
+  },
+}
+
 export default class ErrorBoundary extends Component {
   state = { hasError: false }
 
@@ -18,24 +42,16 @@ export default class ErrorBoundary extends Component {
     if (this.state.hasError) {
       const locale = currentLocale()
       return (
-        <div style={{ padding: '48px 20px', textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>
-          <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>{t(locale, 'error.title')}</h1>
-          <p style={{ color: '#64748b', marginBottom: 20 }}>{t(locale, 'error.hint')}</p>
+        <div style={styles.wrap}>
+          <h1 style={styles.title}>{t(locale, 'error.title')}</h1>
+          <p style={styles.hint}>{t(locale, 'error.hint')}</p>
           <button
+            type="button"
             onClick={() => {
               this.setState({ hasError: false })
               window.location.reload()
             }}
-            style={{
-              padding: '9px 20px',
-              borderRadius: 8,
-              border: 'none',
-              background: '#2563eb',
-              color: 'white',
-              fontWeight: 600,
-              fontSize: 14,
-              cursor: 'pointer',
-            }}
+            style={styles.button}
           >
             {t(locale, 'error.reload')}
           </button>

@@ -11,7 +11,7 @@
   gap: 10px;
   padding: 8px 0;
   border-bottom: 1px solid var(--color-border-light);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-figure);
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.3px;
@@ -27,5 +27,6 @@
 @media print {
   .compare-item {
     border-bottom-color: #ddd;
+    color: #111;
   }
 }

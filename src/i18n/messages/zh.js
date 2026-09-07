@@ -145,6 +145,7 @@ export default {
     fillDiagonal: '填满对角线',
     shuffleHeaders: '打乱行列顺序',
     emptyRange: "范围颠倒了，没有可打印的内容。请把第二个数设得比第一个大，例如 1 到 10。",
+    tooWide: "这个范围生成的表格太宽，无法打印在一页上。请让两个数相差不超过 15，例如 1 到 12。",
     prefill: '预填 {pct}%',
     tableAria: '乘法表',
     title: "乘法",

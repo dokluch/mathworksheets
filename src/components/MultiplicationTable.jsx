@@ -6,6 +6,7 @@ import { useReportEmpty } from './SheetState'
 import WorksheetHeader from './WorksheetHeader'
 import { setStamp } from '../lib/setStamp'
 import './MultiplicationTable.css'
+import { usePreviewScale } from '../hooks/usePreviewScale'
 
 function shuffleArray(array) {
   const arr = [...array]
@@ -24,11 +25,16 @@ export default function MultiplicationTable() {
   const [shuffleHeaders, setShuffleHeaders] = usePersistedState('multiply', 'shuffleHeaders', false)
   const [randomPercent, setRandomPercent] = usePersistedState('multiply', 'randomPercent', 50)
   const [seed, setSeed] = useState(0)
+  const [fitRef, fitStyle] = usePreviewScale()
   const sliderId = useId()
-  useReportEmpty(end <= start)
+  // A backwards range has nothing to print; a range wider than 15 factors
+  // makes a grid that no longer fits one page, which the product promises.
+  const backwards = end <= start
+  const tooWide = !backwards && end - start > 14
+  useReportEmpty(backwards || tooWide)
 
   const tableData = useMemo(() => {
-    if (end <= start) return null
+    if (end <= start || end - start > 14) return null
     void seed // depend on seed for re-randomization
 
     const numbers = []
@@ -115,44 +121,46 @@ export default function MultiplicationTable() {
 
       {!tableData && (
         <p className="sheet-empty no-print" role="status">
-          {t('multiply.emptyRange')}
+          {t(tooWide ? 'multiply.tooWide' : 'multiply.emptyRange')}
         </p>
       )}
 
       {tableData && (
-        <div className="worksheet mult-sheet print-area">
-          <WorksheetHeader
-            title={t('multiply.title')}
-            meta={t('multiply.meta', { start, end })}
-            stamp={setStamp(tableData)}
-          />
-          <div className="mult-table-wrap" tabIndex={0} role="region" aria-label={t('multiply.tableAria')}>
-          <table className="mult-table">
-            <thead>
-              <tr>
-                <th className="corner-cell">×</th>
-                {tableData.cols.map(n => (
-                  <th key={n} className="header-cell">{n}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {tableData.rows.map(r => (
-                <tr key={r}>
-                  <th className="header-cell">{r}</th>
-                  {tableData.cols.map(c => {
-                    const key = `${r}-${c}`
-                    const val = tableData.cells[key]
-                    return (
-                      <td key={c} className={`table-cell ${val != null ? 'filled' : ''}`}>
-                        {val ?? ''}
-                      </td>
-                    )
-                  })}
+        <div className="sheet-fit" ref={fitRef} style={fitStyle}>
+          <div className="worksheet mult-sheet print-area">
+            <WorksheetHeader
+              title={t('multiply.title')}
+              meta={t('multiply.meta', { start, end })}
+              stamp={setStamp(tableData)}
+            />
+            <div className="mult-table-wrap" tabIndex={0} role="region" aria-label={t('multiply.tableAria')}>
+            <table className="mult-table">
+              <thead>
+                <tr>
+                  <th className="corner-cell">×</th>
+                  {tableData.cols.map(n => (
+                    <th key={n} className="header-cell">{n}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {tableData.rows.map(r => (
+                  <tr key={r}>
+                    <th className="header-cell">{r}</th>
+                    {tableData.cols.map(c => {
+                      const key = `${r}-${c}`
+                      const val = tableData.cells[key]
+                      return (
+                        <td key={c} className={`table-cell ${val != null ? 'filled' : ''}`}>
+                          {val ?? ''}
+                        </td>
+                      )
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            </div>
           </div>
         </div>
       )}

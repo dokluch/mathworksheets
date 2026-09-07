@@ -154,6 +154,7 @@ export default {
     fillDiagonal: 'Fill diagonal',
     shuffleHeaders: 'Shuffle rows and columns',
     emptyRange: "The range runs backwards, so there is nothing to print. Set the second number higher than the first — 1 to 10, for example.",
+    tooWide: "That range makes a table too wide to print on one page. Keep the two numbers within 15 of each other — 1 to 12, for example.",
     prefill: 'Pre-fill {pct}%',
     tableAria: 'Multiplication table',
     title: "Multiplication",

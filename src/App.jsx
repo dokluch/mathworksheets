@@ -111,6 +111,17 @@ export default function App() {
   const ActiveComponent = activeSheet ? COMPONENTS[activeSheet] : null
   const activeInfo = worksheets.find(w => w.id === activeSheet)
 
+  // On phones the sheet list is a horizontal rail: bring the open sheet into
+  // view, or the rail shows Multiplication and Add & Subtract and no
+  // indication of which sheet is actually open.
+  useEffect(() => {
+    if (!activeSheet) return
+    const el = document.querySelector('.catalog-grid--compact .catalog-card--active')
+    if (el && typeof el.scrollIntoView === 'function') {
+      el.scrollIntoView({ inline: 'center', block: 'nearest' })
+    }
+  }, [activeSheet])
+
   // Offered on the catalog rather than redirected to, so the front door stays
   // the front door and Back still returns here.
   const resumeSheet = !activeSheet && !activePage && persistedSheet
@@ -160,12 +171,13 @@ export default function App() {
               </a>
             </header>
 
-            <nav className="catalog-grid catalog-grid--compact" role="tablist" aria-label={t('app.worksheetTypes')}>
+            {/* A list of links, described as one. It used to claim
+                role="tablist" without the arrow-key behaviour tabs owe. */}
+            <nav className="catalog-grid catalog-grid--compact" aria-label={t('app.worksheetTypes')}>
               {worksheets.map(ws => (
                 <a
                   key={ws.id}
-                  role="tab"
-                  aria-selected={activeSheet === ws.id}
+                  aria-current={activeSheet === ws.id ? 'page' : undefined}
                   className={`catalog-card ${activeSheet === ws.id ? 'catalog-card--active' : ''}`}
                   style={{ '--card-color': ws.color }}
                   {...cardLink(ws)}
@@ -222,7 +234,7 @@ export default function App() {
 
         {/* ── Worksheet Content ── */}
         {ActiveComponent && (
-          <main className="worksheet-main" id="main" role="tabpanel" aria-label={activeInfo?.label}>
+          <main className="worksheet-main" id="main" aria-label={activeInfo?.label}>
             <div className="worksheet-topbar no-print">
               <h1 className="worksheet-title" style={{ '--card-color': activeInfo?.color }}>
                 {activeInfo && (

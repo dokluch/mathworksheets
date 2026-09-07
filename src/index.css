@@ -22,7 +22,8 @@
   --cover-wash: rgba(26, 31, 36, 0.055);
   --cover-wash-strong: rgba(26, 31, 36, 0.10);
   --on-cover: #1a1f24;
-  --on-cover-muted: #5c6068;
+  /* One muted grey for one role, on both grounds (4.61:1 on the board). */
+  --on-cover-muted: #5a6570;
 
   /* ── The teacher's marking pencil: the one warm mark on a cool cover ── */
   --mark: #d0452f;
@@ -53,14 +54,14 @@
   --color-text: #1a1f24;
   --color-text-muted: #5a6570;
   --color-border: #ddd6c8;
-  --color-border-dark: #b9b0a0;
+  /* Control strokes (toggles, inputs, the Name/Date rules) must clear the
+     3:1 non-text floor on paper AND on the board; #b9b0a0 measured 2.09 and
+     1.66. This is the lightest value that clears both and the header band. */
+  --color-border-dark: #7f776a;
   --color-border-light: #ece7db;
   --color-border-worksheet: #d8d1c3;
   --color-accent-green: #3f7a5e;
-  --color-accent-orange: #b06a1f;
   --color-accent-red: var(--mark);
-  --color-accent-purple: #5b4a91;
-  --color-header-bg: var(--cover);
 
   /* ── Type ── */
   --font-cover: 'Archivo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -81,7 +82,6 @@
   /* Stapled stock, not floating glass: a tight offset shadow with real blur. */
   --shadow-sm: 0 1px 2px rgba(26, 31, 36, 0.10);
   --shadow-md: 0 2px 4px rgba(26, 31, 36, 0.09), 0 8px 18px -8px rgba(26, 31, 36, 0.20);
-  --focus-ring: 0 0 0 2px var(--focus-inner, var(--paper)), 0 0 0 4px var(--mark);
 }
 
 *, *::before, *::after {
@@ -180,6 +180,6 @@ body {
     line-height: 1.2;
     /* Ink, not the old slate: a printed mark on the child's page. */
     color: #4a5560;
-    background: var(--paper);
+    background: #fff;
   }
 }

@@ -6,6 +6,7 @@ import { SettingsPanel, SettingRow, SegmentedControl, PanelActions } from './con
 import './Patterns.css'
 import WorksheetHeader from './WorksheetHeader'
 import { setStamp } from '../lib/setStamp'
+import { usePreviewScale } from '../hooks/usePreviewScale'
 
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -143,6 +144,7 @@ export default function Patterns() {
   const t = useT()
   const [level, setLevel] = usePersistedState('patterns', 'level', 1)
   const [seed, setSeed] = useState(0)
+  const [fitRef, fitStyle] = usePreviewScale()
 
   // Derived, not fixed: the old hard-coded 12 overflowed onto a second page.
   const rowCount = listRowsPerPage()
@@ -168,32 +170,33 @@ export default function Patterns() {
         </SettingRow>
       </SettingsPanel>
 
-      <div className="worksheet print-area">
-        <WorksheetHeader
-          title={t('patterns.title')}
-          meta={t(LEVELS.find(l => l.value === level)?.key ?? 'patterns.easy')}
-          instructions={t('patterns.instructions')}
-          stamp={setStamp(rows)}
-        />
+      <div className="sheet-fit" ref={fitRef} style={fitStyle}>
+        <div className="worksheet print-area">
+          <WorksheetHeader
+            title={t('patterns.title')}
+            meta={t(LEVELS.find(l => l.value === level)?.key ?? 'patterns.easy')}
+            instructions={t('patterns.instructions')}
+            stamp={setStamp(rows)}
+          />
 
-        <div className="pattern-list">
-          {rows.map((row, i) => (
-            <div key={i} className="pattern-row">
-              <span className="pattern-num">{i + 1}.</span>
-              <div className="pattern-seq">
-                {row.seq.map((val, j) => (
-                  <span key={j} className="pattern-cell">
-                    {row.blankPositions.has(j) ? (
-                      <span className="blank-slot" />
-                    ) : (
-                      <span className="pattern-val">{String(val)}</span>
-                    )}
-                    {j < row.seq.length - 1 && <span className="pattern-comma">,</span>}
-                  </span>
-                ))}
+          <div className="pattern-list">
+            {rows.map((row, i) => (
+              <div key={i} className="pattern-row">
+                <div className="pattern-seq">
+                  {row.seq.map((val, j) => (
+                    <span key={j} className="pattern-cell">
+                      {row.blankPositions.has(j) ? (
+                        <span className="blank-slot" />
+                      ) : (
+                        <span className="pattern-val">{String(val)}</span>
+                      )}
+                      {j < row.seq.length - 1 && <span className="pattern-comma">,</span>}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

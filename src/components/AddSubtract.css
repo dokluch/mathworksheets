@@ -7,7 +7,7 @@
   border: none;
   border-radius: 2px;
   padding: 32px 36px;
-  box-shadow: 0 0 0 1px rgba(16, 47, 77, 0.16), var(--shadow-md);
+  box-shadow: 0 0 0 1px var(--edge), var(--shadow-md);
 }
 
 /*
@@ -215,7 +215,7 @@
 }
 
 .problem-text {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-figure);
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.3px;
@@ -232,7 +232,7 @@
 }
 
 .problem-text .op {
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-weight: 600;
   font-size: 20px;
   line-height: 1;
@@ -260,7 +260,7 @@
 }
 
 .stacked-problem {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-figure);
   font-size: 16px;
   font-weight: 500;
   display: inline-flex;
@@ -278,7 +278,7 @@
 }
 
 .stacked-row .op {
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-weight: 600;
   font-size: 18px;
   line-height: 1;
@@ -303,7 +303,11 @@
 
 /* ── Print styles ── */
 @media print {
+  /* White, not the cream screen stock: a tinted rectangle that stops where
+     the content stops read as a second paper over the white page, and it
+     spends ink on nothing. */
   .worksheet {
+    background: #fff;
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -353,6 +357,16 @@
   .compare-item::before,
   .rounding-item::before {
     color: #555;
+  }
+
+  /* Ink discipline: operators and the meta line print as ink, never grey. */
+  .problem-text .op,
+  .stacked-row .op {
+    color: #111;
+  }
+
+  .ws-meta {
+    color: #333;
   }
 
   .problem-item {

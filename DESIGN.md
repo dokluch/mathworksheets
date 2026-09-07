@@ -10,7 +10,7 @@ colors:
   cover-wash: "rgba(26, 31, 36, 0.055)"
   cover-wash-strong: "rgba(26, 31, 36, 0.10)"
   on-cover: "#1a1f24"
-  on-cover-muted: "#5c6068"
+  on-cover-muted: "#5a6570"
   mark: "#d0452f"
   mark-deep: "#ab331f"
   paper: "#fdfcf8"
@@ -23,7 +23,7 @@ colors:
   control-ink: "#23282e"
   control-ink-deep: "#14181c"
   border: "#ddd6c8"
-  border-dark: "#b9b0a0"
+  border-dark: "#7f776a"
   border-light: "#ece7db"
   border-worksheet: "#d8d1c3"
   ink-multiply: "#2d6cb5"
@@ -32,7 +32,7 @@ colors:
   ink-colmul: "#8a4b2a"
   ink-coldiv: "#a83a5b"
   ink-compare: "#9a6212"
-  ink-rounding: "#c4362b"
+  ink-rounding: "#8f3b6e"
   ink-patterns: "#5b4a91"
   ink-eqexplore: "#1f7a8c"
   ruling-screen: "rgba(148, 163, 184, 0.28)"
@@ -247,7 +247,7 @@ Each worksheet carries its own ink (`ink-multiply` … `ink-eqexplore`), assigne
 - **Title** (Archivo 700, 22px/26.4px, −0.015em): static-page `h2`, with more space above (`calc(var(--sq) * 1.6)`) than below (`--half-sq`).
 - **Subtitle** (Archivo 700, 16px, −0.01em): catalog card labels and the resume-card label; the site brand is Archivo 800 17px/−0.015em (15px on mobile).
 - **Lead** (Inter 400, 19px/28.5px): the opening paragraph of a static page.
-- **Body** (Inter 400, 16px/26.4px): prose, constrained by `--measure: 686px` — an absolute measure, roughly 68 characters, not `ch`, so headings and body share one left edge.
+- **Body** (Inter 400, 16px/26.4px): prose, constrained by `--measure: 608px` — an absolute measure, roughly 68 characters, not `ch`, so headings and body share one left edge.
 - **UI** (Inter 500–700, 13–14px, 1.25–1.3): nav links, setting labels, toggles, buttons, card descriptions, sheet title (Inter 700 20px).
 - **Label** (Inter 600, 11px, 0.08em, uppercase): the sheet's ruled field captions (NAME / DATE / SET NO.) — form-field captions on a document, not editorial eyebrows.
 - **Figure** (JetBrains Mono 500, 16px screen / 15px print): every problem, digit, stamp and answer.
@@ -266,7 +266,7 @@ Where the module actually governs: catalog grid gap (`--sq`), catalog vertical p
 
 Where it does not: component-internal padding is a conventional 8/10/12/16/20/24px scale (buttons `10px 20px`, settings body `18px 24px 20px`, sheet `32px 36px`, nav `8px 12px`). The interface sits *on* the square at the block level and *off* it inside components. Record that honestly rather than pretending the ruling is total.
 
-**Containers.** Catalog grid max 940px, `repeat(auto-fill, minmax(268px, 1fr))` (296px cards at 1440); static prose plate is a centred 856px paper band with the board showing down both margins; worksheet content max 960px; prose measure 686px.
+**Containers.** Catalog grid max 940px, `repeat(auto-fill, minmax(268px, 1fr))` (296px cards at 1440); static prose plate is a centred 856px paper band with the board showing down both margins; worksheet content max 960px; prose measure 608px.
 
 **Responsive.** One breakpoint at 768/769px, plus 380px for the single-column catalog.
 - ≥769px with a sheet active: the app is a fixed-height two-column split — a 220px catalog sidebar (compact rows on the board, separated by a 1px `border` rule) and a scrolling worksheet column. Settings flow two per row (`flex: 1 1 calc(50% - 16px)`), and a control that cannot shrink takes a full row instead.
@@ -408,7 +408,7 @@ Everything else is a state transition of 0.12–0.18s: button colour, card lift,
 
 Recorded as shipped, not as intended:
 - The contract's FIRST VIEWPORT called for the catalog as **cover label-strips**; the build shipped a **paper card grid** (`repeat(auto-fill, minmax(268px, 1fr))`, 940px). The label-strip form survives only in the compact sidebar/chip mode. The card grid is what is documented above.
-- The **Equation Explorer's controls sit outside the shared settings panel** (`.eq-controls`, its own layout), breaking the FIXED PANEL discipline that holds for the other eight worksheets.
+- *(resolved)* The Equation Explorer's controls sat outside the shared settings panel. They are now a `SettingsPanel` with labelled `Operation` and `Limit` rows in the same position as the other eight worksheets, and its board, tiles, blank, numpad and explanation panel were rebuilt in the paper vocabulary (2px corners, `--edge` keylines, no hex literals). The confetti burst and the wrong-answer shake are gone: a reward loop is what the About page argues against.
 
 ## Not canonized
 
@@ -417,3 +417,57 @@ Shipped, but deliberately excluded from the system above:
 - *(resolved)* `ink-compare` was `#c07f1e` at 2.58:1 on the board, under the 3:1 non-text floor. It is now `#9a6212` (3.94:1 board, 4.95:1 paper). All nine subject inks clear 3:1 on both grounds; a new one must too.
 - *(resolved)* `--shadow-sm` / `--shadow-md` were navy-tinted (`rgba(16,47,77,…)`) from the dark-ground build. Every shadow and keyline is now ink-tinted (`rgba(26,31,36,…)`).
 - *(resolved)* The `.worksheet` keyline is `var(--edge)` and `.catalog-card-sheet`'s wash is ink-tinted. No navy literal remains in the stylesheets.
+
+
+## Revision — full-site coherence pass
+
+Measured re-review of the shipped build (30/40, up from 24/40) found the world
+stopped at three borders. What changed, and why:
+
+- **Control strokes.** `--color-border-dark` was `#b9b0a0`, measuring **2.09:1
+  on paper and 1.66:1 on the board** — under the 3:1 non-text floor for the
+  toggles, inputs, the language button and the sheet's Name/Date rules. Now
+  `#7f776a` (4.31 / 3.43 / 3.08 on paper, board and header band).
+- **One muted grey.** `--on-cover-muted` `#5c6068` and `--color-text-muted`
+  `#5a6570` were two values for one role; both are now `#5a6570`.
+- **Rounding's ink** was `#c4362b`, 8° from the marking red, so on that route
+  the title icon and the Print button were nearly the same hue and the one
+  warm mark stopped being one. Now `#8f3b6e`.
+- **The `=` sign** in the Equation Explorer was `border-dark` at **1.66:1**. It
+  is the pivot of the activity, and it is now ink.
+- **Ink discipline on paper.** Every operator (`.colarith-op`, `.problem-text
+  .op`, `.stacked-row .op`, `.rounding-arrow`, `.pattern-comma`) was grey on
+  screen and printed grey; a grey `+` against a grey `−` is what a child
+  misreads on a cheap inkjet. All are ink now, with `#111` print overrides.
+- **One numbering system.** Patterns used an inline `1.`; it now uses the same
+  corner counter as every other sheet.
+- **Cover stays on the cover.** The multiplication table painted `--cover` onto
+  the paper head row and a `control-ink` fill in the corner, and printed both
+  as blue-tinted greys (`#d5dcea` / `#e8edf6`) left from the dark build. The
+  head is `--paper-edge`, the corner a ruled outline, and print is neutral.
+- **Print is white.** The sheet, the answer key and the print footer painted
+  the cream screen stock onto a white page, which read as a second paper
+  stopping where the content stopped.
+- **Keyline-first, everywhere.** `.settings-panel` used a grey `border` at 3px
+  while the sheet below it used a keyline at 2px; both are keyline + lift now.
+- **44px at every width.** `.btn-toggle`, `.checkbox-option` and `.num-input`
+  had their touch sizing only under `max-width: 768px`, so an 820px tablet —
+  which is served the desktop layout — got 33px controls and 17px checkbox
+  rows.
+- **The static plate** is a leaf of the book: Archivo title left on the
+  measure, keyline, lift, and a square of stock above it. Its centring is
+  scoped to `.catalog--full.static-page` so `.worksheet-details`, which shares
+  the class, no longer inherits a different centre and width from the sheet
+  it explains.
+- **The rail scrolls to the open sheet.** On phones the active chip was
+  off-screen on load for four of five routes, so the rail showed no selection.
+- **Sheets scale, they do not crop.** `usePreviewScale` fits a sheet to a
+  narrow column instead of cutting its last column mid-number; print is
+  untouched.
+- **ARIA.** `role="tablist"`/`role="tab"`/`role="tabpanel"` were declared on a
+  `<nav>` of links with no roving tabindex and no arrow-key handling. They are
+  gone; the open sheet is `aria-current="page"`.
+- **Dead tokens removed:** `--focus-ring` (focus is an `outline`),
+  `--color-accent-orange`, `--color-accent-purple`, `--color-header-bg`.
+- **Guarded state added:** a multiplication range wider than 15 factors cannot
+  fit one page, so it now says so instead of silently paging.

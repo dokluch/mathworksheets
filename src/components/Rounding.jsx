@@ -6,6 +6,7 @@ import './Rounding.css'
 import WorksheetHeader from './WorksheetHeader'
 import { setStamp } from '../lib/setStamp'
 import AnswerKey from './AnswerKey'
+import { usePreviewScale } from '../hooks/usePreviewScale'
 
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -37,6 +38,7 @@ export default function Rounding() {
   const [columns, setColumns] = usePersistedState('rounding', 'columns', 3)
   const [answerKey, setAnswerKey] = usePersistedState('rounding', 'answerKey', false)
   const [seed, setSeed] = useState(0)
+  const [fitRef, fitStyle] = usePreviewScale()
 
   const problemCount = columns === 2 ? 20 : columns === 3 ? 30 : 40
 
@@ -69,24 +71,26 @@ export default function Rounding() {
         </SettingRow>
       </SettingsPanel>
 
-      <div className={`worksheet print-area cols-${columns}`}>
-        <WorksheetHeader
-          title={t('rounding.title')}
-          meta={t('rounding.meta', { n: place })}
-          stamp={setStamp(problems)}
-        />
+      <div className="sheet-fit" ref={fitRef} style={fitStyle}>
+        <div className={`worksheet print-area cols-${columns}`}>
+          <WorksheetHeader
+            title={t('rounding.title')}
+            meta={t('rounding.meta', { n: place })}
+            stamp={setStamp(problems)}
+          />
 
-        <div
-          className="rounding-grid"
-          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-        >
-          {problems.map((p, i) => (
-            <div key={i} className="rounding-item">
-              <span className="rounding-number">{String(p.n)}</span>
-              <span className="rounding-arrow">≈</span>
-              <span className="blank-slot" />
-            </div>
-          ))}
+          <div
+            className="rounding-grid"
+            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+          >
+            {problems.map((p, i) => (
+              <div key={i} className="rounding-item">
+                <span className="rounding-number">{String(p.n)}</span>
+                <span className="rounding-arrow">≈</span>
+                <span className="blank-slot" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

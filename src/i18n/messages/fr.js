@@ -145,6 +145,7 @@ export default {
     fillDiagonal: 'Remplir la diagonale',
     shuffleHeaders: 'Mélanger lignes et colonnes',
     emptyRange: "La plage est inversée : il n’y a rien à imprimer. Choisissez un second nombre plus grand que le premier, par exemple 1 à 10.",
+    tooWide: "Cette plage donne une table trop large pour tenir sur une page. Gardez un écart d’au plus 15 entre les deux nombres, par exemple de 1 à 12.",
     prefill: 'Pré-remplir {pct} %',
     tableAria: 'Table de multiplication',
     title: "Multiplication",
@@ -361,7 +362,7 @@ export default {
     eqexplore: {
       label: 'Explorateur d’équations',
       shortDesc: 'Résoudre des équations de façon interactive',
-      longDesc: 'Un résolveur d’équations à l’écran (non imprimable) : fais glisser les termes de l’autre côté du signe égal et regarde le signe changer, suis les sauts sur une droite numérique, puis tape la réponse sur le pavé intégré. Les bonnes réponses font monter une série et déclenchent des confettis ; les erreurs rejouent une explication animée.',
+      longDesc: 'Un résolveur d’équations à l’écran (non imprimable) : fais glisser les termes de l’autre côté du signe égal et regarde le signe changer, suis les sauts sur une droite numérique, puis tape la réponse sur le pavé intégré. Les bonnes réponses font monter une série ; les erreurs rejouent une explication animée.',
       skills: ['équations', 'opérations inverses', 'droite numérique', 'calcul mental'],
       settings: [
         'Opération : addition, soustraction ou les deux',

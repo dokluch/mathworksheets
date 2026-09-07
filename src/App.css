@@ -175,6 +175,8 @@
   font-weight: 600;
   color: var(--on-cover);
   text-decoration: none;
+  /* "À propos", "Über uns", "О сайте" were breaking onto two lines. */
+  white-space: nowrap;
   border-radius: var(--radius);
   transition: background 0.15s, color 0.15s;
 }
@@ -239,7 +241,7 @@
   .catalog--sidebar {
     width: 220px;
     min-width: 220px;
-    border-right: 1px solid var(--color-border);
+    border-right: 1px solid var(--cover-line);
     display: flex;
     flex-direction: column;
     overflow-y: auto;
@@ -250,7 +252,7 @@
 /* — Topbar mode (mobile) — */
 @media (max-width: 768px) {
   .catalog--sidebar {
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--cover-line);
     padding: 10px 0 0;
   }
 }
@@ -278,9 +280,6 @@
   gap: 10px;
 }
 
-.catalog-title svg {
-  color: var(--color-primary);
-}
 
 .catalog-subtitle {
   color: var(--color-text-muted);
@@ -334,7 +333,8 @@
   gap: 5px;
   min-height: 44px;
   padding: 7px 12px;
-  border: 1px solid var(--cover-line);
+  /* A control stroke, so it clears 3:1 on the header band like every other. */
+  border: 1px solid var(--color-border-dark);
   background: transparent;
   font-family: inherit;
   font-size: 13px;
@@ -387,9 +387,23 @@
   background: var(--color-surface-hover);
 }
 
+/* The current locale is visibly current: a paper-hover fill and a leading
+   check, not a 9-unit shade of ink nobody can see. */
 .lang-menu a[aria-checked="true"] {
-  color: var(--color-primary);
+  background: var(--color-surface-hover);
+  color: var(--color-text);
   font-weight: 600;
+}
+
+.lang-menu a[aria-checked="true"]::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 10px;
+  margin: 0 10px 2px 0;
+  border-right: 2px solid var(--mark);
+  border-bottom: 2px solid var(--mark);
+  transform: rotate(45deg);
 }
 
 @media (max-width: 768px) {
@@ -794,8 +808,14 @@
     font-size: 15px;
   }
 
+  /* Never under the 13px UI floor: this is the text a parent scans fastest. */
   .catalog-card-desc {
-    font-size: 11px;
+    font-size: 13px;
+  }
+
+  /* Nine cards in two columns strand the ninth alone; let it take the row. */
+  .catalog-grid:not(.catalog-grid--compact) .catalog-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 }
 
@@ -865,7 +885,7 @@
 .site-footer--sidebar {
   margin-top: auto;
   padding: 12px 8px 4px;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .site-footer--sidebar .site-footer-links {
@@ -926,22 +946,55 @@ a.back-btn {
    React-only wrapper would leave no-JS and crawler users on the cover. */
 .static-page {
   align-items: center;
-  width: 100%;
-  max-width: 856px;
-  margin-inline: auto;
   background-color: var(--paper);
   color: var(--color-text);
   /* An absolute measure, not `ch`: ch resolves against each element's own
      font-size, so headings claimed a 890px line while body text got 686px and
      the two sat on different left edges. ~68 characters at the 16px body. */
-  --measure: 686px;
+  --measure: 608px;
   --focus-inner: var(--paper);
+}
+
+/* A leaf of the book, on the board: the plate has the edge and lift every
+   paper surface carries, and a square of stock above it rather than being
+   glued to the header band. */
+.catalog--full.static-page {
+  /* Centring is scoped here, not on `.static-page`: the worksheet-details
+     plate shares that class and was inheriting a different centre and width
+     from the sheet it sits under. */
+  width: 100%;
+  max-width: 856px;
+  margin-inline: auto;
+  margin-block: var(--sq) calc(var(--sq) * 1.5);
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
 }
 
 /* One measure for every block, so the page has a single left edge. */
 .static-page > * {
   width: 100%;
   max-width: var(--measure);
+}
+
+/* The page title is set like every other title in the product — the cover
+   face, left on the measure — not centred Inter over a left-aligned column. */
+.static-page .catalog-brand {
+  text-align: left;
+  margin-bottom: var(--sq);
+}
+
+.static-page .catalog-title {
+  font-family: var(--font-cover);
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.static-page .catalog-subtitle {
+  text-align: left;
 }
 
 .static-page > .catalog-grid {
@@ -1144,7 +1197,7 @@ a.back-btn {
 }
 
 .btn-secondary:hover {
-  background: var(--cover-wash);
+  background: var(--color-surface-hover);
   border-color: var(--color-primary);
 }
 
@@ -1163,6 +1216,7 @@ a.back-btn {
 }
 
 .btn-toggle {
+  min-height: 44px;
   padding: 7px 14px;
   border: 1px solid var(--color-border-dark);
   background: transparent;
@@ -1242,7 +1296,7 @@ a.back-btn {
   break-before: page;
   page-break-before: always;
   padding: 0.35in 0.5in 0;
-  background: var(--paper);
+  background: #fff;
   color: #111;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
@@ -1319,4 +1373,42 @@ a.back-btn {
   font-family: var(--font-figure);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
+}
+
+/* On phones the About h1 and h2 both landed at 22px; the title keeps its
+   step over the section heads. */
+@media (max-width: 768px) {
+  .static-page .catalog-title {
+    font-size: 24px;
+  }
+  .static-page h2 {
+    font-size: 19px;
+  }
+}
+
+/* =============================================
+   SHEET PREVIEW SCALING — see hooks/usePreviewScale.js
+   ============================================= */
+
+/* The sheet is scaled, never cropped: on a narrow screen the parent sees the
+   whole page they are about to print, smaller, rather than two and a half
+   columns of it. The child keeps its natural layout width so print budgets
+   and the notebook grid are untouched. */
+.sheet-fit {
+  width: 100%;
+  overflow: visible;
+}
+
+.sheet-fit > * {
+  transform: scale(var(--preview-scale, 1));
+  transform-origin: top left;
+}
+
+@media print {
+  .sheet-fit {
+    height: auto !important;
+  }
+  .sheet-fit > * {
+    transform: none !important;
+  }
 }

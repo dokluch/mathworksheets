@@ -193,7 +193,7 @@ export const WORKSHEETS = [
       { q: 'Why does the sheet keep using numbers ending in 5?', a: 'The 5 boundary is the only case with a convention rather than an obvious answer, and it is where most mistakes happen. The generator deliberately includes those, along with a mix of round-up and round-down cases.' },
       { q: 'When do children learn rounding?', a: 'Rounding to the nearest 10 usually appears in grade 2, with 100 and 1000 following in grade 3. It is the basis of estimation, which is how a child learns to notice that an answer is far too big.' },
     ],
-    color: '#c4362b',
+    color: '#8f3b6e',
     interactive: false,
   },
   {
@@ -228,7 +228,7 @@ export const WORKSHEETS = [
     shortDesc: 'Solve equations interactively',
     longDesc:
       'An on-screen (not printable) equation solver: drag terms across the equals sign and watch the sign flip, follow the jumps on a number line, then type the answer on the built-in keypad. ' +
-      'Correct answers earn a streak and confetti; wrong ones replay an animated explanation.',
+      'Correct answers build a streak; wrong ones replay an animated explanation.',
     grades: '2–3',
     skills: ['equations', 'inverse operations', 'number line', 'mental arithmetic'],
     settings: [

@@ -30,7 +30,7 @@
 .eq-streak {
   font-size: 15px;
   font-weight: 700;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -39,7 +39,7 @@
 }
 
 .eq-streak--active {
-  color: #e67e22;
+  color: var(--mark);
 }
 
 .eq-streak-num {
@@ -68,7 +68,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace;
+  font-family: var(--font-figure);
   font-size: 36px;
   font-weight: 700;
   color: var(--color-text);
@@ -76,15 +76,17 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* A term is a punch-out card of the same stock as the sheets: paper, a 1px
+   ink keyline, a short-throw lift, square-cut. */
 .eq-tile {
   min-width: 60px;
   height: 64px;
   padding: 0 14px;
   background: var(--color-surface);
-  border: 2px solid var(--color-border);
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s, border-color 0.2s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
+  transition: box-shadow 0.2s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .eq-tile--draggable {
@@ -94,27 +96,23 @@
 }
 
 .eq-tile--draggable:hover {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 0 0 1px var(--edge-strong), var(--shadow-md);
 }
 
 .eq-tile--dragging {
   cursor: grabbing;
-  box-shadow: 0 8px 25px -4px rgba(0,0,0,0.18);
+  box-shadow: 0 0 0 1px var(--edge-strong), 0 8px 25px -4px rgba(26, 31, 36, 0.18);
   z-index: 10;
-  border-color: var(--color-primary);
   position: relative;
   transition: none !important;
 }
 
 .eq-tile--ghost {
   opacity: 0.25;
-  border-style: dashed;
 }
 
 .eq-tile--zero {
   opacity: 0.4;
-  border-style: dashed;
   cursor: default;
 }
 
@@ -122,7 +120,7 @@
 .eq-op {
   font-size: 28px;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   min-width: 28px;
   text-align: center;
   position: relative;
@@ -147,10 +145,12 @@
   to { transform: scale(1); opacity: 1; }
 }
 
+/* The = is the pivot of the whole activity, not a divider: it was a
+   border-grey glyph at 1.66:1 on the board. */
 .eq-equals {
   font-size: 32px;
   font-weight: 700;
-  color: var(--color-border-dark);
+  color: var(--color-text);
   padding: 0 4px;
 }
 
@@ -159,13 +159,16 @@
   position: relative;
 }
 
+/* The blank is the same idiom as the sheets' `.blank-slot`: a rule to write
+   on, not a dashed box. Dashed borders are reserved for the empty state. */
 .eq-blank {
   width: 72px;
   height: 64px;
-  border: 2.5px dashed var(--color-primary);
-  border-radius: 12px;
-  background: var(--color-primary-faint);
-  font-family: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace;
+  border: none;
+  border-bottom: 2.5px solid var(--color-primary);
+  border-radius: 0;
+  background: linear-gradient(to top, var(--color-primary-faint), transparent);
+  font-family: var(--font-figure);
   font-size: 36px;
   font-weight: 700;
   text-align: center;
@@ -176,10 +179,9 @@
   appearance: none;
 }
 
-.eq-blank:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 4px var(--color-primary-light);
-  background: white;
+.eq-blank:focus-visible {
+  outline: 3px solid var(--mark);
+  outline-offset: 2px;
 }
 
 /* Wider inputs for 3- and 4-digit numbers */
@@ -200,24 +202,14 @@
 }
 
 .eq-blank--correct {
-  border-color: var(--color-accent-green);
-  background: rgba(5, 150, 105, 0.08);
+  border-bottom-color: var(--color-accent-green);
+  background: linear-gradient(to top, rgba(63, 122, 94, 0.14), transparent);
   color: var(--color-accent-green);
-  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
 }
 
 .eq-blank--wrong {
-  animation: shake 0.4s ease;
-  border-color: var(--color-accent-red);
-  background: rgba(220, 38, 38, 0.06);
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-6px); }
-  40% { transform: translateX(5px); }
-  60% { transform: translateX(-4px); }
-  80% { transform: translateX(3px); }
+  border-bottom-color: var(--color-accent-red);
+  background: linear-gradient(to top, rgba(208, 69, 47, 0.12), transparent);
 }
 
 /* ── Check / Next buttons ── */
@@ -230,21 +222,24 @@
 .eq-btn {
   padding: 12px 28px;
   border: none;
-  border-radius: 10px;
+  border-radius: 2px;
   font-family: inherit;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   display: flex;
   align-items: center;
   gap: 8px;
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Check is the control accent, not the marking red: red is reserved for the
+   act of making paper, and checking an answer on screen is not that. */
 .eq-btn--check {
+  min-height: 44px;
   background: var(--color-primary);
-  color: white;
+  color: #fff;
 }
 
 .eq-btn--check:hover {
@@ -252,22 +247,24 @@
 }
 
 .eq-btn--check:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
 .eq-btn--next {
-  background: var(--color-accent-green);
-  color: white;
+  min-height: 44px;
+  background: transparent;
+  color: var(--color-text);
+  border: 1.5px solid var(--color-border-dark);
 }
 
 .eq-btn--next:hover {
-  background: #047857;
+  background: var(--color-surface-hover);
 }
 
 .eq-btn--skip {
   background: transparent;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   border: 1px solid var(--color-border);
   font-weight: 600;
   font-size: 14px;
@@ -283,7 +280,7 @@
 .eq-reset-link {
   background: none;
   border: none;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-family: inherit;
   font-size: 13px;
   cursor: pointer;
@@ -307,7 +304,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px;
-  border-radius: 14px;
+  border-radius: 2px;
   transition: background 0.2s;
   flex-shrink: 1;
   min-width: 0;
@@ -323,9 +320,9 @@
 .eq-drop-ghost {
   width: 44px;
   height: 44px;
-  border: 2.5px dashed var(--color-primary, #2563eb);
-  border-radius: 10px;
-  background: var(--color-primary-faint, rgba(37, 99, 235, 0.06));
+  border: 2px solid var(--color-border-dark);
+  border-radius: 2px;
+  background: var(--color-primary-faint);
   animation: eq-ghost-pulse 0.8s ease-in-out infinite;
 }
 
@@ -340,35 +337,11 @@
   touch-action: none;
 }
 
-/* ── Celebration confetti ── */
-.eq-celebration {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  pointer-events: none;
-  z-index: 20;
-}
-
-.eq-confetti {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  animation: confettiBurst 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-@keyframes confettiBurst {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--cx), var(--cy)) scale(0.3);
-    opacity: 0;
-  }
-}
-
-/* ── Correct checkmark ── */
+/* ── Correct checkmark ──
+   The confetti burst and the wrong-answer shake are gone: this is the one
+   surface whose behaviour the About page argues against, and a chime-and-
+   stars reward loop is exactly what the product exists to withhold. What
+   remains is a quiet mark that the answer was right. */
 .eq-checkmark {
   display: inline-flex;
   align-items: center;
@@ -378,7 +351,7 @@
   border-radius: 50%;
   background: var(--color-accent-green);
   color: white;
-  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes popIn {
@@ -405,7 +378,7 @@
 /* ── Drag hint ── */
 .eq-hint {
   font-size: 13px;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   text-align: center;
   opacity: 0.7;
   padding: 0 16px;
@@ -435,10 +408,10 @@
 
 .eq-explain-inner {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border: none;
+  border-radius: 2px;
   padding: 24px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 0 0 1px var(--edge), var(--shadow-md);
 }
 
 .eq-explain-tabs {
@@ -449,16 +422,17 @@
 
 .eq-explain-tab {
   flex: 1;
+  min-height: 44px;
   padding: 8px 16px;
   border: 1.5px solid var(--color-border);
   background: var(--color-surface);
-  border-radius: 8px;
+  border-radius: 2px;
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
 .eq-explain-tab:hover {
@@ -467,7 +441,7 @@
 
 .eq-explain-tab--active {
   background: var(--color-primary);
-  color: white;
+  color: #fff;
   border-color: var(--color-primary);
 }
 
@@ -512,7 +486,8 @@
 .eq-tenframe-dot {
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 2px solid var(--color-border);
+  border: none;
+  box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
   background: var(--color-surface);
   transition: background 0.25s, border-color 0.25s, transform 0.25s;
   max-width: 48px;
@@ -532,7 +507,7 @@
 .eq-tenframe-dot--add {
   background: var(--color-accent-green);
   border-color: var(--color-accent-green);
-  animation: dotAppear 0.3s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+  animation: dotAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .eq-tenframe-dot--remove {
@@ -559,7 +534,7 @@
 .eq-tenframe-label {
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: var(--color-text);
   text-align: center;
 }
 
@@ -578,7 +553,7 @@
   position: relative;
   height: 28px;
   background: var(--color-border-light);
-  border-radius: 6px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
@@ -587,7 +562,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  border-radius: 6px;
+  border-radius: 2px;
 }
 
 .eq-bar-fill--base {
@@ -611,8 +586,8 @@
   margin-top: 4px;
   font-size: 11px;
   font-weight: 600;
-  color: var(--color-text-muted);
-  font-family: 'JetBrains Mono', monospace;
+  color: var(--color-text);
+  font-family: var(--font-figure);
 }
 
 /* ── Explain footer ── */
@@ -626,7 +601,8 @@
 .eq-btn--gotit {
   background: var(--color-surface);
   color: var(--color-text);
-  border: 1px solid var(--color-border-dark);
+  border: 1.5px solid var(--color-border-dark);
+  min-height: 44px;
   padding: 8px 24px;
   font-size: 14px;
 }
@@ -637,15 +613,16 @@
 
 .eq-btn--replay {
   background: none;
-  border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  border: 1.5px solid var(--color-border-dark);
+  min-height: 44px;
+  color: var(--color-text);
   font-size: 13px;
   padding: 6px 14px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 2px;
   font-family: inherit;
   font-weight: 600;
-  transition: all 0.15s;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
 .eq-btn--replay:hover {
@@ -680,14 +657,14 @@
     min-width: 52px;
     height: 56px;
     padding: 0 10px;
-    border-radius: 10px;
+    border-radius: 2px;
   }
 
   .eq-blank {
     width: 62px;
     height: 56px;
     font-size: 32px;
-    border-radius: 10px;
+    border-radius: 2px;
   }
 
   .eq-op {
@@ -801,8 +778,8 @@
   align-items: center;
   margin: 12px auto 0;
   padding: 10px;
-  background: #f0f2f5;
-  border-radius: 14px;
+  background: var(--cover);
+  border-radius: 2px;
   width: fit-content;
 }
 
@@ -817,29 +794,29 @@
   font-size: clamp(20px, calc(var(--_key) * 0.38), 32px);
   font-weight: 600;
   border: none;
-  border-radius: 10px;
-  background: #fff;
-  color: var(--color-text, #1e293b);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--color-text);
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  box-shadow: 0 0 0 1px var(--edge), var(--shadow-sm);
   transition: background 0.1s, transform 0.08s, box-shadow 0.1s;
 }
 
 .eq-numpad-key:active {
-  background: #e8eaed;
+  background: var(--paper-edge);
   transform: scale(0.94);
-  box-shadow: 0 0 1px rgba(0,0,0,0.1);
+  box-shadow: 0 0 1px rgba(26, 31, 36, 0.12);
 }
 
 .eq-numpad-key--muted {
-  background: #e4e7eb;
+  background: var(--paper-edge);
   font-size: clamp(16px, calc(var(--_key) * 0.3), 26px);
   box-shadow: none;
 }
 .eq-numpad-key--muted:active {
-  background: #d1d5db;
+  background: var(--color-border);
 }
 
 .eq-numpad-action {
@@ -855,8 +832,8 @@
   font-weight: 700;
   letter-spacing: 0.02em;
   border: none;
-  border-radius: 10px;
-  background: var(--color-primary, #2563eb);
+  border-radius: 2px;
+  background: var(--color-primary);
   color: #fff;
   cursor: pointer;
   user-select: none;
@@ -864,7 +841,7 @@
   transition: background 0.1s, transform 0.08s, opacity 0.15s;
 }
 .eq-numpad-action:active:not(:disabled) {
-  background: #1d4ed8;
+  background: var(--color-primary-hover);
   transform: scale(0.97);
 }
 .eq-numpad-action:disabled {
@@ -872,10 +849,10 @@
   cursor: default;
 }
 .eq-numpad-action--next {
-  background: var(--color-success, #16a34a);
+  background: var(--color-primary);
 }
 .eq-numpad-action--next:active {
-  background: #15803d;
+  background: var(--color-primary-hover);
 }
 
 /* ── Print ──

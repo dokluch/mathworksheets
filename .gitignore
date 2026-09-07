@@ -30,3 +30,4 @@ dist-ssr
 # are DESIGN.md, PRODUCT.md and .impeccable/surfaces/
 .impeccable/review/
 .impeccable/questions/
+.impeccable/critique/
