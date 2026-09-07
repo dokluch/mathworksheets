@@ -9,6 +9,7 @@ import {
   ogImagePath, inlineHtml, inlineMarkdown,
   renderMarkdown, renderLlmsTxt, renderLlmsFullTxt, renderSitemap, renderRobots,
   renderCatalogJson, renderNotFoundMarkdown, renderNotFoundHtml, buildSiteFiles,
+  worksheetDetailsHtml,
 } from './render.js'
 
 const TEMPLATE = `<!doctype html><html><head><meta charset="UTF-8" />
@@ -182,6 +183,39 @@ describe('renderStaticContent', () => {
       for (const s of ws.settings) expect(textOf(html)).toContain(s)
       for (const other of WORKSHEETS.filter(w => w !== ws)) expect(html).toContain(`href="/worksheets/${other.slug}"`)
     }
+  })
+
+  it('every worksheet page contains worksheetDetailsHtml verbatim', () => {
+    // components/WorksheetDetails.jsx renders this exact string after hydration.
+    // If the prerendered page and the shared fragment ever diverge, the React
+    // view silently drops crawlable copy — which is the bug this guards.
+    for (const locale of LOCALES) {
+      for (const ws of WORKSHEETS) {
+        const route = worksheetRoute(ws, locale)
+        expect(renderStaticContent(route)).toContain(worksheetDetailsHtml(route))
+      }
+    }
+  })
+
+  it('worksheetDetailsHtml carries the prose and sibling links but no heading', () => {
+    const ws = WORKSHEETS[0]
+    const details = worksheetDetailsHtml(worksheetRoute(ws))
+    expect(details).not.toContain('<h1')
+    expect(textOf(details)).toContain(ws.longDesc)
+    for (const s of ws.settings) expect(textOf(details)).toContain(s)
+    for (const other of WORKSHEETS.filter(w => w !== ws)) {
+      expect(details).toContain(`href="/worksheets/${other.slug}"`)
+    }
+    expect(details).toContain('href="/llms.txt"')
+  })
+
+  it('worksheetDetailsHtml escapes worksheet copy', () => {
+    const hostile = { ...WORKSHEETS[0], longDesc: '<script>x</script> a "b"', settings: ['<img onerror=1>'] }
+    const details = worksheetDetailsHtml({ ...worksheetRoute(WORKSHEETS[0]), worksheet: hostile })
+    expect(details).not.toContain('<script>')
+    expect(details).not.toContain('<img onerror')
+    expect(details).toContain('&lt;script&gt;x&lt;/script&gt;')
+    expect(details).toContain('&lt;img onerror=1&gt;')
   })
 
   it('developers page names the product and lists resources', () => {

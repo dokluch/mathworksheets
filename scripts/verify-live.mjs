@@ -97,6 +97,9 @@ async function main() {
     const p = `/worksheets/${ws.slug}`
     const r = await get(p, { accept: 'text/html' })
     record(`GET ${p} → 200 with title`, r.status === 200 && r.text.includes(`${ws.label} Worksheets`), String(r.status))
+    record(`GET ${p} has one <h1>, sequential headings and enough text`,
+      (r.text.match(/<h1\b/gi) || []).length === 1 && headingsSequential(r.text) && textLength(r.text) >= 500,
+      `${textLength(r.text)} chars`)
     await checkOgImage(p, r.text)
     const m = await get(`${p}.md`)
     record(`GET ${p}.md → 200 text/markdown`, m.status === 200 && /^text\/markdown/.test(m.headers.get('content-type') || ''), `${m.status} ${m.headers.get('content-type')}`)

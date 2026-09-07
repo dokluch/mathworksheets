@@ -220,7 +220,7 @@ export function pageDescription(route) {
   })
 }
 
-function gradeLevelText(ws, locale) {
+export function gradeLevelText(ws, locale) {
   return t(locale, ws.grades.includes('–') ? 'seo.gradeRange' : 'seo.gradeOne', { grades: ws.grades })
 }
 
@@ -531,22 +531,37 @@ function homeContent(route) {
     </main>`
 }
 
-function worksheetContent(route) {
+/**
+ * Breadcrumb and page heading. Prerender-only: the React worksheet view has its
+ * own compact topbar heading, so that the generator stays above the fold.
+ */
+function worksheetHeroHtml(route) {
+  const { locale } = route
+  const h = (key, params) => html(locale, key, params)
+  const ws = route.worksheet
+  return `${breadcrumbNav(locale, ws.label)}
+      <header class="catalog-header">
+        <div class="catalog-brand">
+          <h1 class="catalog-title">${h('seo.worksheetHeading', { label: ws.label })}</h1>
+          <p class="catalog-subtitle">${escapeHtml(ws.shortDesc)} · ${escapeHtml(gradeLevelText(ws, locale))}</p>
+        </div>
+      </header>`
+}
+
+/**
+ * Everything below the heading: description, settings, how to use, sibling
+ * worksheets and agent links. Shared with components/WorksheetDetails.jsx so the
+ * crawlable fallback and the hydrated view cannot drift apart — the same
+ * contract components/StaticPage.jsx has with staticBody().
+ */
+export function worksheetDetailsHtml(route) {
   const { locale } = route
   const h = (key, params) => html(locale, key, params)
   const ws = route.worksheet
   const others = localizedWorksheets(locale).filter(w => w.id !== ws.id)
   const settings = ws.settings.map(s => `<li>${escapeHtml(s)}</li>`).join('\n        ')
   const related = others.map(w => `<li><a href="${worksheetRoute(w, locale).path}">${escapeHtml(w.label)}</a> – ${escapeHtml(w.shortDesc)}</li>`).join('\n        ')
-  return `<main class="catalog catalog--full static-page">
-      ${breadcrumbNav(locale, ws.label)}
-      <header class="catalog-header">
-        <div class="catalog-brand">
-          <h1 class="catalog-title">${h('seo.worksheetHeading', { label: ws.label })}</h1>
-          <p class="catalog-subtitle">${escapeHtml(ws.shortDesc)} · ${escapeHtml(gradeLevelText(ws, locale))}</p>
-        </div>
-      </header>
-      <section class="static-intro">
+  return `<section class="static-intro">
         <p>${escapeHtml(ws.longDesc)}</p>
         <p><strong>${h('static.worksheet.skills')}:</strong> ${ws.skills.map(escapeHtml).join(', ')}. <strong>${h('static.worksheet.format')}:</strong> ${h(ws.interactive ? 'static.worksheet.formatInteractive' : 'static.worksheet.formatPrintable')}.</p>
       </section>
@@ -564,7 +579,13 @@ function worksheetContent(route) {
       <ul>
         ${related}
       </ul>
-      ${agentLinksHtml(locale)}
+      ${agentLinksHtml(locale)}`
+}
+
+function worksheetContent(route) {
+  return `<main class="catalog catalog--full static-page">
+      ${worksheetHeroHtml(route)}
+      ${worksheetDetailsHtml(route)}
     </main>`
 }
 

@@ -64,6 +64,44 @@ describe('App', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(BRAND)
   })
 
+  it('keeps the crawlable worksheet prose in the DOM after hydration', () => {
+    // src/main.jsx removes the prerendered #static-content before React mounts,
+    // so without WorksheetDetails a JS-executing crawler sees no prose at all.
+    window.history.replaceState(null, '', '/worksheets/column-addition')
+    render(<App />)
+    const ws = WORKSHEETS.find(w => w.slug === 'column-addition')
+
+    const h1s = screen.getAllByRole('heading', { level: 1 })
+    expect(h1s.length).toBe(1)
+    expect(h1s[0].textContent).toBe('Column Addition Worksheets')
+
+    const details = document.querySelector('.worksheet-details')
+    expect(details).toBeTruthy()
+    expect(details.className).toContain('no-print')
+    expect(details.textContent).toContain(ws.longDesc)
+    for (const setting of ws.settings) expect(details.textContent).toContain(setting)
+    expect(details.querySelector('a[href="/worksheets/rounding"]')).toBeTruthy()
+    expect(details.querySelector('a[href="/llms.txt"]')).toBeTruthy()
+    expect(details.querySelector('a[href="/developers"]')).toBeTruthy()
+  })
+
+  it('a sibling worksheet link inside the details block navigates in-app', () => {
+    window.history.replaceState(null, '', '/worksheets/column-addition')
+    render(<App />)
+    const details = document.querySelector('.worksheet-details')
+    fireEvent.click(within(details).getByRole('link', { name: 'Rounding' }))
+    expect(window.location.pathname).toBe('/worksheets/rounding')
+    expect(screen.getAllByRole('heading', { level: 1 })[0].textContent).toBe('Rounding Worksheets')
+  })
+
+  it('the details block is localized with the rest of the page', () => {
+    window.history.replaceState(null, '', '/fr/worksheets/column-addition')
+    render(<App />)
+    const details = document.querySelector('.worksheet-details')
+    expect(details.querySelector('a[href="/fr/worksheets/rounding"]')).toBeTruthy()
+    expect(details.textContent).toContain(localizeWorksheet(WORKSHEETS.find(w => w.slug === 'column-addition'), 'fr').longDesc)
+  })
+
   it('shows a footer with About, Privacy, Terms and GitHub links that is never printed', () => {
     render(<App />)
     const footer = screen.getByRole('contentinfo')
