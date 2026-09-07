@@ -127,11 +127,21 @@ async function main() {
     const img = await head(path)
     record(`GET ${path} → 200 image/png`, img.status === 200 && /^image\/png/.test(img.type) && isPng(img.bytes), `${img.status} ${img.type}`)
   }
+  // The agent-facing surfaces: a scraper must be able to pick a worksheet and
+  // learn how to cite the site from llms.txt alone.
+  for (const path of ['/llms.txt', '/llms-full.txt']) {
+    const r = await get(path)
+    const ok = r.status === 200 && /Choosing a worksheet/.test(r.text) && /CC BY-NC 4.0/.test(r.text) && /carrying \/ regrouping/.test(r.text)
+    record(`GET ${path} carries the grade/skill index and licence terms`, ok, String(r.status))
+  }
+
   const cat = await get('/worksheets.json')
   let catOk = false
   try {
     const json = JSON.parse(cat.text)
     catOk = cat.status === 200 && json.worksheets.length === WORKSHEETS.length && json.locales.length === LOCALES.length
+      && json.usage?.aiCrawlingAllowed === true && json.usage?.commercialUse === false
+      && json.worksheets.every(w => Array.isArray(w.examples) && w.examples.length >= 3 && /^\d{4}-\d{2}-\d{2}$/.test(w.updated))
   } catch { catOk = false }
   record('GET /worksheets.json → valid catalog with locales', catOk, String(cat.status))
 

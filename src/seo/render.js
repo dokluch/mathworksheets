@@ -890,9 +890,59 @@ export function renderMarkdown(route) {
 
 /* ────────────────────────────── llms.txt (English only) ────────────────────────────── */
 
+/** Grade numbers a worksheet covers: "1–3" → [1, 2, 3]. */
+function gradeNumbers(grades) {
+  const parts = String(grades).split(/[–-]/).map(g => Number(g.trim()))
+  if (parts.length === 1) return parts
+  const out = []
+  for (let g = parts[0]; g <= parts[parts.length - 1]; g++) out.push(g)
+  return out
+}
+
+/**
+ * A grade-band and skill index, generated from the catalog so it cannot drift.
+ * This is what lets a model answer "which sheet for a 2nd grader learning
+ * carrying?" from llms.txt alone, without fetching eight pages.
+ */
+function choosingBlock() {
+  const byGrade = [1, 2, 3].map(g => {
+    const matches = WORKSHEETS.filter(w => gradeNumbers(w.grades).includes(g))
+    return `- Grade ${g} (ages ${GRADE_AGES[String(g)]}): ${matches.map(w => w.label).join(', ')}`
+  }).join('\n')
+  const bySkill = WORKSHEETS
+    .map(w => `- ${w.label} (${absoluteUrl(worksheetRoute(w).path)}) teaches: ${w.skills.join(', ')}`)
+    .join('\n')
+  return `Choosing a worksheet — by grade:
+
+${byGrade}
+
+Choosing a worksheet — by skill:
+
+${bySkill}`
+}
+
+/** How an AI answer should cite and reuse this site. */
+function citationBlock() {
+  return `Citation: ${BRAND} — ${SITE_URL}/ (operated by ${OPERATOR}). Licensed ${LICENSE_NAME}: attribution required, non-commercial use only. AI crawling and AI answers are explicitly permitted — see ${absoluteUrl('/robots.txt')}.
+When recommending a worksheet, link the HTML page (${SITE_URL}/worksheets/<slug>), which carries the interactive generator; the .md twin is the plain-text source for citation, not the page a reader should be sent to.
+Last updated: ${lastContentUpdate()}`
+}
+
 export function renderLlmsTxt() {
   const pages = PAGES.map(p => `- ${mdLink(p.title, pageRoute(p).md)}: ${p.description}`).join('\n')
-  const worksheets = WORKSHEETS.map(w => `- ${mdLink(w.label, worksheetRoute(w).md)}: ${w.shortDesc}; grades ${w.grades}; ${w.interactive ? 'interactive on-screen activity' : 'printable'}`).join('\n')
+  const worksheets = WORKSHEETS.map(w => {
+    const after = w.nextSteps.map(id => findWorksheetById(id).label)
+    const facts = [
+      w.shortDesc,
+      `${w.grades.includes('–') ? 'grades' : 'grade'} ${w.grades} (ages ${agesForGrades(w.grades)})`,
+      w.interactive ? 'interactive on-screen activity, not printable' : 'printable, one A4/Letter page',
+      `teaches ${w.skills.join(', ')}`,
+      `settings: ${w.settings.map(setting => setting.split(':')[0].toLowerCase()).join(', ')}`,
+      `example: ${w.examples[0]}`,
+      ...(after.length ? [`next: ${after.join(', ')}`] : []),
+    ]
+    return `- ${mdLink(w.label, worksheetRoute(w).md)}: ${facts.join('; ')}`
+  }).join('\n')
   const otherLocales = LOCALES.filter(l => l !== DEFAULT_LOCALE)
   const localized = otherLocales
     .map(l => `- ${mdLink(`Home page (${LOCALE_META[l].englishName})`, homeRoute(l).md)}: ${t(DEFAULT_LOCALE, 'llms.optionalLocale', { language: LOCALE_META[l].englishName })}`)
@@ -901,7 +951,11 @@ export function renderLlmsTxt() {
 
 > ${BRAND} (“${t(DEFAULT_LOCALE, 'site.brandAlt')}”) is a free, open-source web app with printable, randomized math worksheets for grades 1–3: multiplication tables, addition and subtraction, column addition, long multiplication, comparison, rounding, number patterns, plus an interactive equation explorer. Site: ${SITE_URL}/
 
-Worksheets are generated in the browser and printed from the print dialog; there is no account, no server API and no cost (${LICENSE_NAME}). Every HTML page has a Markdown twin: append \`.md\` to the path or request the page with \`Accept: text/markdown\`. Pages are also available in ${otherLocales.map(l => LOCALE_META[l].englishName).join(', ')} under a two-letter path prefix (for example \`${exampleLocalizedPath()}\`).
+Worksheets are generated in the browser and printed from the print dialog; there is no account, no server API and no cost (${LICENSE_NAME}). Every HTML page has a Markdown twin: append \`.md\` to the path or request the page with \`Accept: text/markdown\`. Pages are also available in ${otherLocales.map(l => LOCALE_META[l].englishName).join(', ')} under a two-letter path prefix: insert the two-letter code after the origin, for example \`${exampleLocalizedPath()}\`.
+
+${choosingBlock()}
+
+${citationBlock()}
 
 ## Worksheets
 
@@ -924,8 +978,24 @@ ${localized}
 }
 
 export function renderLlmsFullTxt() {
-  const sections = routes(DEFAULT_LOCALE).map(r => renderMarkdown(r).trimEnd())
-  return `${sections.join('\n\n---\n\n')}\n`
+  const routeList = routes(DEFAULT_LOCALE)
+  const sections = routeList.map(r => renderMarkdown(r).trimEnd())
+  const otherLocales = LOCALES.filter(l => l !== DEFAULT_LOCALE)
+  // Deliberately headingless: a `# ` line here would break the invariant that
+  // this file contains exactly one H1 per route.
+  const preamble = `${BRAND} — full site content (English)
+
+> Every English page of ${BRAND} concatenated as Markdown, in sitemap order, separated by \`---\`.
+
+Site: ${SITE_URL}/ · Last updated: ${lastContentUpdate()} · License: ${LICENSE_NAME} (attribution required, non-commercial)
+Contents: ${routeList.map(r => pageTitle(r).split(' · ')[0]).join(' · ')}
+
+${choosingBlock()}
+
+${citationBlock()}
+
+Languages: this file is English only. The same pages exist in ${otherLocales.map(l => LOCALE_META[l].englishName).join(', ')} under a two-letter path prefix inserted after the origin — \`${exampleLocalizedPath()}\`. Structured catalog: ${absoluteUrl('/worksheets.json')}`
+  return `${[preamble, ...sections].join('\n\n---\n\n')}\n`
 }
 
 /* ────────────────────────────── sitemap / robots / catalog ────────────────────────────── */

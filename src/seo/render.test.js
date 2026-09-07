@@ -410,6 +410,35 @@ describe('llms.txt (llmstxt.org format)', () => {
     expect(txt).toContain(`${SITE_URL}/worksheets.json`)
   })
 
+  it('carries a generated grade and skill index a model can answer from', () => {
+    const preamble = txt.split(/^## /m)[0]
+    expect(preamble).toContain('Choosing a worksheet — by grade:')
+    expect(preamble).toContain('Choosing a worksheet — by skill:')
+    for (const grade of [1, 2, 3]) expect(preamble).toContain(`- Grade ${grade} (ages `)
+    // The query this exists to answer: "2nd grader learning carrying".
+    expect(preamble).toContain('carrying / regrouping')
+    for (const ws of WORKSHEETS) expect(preamble).toContain(ws.label)
+  })
+
+  it('states how AI answers should cite and reuse the site', () => {
+    const preamble = txt.split(/^## /m)[0]
+    expect(preamble).toContain('CC BY-NC 4.0')
+    expect(preamble).toContain('non-commercial use only')
+    expect(preamble).toContain('AI crawling and AI answers are explicitly permitted')
+    expect(preamble).toMatch(/Last updated: \d{4}-\d{2}-\d{2}/)
+  })
+
+  it('each worksheet note carries the grades, skills and an example', () => {
+    const section = txt.split(/^## Worksheets/m)[1].split(/^## /m)[0]
+    for (const ws of WORKSHEETS) {
+      const line = section.split('\n').find(l => l.includes(`](${SITE_URL}/worksheets/${ws.slug}.md)`))
+      expect(line).toBeTruthy()
+      expect(line).toContain(`(ages ${agesForGrades(ws.grades)})`)
+      expect(line).toContain(`teaches ${ws.skills.join(', ')}`)
+      expect(line).toContain(`example: ${ws.examples[0]}`)
+    }
+  })
+
   it('files the static pages under Optional', () => {
     const optional = txt.split(/^## Optional/m)[1]
     for (const p of PAGES) expect(optional).toContain(`- [${p.title}](${SITE_URL}/${p.slug}.md): `)
@@ -417,6 +446,19 @@ describe('llms.txt (llmstxt.org format)', () => {
 })
 
 describe('llms-full.txt', () => {
+  it('opens with a headingless preamble naming the site, licence and scope', () => {
+    const full = renderLlmsFullTxt()
+    const preamble = full.split('\n\n---\n\n')[0]
+    expect(preamble.startsWith(`${BRAND} — full site content`)).toBe(true)
+    // A `# ` line here would break the one-H1-per-route invariant below.
+    expect(preamble).not.toMatch(/^# /m)
+    expect(preamble).toContain(`${SITE_URL}/`)
+    expect(preamble).toContain('CC BY-NC 4.0')
+    expect(preamble).toContain('Choosing a worksheet — by grade:')
+    expect(preamble).toContain('English only')
+    expect(preamble).toContain(`${SITE_URL}/worksheets.json`)
+  })
+
   it('contains every page in order, separated by horizontal rules', () => {
     const full = renderLlmsFullTxt()
     const h1s = full.match(/^# .+$/gm)
