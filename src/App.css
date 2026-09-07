@@ -136,28 +136,39 @@
   display: flex;
 }
 
-/* The wordmark sits in the white ruled label a school book carries on its
-   cover — the one place the paper shows through the chrome. */
+/* A masthead, not a control. This used to be a paper plate — keyline, lift,
+   and a hover rise — which put it directly beside the bordered language
+   button and made the two read as a pair of buttons. Worse, it broke the
+   cover/paper rule from the other direction: paper is reserved for where real
+   paper is, and a wordmark is not a sheet. The identity is carried by the
+   cover face and the drawn ruler mark, printed straight onto the stock. */
 .site-brand {
   display: inline-flex;
   align-items: center;
+  gap: 9px;
   min-height: 44px;
-  padding: 5px 14px;
+  padding: 0 4px;
   font-family: var(--font-cover);
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 800;
-  letter-spacing: -0.015em;
-  color: var(--color-text);
-  background: var(--paper);
+  letter-spacing: -0.022em;
+  color: var(--on-cover);
   text-decoration: none;
-  border-radius: 2px;
-  box-shadow: 0 0 0 1px var(--edge-strong), var(--shadow-sm);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.site-brand:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 0 1px var(--edge-strong), var(--shadow-md);
+/* It is still a link home, so it owes an affordance — a ruled underline in
+   the world's own weight, not a colour shift or a lift. Only the wordmark is
+   underlined; the mark beside it is not text. */
+.site-brand span {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.15s ease;
+}
+
+.site-brand:hover span {
+  text-decoration-color: var(--cover-line-strong);
 }
 
 .site-nav {
@@ -192,8 +203,9 @@
   }
   .site-brand {
     /* Holds the wordmark on one line beside About and the language button. */
-    font-size: 15px;
-    padding: 5px 10px;
+    font-size: 16px;
+    gap: 7px;
+    padding: 0 2px;
     white-space: nowrap;
   }
   .site-nav-link {

@@ -325,7 +325,7 @@ The shared control primitive for every printable worksheet, holding the same pos
 Numeric input: 72px wide, 1px `border-dark`, 3px corners, centred 14px on paper. Focus drops the outline for a `control-ink` border plus a 3px `rgba(26,31,36,0.12)` halo. Checkboxes and sliders use `accent-color: var(--color-primary)`.
 
 ### Navigation
-Site header on `cover-deep` with a 2px `cover-line` bottom rule. The wordmark sits in a paper ruled label with an `edge-strong` keyline and a 22px stroked ruler icon — the one place paper shows through the chrome — and lifts 1px on hover. Nav links are ink Inter 600 13px on transparent, hovering to `cover-wash`. The language button is an outlined board control; its menu is a paper plate (172px min) with 44px rows, `paper-hover` on hover, and the current locale in `control-ink` 600.
+Site header on `cover-deep` with a 2px `cover-line` bottom rule. The wordmark is a masthead printed straight onto that stock — Archivo 800 at 19px, tracked −0.022em, beside a 22px stroked ruler icon — with no plate, no keyline and no hover lift. It is still a link home, so the wordmark (not the mark) carries a 2px underline in `cover-line-strong` on hover. Nav links are ink Inter 600 13px on transparent, hovering to `cover-wash`. The language button is an outlined board control; its menu is a paper plate (172px min) with 44px rows, `paper-hover` on hover, and the current locale in `control-ink` 600.
 
 ### Skip link
 Paper chip parked at `translateY(calc(-100% - 20px))`, top-left, 44px tall, z-index 100; slides to 0 on `:focus-visible` over 0.16s.
@@ -555,3 +555,26 @@ correspondingly stronger edge, or the page becomes one flat field.
 Verified: 195 tests, lint and build clean; 21 route × viewport combinations
 with **zero contrast failures** and no horizontal overflow; the 8 print
 configurations unchanged (ruled, 696px, one page each).
+
+## Revision — the brand stops being a button
+
+`.site-brand` was a paper plate: `--paper` ground, an `--edge-strong` keyline,
+`--shadow-sm`, and a 1px rise on hover. It sat immediately beside the outlined
+language switcher, so the two read as a pair of buttons — and on the lightened
+board the plate stood out more, not less. It also broke the cover/paper rule
+from the unusual direction: paper is reserved for where real paper is, and a
+wordmark is not a sheet.
+
+The wordmark is now a masthead on the cover stock. Archivo 800 at 19px
+(16px on phones), tracked −0.022em, ink, beside the drawn ruler mark. It is
+still a link home, so it owes an affordance — a 2px underline in
+`--cover-line-strong` at a 4px offset, on the wordmark only, since the mark
+beside it is not text. Focus keeps the marking-red ring.
+
+**The header now contains exactly one boxed element, and it is the one real
+control.** That is the test to apply to anything added there later.
+
+Verified: the wordmark, About and the switcher fit one line at 390px in every
+locale including German (`Über uns`) and Russian (`О сайте`) with no
+horizontal overflow; 21 route × viewport combinations still report zero
+contrast failures; 195 tests, lint and build clean.

@@ -525,7 +525,8 @@
    "refersTo": "brand-label",
    "description": "The top of the cover: the scored board tone, ruled off below, with the wordmark in the paper label a school book carries — the one place paper shows through the chrome.",
    "html": "<header class=\"ds-header\"><a class=\"ds-brand\" href=\"#\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z\" transform=\"rotate(45 12 12)\"/><path d=\"M7 12h3M7 9h2M7 15h2\"/></svg>Super Awesome Math</a><nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\">About</a><button class=\"ds-lang\">EN</button></nav></header>",
-   "css": ".ds-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 20px; background: #e5e2d9; border-bottom: 2px solid rgba(26,31,36,0.16); } .ds-brand { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 5px 14px; font-family: 'Archivo', 'Inter', sans-serif; font-size: 17px; font-weight: 800; letter-spacing: -0.015em; color: #1a1f24; background: #fdfcf8; text-decoration: none; border-radius: 2px; box-shadow: 0 0 0 1px rgba(26,31,36,0.34), 0 1px 2px rgba(16,47,77,0.12); transition: transform 0.15s ease, box-shadow 0.15s ease; } .ds-brand:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(26,31,36,0.34), 0 2px 4px rgba(16,47,77,0.10), 0 8px 18px -8px rgba(16,47,77,0.28); } .ds-nav { display: flex; align-items: center; gap: 6px; } .ds-nav-link { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; text-decoration: none; border-radius: 3px; transition: background 0.15s; } .ds-nav-link:hover { background: rgba(26,31,36,0.055); } .ds-lang { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; padding: 7px 12px; border: 1px solid rgba(26,31,36,0.16); background: transparent; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; border-radius: 3px; cursor: pointer; } .ds-lang:hover { background: rgba(26,31,36,0.055); border-color: rgba(26,31,36,0.34); }"
+   "css": ".ds-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 20px; background: #e5e2d9; border-bottom: 2px solid rgba(26,31,36,0.16); } .ds-brand { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 0 4px; font-family: 'Archivo', 'Inter', sans-serif; font-size: 19px; font-weight: 800; letter-spacing: -0.022em; color: #1a1f24; text-decoration: none; } .ds-brand span { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 4px; transition: text-decoration-color 0.15s ease; } .ds-brand:hover span { text-decoration-color: rgba(26,31,36,0.34); } .ds-nav { display: flex; align-items: center; gap: 6px; } .ds-nav-link { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 12px; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; text-decoration: none; border-radius: 3px; transition: background 0.15s; } .ds-nav-link:hover { background: rgba(26,31,36,0.055); } .ds-lang { display: inline-flex; align-items: center; gap: 5px; min-height: 44px; padding: 7px 12px; border: 1px solid rgba(26,31,36,0.16); background: transparent; font-family: 'Inter', -apple-system, sans-serif; font-size: 13px; font-weight: 600; color: #1a1f24; border-radius: 3px; cursor: pointer; } .ds-lang:hover { background: rgba(26,31,36,0.055); border-color: rgba(26,31,36,0.34); }",
+   "purpose": "The top of the cover: deeper stock, ruled off from the page below. The wordmark is a masthead printed straight onto that stock — cover face plus the drawn ruler mark, no plate. It was a paper plate with a keyline, lift and hover rise, which made it read as a sibling of the bordered language button; the only boxed thing in the header is the one real control."
   },
   {
    "name": "Resume Card",
@@ -627,6 +628,11 @@
     "name": "The Preview-On-Its-Ruling Rule",
     "body": "A catalog preview draws squared paper, so every mark in it is placed in the ruling’s coordinates — never in free pixels. Use cx/cy/ln/span in SheetThumb: a digit is centred in a cell at the sheet’s own 0.77 digit-to-square ratio, a rule falls on a grid line, a blank is ink inside a cell. A mark at an arbitrary offset breaks the only claim the preview makes.",
     "section": "components"
+   },
+   {
+    "name": "The Masthead Rule",
+    "body": "The wordmark is set on the cover stock, never on a paper plate. Paper is reserved for where real paper is, and a wordmark is not a sheet — giving it a keyline, a lift and a hover rise put it beside the language button and made the pair read as two buttons. Identity is carried by the cover face and the drawn ruler mark. It is still a link home, so it owes an affordance: a ruled underline on the wordmark only, in --cover-line-strong, never a colour shift or a lift.",
+    "section": "components"
    }
   ],
   "dos": [
@@ -659,7 +665,8 @@
    "Don't clip focus rings: no overflow: hidden on control containers.",
    "Don't force a paper size in @page. Orientation only; lay out to the Letter/A4 intersection.",
    "Don't rule a coloured band across the head of a card. The subject colour belongs in the shadow the sheet casts (color-mix on --card-color, declared after a neutral shadow), not in a strip between the card edge and its content.",
-   "Don't leave a cool hue on the paper. The ruling was slate-400 long after the palette went warm and read lavender on cream; screen and print ruling are neutral ink at the same blended lightness."
+   "Don't leave a cool hue on the paper. The ruling was slate-400 long after the palette went warm and read lavender on cream; screen and print ruling are neutral ink at the same blended lightness.",
+   "Don't put the brand on a paper plate, or give it a hover lift. In the header the only boxed element is the language switcher, because it is the only control."
   ],
   "contrast": [
    "ink on paper 16.17:1",
