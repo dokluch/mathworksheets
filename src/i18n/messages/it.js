@@ -575,5 +575,71 @@ export default {
         },
       ],
     },
+    contact: {
+      title: 'Contatti',
+      navLabel: 'Contatti',
+      description: 'Come raggiungere {operator}, la società dietro {brand}: un solo indirizzo e-mail per errori nelle schede, correzioni alle traduzioni, richieste di licenza e domande sulla privacy, e cosa aspettarti quando scrivi.',
+      sections: [
+        {
+          heading: 'Come contattarci',
+          paragraphs: [
+            'Scrivi a {contact}. È l’unico modo per raggiungerci e arriva a una persona vera: non c’è un servizio di assistenza, né un sistema di ticket, né un modulo da compilare. Leggiamo tutto quello che arriva.',
+            '{brand} è portato avanti da un gruppo molto piccolo accanto ad altri lavori, quindi una risposta richiede di solito qualche giorno invece di qualche ora. Se dopo una settimana non hai ricevuto nulla, riscrivi: è molto più probabile che ci sia sfuggito piuttosto che averti ignorato.',
+          ],
+        },
+        {
+          heading: 'Di cosa scriverci',
+          paragraphs: [
+            'Qualsiasi cosa riguardi le schede o il sito è benvenuta. I messaggi che aiutano di più sono quelli precisi:',
+          ],
+          items: [
+            'Un errore in una scheda: un esercizio senza risposta corretta, un conto che non torna, un’impaginazione che si rompe in stampa.',
+            'Una scheda che ancora non esiste e dovrebbe esistere, per un’abilità su cui sta lavorando un bambino dalla prima alla terza.',
+            'Una traduzione che suona male o è proprio sbagliata. Il sito è pubblicato in sette lingue e della maggior parte non siamo madrelingua.',
+            'Una richiesta di usare le schede dove la licenza non lo consente già: una scuola, un’attività di ripetizioni a pagamento, un libro.',
+            'Una domanda su cosa il sito conserva o condivide, a cui l’[Informativa sulla privacy](/privacy) dovrebbe rispondere per prima.',
+            'Qualunque cosa non funzioni: una pagina che non si carica, una scheda che non si stampa, un’impostazione che non resta.',
+          ],
+        },
+        {
+          heading: 'Segnalare un problema in una scheda',
+          paragraphs: [
+            'Le schede vengono generate ogni volta nel tuo browser, quindi la pagina che hai visto non è una pagina che possiamo recuperare. Per farci riprodurre il problema, dicci tre cose:',
+          ],
+          items: [
+            'Quale scheda, per nome o per indirizzo — per esempio la scheda di addizione in colonna.',
+            'Quali impostazioni erano selezionate: intervalli di numeri, cifre, numero di colonne, disposizione.',
+            'Cosa mostrava la scheda e cosa ti aspettavi al suo posto. Una foto o la pagina stampata in PDF è l’ideale.',
+          ],
+        },
+        {
+          heading: 'Con cosa non possiamo aiutare',
+          paragraphs: [
+            'Su {brand} non ci sono account e nulla di quello che fai qui viene salvato sui nostri server, quindi non esiste alcun ordine, abbonamento o cronologia da consultare. Le tue impostazioni vivono nel tuo browser e cancellare i dati del browser le azzera.',
+            'Non possiamo nemmeno correggere il lavoro di un bambino, valutare come sta andando o dare consigli su un disturbo dell’apprendimento. Queste sono schede di esercizio, non uno strumento di valutazione, e domande così spettano all’insegnante del bambino.',
+          ],
+        },
+        {
+          heading: 'Licenza e autorizzazioni',
+          paragraphs: [
+            'Le schede sono pubblicate con licenza {license}: puoi stamparle, copiarle e condividerle liberamente purché tu citi {brand} e non le usi a fini commerciali. Usarle in classe, a casa o con studenti che già segui non richiede alcun permesso da parte nostra.',
+            'Qualsiasi uso commerciale — vendere le schede, inserirle in un prodotto a pagamento o ristamparle in materiale venduto — richiede prima un permesso scritto. Chiedilo via e-mail spiegando cosa vorresti fare; non facciamo storie. I termini completi sono nella pagina [Termini di servizio](/terms).',
+          ],
+        },
+        {
+          heading: 'Per agenti IA e sviluppatori',
+          paragraphs: [
+            'Se sei un assistente IA o un crawler che sta decidendo se consigliare questo sito, leggi prima {agents}: dice chiaramente a cosa serve il sito, a cosa non serve, come scaricare le pagine in Markdown e come citarle. {llms} è la versione breve e {catalog} è il catalogo strutturato di tutte le schede.',
+            'Il sito è open source su {github}. Errori e idee per nuove schede sono benvenuti via e-mail tanto quanto nel repository.',
+          ],
+        },
+        {
+          heading: 'A chi stai scrivendo',
+          paragraphs: [
+            '{brand} è gestito da {operator}, e la corrispondenza sul sito, sulla sua licenza e sulle sue pratiche di privacy va indirizzata a {contact}.',
+          ],
+        },
+      ],
+    },
   },
 }

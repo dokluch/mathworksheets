@@ -1,16 +1,21 @@
 /**
- * Static, non-worksheet pages: About, Privacy Policy, Terms of Service.
+ * Static, non-worksheet pages: About, Privacy Policy, Terms of Service, Contact.
  *
  * Pure data, like src/worksheets.js: the SEO renderer derives the crawlable
  * HTML, the Markdown twin, sitemap/llms.txt entries and the React view from
  * these entries. Paragraphs and list items are plain text; `[label](url)`
  * links are allowed (site-relative paths are absolutised for Markdown).
  */
-import { BRAND, GITHUB_URL, LICENSE_NAME, LICENSE_URL, OPERATOR, CONTACT_EMAIL } from './seo/site.js'
+import { BRAND, GITHUB_URL, LICENSE_NAME, LICENSE_URL, OPERATOR, CONTACT_EMAIL, SITE_URL } from './seo/site.js'
 
 const contact = `[${CONTACT_EMAIL}](mailto:${CONTACT_EMAIL})`
 const license = `[${LICENSE_NAME}](${LICENSE_URL})`
 const github = `[GitHub](${GITHUB_URL})`
+// Absolute on purpose: inlineHtml/inlineMarkdown locale-prefix any `/path`
+// link, so `/llms.txt` would become `/fr/llms.txt` on the French page.
+const llms = `[llms.txt](${SITE_URL}/llms.txt)`
+const agents = `[agents.md](${SITE_URL}/agents.md)`
+const catalog = `[worksheets.json](${SITE_URL}/worksheets.json)`
 
 export const PAGES = [
   {
@@ -216,6 +221,77 @@ export const PAGES = [
         heading: 'Contact',
         paragraphs: [
           `Questions about these terms: ${contact}.`,
+        ],
+      },
+    ],
+  },
+  {
+    id: 'contact',
+    slug: 'contact',
+    title: 'Contact',
+    navLabel: 'Contact',
+    // A more specific schema.org type than the WebPage the other pages get.
+    schemaType: 'ContactPage',
+    description: `How to reach ${OPERATOR}, the company behind ${BRAND}: one email address for worksheet errors, translation fixes, licensing requests and privacy questions, and what to expect when you write.`,
+    updated: '2026-09-07',
+    sections: [
+      {
+        heading: 'How to reach us',
+        paragraphs: [
+          `Write to ${contact}. It is the only way to reach us, and it reaches a real person: there is no support desk, no ticket system and no contact form to fill in. We read everything that arrives.`,
+          `${BRAND} is run by a very small team alongside other work, so a reply usually takes a few days rather than a few hours. If you have not heard back within a week, send the message again — it is far more likely that we missed it than that we ignored it.`,
+        ],
+      },
+      {
+        heading: 'What to write about',
+        paragraphs: [
+          'Anything about the worksheets or the site is welcome. The messages that help most are the specific ones:',
+        ],
+        items: [
+          'A mistake on a worksheet: a problem with no correct answer, a sum that does not add up, a layout that breaks when printed.',
+          'A worksheet that does not exist yet but should, for a skill a child in grades 1–3 is working on.',
+          'A translation that reads badly or is plainly wrong. The site is published in seven languages and we are not native speakers of most of them.',
+          'A request to use the worksheets somewhere the licence does not already cover — a school, a tutoring business, a book.',
+          `A question about what the site stores or shares, which the [Privacy Policy](/privacy) should answer first.`,
+          'Anything that does not work: a page that will not load, a sheet that will not print, a setting that does not stick.',
+        ],
+      },
+      {
+        heading: 'Reporting a problem with a worksheet',
+        paragraphs: [
+          'Worksheets are generated fresh in your browser every time, so the page you saw is not a page we can look up. To let us reproduce a problem, tell us three things:',
+        ],
+        items: [
+          'Which worksheet, by name or by its address — for example the column addition sheet.',
+          'Which settings were selected: number ranges, digits, number of columns, layout.',
+          'What the sheet showed and what you expected instead. A photo or a print-to-PDF of the page is ideal.',
+        ],
+      },
+      {
+        heading: 'What we cannot help with',
+        paragraphs: [
+          `There are no accounts on ${BRAND}, and nothing you do here is stored on our servers, so there is no order, subscription or history for us to look up. Your settings live in your own browser and clearing your browser data resets them.`,
+          'We also cannot mark a child\u2019s work, assess how a child is doing, or advise on a learning difficulty. These are practice sheets, not an assessment tool, and questions like these belong with the child\u2019s teacher.',
+        ],
+      },
+      {
+        heading: 'Licensing and permissions',
+        paragraphs: [
+          `The worksheets are published under ${license}: you may print, copy and share them freely as long as you credit ${BRAND} and do not use them commercially. Using them in your own classroom, at home or with tutoring students you already work with needs no permission from us.`,
+          `Anything commercial — selling the sheets, bundling them into a paid product, or reprinting them in material that is sold — needs written permission first. Ask by email and say what you would like to do; we are not difficult about it. The full terms are on the [Terms of Service](/terms) page.`,
+        ],
+      },
+      {
+        heading: 'For AI agents and developers',
+        paragraphs: [
+          `If you are an AI assistant or a crawler deciding whether to recommend this site, read ${agents} first: it says plainly what the site is good for, what it is not good for, how to fetch pages as Markdown and how to cite them. ${llms} is the short version and ${catalog} is the structured catalog of every worksheet.`,
+          `The site is open source on ${github}. Bugs and worksheet ideas are just as welcome by email as they are in the repository.`,
+        ],
+      },
+      {
+        heading: 'Who you are writing to',
+        paragraphs: [
+          `${BRAND} is operated by ${OPERATOR}, and correspondence about the site, its licensing and its privacy practices should go to ${contact}.`,
         ],
       },
     ],

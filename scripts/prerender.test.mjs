@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { prerender } from './prerender.mjs'
 import { WORKSHEETS } from '../src/worksheets.js'
+import { PAGES } from '../src/pages.js'
 import { routes, worksheetRoute, pageTitle } from '../src/seo/render.js'
 import { BRAND } from '../src/seo/site.js'
 import { LOCALES } from '../src/i18n/index.js'
@@ -18,11 +19,11 @@ describe('scripts/prerender.mjs', () => {
     const logs = []
     const written = await prerender(dist, { now: new Date('2026-09-04T00:00:00Z'), log: m => logs.push(m) })
 
-    expect(written.length).toBe(2 * routes().length + 6)
+    expect(written.length).toBe(2 * routes().length + 7)
     expect(logs[0]).toContain(`wrote ${written.length} files`)
 
     const root = await readdir(dist)
-    for (const f of ['index.html', 'index.md', 'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', '404.html', 'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md']) {
+    for (const f of ['index.html', 'index.md', 'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', 'agents.md', '404.html', 'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md', 'contact.html', 'contact.md']) {
       expect(root).toContain(f)
     }
     const ws = await readdir(join(dist, 'worksheets'))
@@ -43,8 +44,8 @@ describe('scripts/prerender.mjs', () => {
     expect(privacy).toContain('<footer class="site-footer no-print">')
 
     // Every locale: <locale>.html/.md at the root, the rest under <locale>/
-    // Per locale: html + md for home, every worksheet and the 3 static pages, plus 6 shared files.
-    expect(written.length).toBe(2 * LOCALES.length * (WORKSHEETS.length + 1 + 3) + 6)
+    // Per locale: html + md for home, every worksheet and every static page, plus 7 shared files.
+    expect(written.length).toBe(2 * LOCALES.length * (WORKSHEETS.length + 1 + PAGES.length) + 7)
     for (const l of LOCALES.filter(x => x !== 'en')) {
       expect(root).toContain(`${l}.html`)
       expect(root).toContain(`${l}.md`)
@@ -54,7 +55,7 @@ describe('scripts/prerender.mjs', () => {
         expect(lws).toContain(`${w.slug}.md`)
       }
       const ldir = await readdir(join(dist, l))
-      for (const f of ['about.html', 'about.md', 'privacy.md', 'terms.html']) expect(ldir).toContain(f)
+      for (const f of ['about.html', 'about.md', 'privacy.md', 'terms.html', 'contact.html', 'contact.md']) expect(ldir).toContain(f)
     }
     const roundingWs = WORKSHEETS.find(w => w.id === 'rounding')
     const fr = await readFile(join(dist, 'fr', 'worksheets', 'rounding.html'), 'utf8')

@@ -19,6 +19,10 @@
       ]
     },
     {
+      "source": "/agents.md",
+      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
+    },
+    {
       "source": "/worksheets.json",
       "headers": [
         { "key": "Content-Type", "value": "application/json; charset=utf-8" },

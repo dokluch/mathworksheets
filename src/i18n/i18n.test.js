@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { WORKSHEETS } from '../worksheets.js'
 import { PAGES } from '../pages.js'
+import { CONTACT_EMAIL } from '../seo/site.js'
 import {
   LOCALES, LOCALE_META, DEFAULT_LOCALE, MESSAGES, t, lookup, interpolate,
   localizeWorksheet, localizedWorksheets, localizePage, localizedPages,
@@ -151,7 +152,7 @@ describe('message files', () => {
           const localized = localizePage(page, locale)
           const all = [localized.title, localized.description, ...localized.sections.flatMap(s => [s.heading, ...(s.paragraphs || []), ...(s.items || [])])]
           for (const text of all) expect(text, `${locale}:${page.id} leaves a placeholder`).not.toMatch(/\{\w+\}/)
-          expect(all.join(' ')).toContain('contact@')
+          expect(all.join(' ')).toContain(CONTACT_EMAIL)
         }
         const navLabels = localizedPages(locale).map(p => p.navLabel)
         expect(new Set(navLabels).size).toBe(navLabels.length)

@@ -15,9 +15,9 @@ export const TAGLINE = 'Printable Math Worksheets for Grades 1–3'
 export const DESCRIPTION =
   'Super Awesome Math: free, printable, randomized math worksheets for grades 1–3. Multiplication tables, addition and subtraction, column addition, long multiplication, long division, comparison, rounding, number patterns and an interactive equation explorer.'
 export const AUTHOR = { name: 'dokluch', url: 'https://github.com/dokluch' }
-/** Legal operator named on the About, Privacy and Terms pages. */
+/** Legal operator named on the About, Privacy, Terms and Contact pages. */
 export const OPERATOR = 'Superposition Labs Inc.'
-export const CONTACT_EMAIL = 'contact@superposition.to'
+export const CONTACT_EMAIL = 'hello@superawesomemath.com'
 export const GITHUB_URL = 'https://github.com/dokluch/mathworksheets'
 export const LICENSE_URL = 'https://creativecommons.org/licenses/by-nc/4.0/'
 export const LICENSE_NAME = 'CC BY-NC 4.0'

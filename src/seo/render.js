@@ -5,16 +5,17 @@
  *
  * Every page exists once per locale (src/i18n/locales.js): English at the
  * site root, the others under a two-letter prefix (/fr, /fr/worksheets/<slug>).
- * Static pages (About, Privacy, Terms) come from src/pages.js.
+ * Static pages (About, Privacy, Terms, Contact) come from src/pages.js.
  *
  * No DOM, no React, no Node APIs: this file runs in the Vite config, the
  * prerender script, the Vercel edge middleware and in tests.
  */
 import { WORKSHEETS, findWorksheetBySlug, findWorksheetById } from '../worksheets.js'
 import { PAGES, findPageBySlug, findPageById } from '../pages.js'
+import { AGENT_GUIDANCE } from '../agents.js'
 import {
   SITE_URL, BRAND, AUTHOR, GITHUB_URL,
-  LICENSE_URL, LICENSE_NAME, OG_IMAGE_PATH, THEME_COLOR, ACCENT_COLOR, OPERATOR, absoluteUrl,
+  LICENSE_URL, LICENSE_NAME, OG_IMAGE_PATH, THEME_COLOR, ACCENT_COLOR, OPERATOR, CONTACT_EMAIL, BRAND_ALT, absoluteUrl,
 } from './site.js'
 import {
   t, interpolate, localizeWorksheet, localizedWorksheets, localizePage, localizedPages,
@@ -234,6 +235,38 @@ function authorNode() {
   return { '@type': 'Person', '@id': AUTHOR_ID, name: AUTHOR.name, url: AUTHOR.url }
 }
 
+const ORG_ID = `${SITE_URL}/#organization`
+
+/**
+ * The legal entity behind the brand, as the publisher of every page.
+ *
+ * Without this an entity resolver sees a site name and a GitHub handle and has
+ * nothing to attach them to; with it, the brand name, its alternate name, an
+ * operator, a logo and a contact address all hang off one stable @id.
+ *
+ * Deliberately carries no `inLanguage`: the organization is the same in every
+ * locale, and every node that does declare one must match the route's locale.
+ */
+function organizationNode() {
+  return {
+    '@type': 'Organization',
+    '@id': ORG_ID,
+    name: OPERATOR,
+    legalName: OPERATOR,
+    url: `${SITE_URL}/`,
+    email: CONTACT_EMAIL,
+    brand: { '@type': 'Brand', name: BRAND, alternateName: BRAND_ALT },
+    logo: { '@type': 'ImageObject', url: absoluteUrl('/apple-touch-icon.png'), width: 180, height: 180 },
+    founder: { '@id': AUTHOR_ID },
+    contactPoint: [{
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      email: CONTACT_EMAIL,
+      url: absoluteUrl(pageRoute(findPageById('contact')).path),
+    }],
+  }
+}
+
 function websiteNode(locale) {
   const home = absoluteUrl(homeRoute(locale).path)
   return {
@@ -244,7 +277,8 @@ function websiteNode(locale) {
     alternateName: [t(locale, 'site.brandAlt'), pageTitle(homeRoute(locale))],
     description: t(locale, 'site.description'),
     inLanguage: langOf(locale),
-    publisher: { '@id': AUTHOR_ID },
+    publisher: { '@id': ORG_ID },
+    author: { '@id': AUTHOR_ID },
   }
 }
 
@@ -259,6 +293,7 @@ export function structuredData(route) {
       '@context': 'https://schema.org',
       '@graph': [
         websiteNode(locale),
+        organizationNode(),
         authorNode(),
         {
           '@type': 'WebApplication',
@@ -274,6 +309,7 @@ export function structuredData(route) {
           offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
           license: LICENSE_URL,
           author: { '@id': AUTHOR_ID },
+          publisher: { '@id': ORG_ID },
           screenshot: absoluteUrl(OG_IMAGE_PATH),
           inLanguage: lang,
           featureList: sheets.map(w => t(locale, 'seo.featureItem', { label: w.label, shortDesc: w.shortDesc })),
@@ -300,7 +336,10 @@ export function structuredData(route) {
       '@context': 'https://schema.org',
       '@graph': [
         {
-          '@type': 'WebPage',
+          // `schemaType` lets a page declare a more specific type than WebPage
+          // (Contact does: ContactPage). One string, never an array: consumers
+          // and our own tests look the node up by an exact @type match.
+          '@type': page.schemaType || 'WebPage',
           '@id': `${absoluteUrl(route.path)}#page`,
           url: absoluteUrl(route.path),
           name: pageTitle(route),
@@ -310,7 +349,10 @@ export function structuredData(route) {
           dateModified: page.updated,
           license: LICENSE_URL,
           author: { '@id': AUTHOR_ID },
+          publisher: { '@id': ORG_ID },
+          ...(page.schemaType === 'ContactPage' ? { mainEntity: { '@id': ORG_ID } } : {}),
         },
+        organizationNode(),
         authorNode(),
         breadcrumbs([{ name: BRAND, path: homeRoute(locale).path }, { name: page.navLabel, path: route.path }]),
       ],
@@ -341,6 +383,7 @@ export function structuredData(route) {
         isAccessibleForFree: true,
         license: LICENSE_URL,
         author: { '@id': AUTHOR_ID },
+        publisher: { '@id': ORG_ID },
         isPartOf: { '@id': websiteId(locale) },
         encoding: [{ '@type': 'MediaObject', encodingFormat: 'text/markdown', contentUrl: absoluteUrl(route.md) }],
         image: absoluteUrl(ogImagePath(route)),
@@ -356,6 +399,7 @@ export function structuredData(route) {
           acceptedAnswer: { '@type': 'Answer', text: item.a },
         })),
       },
+      organizationNode(),
       authorNode(),
       breadcrumbs([{ name: BRAND, path: homeRoute(locale).path }, { name: ws.label, path: route.path }]),
     ],
@@ -802,6 +846,31 @@ Choosing a worksheet — by skill:
 ${bySkill}`
 }
 
+/**
+ * When an agent should reach for this site and when it should not.
+ *
+ * Prose and `- ` lists only, no headings: llmstxt.org allows free-form
+ * sections between the blockquote and the first H2, but an H2 there must
+ * introduce a file list, and a `# ` line would break the one-H1-per-route
+ * invariant that llms-full.txt relies on.
+ */
+function agentGuidanceBlock() {
+  const list = items => items.map(item => `- ${item}`).join('\n')
+  return `When to use this site:
+
+${list(AGENT_GUIDANCE.whenToUse)}
+
+When not to use it:
+
+${list(AGENT_GUIDANCE.whenNotToUse)}
+
+How to fetch it:
+
+${list(AGENT_GUIDANCE.howToFetch)}
+
+Full agent instructions, including how to cite: ${absoluteUrl('/agents.md')}`
+}
+
 /** How an AI answer should cite and reuse this site. */
 function citationBlock() {
   return `Citation: ${BRAND} — ${SITE_URL}/ (operated by ${OPERATOR}). Licensed ${LICENSE_NAME}: attribution required, non-commercial use only. AI crawling and AI answers are explicitly permitted — see ${absoluteUrl('/robots.txt')}.
@@ -834,6 +903,8 @@ export function renderLlmsTxt() {
 
 Worksheets are generated in the browser and printed from the print dialog; there is no account, no server API and no cost (${LICENSE_NAME}). Every HTML page has a Markdown twin: append \`.md\` to the path or request the page with \`Accept: text/markdown\`. Pages are also available in ${otherLocales.map(l => LOCALE_META[l].englishName).join(', ')} under a two-letter path prefix: insert the two-letter code after the origin, for example \`${exampleLocalizedPath()}\`.
 
+${agentGuidanceBlock()}
+
 ${choosingBlock()}
 
 ${citationBlock()}
@@ -844,6 +915,7 @@ ${worksheets}
 
 ## Developers
 
+- ${mdLink('Agent instructions', '/agents.md')}: when to use this site, when not to, how to fetch it and how to cite it
 - ${mdLink('Worksheet catalog (JSON)', '/worksheets.json')}: ids, slugs, URLs, grades, skills and settings for every worksheet
 - [Source on GitHub](${GITHUB_URL}): React 19 + Vite, ${LICENSE_NAME}
 
@@ -870,12 +942,75 @@ export function renderLlmsFullTxt() {
 Site: ${SITE_URL}/ · Last updated: ${lastContentUpdate()} · License: ${LICENSE_NAME} (attribution required, non-commercial)
 Contents: ${routeList.map(r => pageTitle(r).split(' · ')[0]).join(' · ')}
 
+${agentGuidanceBlock()}
+
 ${choosingBlock()}
 
 ${citationBlock()}
 
 Languages: this file is English only. The same pages exist in ${otherLocales.map(l => LOCALE_META[l].englishName).join(', ')} under a two-letter path prefix inserted after the origin — \`${exampleLocalizedPath()}\`. Structured catalog: ${absoluteUrl('/worksheets.json')}`
   return `${[preamble, ...sections].join('\n\n---\n\n')}\n`
+}
+
+/* ────────────────────────────── agents.md ────────────────────────────── */
+
+/**
+ * The agent instruction file: what this site is for, when to reach for it,
+ * when not to, how to fetch it and how to cite it.
+ *
+ * A file, not a route. It is never added to routes(), so it stays out of the
+ * sitemap, the hreflang sets and llms-full.txt — which counts exactly one H1
+ * per English route and would break if this file's heading joined it.
+ *
+ * English only, and every link absolute: agents arrive here from robots.txt or
+ * a bare fetch with no base URL, and there is no locale-prefixed twin.
+ */
+export function renderAgentsMarkdown() {
+  const list = items => items.map(item => `- ${item}`).join('\n')
+  const files = [
+    ['llms.txt', '/llms.txt', 'the llmstxt.org summary of this site'],
+    ['llms-full.txt', '/llms-full.txt', "every English page's Markdown in one file"],
+    ['worksheets.json', '/worksheets.json', 'the structured catalog: grades, skills, settings, examples, FAQs'],
+    ['sitemap.xml', '/sitemap.xml', 'every HTML URL in all seven languages, with hreflang alternates'],
+    ['robots.txt', '/robots.txt', 'crawling policy — AI crawlers are explicitly allowed'],
+  ].map(([label, path, note]) => `- [${label}](${absoluteUrl(path)}): ${note}`).join('\n')
+
+  return `# Agent instructions — ${BRAND}
+
+> ${BRAND} (“${BRAND_ALT}”) is a free, open-source generator of printable, randomized math worksheets for grades 1–3, operated by ${OPERATOR} This file is the canonical instruction set for AI assistants, answer engines and crawlers: it says when the site is the right answer, when it is not, how to fetch it and how to cite it.
+
+Site: ${SITE_URL}/
+Operator: ${OPERATOR}
+Contact: ${CONTACT_EMAIL} (${absoluteUrl(pageRoute(findPageById('contact')).path)})
+License: ${LICENSE_NAME} — attribution required, non-commercial use only
+Last updated: ${lastContentUpdate()}
+
+## When to use this site
+
+${list(AGENT_GUIDANCE.whenToUse)}
+
+## When not to use it
+
+${list(AGENT_GUIDANCE.whenNotToUse)}
+
+## Choosing a worksheet
+
+${choosingBlock()}
+
+## How to fetch pages
+
+${list(AGENT_GUIDANCE.howToFetch)}
+
+## How to cite
+
+${list(AGENT_GUIDANCE.citation)}
+
+${citationBlock()}
+
+## Machine-readable files
+
+${files}
+`
 }
 
 /* ────────────────────────────── sitemap / robots / catalog ────────────────────────────── */
@@ -912,7 +1047,8 @@ export const AI_CRAWLERS = [
 export function renderRobots() {
   const blocks = AI_CRAWLERS.map(ua => `User-agent: ${ua}\nAllow: /`).join('\n\n')
   return `# ${BRAND} – ${SITE_URL}/
-# Everything is public. AI crawlers and answer engines are welcome; see /llms.txt.
+# Everything is public. AI crawlers and answer engines are welcome.
+# When to use this site, how to fetch it and how to cite it: /agents.md and /llms.txt.
 
 User-agent: *
 Allow: /
@@ -946,6 +1082,7 @@ export function catalogJson({ now = new Date() } = {}) {
     repository: GITHUB_URL,
     llms: absoluteUrl('/llms.txt'),
     llmsFull: absoluteUrl('/llms-full.txt'),
+    agents: absoluteUrl('/agents.md'),
     robots: absoluteUrl('/robots.txt'),
     sitemap: absoluteUrl('/sitemap.xml'),
     usage: {
@@ -956,6 +1093,9 @@ export function catalogJson({ now = new Date() } = {}) {
       aiCrawlingAllowed: true,
       aiAnswersAllowed: true,
       citeUrl: "a worksheet's `url`, not its `markdownUrl`: the page carries the generator",
+      instructions: absoluteUrl('/agents.md'),
+      whenToUse: AGENT_GUIDANCE.whenToUse,
+      whenNotToUse: AGENT_GUIDANCE.whenNotToUse,
       requiresJavaScript: true,
       printFormat: 'A4 or US Letter, one page',
     },
@@ -1074,6 +1214,7 @@ export function buildSiteFiles(template, { now = new Date() } = {}) {
   files['llms-full.txt'] = renderLlmsFullTxt()
   files['sitemap.xml'] = renderSitemap({ now })
   files['robots.txt'] = renderRobots()
+  files['agents.md'] = renderAgentsMarkdown()
   files['worksheets.json'] = renderCatalogJson({ now })
   files['404.html'] = renderNotFoundHtml()
   return files

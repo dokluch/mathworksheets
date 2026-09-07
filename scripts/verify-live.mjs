@@ -11,7 +11,7 @@ import { WORKSHEETS } from '../src/worksheets.js'
 import { PAGES } from '../src/pages.js'
 import { LOCALES, LOCALE_META } from '../src/i18n/index.js'
 import { worksheetRoute, pageTitle, escapeHtml } from '../src/seo/render.js'
-import { SITE_URL, BRAND } from '../src/seo/site.js'
+import { SITE_URL, BRAND, OPERATOR, CONTACT_EMAIL } from '../src/seo/site.js'
 
 const base = (process.argv[2] || process.env.SITE_URL || SITE_URL).replace(/\/+$/, '')
 // Brand-derived so a rename never silently skips these checks.
@@ -67,6 +67,21 @@ function headingsSequential(html) {
   return true
 }
 
+/** Every node across every JSON-LD block on the page. */
+function ldGraph(html) {
+  return [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+    .flatMap(m => {
+      try {
+        const parsed = JSON.parse(m[1].replace(/<\\\//g, '</'))
+        return parsed['@graph'] || [parsed]
+      } catch { return [] }
+    })
+}
+
+function hasType(nodes, type) {
+  return nodes.some(n => (Array.isArray(n['@type']) ? n['@type'] : [n['@type']]).includes(type))
+}
+
 async function main() {
   console.log(`Verifying ${base}\n`)
 
@@ -79,6 +94,14 @@ async function main() {
   record('GET / heading levels are sequential', headingsSequential(home.text))
   record('GET / has canonical + JSON-LD', /rel="canonical"/.test(home.text) && /application\/ld\+json/.test(home.text))
   record('GET / has the site footer linking every static page', /class="site-footer/.test(home.text) && PAGES.every(p => home.text.includes(`href="/${p.slug}"`)))
+  // The brand entity: without a named publisher an answer engine has nothing
+  // to attach "Super Awesome Math" to.
+  const homeGraph = ldGraph(home.text)
+  const homeOrg = homeGraph.find(n => n['@type'] === 'Organization')
+  record('GET / JSON-LD names the operator as publisher of the brand',
+    !!homeOrg && homeOrg.name === OPERATOR && homeOrg.brand?.name === BRAND && homeOrg.email === CONTACT_EMAIL
+      && homeGraph.find(n => n['@type'] === 'WebSite')?.publisher?.['@id'] === homeOrg['@id'],
+    homeOrg ? homeOrg['@id'] : 'no Organization node')
   record('GET / HTML has Vary: Accept', /accept/i.test(home.headers.get('vary') || ''), `Vary: ${home.headers.get('vary')}`)
   record('GET / HTML has Link rel=alternate markdown', /rel="alternate"/.test(home.headers.get('link') || ''), `Link: ${home.headers.get('link')}`)
   await checkOgImage('/', home.text)
@@ -119,6 +142,7 @@ async function main() {
     ]),
     ['/sitemap.xml', /<urlset/],
     ['/robots.txt', /Sitemap: /],
+    ['/agents.md', /^# Agent instructions/],
   ]) {
     const r = await get(path)
     record(`GET ${path} → 200 and looks right`, r.status === 200 && re.test(r.text.trimStart()), String(r.status))
@@ -133,7 +157,37 @@ async function main() {
     const r = await get(path)
     const ok = r.status === 200 && /Choosing a worksheet/.test(r.text) && /CC BY-NC 4.0/.test(r.text) && /carrying \/ regrouping/.test(r.text)
     record(`GET ${path} carries the grade/skill index and licence terms`, ok, String(r.status))
+    record(`GET ${path} tells an agent when to use the site and when not to`,
+      r.status === 200 && /When to use this site:/.test(r.text) && /When not to use it:/.test(r.text) && /agents\.md/.test(r.text),
+      String(r.status))
   }
+
+  // The dedicated agent-instruction file: the one an audit looks for by name.
+  const agents = await get('/agents.md')
+  record('GET /agents.md → 200 text/markdown with when-to-use guidance',
+    agents.status === 200
+      && /^text\/markdown/.test(agents.headers.get('content-type') || '')
+      && /^# Agent instructions/.test(agents.text.trimStart())
+      && /## When to use this site/.test(agents.text)
+      && /## When not to use it/.test(agents.text)
+      && /## How to cite/.test(agents.text)
+      && /CC BY-NC 4.0/.test(agents.text)
+      && agents.text.includes(CONTACT_EMAIL),
+    `${agents.status} ${agents.headers.get('content-type')}`)
+  // A file, not a route: the extensionless sibling must stay a 404.
+  const agentsRoute = await get('/agents')
+  record('GET /agents → 404 (agents.md is a file, not a page)', agentsRoute.status === 404, String(agentsRoute.status))
+
+  // Trust anchor: an agent checks /contact before recommending a site.
+  const contact = await get('/contact', { accept: 'text/html' })
+  const contactGraph = ldGraph(contact.text)
+  const contactOrg = contactGraph.find(n => n['@type'] === 'Organization')
+  record('GET /contact → 200 with >= 500 chars of text without JS',
+    contact.status === 200 && textLength(contact.text) >= 500, `${contact.status}, ${textLength(contact.text)} chars`)
+  record('GET /contact carries ContactPage + ContactPoint structured data',
+    hasType(contactGraph, 'ContactPage') && contactOrg?.contactPoint?.[0]?.email === CONTACT_EMAIL,
+    contactOrg ? contactOrg['@id'] : 'no Organization node')
+  record(`GET /contact publishes ${CONTACT_EMAIL}`, contact.text.includes(`mailto:${CONTACT_EMAIL}`))
 
   const cat = await get('/worksheets.json')
   let catOk = false
@@ -141,6 +195,10 @@ async function main() {
     const json = JSON.parse(cat.text)
     catOk = cat.status === 200 && json.worksheets.length === WORKSHEETS.length && json.locales.length === LOCALES.length
       && json.usage?.aiCrawlingAllowed === true && json.usage?.commercialUse === false
+      && /\/agents\.md$/.test(json.agents || '') && /\/agents\.md$/.test(json.usage?.instructions || '')
+      && Array.isArray(json.usage?.whenToUse) && json.usage.whenToUse.length > 0
+      && Array.isArray(json.usage?.whenNotToUse) && json.usage.whenNotToUse.length > 0
+      && typeof json.pages?.contact === 'string'
       && json.worksheets.every(w => Array.isArray(w.examples) && w.examples.length >= 3 && /^\d{4}-\d{2}-\d{2}$/.test(w.updated))
   } catch { catOk = false }
   record('GET /worksheets.json → valid catalog with locales', catOk, String(cat.status))

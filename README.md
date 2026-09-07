@@ -40,6 +40,7 @@ Optional environment (see `.env.example`): `VITE_GA_MEASUREMENT_ID` enables GA4 
 
 ## For developers and AI agents
 
+- [/agents.md](https://superawesomemath.com/agents.md) — when to use this site, when not to, how to fetch it and how to cite it
 - [/llms.txt](https://superawesomemath.com/llms.txt) and [/llms-full.txt](https://superawesomemath.com/llms-full.txt)
 - [/worksheets.json](https://superawesomemath.com/worksheets.json) — machine-readable catalog
 - Every page answers `Accept: text/markdown` with its Markdown twin (or append `.md`)

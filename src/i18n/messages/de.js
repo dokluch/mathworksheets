@@ -575,5 +575,71 @@ export default {
         },
       ],
     },
+    contact: {
+      title: 'Kontakt',
+      navLabel: 'Kontakt',
+      description: 'So erreichen Sie {operator}, das Unternehmen hinter {brand}: eine einzige E-Mail-Adresse für Fehler auf Arbeitsblättern, Korrekturen an Übersetzungen, Lizenzanfragen und Fragen zum Datenschutz — und was Sie erwartet, wenn Sie schreiben.',
+      sections: [
+        {
+          heading: 'So erreichen Sie uns',
+          paragraphs: [
+            'Schreiben Sie an {contact}. Das ist der einzige Weg zu uns, und er führt zu einem echten Menschen: Es gibt keinen Support-Schalter, kein Ticketsystem und kein Formular zum Ausfüllen. Wir lesen alles, was ankommt.',
+            '{brand} wird von einem sehr kleinen Team neben anderer Arbeit betrieben, deshalb dauert eine Antwort eher ein paar Tage als ein paar Stunden. Wenn Sie nach einer Woche nichts gehört haben, schreiben Sie noch einmal — viel wahrscheinlicher haben wir die Nachricht übersehen, als dass wir sie ignoriert hätten.',
+          ],
+        },
+        {
+          heading: 'Worüber Sie schreiben können',
+          paragraphs: [
+            'Alles rund um die Arbeitsblätter oder die Website ist willkommen. Am meisten helfen die konkreten Nachrichten:',
+          ],
+          items: [
+            'Ein Fehler auf einem Arbeitsblatt: eine Aufgabe ohne richtige Lösung, eine Rechnung, die nicht aufgeht, ein Layout, das beim Drucken zerfällt.',
+            'Ein Arbeitsblatt, das es noch nicht gibt und geben sollte, für eine Fertigkeit, an der ein Kind der Klassen 1 bis 3 gerade arbeitet.',
+            'Eine Übersetzung, die schief klingt oder schlicht falsch ist. Die Website erscheint in sieben Sprachen, und in den meisten sind wir keine Muttersprachler.',
+            'Eine Anfrage, die Arbeitsblätter dort einzusetzen, wo die Lizenz es nicht ohnehin erlaubt: an einer Schule, in einem bezahlten Nachhilfeangebot, in einem Buch.',
+            'Eine Frage dazu, was die Website speichert oder weitergibt — die [Datenschutzerklärung](/privacy) sollte sie zuerst beantworten.',
+            'Alles, was nicht funktioniert: eine Seite, die nicht lädt, ein Blatt, das sich nicht drucken lässt, eine Einstellung, die nicht bleibt.',
+          ],
+        },
+        {
+          heading: 'Ein Problem mit einem Arbeitsblatt melden',
+          paragraphs: [
+            'Arbeitsblätter werden bei jedem Aufruf neu in Ihrem Browser erzeugt. Die Seite, die Sie gesehen haben, ist also keine Seite, die wir nachschlagen können. Damit wir das Problem nachstellen können, nennen Sie uns drei Dinge:',
+          ],
+          items: [
+            'Welches Arbeitsblatt, mit Namen oder Adresse — zum Beispiel das Blatt zur schriftlichen Addition.',
+            'Welche Einstellungen gewählt waren: Zahlenräume, Stellen, Anzahl der Spalten, Layout.',
+            'Was das Blatt gezeigt hat und was Sie stattdessen erwartet haben. Ein Foto oder die als PDF gedruckte Seite ist ideal.',
+          ],
+        },
+        {
+          heading: 'Wobei wir nicht helfen können',
+          paragraphs: [
+            'Bei {brand} gibt es keine Konten, und nichts von dem, was Sie hier tun, wird auf unseren Servern gespeichert. Es gibt also keine Bestellung, kein Abonnement und keinen Verlauf, den wir nachschlagen könnten. Ihre Einstellungen liegen in Ihrem eigenen Browser, und das Löschen der Browserdaten setzt sie zurück.',
+            'Wir können auch die Arbeit eines Kindes nicht korrigieren, seinen Lernstand nicht beurteilen und nicht zu einer Lernschwierigkeit beraten. Das sind Übungsblätter, kein Diagnoseinstrument, und solche Fragen gehören zur Lehrkraft des Kindes.',
+          ],
+        },
+        {
+          heading: 'Lizenz und Genehmigungen',
+          paragraphs: [
+            'Die Arbeitsblätter erscheinen unter {license}: Sie dürfen sie frei drucken, kopieren und weitergeben, solange Sie {brand} nennen und sie nicht kommerziell nutzen. Für den Einsatz im eigenen Unterricht, zu Hause oder mit Nachhilfeschülern, die Sie ohnehin betreuen, brauchen Sie keine Erlaubnis von uns.',
+            'Alles Kommerzielle — die Blätter zu verkaufen, sie in ein kostenpflichtiges Produkt zu packen oder sie in verkauftem Material nachzudrucken — braucht vorher eine schriftliche Genehmigung. Fragen Sie per E-Mail und schreiben Sie, was Sie vorhaben; wir stellen uns nicht quer. Die vollständigen Bedingungen stehen auf der Seite [Nutzungsbedingungen](/terms).',
+          ],
+        },
+        {
+          heading: 'Für KI-Agenten und Entwickler',
+          paragraphs: [
+            'Wenn Sie ein KI-Assistent oder ein Crawler sind und entscheiden, ob Sie diese Website empfehlen: Lesen Sie zuerst {agents}. Dort steht ausdrücklich, wofür die Website taugt, wofür nicht, wie sich Seiten als Markdown abrufen lassen und wie sie zu zitieren sind. {llms} ist die Kurzfassung, {catalog} der strukturierte Katalog aller Arbeitsblätter.',
+            'Die Website ist quelloffen auf {github}. Fehler und Ideen für Arbeitsblätter sind per E-Mail genauso willkommen wie im Repository.',
+          ],
+        },
+        {
+          heading: 'An wen Sie schreiben',
+          paragraphs: [
+            '{brand} wird von {operator} betrieben. Schriftverkehr zur Website, zu ihrer Lizenz und zu ihren Datenschutzpraktiken richten Sie bitte an {contact}.',
+          ],
+        },
+      ],
+    },
   },
 }

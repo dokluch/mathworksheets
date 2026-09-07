@@ -7,7 +7,7 @@
  */
 import { WORKSHEETS } from '../worksheets.js'
 import { PAGES } from '../pages.js'
-import { BRAND, OPERATOR, CONTACT_EMAIL, GITHUB_URL, LICENSE_NAME, LICENSE_URL } from '../seo/site.js'
+import { BRAND, OPERATOR, CONTACT_EMAIL, GITHUB_URL, LICENSE_NAME, LICENSE_URL, SITE_URL } from '../seo/site.js'
 import { DEFAULT_LOCALE, LOCALE_META } from './locales.js'
 import en from './messages/en.js'
 import fr from './messages/fr.js'
@@ -96,6 +96,10 @@ export function localizedWorksheets(locale = DEFAULT_LOCALE) {
  * Placeholders available inside translated static-page text (src/pages.js
  * bakes the same values into the English source). Links use the `[label](url)`
  * syntax that render.js turns into HTML / Markdown.
+ *
+ * The machine-file links are absolute on purpose: inlineHtml/inlineMarkdown
+ * run localizePath() over any `[label](/path)`, so a root-relative `/llms.txt`
+ * would render as `/fr/llms.txt` on the French page and 404.
  */
 export const PAGE_PARAMS = {
   brand: BRAND,
@@ -103,10 +107,13 @@ export const PAGE_PARAMS = {
   contact: `[${CONTACT_EMAIL}](mailto:${CONTACT_EMAIL})`,
   license: `[${LICENSE_NAME}](${LICENSE_URL})`,
   github: `[GitHub](${GITHUB_URL})`,
+  llms: `[llms.txt](${SITE_URL}/llms.txt)`,
+  agents: `[agents.md](${SITE_URL}/agents.md)`,
+  catalog: `[worksheets.json](${SITE_URL}/worksheets.json)`,
 }
 
 /**
- * A static page (About, Privacy, Terms) with title, navLabel, description and
+ * A static page (About, Privacy, Terms, Contact) with title, navLabel, description and
  * sections translated. English returns the src/pages.js object itself;
  * id, slug and updated are never translated.
  */
