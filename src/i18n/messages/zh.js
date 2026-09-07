@@ -50,6 +50,7 @@ export default {
       formatInteractive: '互动，在屏幕上完成',
       formatPrintable: '可打印，每次加载随机生成',
       settings: '设置',
+      examples: '示例题目',
       howToUseWorksheet: '如何使用这份练习题',
       howToUseActivity: '如何使用这个活动',
       step1: '打开 {url}（需要 JavaScript）。',

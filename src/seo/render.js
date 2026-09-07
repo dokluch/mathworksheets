@@ -220,6 +220,17 @@ export function pageDescription(route) {
   })
 }
 
+const GRADE_AGES = { '1': '6-7', '2': '7-8', '3': '8-9' }
+
+/** schema.org typicalAgeRange for a grade band like "2" or "1–3". Derived, not translated. */
+export function agesForGrades(grades) {
+  const parts = String(grades).split(/[–-]/).map(g => g.trim())
+  const lo = GRADE_AGES[parts[0]]
+  const hi = GRADE_AGES[parts[parts.length - 1]]
+  if (!lo || !hi) return undefined
+  return `${lo.split('-')[0]}-${hi.split('-')[1]}`
+}
+
 export function gradeLevelText(ws, locale) {
   return t(locale, ws.grades.includes('–') ? 'seo.gradeRange' : 'seo.gradeOne', { grades: ws.grades })
 }
@@ -364,8 +375,11 @@ export function structuredData(route) {
         description: ws.longDesc,
         learningResourceType: t(locale, ws.interactive ? 'seo.learningResourceInteractive' : 'seo.learningResourceWorksheet'),
         educationalLevel: gradeLevelText(ws, locale),
+        typicalAgeRange: agesForGrades(ws.grades),
         teaches: ws.skills,
+        educationalAlignment: ws.skills.map(skill => ({ '@type': 'AlignmentObject', alignmentType: 'teaches', targetName: skill })),
         educationalUse: 'practice',
+        dateModified: ws.updated,
         audience: { '@type': 'EducationalAudience', educationalRole: 'student' },
         inLanguage: lang,
         isAccessibleForFree: true,
@@ -560,6 +574,7 @@ export function worksheetDetailsHtml(route) {
   const ws = route.worksheet
   const others = localizedWorksheets(locale).filter(w => w.id !== ws.id)
   const settings = ws.settings.map(s => `<li>${escapeHtml(s)}</li>`).join('\n        ')
+  const examples = ws.examples.map(e => `<li>${escapeHtml(e)}</li>`).join('\n        ')
   const related = others.map(w => `<li><a href="${worksheetRoute(w, locale).path}">${escapeHtml(w.label)}</a> – ${escapeHtml(w.shortDesc)}</li>`).join('\n        ')
   return `<section class="static-intro">
         <p>${escapeHtml(ws.longDesc)}</p>
@@ -568,6 +583,10 @@ export function worksheetDetailsHtml(route) {
       <h2>${h('static.worksheet.settings')}</h2>
       <ul>
         ${settings}
+      </ul>
+      <h2>${h('static.worksheet.examples')}</h2>
+      <ul class="worksheet-examples">
+        ${examples}
       </ul>
       <h2>${h(ws.interactive ? 'static.worksheet.howToUseActivity' : 'static.worksheet.howToUseWorksheet')}</h2>
       <ol>
@@ -753,6 +772,7 @@ export function renderWorksheetMarkdown(route) {
   const m = (key, params) => text(locale, key, params)
   const ws = route.worksheet
   const settings = ws.settings.map(s => `- ${s}`).join('\n')
+  const examples = ws.examples.map(e => `- ${e}`).join('\n')
   const others = localizedWorksheets(locale).filter(w => w.id !== ws.id)
     .map(w => `- ${mdLink(w.label, worksheetRoute(w, locale).md)}: ${w.shortDesc}`)
     .join('\n')
@@ -765,10 +785,15 @@ ${ws.longDesc}
 **${m('static.worksheet.skills')}:** ${ws.skills.join(', ')}.
 **${m('static.worksheet.format')}:** ${m(ws.interactive ? 'static.worksheet.formatInteractive' : 'static.worksheet.formatPrintable')}.
 **${m('static.worksheet.url')}:** ${absoluteUrl(route.path)}
+**${gradeLevelText(ws, locale)}** · ${m('md.lastUpdated')}: ${ws.updated}
 
 ## ${m('static.worksheet.settings')}
 
 ${settings}
+
+## ${m('static.worksheet.examples')}
+
+${examples}
 
 ## ${m('md.howToUse')}
 
@@ -909,13 +934,14 @@ export function renderSitemap({ now = new Date() } = {}) {
   const lastmod = now.toISOString().slice(0, 10)
   const urls = routes().map(r => {
     const priority = r.kind === 'home' ? '1.0' : r.kind === 'worksheet' ? '0.8' : r.kind === 'page' ? '0.3' : '0.5'
+    const modified = r.worksheet?.updated || r.page?.updated || lastmod
     const alternates = [
       ...LOCALES.map(l => `    <xhtml:link rel="alternate" hreflang="${LOCALE_META[l].hreflang}" href="${escapeHtml(absoluteUrl(sameRouteIn(r, l).path))}" />`),
       `    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeHtml(absoluteUrl(sameRouteIn(r, DEFAULT_LOCALE).path))}" />`,
     ].join('\n')
     return `  <url>
     <loc>${escapeHtml(absoluteUrl(r.path))}</loc>
-    <lastmod>${lastmod}</lastmod>
+    <lastmod>${modified}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>${priority}</priority>
 ${alternates}
@@ -947,18 +973,43 @@ Sitemap: ${absoluteUrl('/sitemap.xml')}
 `
 }
 
+function catalogRef(id) {
+  const w = findWorksheetById(id)
+  return { id: w.id, label: w.label, url: absoluteUrl(worksheetRoute(w).path) }
+}
+
+/** Newest content date across the catalog and the static pages. */
+export function lastContentUpdate() {
+  return [...WORKSHEETS.map(w => w.updated), ...PAGES.map(p => p.updated)].sort().pop()
+}
+
 export function catalogJson({ now = new Date() } = {}) {
   return {
+    schemaVersion: 1,
     name: BRAND,
     alternateName: t(DEFAULT_LOCALE, 'site.brandAlt'),
     description: t(DEFAULT_LOCALE, 'site.description'),
     url: `${SITE_URL}/`,
     generatedAt: now.toISOString(),
+    lastUpdated: lastContentUpdate(),
     license: { name: LICENSE_NAME, url: LICENSE_URL },
     repository: GITHUB_URL,
     llms: absoluteUrl('/llms.txt'),
+    llmsFull: absoluteUrl('/llms-full.txt'),
+    robots: absoluteUrl('/robots.txt'),
     sitemap: absoluteUrl('/sitemap.xml'),
     developers: absoluteUrl('/developers'),
+    usage: {
+      license: { name: LICENSE_NAME, url: LICENSE_URL },
+      attribution: `${BRAND} — ${SITE_URL}/`,
+      operator: OPERATOR,
+      commercialUse: false,
+      aiCrawlingAllowed: true,
+      aiAnswersAllowed: true,
+      citeUrl: "a worksheet's `url`, not its `markdownUrl`: the page carries the generator",
+      requiresJavaScript: true,
+      printFormat: 'A4 or US Letter, one page',
+    },
     pages: Object.fromEntries(PAGES.map(p => [p.id, absoluteUrl(pageRoute(p).path)])),
     locales: LOCALES.map(l => ({ code: l, lang: LOCALE_META[l].lang, name: LOCALE_META[l].englishName, url: absoluteUrl(homeRoute(l).path) })),
     worksheets: WORKSHEETS.map(w => {
@@ -973,8 +1024,13 @@ export function catalogJson({ now = new Date() } = {}) {
         description: w.shortDesc,
         longDescription: w.longDesc,
         grades: w.grades,
+        typicalAgeRange: agesForGrades(w.grades),
         skills: w.skills,
         settings: w.settings,
+        examples: w.examples,
+        prerequisites: w.prerequisites.map(id => catalogRef(id)),
+        nextSteps: w.nextSteps.map(id => catalogRef(id)),
+        updated: w.updated,
         printable: !w.interactive,
         interactive: w.interactive,
       }

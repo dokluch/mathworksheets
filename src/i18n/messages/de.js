@@ -50,6 +50,7 @@ export default {
       formatInteractive: 'interaktiv, am Bildschirm',
       formatPrintable: 'zum Ausdrucken, bei jedem Laden neu gemischt',
       settings: 'Einstellungen',
+      examples: 'Beispielaufgaben',
       howToUseWorksheet: 'So verwendest du dieses Arbeitsblatt',
       howToUseActivity: 'So verwendest du diese Übung',
       step1: 'Öffne {url} (JavaScript erforderlich).',

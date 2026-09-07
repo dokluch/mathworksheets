@@ -120,6 +120,10 @@ describe('message files', () => {
           expect(w.longDesc.length).toBeGreaterThan(locale === 'zh' ? 40 : 80)
           expect(w.skills.length, `${locale}:${ws.id}.skills`).toBe(ws.skills.length)
           expect(w.settings.length, `${locale}:${ws.id}.settings`).toBe(ws.settings.length)
+          // Example problems are mathematical notation and are shared verbatim
+          // across locales; translating them would be a bug, not an omission.
+          expect(w.examples, `${locale}:${ws.id}.examples`).toBeUndefined()
+          expect(localizeWorksheet(ws, locale).examples).toEqual(ws.examples)
         }
         const labels = localizedWorksheets(locale).map(w => w.label)
         expect(new Set(labels).size).toBe(labels.length)

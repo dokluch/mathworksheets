@@ -9,7 +9,7 @@ import {
   ogImagePath, inlineHtml, inlineMarkdown,
   renderMarkdown, renderLlmsTxt, renderLlmsFullTxt, renderSitemap, renderRobots,
   renderCatalogJson, renderNotFoundMarkdown, renderNotFoundHtml, buildSiteFiles,
-  worksheetDetailsHtml,
+  worksheetDetailsHtml, agesForGrades, lastContentUpdate,
 } from './render.js'
 
 const TEMPLATE = `<!doctype html><html><head><meta charset="UTF-8" />
@@ -52,9 +52,43 @@ describe('catalog invariants', () => {
       expect(ws.skills.length).toBeGreaterThan(0)
       expect(ws.settings.length).toBeGreaterThan(0)
       expect(ws.color).toMatch(/^#[0-9a-f]{6}$/)
+      expect(ws.examples.length).toBeGreaterThanOrEqual(3)
+      expect(ws.updated).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+      expect(ws.updated <= new Date().toISOString().slice(0, 10)).toBe(true)
     }
     const slugs = new Set(WORKSHEETS.map(w => w.slug))
     expect(slugs.size).toBe(WORKSHEETS.length)
+  })
+
+  it('examples are mathematical notation only, so they need no translation', () => {
+    // The moment someone writes "Add 348 and 275" here it becomes an English
+    // string rendered on all seven locales' pages. This is the guard.
+    for (const ws of WORKSHEETS) {
+      for (const example of ws.examples) {
+        expect(example).toMatch(/^[0-9x\s+\-−×÷=<>?□→.,()]+$/)
+      }
+    }
+  })
+
+  it('prerequisites and next steps reference real, other worksheets', () => {
+    for (const ws of WORKSHEETS) {
+      for (const id of [...ws.prerequisites, ...ws.nextSteps]) {
+        expect(id).not.toBe(ws.id)
+        expect(WORKSHEETS.some(w => w.id === id)).toBe(true)
+      }
+    }
+  })
+
+  it('lastContentUpdate is the newest date across worksheets and pages', () => {
+    const all = [...WORKSHEETS.map(w => w.updated), ...PAGES.map(p => p.updated)]
+    expect(lastContentUpdate()).toBe(all.sort().pop())
+    expect(lastContentUpdate()).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+  })
+
+  it('agesForGrades derives an age band from every grade value', () => {
+    expect(agesForGrades('2')).toBe('7-8')
+    expect(agesForGrades('1–3')).toBe('6-9')
+    for (const ws of WORKSHEETS) expect(agesForGrades(ws.grades)).toMatch(/^\d-\d$/)
   })
 })
 
@@ -207,6 +241,20 @@ describe('renderStaticContent', () => {
       expect(details).toContain(`href="/worksheets/${other.slug}"`)
     }
     expect(details).toContain('href="/llms.txt"')
+  })
+
+  it('example problems reach the HTML and the Markdown twin in every locale', () => {
+    for (const locale of LOCALES) {
+      for (const ws of WORKSHEETS) {
+        const route = worksheetRoute(ws, locale)
+        const html = renderStaticContent(route)
+        const md = renderMarkdown(route)
+        for (const example of ws.examples) {
+          expect(textOf(html)).toContain(example)
+          expect(md).toContain(example)
+        }
+      }
+    }
   })
 
   it('worksheetDetailsHtml escapes worksheet copy', () => {

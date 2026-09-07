@@ -50,6 +50,7 @@ export default {
       formatInteractive: 'интерактивный, на экране',
       formatPrintable: 'для печати, новые задания при каждой загрузке',
       settings: 'Настройки',
+      examples: 'Примеры заданий',
       howToUseWorksheet: 'Как пользоваться этим листом',
       howToUseActivity: 'Как пользоваться этим упражнением',
       step1: 'Откройте {url} (нужен JavaScript).',

@@ -50,6 +50,7 @@ export default {
       formatInteractive: 'interactivo, en pantalla',
       formatPrintable: 'imprimible, aleatorio en cada carga',
       settings: 'Ajustes',
+      examples: 'Ejemplos de ejercicios',
       howToUseWorksheet: 'Cómo usar esta ficha',
       howToUseActivity: 'Cómo usar esta actividad',
       step1: 'Abre {url} (requiere JavaScript).',

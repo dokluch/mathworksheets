@@ -59,6 +59,7 @@ export default {
       formatInteractive: 'interactive, on screen',
       formatPrintable: 'printable, randomized on every load',
       settings: 'Settings',
+      examples: 'Example problems',
       howToUseWorksheet: 'How to use this worksheet',
       howToUseActivity: 'How to use this activity',
       step1: 'Open {url} (JavaScript required).',
