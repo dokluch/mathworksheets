@@ -113,7 +113,7 @@ export const PAGE_PARAMS = {
 }
 
 /**
- * A static page (About, Privacy, Terms, Contact) with title, navLabel, description and
+ * A static page (About, Privacy, Terms) with title, navLabel, description and
  * sections translated. English returns the src/pages.js object itself;
  * id, slug and updated are never translated.
  */

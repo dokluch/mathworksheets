@@ -22,7 +22,7 @@ describe('matcher', () => {
   const re = new RegExp(`^${MATCHER}$`)
   it('runs for extensionless page paths only', () => {
     expect(config.matcher).toEqual([MATCHER])
-    for (const p of ['/', '/contact', '/fr/contact', '/worksheets/rounding', '/nope', '/a/b/c']) expect(re.test(p)).toBe(true)
+    for (const p of ['/', '/about', '/fr/about', '/worksheets/rounding', '/nope', '/a/b/c']) expect(re.test(p)).toBe(true)
     // agents.md is a static file: it must never reach the negotiator.
     for (const p of ['/assets/index-abc.js', '/llms.txt', '/index.md', '/worksheets/rounding.md', '/agents.md', '/sitemap.xml', '/favicon.svg', '/worksheets.json']) {
       expect(re.test(p)).toBe(false)

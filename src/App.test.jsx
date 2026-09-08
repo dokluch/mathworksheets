@@ -124,11 +124,11 @@ describe('App', () => {
     expect(stamp.textContent).toContain(t('fr', 'common.printFooterTagline'))
   })
 
-  it('shows a footer with About, Privacy, Terms and Contact links that is never printed', () => {
+  it('shows a footer with About, Privacy and Terms links that is never printed', () => {
     render(<App />)
     const footer = screen.getByRole('contentinfo')
     expect(footer.className).toContain('no-print')
-    for (const [name, href] of [['About', '/about'], ['Privacy', '/privacy'], ['Terms', '/terms'], ['Contact', '/contact']]) {
+    for (const [name, href] of [['About', '/about'], ['Privacy', '/privacy'], ['Terms', '/terms']]) {
       expect(within(footer).getByRole('link', { name }).getAttribute('href')).toBe(href)
     }
     // The repository is going private, so the footer no longer links it.
@@ -147,19 +147,6 @@ describe('App', () => {
     expect(screen.getByRole('main').className).toContain('static-page')
     expect(JSON.parse(localStorage.getItem('mathsheets')).app.activeTab).toBe('patterns')
     expect(window.scrollTo).toHaveBeenCalled()
-  })
-
-  it('opens the contact page from the footer with the address and the external agent links intact', () => {
-    render(<App />)
-    fireEvent.click(within(screen.getByRole('contentinfo')).getByRole('link', { name: 'Contact' }))
-    expect(window.location.pathname).toBe('/contact')
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Contact')
-    const main = screen.getByRole('main')
-    expect(main.className).toContain('static-page')
-    expect(main.querySelector(`a[href="mailto:${CONTACT_EMAIL}"]`)).toBeTruthy()
-    // Machine-file links are absolute so they survive the locale prefix.
-    expect(main.querySelector(`a[href="${SITE_URL}/agents.md"]`)).toBeTruthy()
-    expect(main.querySelector('a[href="/agents.md"]')).toBeNull()
   })
 
   it('opens the static page named in the URL and routes its internal links in-app', () => {

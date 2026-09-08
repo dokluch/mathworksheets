@@ -78,10 +78,6 @@ function ldGraph(html) {
     })
 }
 
-function hasType(nodes, type) {
-  return nodes.some(n => (Array.isArray(n['@type']) ? n['@type'] : [n['@type']]).includes(type))
-}
-
 async function main() {
   console.log(`Verifying ${base}\n`)
 
@@ -178,17 +174,6 @@ async function main() {
   const agentsRoute = await get('/agents')
   record('GET /agents → 404 (agents.md is a file, not a page)', agentsRoute.status === 404, String(agentsRoute.status))
 
-  // Trust anchor: an agent checks /contact before recommending a site.
-  const contact = await get('/contact', { accept: 'text/html' })
-  const contactGraph = ldGraph(contact.text)
-  const contactOrg = contactGraph.find(n => n['@type'] === 'Organization')
-  record('GET /contact → 200 with >= 500 chars of text without JS',
-    contact.status === 200 && textLength(contact.text) >= 500, `${contact.status}, ${textLength(contact.text)} chars`)
-  record('GET /contact carries ContactPage + ContactPoint structured data',
-    hasType(contactGraph, 'ContactPage') && contactOrg?.contactPoint?.[0]?.email === CONTACT_EMAIL,
-    contactOrg ? contactOrg['@id'] : 'no Organization node')
-  record(`GET /contact publishes ${CONTACT_EMAIL}`, contact.text.includes(`mailto:${CONTACT_EMAIL}`))
-
   const cat = await get('/worksheets.json')
   let catOk = false
   try {
@@ -198,7 +183,7 @@ async function main() {
       && /\/agents\.md$/.test(json.agents || '') && /\/agents\.md$/.test(json.usage?.instructions || '')
       && Array.isArray(json.usage?.whenToUse) && json.usage.whenToUse.length > 0
       && Array.isArray(json.usage?.whenNotToUse) && json.usage.whenNotToUse.length > 0
-      && typeof json.pages?.contact === 'string'
+      && typeof json.pages?.about === 'string'
       && json.worksheets.every(w => Array.isArray(w.examples) && w.examples.length >= 3 && /^\d{4}-\d{2}-\d{2}$/.test(w.updated))
   } catch { catOk = false }
   record('GET /worksheets.json → valid catalog with locales', catOk, String(cat.status))

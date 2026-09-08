@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { WORKSHEETS } from '../worksheets.js'
-import { PAGES, findPageById } from '../pages.js'
+import { PAGES } from '../pages.js'
 import { AGENT_GUIDANCE } from '../agents.js'
 import { SITE_URL, BRAND, BRAND_ALT, OPERATOR, CONTACT_EMAIL, OG_IMAGE_PATH, GITHUB_URL, LICENSE_NAME } from './site.js'
 import { LOCALES, LOCALE_META, localizeWorksheet, localizePage } from '../i18n/index.js'
@@ -105,7 +105,7 @@ describe('routes', () => {
     expect(routes().length).toBe(LOCALES.length * r.length)
     expect(routes().slice(0, r.length).map(x => x.path)).toEqual(r.map(x => x.path))
     expect(r[0].path).toBe('/')
-    expect(r.slice(-PAGES.length).map(x => x.path)).toEqual(['/about', '/privacy', '/terms', '/contact'])
+    expect(r.slice(-PAGES.length).map(x => x.path)).toEqual(['/about', '/privacy', '/terms'])
     expect(r.map(x => x.md)).toContain('/worksheets/multiplication.md')
     expect(r.map(x => x.md)).toContain('/privacy.md')
     expect(new Set(r.map(x => x.path)).size).toBe(r.length)
@@ -182,7 +182,7 @@ describe('renderHead', () => {
       expect(ogImagePath(route)).toBe(OG_IMAGE_PATH)
       expect(head).toContain(`<meta property="og:image" content="${SITE_URL}${OG_IMAGE_PATH}" />`)
       const sd = structuredData(route)
-      const wp = sd['@graph'].find(n => n['@type'] === (page.schemaType || 'WebPage'))
+      const wp = sd['@graph'].find(n => n['@type'] === 'WebPage')
       expect(wp.dateModified).toBe(page.updated)
       expect(wp.url).toBe(`${SITE_URL}/${page.slug}`)
       const bc = sd['@graph'].find(n => n['@type'] === 'BreadcrumbList')
@@ -330,7 +330,7 @@ describe('renderStaticContent', () => {
       expect(html).toContain(OPERATOR)
       expect(html).toContain('creativecommons.org/licenses/by-nc/4.0/')
     }
-    expect(siteFooterLinks().map(l => l.label)).toEqual(['About', 'Privacy', 'Terms', 'Contact'])
+    expect(siteFooterLinks().map(l => l.label)).toEqual(['About', 'Privacy', 'Terms'])
     expect(footerHtml({ year: 2030 })).toContain('© 2030 ')
     expect(headingLevels(footerHtml())).toEqual([])
   })
@@ -533,7 +533,7 @@ describe('sitemap / robots / catalog', () => {
       interactive: false,
     })
     expect(json.worksheets.find(w => w.id === 'eqexplore').printable).toBe(false)
-    expect(json.pages).toEqual({ about: `${SITE_URL}/about`, privacy: `${SITE_URL}/privacy`, terms: `${SITE_URL}/terms`, contact: `${SITE_URL}/contact` })
+    expect(json.pages).toEqual({ about: `${SITE_URL}/about`, privacy: `${SITE_URL}/privacy`, terms: `${SITE_URL}/terms` })
   })
 })
 
@@ -747,19 +747,6 @@ describe('brand entity', () => {
     }
   })
 
-  it('gives /contact a ContactPage with a contact point an agent can read', () => {
-    const route = pageRoute(findPageById('contact'))
-    const graph = structuredData(route)['@graph']
-    const page = graph.find(n => n['@type'] === 'ContactPage')
-    expect(page.url).toBe(`${SITE_URL}/contact`)
-    expect(page.mainEntity['@id']).toBe(`${SITE_URL}/#organization`)
-    expect(graph.find(n => n['@type'] === 'WebPage')).toBeUndefined()
-    const point = orgOf(route).contactPoint[0]
-    expect(point).toMatchObject({ '@type': 'ContactPoint', email: CONTACT_EMAIL, url: `${SITE_URL}/contact` })
-    // The other pages stay plain WebPages.
-    expect(structuredData(pageRoute(PAGES[0]))['@graph'].find(n => n['@type'] === 'WebPage')).toBeTruthy()
-  })
-
   it('publishes the contact address on the brand domain', () => {
     expect(CONTACT_EMAIL.split('@')[1]).toBe(new URL(SITE_URL).hostname)
   })
@@ -811,7 +798,6 @@ describe('agent guidance', () => {
     expect(txt).toContain(OPERATOR)
     expect(txt).toContain(LICENSE_NAME)
     expect(txt).toContain(CONTACT_EMAIL)
-    expect(txt).toContain(`${SITE_URL}/contact`)
     expect(txt).toContain(lastContentUpdate())
     for (const file of ['/llms.txt', '/llms-full.txt', '/worksheets.json', '/sitemap.xml', '/robots.txt']) {
       expect(txt, file).toContain(`](${SITE_URL}${file})`)
@@ -836,41 +822,7 @@ describe('agent guidance', () => {
     expect(json.usage.whenNotToUse).toEqual(AGENT_GUIDANCE.whenNotToUse)
     expect(json.usage.whenToUse.length).toBeGreaterThan(0)
     expect(json.usage.whenNotToUse.length).toBeGreaterThan(0)
-    expect(json.pages.contact).toBe(`${SITE_URL}/contact`)
-  })
-})
-
-describe('contact page', () => {
-  const page = findPageById('contact')
-
-  it('is a trust anchor: reachable, substantial, and carries the address and the operator', () => {
-    expect(findRoute('/contact').page.id).toBe('contact')
-    const html = renderStaticContent(pageRoute(page))
-    const text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
-    expect(text.length).toBeGreaterThanOrEqual(500)
-    expect(html).toContain(`href="mailto:${CONTACT_EMAIL}"`)
-    expect(html).toContain(OPERATOR)
-    expect(html).toContain('href="/privacy"')
-    expect(html).toContain('href="/terms"')
-  })
-
-  it('links the machine-readable files absolutely, so the localized pages do not 404', () => {
-    for (const locale of LOCALES) {
-      const html = renderStaticContent(pageRoute(localizePage(page, locale), locale))
-      expect(html, locale).toContain(`href="${SITE_URL}/agents.md"`)
-      expect(html, locale).toContain(`href="${SITE_URL}/llms.txt"`)
-      expect(html, locale).not.toContain(`href="/${locale}/agents.md"`)
-      expect(html, locale).not.toContain('href="/agents.md"')
-    }
-  })
-
-  it('exists in every locale, in the footer and in the markdown twin', () => {
-    for (const locale of LOCALES) {
-      const route = pageRoute(localizePage(page, locale), locale)
-      expect(route.path).toBe(locale === 'en' ? '/contact' : `/${locale}/contact`)
-      expect(renderMarkdown(route)).toContain(`mailto:${CONTACT_EMAIL}`)
-      expect(siteFooterLinks(locale).map(l => l.path)).toContain(route.path)
-    }
+    expect(json.pages.about).toBe(`${SITE_URL}/about`)
   })
 })
 
@@ -881,7 +833,6 @@ describe('buildSiteFiles', () => {
     expect(names).toEqual(expect.arrayContaining([
       'index.html', 'index.md',
       'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md',
-      'contact.html', 'contact.md',
       'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', 'agents.md', '404.html',
       ...WORKSHEETS.flatMap(w => [`worksheets/${w.slug}.html`, `worksheets/${w.slug}.md`]),
     ]))

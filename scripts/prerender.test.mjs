@@ -23,7 +23,7 @@ describe('scripts/prerender.mjs', () => {
     expect(logs[0]).toContain(`wrote ${written.length} files`)
 
     const root = await readdir(dist)
-    for (const f of ['index.html', 'index.md', 'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', 'agents.md', '404.html', 'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md', 'contact.html', 'contact.md']) {
+    for (const f of ['index.html', 'index.md', 'llms.txt', 'llms-full.txt', 'sitemap.xml', 'robots.txt', 'worksheets.json', 'agents.md', '404.html', 'about.html', 'about.md', 'privacy.html', 'privacy.md', 'terms.html', 'terms.md']) {
       expect(root).toContain(f)
     }
     const ws = await readdir(join(dist, 'worksheets'))
@@ -55,7 +55,7 @@ describe('scripts/prerender.mjs', () => {
         expect(lws).toContain(`${w.slug}.md`)
       }
       const ldir = await readdir(join(dist, l))
-      for (const f of ['about.html', 'about.md', 'privacy.md', 'terms.html', 'contact.html', 'contact.md']) expect(ldir).toContain(f)
+      for (const f of ['about.html', 'about.md', 'privacy.md', 'terms.html', 'terms.md']) expect(ldir).toContain(f)
     }
     const roundingWs = WORKSHEETS.find(w => w.id === 'rounding')
     const fr = await readFile(join(dist, 'fr', 'worksheets', 'rounding.html'), 'utf8')

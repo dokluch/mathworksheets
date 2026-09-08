@@ -5,7 +5,7 @@
  *
  * Every page exists once per locale (src/i18n/locales.js): English at the
  * site root, the others under a two-letter prefix (/fr, /fr/worksheets/<slug>).
- * Static pages (About, Privacy, Terms, Contact) come from src/pages.js.
+ * Static pages (About, Privacy, Terms) come from src/pages.js.
  *
  * No DOM, no React, no Node APIs: this file runs in the Vite config, the
  * prerender script, the Vercel edge middleware and in tests.
@@ -238,7 +238,7 @@ const ORG_ID = `${SITE_URL}/#organization`
  *
  * Without this an entity resolver sees a site name and a GitHub handle and has
  * nothing to attach them to; with it, the brand name, its alternate name, an
- * operator, a logo and a contact address all hang off one stable @id.
+ * operator, a logo and an email address all hang off one stable @id.
  *
  * Deliberately carries no `inLanguage`: the organization is the same in every
  * locale, and every node that does declare one must match the route's locale.
@@ -254,12 +254,6 @@ function organizationNode() {
     brand: { '@type': 'Brand', name: BRAND, alternateName: BRAND_ALT },
     logo: { '@type': 'ImageObject', url: absoluteUrl('/apple-touch-icon.png'), width: 180, height: 180 },
     founder: { '@id': AUTHOR_ID },
-    contactPoint: [{
-      '@type': 'ContactPoint',
-      contactType: 'customer support',
-      email: CONTACT_EMAIL,
-      url: absoluteUrl(pageRoute(findPageById('contact')).path),
-    }],
   }
 }
 
@@ -332,10 +326,7 @@ export function structuredData(route) {
       '@context': 'https://schema.org',
       '@graph': [
         {
-          // `schemaType` lets a page declare a more specific type than WebPage
-          // (Contact does: ContactPage). One string, never an array: consumers
-          // and our own tests look the node up by an exact @type match.
-          '@type': page.schemaType || 'WebPage',
+          '@type': 'WebPage',
           '@id': `${absoluteUrl(route.path)}#page`,
           url: absoluteUrl(route.path),
           name: pageTitle(route),
@@ -346,7 +337,6 @@ export function structuredData(route) {
           license: LICENSE_URL,
           author: { '@id': AUTHOR_ID },
           publisher: { '@id': ORG_ID },
-          ...(page.schemaType === 'ContactPage' ? { mainEntity: { '@id': ORG_ID } } : {}),
         },
         organizationNode(),
         authorNode(),
@@ -989,7 +979,7 @@ export function renderAgentsMarkdown() {
 
 Site: ${SITE_URL}/
 Operator: ${OPERATOR}
-Contact: ${CONTACT_EMAIL} (${absoluteUrl(pageRoute(findPageById('contact')).path)})
+Contact: ${CONTACT_EMAIL}
 License: ${LICENSE_NAME} — attribution required, non-commercial use only
 Last updated: ${lastContentUpdate()}
 
