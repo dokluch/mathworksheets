@@ -5,13 +5,18 @@
  *   node scripts/verify-live.mjs https://superawesomemath.com
  *   npm run verify:live -- https://my-preview.vercel.app
  *
- * Exits 1 if any check fails. Read-only: only GET requests.
+ * Exits 1 if any check fails. Read-only: only GET requests, plus one headless
+ * Chromium page load for the GA4 check (whose analytics beacon is aborted, so
+ * verifying the site never pollutes the property).
+ *
+ * The GA section needs the Chromium build once: `npx playwright install chromium`.
  */
 import { WORKSHEETS } from '../src/worksheets.js'
 import { PAGES } from '../src/pages.js'
 import { LOCALES, LOCALE_META } from '../src/i18n/index.js'
 import { worksheetRoute, pageTitle, escapeHtml } from '../src/seo/render.js'
 import { SITE_URL, BRAND, OPERATOR, CONTACT_EMAIL } from '../src/seo/site.js'
+import { DEFAULT_ID, PROD_HOSTS } from '../src/lib/analytics.js'
 
 const base = (process.argv[2] || process.env.SITE_URL || SITE_URL).replace(/\/+$/, '')
 // Brand-derived so a rename never silently skips these checks.
@@ -76,6 +81,66 @@ function ldGraph(html) {
         return parsed['@graph'] || [parsed]
       } catch { return [] }
     })
+}
+
+/**
+ * GA4 is injected client-side by src/lib/analytics.js, and verify-live's other
+ * checks are fetch-only (textLength() even strips <script> blocks), so nothing
+ * here can see it without a real browser. This section caught a live outage:
+ * the tag loaded but every command was pushed to dataLayer as a plain Array,
+ * which gtag.js ignores, so no hit was ever sent.
+ */
+async function checkAnalytics() {
+  // initAnalytics() only resolves a measurement id on a production hostname,
+  // so against a preview or local origin there is nothing to assert.
+  const host = new URL(base).hostname
+  if (!PROD_HOSTS.includes(host)) {
+    console.log(`SKIP  GA4 checks (${host} is not a production host, so analytics stays off by design)`)
+    return
+  }
+
+  let chromium
+  try {
+    ({ chromium } = await import('playwright'))
+  } catch {
+    return record('GA4: headless Chromium available', false, 'playwright not installed')
+  }
+
+  let browser
+  try {
+    browser = await chromium.launch()
+  } catch (err) {
+    return record('GA4: headless Chromium available', false, `${err.message.split('\n')[0]} — run: npx playwright install chromium`)
+  }
+
+  try {
+    const page = await browser.newPage()
+    let tagLoaded = false
+    let beacon = ''
+    page.on('request', r => {
+      if (r.url().includes(`googletagmanager.com/gtag/js?id=${DEFAULT_ID}`)) tagLoaded = true
+    })
+    // Record the hit, then abort it: this proves gtag.js built and sent the
+    // beacon without logging a bot page_view against the real property.
+    await page.route(/\/g\/collect/, route => {
+      beacon = route.request().url()
+      return route.abort()
+    })
+
+    await page.goto(base + '/', { waitUntil: 'networkidle' })
+    await page.waitForTimeout(4000)
+
+    const kinds = await page.evaluate(() =>
+      (window.dataLayer || []).map(e => Object.prototype.toString.call(e)))
+
+    record(`GA4: gtag.js loads for ${DEFAULT_ID}`, tagLoaded)
+    record('GA4: a /g/collect hit is sent', beacon.includes(`tid=${DEFAULT_ID}`), beacon ? beacon.slice(0, 90) : 'no beacon')
+    // gtag.js executes an entry only if it is an Arguments object; Arrays are
+    // dropped silently. gtag.js appends its own plain Objects, so allow those.
+    record('GA4: dataLayer commands are Arguments, not Arrays', kinds.length > 0 && !kinds.includes('[object Array]'), kinds.join(' '))
+  } finally {
+    await browser.close()
+  }
 }
 
 async function main() {
@@ -224,6 +289,9 @@ async function main() {
   record('Unknown asset → HTTP 404', nfAsset.status === 404, String(nfAsset.status))
   const nfSlug = await get('/worksheets/does-not-exist')
   record('Unknown worksheet slug → HTTP 404', nfSlug.status === 404, String(nfSlug.status))
+
+  // 5. Analytics (needs a browser: GA is injected client-side)
+  await checkAnalytics()
 
   const failed = results.filter(r => !r.ok)
   console.log(`\n${results.length - failed.length}/${results.length} checks passed`)

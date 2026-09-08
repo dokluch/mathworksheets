@@ -13,8 +13,8 @@
  */
 
 const ENV_ID = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_GA_MEASUREMENT_ID) || ''
-const DEFAULT_ID = 'G-G7HL4RG2GM'
-const PROD_HOSTS = ['superawesomemath.com', 'www.superawesomemath.com']
+export const DEFAULT_ID = 'G-G7HL4RG2GM'
+export const PROD_HOSTS = ['superawesomemath.com', 'www.superawesomemath.com']
 
 function resolveId(win) {
   if (ENV_ID) return ENV_ID
@@ -23,9 +23,11 @@ function resolveId(win) {
 
 let state = { enabled: false, id: '', win: null }
 
+// Must go through w.gtag: it pushes `arguments`, and gtag.js only executes a
+// dataLayer entry that is an Arguments object — a plain Array is silently
+// ignored, which drops every consent/config/event command on the floor.
 function gtag(...args) {
-  state.win.dataLayer = state.win.dataLayer || []
-  state.win.dataLayer.push(args)
+  state.win.gtag(...args)
 }
 
 export function isAnalyticsEnabled() {

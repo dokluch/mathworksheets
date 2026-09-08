@@ -1,6 +1,9 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { initAnalytics, trackEvent, trackPageView, settingsToParams, isAnalyticsEnabled, _resetAnalytics } from './analytics.js'
+import { initAnalytics, trackEvent, trackPageView, settingsToParams, isAnalyticsEnabled, _resetAnalytics, DEFAULT_ID } from './analytics.js'
+
+/** gtag.js only executes a dataLayer entry that is an Arguments object. */
+const isArguments = v => Object.prototype.toString.call(v) === '[object Arguments]'
 
 beforeEach(() => {
   _resetAnalytics()
@@ -28,8 +31,9 @@ describe('initAnalytics', () => {
     const doc = document.implementation.createHTMLDocument('')
     expect(initAnalytics(undefined, { win, doc })).toBe(true)
     const dl = win.dataLayer.map(args => Array.from(args))
-    expect(dl[2].slice(0, 2)).toEqual(['config', 'G-G7HL4RG2GM'])
-    expect(doc.head.querySelectorAll('script[src*="id=G-G7HL4RG2GM"]').length).toBe(1)
+    expect(dl[2].slice(0, 2)).toEqual(['config', DEFAULT_ID])
+    expect(doc.head.querySelectorAll(`script[src*="id=${DEFAULT_ID}"]`).length).toBe(1)
+    expect(win.dataLayer.every(isArguments)).toBe(true)
   })
 
   it('pushes Consent Mode v2 defaults (denied) before config and loads gtag.js once', () => {
@@ -41,6 +45,8 @@ describe('initAnalytics', () => {
     expect(dl[1][0]).toBe('js')
     expect(dl[2].slice(0, 2)).toEqual(['config', 'G-TEST123'])
     expect(dl[2][2]).toMatchObject({ send_page_view: false, anonymize_ip: true })
+    // Pushing plain Arrays here makes gtag.js silently ignore every command.
+    expect(window.dataLayer.map(e => Object.prototype.toString.call(e))).toEqual(['[object Arguments]', '[object Arguments]', '[object Arguments]'])
     const scripts = document.head.querySelectorAll('script[src*="googletagmanager.com/gtag/js?id=G-TEST123"]')
     expect(scripts.length).toBe(1)
     expect(scripts[0].async).toBe(true)
@@ -55,6 +61,7 @@ describe('events', () => {
     const before = window.dataLayer.length
     expect(trackEvent('print_worksheet', { worksheet_id: 'addsub' })).toBe(true)
     expect(trackPageView('/worksheets/rounding', 'Rounding')).toBe(true)
+    expect(window.dataLayer.slice(before).every(isArguments)).toBe(true)
     const pushed = window.dataLayer.slice(before).map(a => Array.from(a))
     expect(pushed[0]).toEqual(['event', 'print_worksheet', { worksheet_id: 'addsub' }])
     expect(pushed[1][0]).toBe('event')
