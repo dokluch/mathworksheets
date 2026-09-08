@@ -640,3 +640,51 @@ build unchanged.
 (~110 characters). The type ramp asks for 65–75ch, so it wants a `--measure`
 cap centred in the plate the way `.static-page` does. Left alone because the
 brief was the plate's width, not the copy's.
+
+## Revision — the worksheet appendix
+
+The prose under every sheet was set as a second article. Six measured defects, not one.
+
+**The scale ran backwards, in two places.** The lede was **19px** against **16px** section
+headings, and every FAQ answer was **16px** against its own **15px** question. That is the
+whole of "the font size is too large": no single value was outrageous, the ranking was
+inverted, so the eye could not find the entry point.
+
+| piece | before | after |
+|---|---|---|
+| lede | 19px | **15px** |
+| Skills / Format line | 19px ink | **13px muted**, with a paragraph break |
+| section heading | 16px | **13px** (the FAQ's own label: 11px tracked micro-label) |
+| list items | 16px | **13px** |
+| FAQ question | 15px | **14px** |
+| FAQ answer | 16px | **13px** |
+| dead white down the right | **286px** | **0** |
+
+**A third of it was empty.** The plate is 912px, but the block borrows `.static-page`, whose
+`> *` and `.static-fold` rules cap children at `--measure` and whose `align-items: center` is
+a no-op here (not a flex container). Every line and every hairline hugged the left edge. The
+appendix is a two-column grid above 1080px now — questions in the wider left column, a
+reference rail of Settings / Example problems / Other worksheets on the right — so the width
+is used rather than apologised for.
+
+**Three shared rules had to be beaten on specificity, not source order.** `.static-page`'s
+`--measure`, `.static-intro` size and `align-items` all sit later in the file at equal
+specificity. Every appendix rule that overrides one is written `.worksheet-details.static-page`
+— the block carries both classes. The prerendered `.static-page` article is untouched.
+
+**Structure.** `fold()` now takes a section key, so the layout places a fold by *what it is*
+rather than by where it happens to sit; the reference lists share one `.static-aside` wrapper,
+because a grid item spanning three rows distributes its height across them and prised the
+three labels 200px apart. The FAQ ships `open`: it is the only part a parent reads, it leads
+the DOM, and Google wants content behind `FAQPage` markup visible rather than behind a click.
+
+**"How to use this worksheet" is gone from the page.** Its first step was *Open the URL you
+are already on*. It survives in the Markdown twin and `llms-full.txt`, where an agent
+genuinely needs the URL. Four message keys and the `link()` helper had no other consumer and
+went with it, in all seven locales.
+
+Verified: 284 tests, lint and build clean; the how-to absent from `dist/worksheets/*.html` and
+present in the `.md` twin and `llms-full.txt`; `FAQPage` still emitted and the heading outline
+still sequential; 21 route × viewport combinations with zero contrast failures and no
+horizontal overflow; the 8 notebook print configurations and the 10-sheet A4/Letter sweep
+unchanged (the block is `no-print`).

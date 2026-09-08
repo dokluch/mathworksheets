@@ -154,10 +154,6 @@ function code(s) {
   return raw(`<code>${escapeHtml(s)}</code>`)
 }
 
-function link(href, label) {
-  return raw(`<a href="${attr(href)}">${escapeHtml(label)}</a>`)
-}
-
 const LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/g
 
 /** Plain text with optional `[label](url)` links → escaped HTML with anchors; site-relative links get the locale prefix. */
@@ -562,10 +558,19 @@ function worksheetHeroHtml(route) {
 }
 
 /**
- * Everything below the heading: description, settings, how to use, sibling
- * worksheets and agent links. Shared with components/WorksheetDetails.jsx so the
- * crawlable fallback and the hydrated view cannot drift apart — the same
- * contract components/StaticPage.jsx has with staticBody().
+ * Everything below the heading: the description, the questions a parent
+ * actually has, and an aside of reference lists (settings, examples, the other
+ * worksheets). The FAQ comes first in the DOM because it comes first in every
+ * reading order that matters — the appendix reads it left, a phone reads it
+ * top, and a crawler reads it before the link lists.
+ *
+ * There is no "how to use" section here: its first step was "open the page you
+ * are already on". It survives in the Markdown twin (renderWorksheetMarkdown),
+ * where an agent genuinely needs the URL.
+ *
+ * Shared with components/WorksheetDetails.jsx so the crawlable fallback and the
+ * hydrated view cannot drift apart — the same contract
+ * components/StaticPage.jsx has with staticBody().
  */
 export function worksheetDetailsHtml(route) {
   const { locale } = route
@@ -580,33 +585,36 @@ export function worksheetDetailsHtml(route) {
         <p>${escapeHtml(ws.longDesc)}</p>
         <p><strong>${h('static.worksheet.skills')}:</strong> ${ws.skills.map(escapeHtml).join(', ')}. <strong>${h('static.worksheet.format')}:</strong> ${h(ws.interactive ? 'static.worksheet.formatInteractive' : 'static.worksheet.formatPrintable')}.</p>
       </section>
-      ${fold(h('static.worksheet.settings'), `<ul>
+      ${fold('faq', h('static.worksheet.faq'), `<dl class="worksheet-faq">
+        ${faq}
+      </dl>`, { open: true })}
+      <div class="static-aside">
+      ${fold('settings', h('static.worksheet.settings'), `<ul>
         ${settings}
       </ul>`)}
-      ${fold(h('static.worksheet.examples'), `<ul class="worksheet-examples">
+      ${fold('examples', h('static.worksheet.examples'), `<ul class="worksheet-examples">
         ${examples}
       </ul>`)}
-      ${fold(h(ws.interactive ? 'static.worksheet.howToUseActivity' : 'static.worksheet.howToUseWorksheet'), `<ol>
-        <li>${h('static.worksheet.step1', { url: link(route.path, absoluteUrl(route.path)) })}</li>
-        <li>${h('static.worksheet.step2')}</li>
-        <li>${h(ws.interactive ? 'static.worksheet.step3Interactive' : 'static.worksheet.step3Printable')}</li>
-      </ol>`)}
-      ${fold(h('static.worksheet.faq'), `<dl class="worksheet-faq">
-        ${faq}
-      </dl>`)}
-      ${fold(h('static.worksheet.others', { brand: BRAND }), `<ul>
+      ${fold('others', h('static.worksheet.others', { brand: BRAND }), `<ul>
         ${related}
       </ul>`)}
+      </div>
 `
 }
 
 /**
- * A collapsed section: the heading stays an <h2> inside the <summary>, so the
+ * A foldable section: the heading stays an <h2> inside the <summary>, so the
  * document outline and the heading-level invariant are unchanged, and the body
  * stays in the HTML for crawlers. Markdown twins are unaffected.
+ *
+ * `key` names the section in the class list so the appendix layout can place a
+ * fold by what it is rather than by where it happens to sit — a fold added or
+ * removed must not silently re-shuffle the columns. `open` is for the FAQ: it
+ * is the only section a parent actually reads, and Google wants the content
+ * behind FAQPage markup visible rather than behind a click.
  */
-function fold(heading, body) {
-  return `<details class="static-fold">
+function fold(key, heading, body, { open = false } = {}) {
+  return `<details class="static-fold static-fold--${key}"${open ? ' open' : ''}>
         <summary><h2>${heading}</h2></summary>
         ${body}
       </details>`

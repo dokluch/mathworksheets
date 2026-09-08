@@ -633,6 +633,16 @@
     "name": "The Three-Step Radius Rule",
     "body": "Every corner in the app is --radius-sm (6px), --radius (8px) or --radius-lg (12px). Plates take the large step, controls the default, small marks the small one. A 2-3px scale was tried and read as too sharp for a product a six-year-old sits in front of. A literal px radius in a component file is drift in either direction.",
     "section": "shapes"
+   },
+   {
+    "name": "The Appendix Scale Rule",
+    "body": "A block that explains the primary content is set BELOW the primary content's scale, never above it. The worksheet appendix ran the other way — a 19px lede over 13px section labels, and 16px FAQ answers over their own 15px questions — and the complaint it drew was \"the font size is too large\" when no single value was large. It is the ranking that has to be right: lede 15, labels 13, list and answer 13, question 14, and a section marker that is not a heading at all takes 11px tracked and uppercase.",
+    "section": "typography"
+   },
+   {
+    "name": "The Borrowed-Class Rule",
+    "body": ".worksheet-details carries both .worksheet-details and .static-page, and every shared .static-page rule it needs to override sits later in the file at equal specificity (--measure, .static-intro size, align-items). Write those overrides .worksheet-details.static-page. A single-class override there is a silent no-op that measures as \"the change did not apply\".",
+    "section": "components"
    }
   ],
   "dos": [
@@ -667,7 +677,9 @@
    "Don't rule a coloured band across the head of a card. The subject colour belongs in the shadow the sheet casts (color-mix on --card-color, declared after a neutral shadow), not in a strip between the card edge and its content.",
    "Don't leave a cool hue on the paper. The ruling was slate-400 long after the palette went warm and read lavender on cream; screen and print ruling are neutral ink at the same blended lightness.",
    "Don't put the brand on a paper plate, or give it a hover lift. In the header the only boxed element is the language switcher, because it is the only control.",
-   "Don't paint a coloured board behind the interface. An ink-navy field and a cream one were both built and both rejected — the navy for being dark, the cream for reading as aged paper. Chrome is white; the page tint is #f5f5f0 and nothing else."
+   "Don't paint a coloured board behind the interface. An ink-navy field and a cream one were both built and both rejected — the navy for being dark, the cream for reading as aged paper. Chrome is white; the page tint is #f5f5f0 and nothing else.",
+   "Don't tell a reader to open the page they are on. The worksheet how-to's first step was the page's own URL; it belongs in the Markdown twin, where an agent needs it, and nowhere on screen.",
+   "Don't leave a plate wider than its content. The appendix borrowed a 608px measure inside a 912px plate and left 286px of bare white down its right edge for every line and every hairline. Use the width or narrow the plate."
   ],
   "contrast": [
    "ink on paper 16.17:1",
