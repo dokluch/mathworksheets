@@ -116,15 +116,41 @@ export function shapeSize(shape) {
   return Math.max(b.w, b.h)
 }
 
-/** Shoelace area of a closed polygon. */
-export function area(points) {
+/** Shoelace area, positive when the outline runs clockwise on screen (y down). */
+export function signedArea(points) {
   let a = 0
   for (let i = 0, n = points.length; i < n; i++) {
     const [x1, y1] = points[i]
     const [x2, y2] = points[(i + 1) % n]
     a += x1 * y2 - x2 * y1
   }
-  return Math.abs(a) / 2
+  return a / 2
+}
+
+/** Shoelace area of a closed polygon. */
+export const area = points => Math.abs(signedArea(points))
+
+/** How much line is drawn: a closed shape's perimeter, an open one's length. */
+export function lineLength(shape) {
+  const pts = outline(shape)
+  const n = pts.length
+  const segs = isClosed(shape) ? n : n - 1
+  let len = 0
+  for (let i = 0; i < segs; i++) {
+    const [x1, y1] = pts[i]
+    const [x2, y2] = pts[(i + 1) % n]
+    len += Math.hypot(x2 - x1, y2 - y1)
+  }
+  return len
+}
+
+/**
+ * Isoperimetric quotient: 1 for a circle, about 0.8 for a square, and near
+ * zero for a long thin band however it bends.
+ */
+export function roundness(shape) {
+  const p = lineLength(shape)
+  return p > 0 ? (4 * Math.PI * area(outline(shape))) / (p * p) : 0
 }
 
 /** Andrew's monotone chain. */
@@ -152,6 +178,131 @@ export function convexHull(points) {
 export function convexity(points) {
   const hull = area(convexHull(points))
   return hull > 0 ? area(points) / hull : 1
+}
+
+/**
+ * The narrowest and the longest extent of the convex hull. Their ratio says
+ * whether a figure as a whole is stretched out, whatever spikes or gaps it has.
+ */
+export function hullProportions(points) {
+  const hull = convexHull(points)
+  let diameter = 0
+  for (let i = 0; i < hull.length; i++) {
+    for (let j = i + 1; j < hull.length; j++) {
+      diameter = Math.max(diameter, Math.hypot(hull[j][0] - hull[i][0], hull[j][1] - hull[i][1]))
+    }
+  }
+  let width = hull.length < 3 ? 0 : Infinity
+  for (let i = 0; i < hull.length && hull.length >= 3; i++) {
+    const [ax, ay] = hull[i]
+    const [bx, by] = hull[(i + 1) % hull.length]
+    const len = Math.hypot(bx - ax, by - ay)
+    if (len === 0) continue
+    let far = 0
+    for (const [px, py] of hull) far = Math.max(far, Math.abs((bx - ax) * (py - ay) - (by - ay) * (px - ax)) / len)
+    width = Math.min(width, far)
+  }
+  return { width, diameter }
+}
+
+export function distToSegment([px, py], [ax, ay], [bx, by]) {
+  const dx = bx - ax
+  const dy = by - ay
+  const len2 = dx * dx + dy * dy
+  const t = len2 ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / len2)) : 0
+  return Math.hypot(px - (ax + t * dx), py - (ay + t * dy))
+}
+
+/** Distance from a point to the nearest part of an outline. */
+export function distToOutline(p, points, closed = true) {
+  const n = points.length
+  let best = Infinity
+  for (let i = 0; i < (closed ? n : n - 1); i++) best = Math.min(best, distToSegment(p, points[i], points[(i + 1) % n]))
+  return best
+}
+
+const cross3 = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+function segmentsCross(a, b, c, d) {
+  const d1 = cross3(c, d, a)
+  const d2 = cross3(c, d, b)
+  const d3 = cross3(a, b, c)
+  const d4 = cross3(a, b, d)
+  return ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))
+}
+
+/**
+ * How a line meets itself. `crossAngle` is the widest angle, in degrees, at
+ * which it crosses itself (0 when it never does); `gap` is how close its
+ * parts come where they do not cross. Parts less than `skip` units apart
+ * along the line are neighbours and never count.
+ */
+export function selfContact(shape, skip = 6) {
+  const pts = outline(shape)
+  const closed = isClosed(shape)
+  const n = pts.length
+  const segs = closed ? n : n - 1
+  const start = [0]
+  for (let i = 0; i < segs; i++) {
+    const [x1, y1] = pts[i]
+    const [x2, y2] = pts[(i + 1) % n]
+    start.push(start[i] + Math.hypot(x2 - x1, y2 - y1))
+  }
+  const total = start[segs]
+  let crossAngle = 0
+  let gap = Infinity
+  for (let i = 0; i < segs; i++) {
+    for (let j = i + 1; j < segs; j++) {
+      let sep = start[j] - start[i + 1]
+      if (closed) sep = Math.min(sep, total - start[j + 1] + start[i])
+      if (sep < skip) continue
+      const a = pts[i], b = pts[(i + 1) % n], c = pts[j], d = pts[(j + 1) % n]
+      if (segmentsCross(a, b, c, d)) {
+        const u = Math.atan2(b[1] - a[1], b[0] - a[0])
+        const v = Math.atan2(d[1] - c[1], d[0] - c[0])
+        let deg = Math.abs(((u - v) * 180) / Math.PI) % 180
+        if (deg > 90) deg = 180 - deg
+        crossAngle = Math.max(crossAngle, deg)
+      } else {
+        gap = Math.min(gap, distToSegment(a, c, d), distToSegment(b, c, d), distToSegment(c, a, b), distToSegment(d, a, b))
+      }
+    }
+  }
+  return { crossAngle, gap }
+}
+
+/** Turn at each vertex of a line, in degrees: positive turns clockwise on screen. */
+function turns(points, closed) {
+  const pts = []
+  for (const p of points) {
+    const q = pts[pts.length - 1]
+    if (!q || Math.hypot(p[0] - q[0], p[1] - q[1]) > 1e-9) pts.push(p)
+  }
+  if (closed && pts.length > 1 && Math.hypot(pts[0][0] - pts.at(-1)[0], pts[0][1] - pts.at(-1)[1]) <= 1e-9) pts.pop()
+  const n = pts.length
+  const out = []
+  for (let i = closed ? 0 : 1; i < (closed ? n : n - 1); i++) {
+    const a = pts[(i - 1 + n) % n]
+    const b = pts[i]
+    const c = pts[(i + 1) % n]
+    const e1 = [b[0] - a[0], b[1] - a[1]]
+    const e2 = [c[0] - b[0], c[1] - b[1]]
+    out.push((Math.atan2(e1[0] * e2[1] - e1[1] * e2[0], e1[0] * e2[0] + e1[1] * e2[1]) * 180) / Math.PI)
+  }
+  return out
+}
+
+/** Total turning along an open line, in degrees: positive turns clockwise on screen. */
+export const totalTurning = points => turns(points, false).reduce((a, t) => a + t, 0)
+
+/**
+ * The sharpest corner of a closed outline that points into the figure, as
+ * degrees of turn. A dent made of a smooth curve turns a little at every
+ * sample and scores low; a notch cut to a point scores high.
+ */
+export function sharpestInwardTurn(points) {
+  const s = Math.sign(signedArea(points))
+  return Math.max(0, ...turns(points, true).map(t => -s * t))
 }
 
 export function pointInPolygon([x, y], points) {

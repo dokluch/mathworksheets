@@ -14,7 +14,7 @@ import {
   panel, polygon, curve, ellipse, dot, outline, convexity, isClosed, shapeSize, panelBbox, rotate,
 } from '../shapes.js'
 import {
-  figure, sized, placeRandom, placeAt, placeGroup, scatter, squiggle,
+  figure, sized, placeRandom, placeAt, placeGroup, scatter, squiggle, zigzag, TEXTURED_MIN,
   ALL_KINDS, CONVEX_KINDS, CONCAVE_KINDS, STRAIGHT_KINDS, CURVED_KINDS,
 } from '../gen.js'
 
@@ -35,18 +35,6 @@ function kindFor(r, size, kinds = ALL_KINDS) {
 function anyFigure(r, { kinds = ALL_KINDS, fill = anyFill(r), size = r.num(15, 55), region = 'any' } = {}) {
   return placeRandom(r, figure(r, kindFor(r, size, kinds), { fill, size }), region)
 }
-
-/**
- * A serrated outline in the proportions of Bongard's own drawings: teeth
- * about a fortieth of the figure high and a twentieth apart, so the edge
- * reads as a fine zigzag and the shape underneath stays plain to see. Sizes
- * below TEXTURED_MIN are left smooth, where even that would blur into a smudge.
- */
-const TEXTURED_MIN = 24
-const zigzag = (r, size) => ({
-  amp: Math.min(1.6, Math.max(1, size * r.num(0.024, 0.03))),
-  step: Math.min(3.2, Math.max(1.8, size * r.num(0.05, 0.06))),
-})
 
 /* ── BP7 helpers: a figure long along the x axis, later turned upright ── */
 

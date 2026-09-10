@@ -37,13 +37,16 @@ function Side({ panels, x0 }) {
   ))
 }
 
+/** Room round the edge for the half of each outer panel's frame stroke that falls outside it. */
+const PAD = 1
+
 export function ProblemFigure({ problem, label, className }) {
   const rightX0 = 2 * PANEL + GAP + DIVIDER
   const divX = 2 * PANEL + GAP + DIVIDER / 2
   return (
     <svg
       className={className}
-      viewBox={`0 0 ${PROBLEM_W} ${PROBLEM_H}`}
+      viewBox={`${-PAD} ${-PAD} ${PROBLEM_W + 2 * PAD} ${PROBLEM_H + 2 * PAD}`}
       width="100%"
       height="100%"
       preserveAspectRatio="xMidYMid meet"

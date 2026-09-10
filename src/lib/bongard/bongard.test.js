@@ -2,8 +2,10 @@ import { describe, it, expect } from 'vitest'
 import { mulberry32, rngHelpers } from './rng.js'
 import {
   polygon, curve, circle, ellipse, outline, bbox, area, convexity, catmullRom, jaggedPoints, resample, toPath, rotate, translate, scale, isClosed, pointInPolygon,
+  lineLength, roundness, hullProportions, selfContact, totalTurning, sharpestInwardTurn,
 } from './shapes.js'
-import { figure, sized, placeRandom, randomPolygon, randomBlob, ALL_KINDS, MARGIN } from './gen.js'
+import { figure, sized, placeRandom, randomPolygon, randomBlob, band, body, spiralPoints, ALL_KINDS, MARGIN } from './gen.js'
+import { distanceField, mainNeck, partsAbove } from './field.js'
 import { PROBLEMS, PROBLEM_BY_ID, BANDS, BAND_LEVEL, PER_PAGE, MAX_ATTEMPTS, generatePanel, generateProblem, generateSheet, problemsInBand, ruleKey } from './index.js'
 import { BOX } from './shapes.js'
 import { PROBLEM_W, PROBLEM_H } from './layout.js'
@@ -70,6 +72,72 @@ describe('geometry', () => {
     expect(toPath(ellipse(5, 5, 5, 2, { rotate: 30 })).transform).toBe('rotate(30 5 5)')
     expect(toPath(curve([[0, 0], [10, 0], [10, 10]])).d).toMatch(/^M0 0 C.* Z$/)
     expect(toPath({ ...square, jagged: { amp: 1, step: 2 } }).d.split('L').length).toBe(28)
+  })
+})
+
+describe('outline measures', () => {
+  it('tells round from thin, and compact from long', () => {
+    expect(roundness(circle(0, 0, 10))).toBeGreaterThan(0.99)
+    expect(roundness(polygon([[0, 0], [60, 0], [60, 6], [0, 6]]))).toBeLessThan(0.3)
+    const { width, diameter } = hullProportions([[0, 0], [40, 0], [40, 10], [0, 10]])
+    expect(width).toBeCloseTo(10)
+    expect(diameter).toBeCloseTo(Math.hypot(40, 10))
+    expect(lineLength(square)).toBe(40)
+    expect(lineLength(polygon(square.points, { closed: false }))).toBe(30)
+  })
+
+  it('finds where a line crosses itself, and how close it comes where it does not', () => {
+    expect(selfContact(polygon([[0, 0], [20, 20], [20, 0], [0, 20]])).crossAngle).toBeCloseTo(90)
+    expect(selfContact(polygon([[0, 0], [20, 0], [0, 20], [20, 20]], { closed: false }))).toMatchObject({ crossAngle: 0, gap: 20 })
+  })
+
+  it('reads which way a line turns and which corners point in', () => {
+    // Right, then down, then left: two clockwise quarter turns on screen.
+    expect(totalTurning([[0, 0], [10, 0], [10, 10], [0, 10]])).toBeCloseTo(180)
+    expect(sharpestInwardTurn(square.points)).toBe(0)
+    expect(sharpestInwardTurn(arrow.points)).toBeGreaterThan(45)
+  })
+
+  it('winds a spiral the asked way, followed from its outer end in', () => {
+    const r = rngHelpers(mulberry32(3))
+    for (const style of ['round', 'square', 'triangle', 'pentagon']) {
+      for (const inward of [1, -1]) {
+        const pts = spiralPoints(r, style, inward)
+        const line = style === 'round' ? outline(curve(pts, { closed: false })) : pts
+        expect(Math.sign(totalTurning(line.slice().reverse())), `${style} ${inward}`).toBe(inward)
+      }
+    }
+  })
+
+  it('outlines a band round its centre line', () => {
+    const line = [[0, 0], [10, 0], [20, 0], [30, 0]]
+    expect(area(band(line, 2, { caps: 'flat' }))).toBeCloseTo(120)
+    expect(area(band(line, 2))).toBeCloseTo(120 + Math.PI * 4, 0)
+  })
+})
+
+describe('necks', () => {
+  const dumbbell = body([
+    { round: true, x0: -40, x1: -10, h: 12 },
+    { x0: -25, x1: 25, h0: 3, h1: 3 },
+    { round: true, x0: 10, x1: 40, h: 12 },
+  ])
+
+  it('finds the neck between two lobes, and none in a plain bar', () => {
+    const field = distanceField(dumbbell.points)
+    const n = mainNeck(field)
+    expect(n.ratio).toBeGreaterThan(2)
+    expect(n.level).toBeGreaterThan(2)
+    expect(n.level).toBeLessThan(4)
+    const labels = partsAbove(field, n.level)
+    expect(labels[n.peaks[0]]).not.toBe(labels[n.peaks[1]])
+    const bar = mainNeck(distanceField([[0, 0], [60, 0], [60, 20], [0, 20]]))
+    expect(bar === null || bar.drop < 1.5).toBe(true)
+  })
+
+  it('puts a point exactly on the outline of a body', () => {
+    expect(dumbbell.at(-25, -1)[1]).toBeCloseTo(-12)
+    expect(dumbbell.at(0, 1)[1]).toBeCloseTo(3)
   })
 })
 

@@ -4,12 +4,15 @@
  * A problem is a rule with a generator and a checker (see problems/). This
  * module turns one into twelve concrete panels — six that satisfy the rule
  * on the left, six that break it on the right — by drawing panels until the
- * checker agrees, and assembles a page of distinct problems.
+ * checker agrees, and assembles a page of distinct problems. A checker that
+ * returns null calls a panel too close to call, and it is redrawn for either side.
  */
 import { rngHelpers } from './rng.js'
-import { problems as first } from './problems/bp001-010.js'
+import { problems as bp001 } from './problems/bp001-010.js'
+import { problems as bp011 } from './problems/bp011-020.js'
+import { problems as bp021 } from './problems/bp021-030.js'
 
-export const PROBLEMS = [...first]
+export const PROBLEMS = [...bp001, ...bp011, ...bp021]
 export const PROBLEM_BY_ID = Object.fromEntries(PROBLEMS.map(p => [p.id, p]))
 
 export const BANDS = ['easy', 'medium', 'hard']
