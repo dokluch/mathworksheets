@@ -109,6 +109,10 @@ export default {
     language: 'Langue',
     resume: 'Reprendre où vous en étiez',
     skipToContent: 'Aller au contenu',
+    gradeFilter: 'Niveau',
+    allGrades: 'Tous',
+    ages: '{ages} ans',
+    sheetCount: { one: '{n} fiche', other: '{n} fiches' },
   },
 
   common: {

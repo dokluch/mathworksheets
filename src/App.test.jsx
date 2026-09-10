@@ -9,6 +9,7 @@ vi.mock('./lib/analytics.js', () => ({
 }))
 import { trackEvent } from './lib/analytics.js'
 import { WORKSHEETS } from './worksheets.js'
+import { gradeNumbers } from './seo/render.js'
 import { PAGES } from './pages.js'
 import { t, localizeWorksheet, localizePage } from './i18n/index.js'
 import { BRAND, CONTACT_EMAIL, SITE_URL } from './seo/site.js'
@@ -60,6 +61,77 @@ describe('App', () => {
   it('offers no resume card when nothing is remembered', () => {
     render(<App />)
     expect(document.querySelector('.resume-card')).toBeNull()
+  })
+
+  // The grade filter narrows the landing grid. Default is All, so a first
+  // visitor and a crawler both see the whole catalog.
+  const catalogHrefs = () => screen.getAllByRole('link')
+    .map(l => l.getAttribute('href'))
+    .filter(h => h && h.includes('/worksheets/'))
+
+  it('shows every sheet by default and filters the catalog by grade', () => {
+    render(<App />)
+    const all = screen.getByRole('button', { name: /^All/ })
+    expect(all.getAttribute('aria-pressed')).toBe('true')
+    expect(new Set(catalogHrefs()).size).toBe(WORKSHEETS.length)
+
+    fireEvent.click(screen.getByRole('button', { name: /^Grade 1/ }))
+    const expected = WORKSHEETS.filter(ws => gradeNumbers(ws.grades).includes(1)).map(ws => `/worksheets/${ws.slug}`)
+    expect(expected.length).toBeGreaterThan(0)
+    expect(expected.length).toBeLessThan(WORKSHEETS.length)
+    expect(new Set(catalogHrefs())).toEqual(new Set(expected))
+    expect(screen.getByRole('button', { name: /^Grade 1/ }).getAttribute('aria-pressed')).toBe('true')
+    expect(screen.getByRole('button', { name: /^All/ }).getAttribute('aria-pressed')).toBe('false')
+    expect(screen.getByRole('status').textContent).toBe(`${expected.length} sheets`)
+    expect(trackEvent).toHaveBeenCalledWith('select_grade', { grade: '1' })
+
+    fireEvent.click(screen.getByRole('button', { name: /^All/ }))
+    expect(new Set(catalogHrefs()).size).toBe(WORKSHEETS.length)
+  })
+
+  it('names the age band under every grade', () => {
+    render(<App />)
+    expect(screen.getByRole('button', { name: /^All/ }).textContent).toContain('Ages 6–9')
+    expect(screen.getByRole('button', { name: /^Grade 1/ }).textContent).toContain('Ages 6–7')
+    expect(screen.getByRole('button', { name: /^Grade 3/ }).textContent).toContain('Ages 8–9')
+  })
+
+  it('remembers the chosen grade on this device', () => {
+    render(<App />)
+    fireEvent.click(screen.getByRole('button', { name: /^Grade 2/ }))
+    expect(JSON.parse(localStorage.getItem('mathsheets')).app.grade).toBe('2')
+
+    cleanup()
+    render(<App />)
+    expect(screen.getByRole('button', { name: /^Grade 2/ }).getAttribute('aria-pressed')).toBe('true')
+    const shown = WORKSHEETS.filter(ws => gradeNumbers(ws.grades).includes(2))
+    expect(new Set(catalogHrefs())).toEqual(new Set(shown.map(ws => `/worksheets/${ws.slug}`)))
+  })
+
+  it('opens the whole catalog when the remembered grade is not one we offer', () => {
+    localStorage.setItem('mathsheets', JSON.stringify({ app: { grade: '7' } }))
+    render(<App />)
+    expect(screen.getByRole('button', { name: /^All/ }).getAttribute('aria-pressed')).toBe('true')
+    expect(new Set(catalogHrefs()).size).toBe(WORKSHEETS.length)
+  })
+
+  it('translates the grade filter and keeps prefixed links under /fr', () => {
+    window.history.replaceState(null, '', '/fr')
+    render(<App />)
+    const grade2 = screen.getByRole('button', { name: new RegExp(`^${t('fr', 'seo.gradeOne', { grades: '2' })}`) })
+    expect(grade2.textContent).toContain(t('fr', 'app.ages', { ages: '7–8' }))
+    fireEvent.click(grade2)
+    for (const href of catalogHrefs()) expect(href).toMatch(/^\/fr\/worksheets\//)
+  })
+
+  it('leaves the sidebar catalog on a worksheet page unfiltered', () => {
+    localStorage.setItem('mathsheets', JSON.stringify({ app: { grade: '1' } }))
+    window.history.replaceState(null, '', '/worksheets/long-division')
+    render(<App />)
+    expect(document.querySelector('.grade-filter')).toBeNull()
+    // long-division is grade 3 only: a filtered sidebar would hide the open sheet.
+    const sidebar = document.querySelector('.catalog--sidebar')
+    expect(sidebar.querySelectorAll('.catalog-card').length).toBe(WORKSHEETS.length)
   })
 
   it('opens the worksheet named in the URL', () => {

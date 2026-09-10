@@ -2,7 +2,7 @@ import { useEffect, useCallback, useMemo, useState } from 'react'
 import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator, IconDivide, IconMathSymbols, IconPuzzle } from '@tabler/icons-react'
 import { usePersistedState, getPersistedTab } from './hooks/usePersistedState'
 import { useRoute, sheetIdToPath } from './hooks/useRoute'
-import { worksheetRoute, gradeLevelText } from './seo/render'
+import { worksheetRoute, gradeLevelText, gradeNumbers } from './seo/render'
 import { findWorksheetById } from './worksheets'
 import { trackEvent, settingsToParams } from './lib/analytics'
 import { t as translate, localizedWorksheets, DEFAULT_LOCALE } from './i18n/index.js'
@@ -15,6 +15,8 @@ import PrintCta from './components/PrintCta'
 import PrintFooter from './components/PrintFooter'
 import StaticPage from './components/StaticPage'
 import SheetThumb from './components/SheetThumb'
+import GradeFilter from './components/GradeFilter'
+import { ALL_GRADES, isGrade } from './lib/grades'
 import { SheetStateContext } from './components/SheetState'
 import WorksheetDetails from './components/WorksheetDetails'
 import MultiplicationTable from './components/MultiplicationTable'
@@ -90,6 +92,23 @@ export default function App() {
   const worksheets = useMemo(
     () => localizedWorksheets(locale).map(ws => ({ ...ws, desc: ws.shortDesc, Icon: ICONS[ws.id] })),
     [locale],
+  )
+
+  // Which grade the landing catalog is narrowed to. Remembered per device like the
+  // other settings: a household picks for the same child most visits. A value left
+  // by an older build, or a grade that no longer exists, opens the full catalog.
+  const [persistedGrade, setGrade] = usePersistedState('app', 'grade', ALL_GRADES)
+  const grade = isGrade(persistedGrade) ? persistedGrade : ALL_GRADES
+  const selectGrade = useCallback(next => {
+    trackEvent('select_grade', { grade: next })
+    setGrade(next)
+  }, [setGrade])
+
+  // The filter narrows the landing grid only; the sidebar on a worksheet page
+  // stays whole, so no sheet is ever unreachable from where a child is working.
+  const shownWorksheets = useMemo(
+    () => (grade === ALL_GRADES ? worksheets : worksheets.filter(ws => gradeNumbers(ws.grades).includes(Number(grade)))),
+    [worksheets, grade],
   )
 
   // One listener catches both the Print button and Cmd/Ctrl+P.
@@ -215,8 +234,10 @@ export default function App() {
               </a>
             )}
 
+            <GradeFilter value={grade} onChange={selectGrade} count={shownWorksheets.length} />
+
             <nav className="catalog-grid" aria-label={t('app.worksheetTypes')}>
-              {worksheets.map(ws => (
+              {shownWorksheets.map(ws => (
                 <a
                   key={ws.id}
                   className="catalog-card"

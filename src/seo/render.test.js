@@ -10,7 +10,7 @@ import {
   ogImagePath, inlineHtml, inlineMarkdown,
   renderMarkdown, renderLlmsTxt, renderLlmsFullTxt, renderSitemap, renderRobots,
   renderCatalogJson, renderNotFoundMarkdown, renderNotFoundHtml, buildSiteFiles, renderAgentsMarkdown,
-  worksheetDetailsHtml, agesForGrades, lastContentUpdate, escapeHtml,
+  worksheetDetailsHtml, agesForGrades, gradeNumbers, lastContentUpdate, escapeHtml,
 } from './render.js'
 
 const TEMPLATE = `<!doctype html><html><head><meta charset="UTF-8" />
@@ -96,6 +96,17 @@ describe('catalog invariants', () => {
     expect(agesForGrades('2')).toBe('7-8')
     expect(agesForGrades('1–3')).toBe('6-9')
     for (const ws of WORKSHEETS) expect(agesForGrades(ws.grades)).toMatch(/^\d-\d$/)
+  })
+
+  it('gradeNumbers expands a band into every grade it covers', () => {
+    expect(gradeNumbers('3')).toEqual([3])
+    expect(gradeNumbers('1–3')).toEqual([1, 2, 3])
+    for (const ws of WORKSHEETS) {
+      const grades = gradeNumbers(ws.grades)
+      expect(grades.length).toBeGreaterThan(0)
+      for (const g of grades) expect(g).toBeGreaterThanOrEqual(1)
+      for (const g of grades) expect(g).toBeLessThanOrEqual(3)
+    }
   })
 })
 

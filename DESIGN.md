@@ -125,6 +125,13 @@ components:
   button-toggle-active:
     backgroundColor: "{colors.control-ink}"
     textColor: "#ffffff"
+  button-toggle-stacked:
+    backgroundColor: "transparent"
+    textColor: "{colors.ink}"
+    typography: "{typography.ui}"
+    rounded: "{rounded.cover}"
+    padding: "8px 18px"
+    height: "51px"
   catalog-card:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
@@ -308,7 +315,7 @@ Form language: rules and bands, not pills or blobs. Subject identity is a 4–5p
 - **Shape:** `--radius` (8px), 44px minimum height, Inter 700 at 14px, `translateY(1px)` on press.
 - **Primary:** marking red on white (`10px 20px`); hovers to `mark-deep`. This is the Print action and, at the sheet's foot, widens to full width on mobile (`12px 28px`, 15px).
 - **Secondary:** transparent with a 1.5px `border-dark` stroke and ink text; hovers to a 6% ink wash with a `control-ink` border.
-- **Toggle (segmented):** 1px `border-dark`, transparent, Inter 500 13px, `7px 14px`; active fills `control-ink` with white text; focused segment raises `z-index` so its ring is not clipped. Never wraps; on mobile the group is full-width with equal flex children and wrapping labels.
+- **Toggle (segmented):** 1px `border-dark`, transparent, Inter 500 13px, `7px 14px`; active fills `control-ink` with white text; focused segment raises `z-index` so its ring is not clipped. Never wraps; on mobile the group is full-width with equal flex children and wrapping labels. A stacked variant carries a quieter figure line under each label; see **Grade filter**.
 - **Disabled:** `opacity: 0.45`, `not-allowed`, no press transform.
 
 ### Cards (catalog, landing)
@@ -333,6 +340,9 @@ Paper chip parked at `translateY(calc(-100% - 20px))`, top-left, 44px tall, z-in
 
 ### Resume card
 The remembered sheet, offered not forced: a board-side link on `cover-wash` with a `cover-line` border, a 4px subject tab, and an Archivo 700 16px label. Hover goes to `cover-wash-strong` and `cover-line-strong`.
+
+### Grade filter
+The landing catalog's segmented toggle in its stacked variant: All / Grade 1 / Grade 2 / Grade 3, each label (Inter 500 14px) over its age band (JetBrains Mono 11.5px graphite, tabular). Active fills `control-ink`, the label goes 600 and the figure line to 72% white — fill and weight carry the state, never the colour alone. Desktop is an intrinsic bar of 112px cells centred over the grid; ≤768px it is four equal cells across the full board. No plate, no keyline, no eyebrow: it is a control for the grid, so it sits with the grid.
 
 ### Empty state
 Board-side, max 46ch, dashed `cover-line-strong` border on `cover-wash`, ink 15px/1.55. It says what went wrong and how to fix it, where the sheet would have been.
@@ -689,3 +699,47 @@ present in the `.md` twin and `llms-full.txt`; `FAQPage` still emitted and the h
 still sequential; 21 route × viewport combinations with zero contrast failures and no
 horizontal overflow; the 8 notebook print configurations and the 10-sheet A4/Letter sweep
 unchanged (the block is `no-print`).
+
+## Revision — the catalog learns its grades
+
+**Date:** 2026-09-10
+
+**What changed.** The landing catalog gained a grade filter between the hero and the grid:
+All / Grade 1 / Grade 2 / Grade 3. Choosing a grade narrows the grid to the sheets whose band
+covers it (4, 9 and 11 of 11 sheets); the choice is remembered per device alongside the locale
+and the resumed sheet.
+
+**Why it is a toggle and not a new object.** The catalog already owns one control language — the
+segmented toggle that configures every worksheet. Reusing it means a parent who has set a number
+range once already knows what this bar does, and the cover gains no new shape. What it needed was
+a second line, so the toggle grew a stacked variant rather than the catalog growing a chip rail.
+
+**Why the age band is the second line.** A parent knows their child is six before they know which
+grade column addition belongs to, and outside the US "Grade 2" is not what the school says at all —
+the French segment reads *Niveau 2*, which no French parent uses. The age band is the line that
+survives translation, so it travels under every segment, derived from the same `agesForGrades`
+the worksheet pages already publish. It is a figure, so it is set in the figure face. **All**
+carries "Ages 6–9" so the four cells are two lines on one baseline rather than one ragged row.
+
+**Why the grid does not animate.** Filtering re-flows nine or eleven drawn sheets at once; any
+authored transition on that is the second animation this system does not have. The 0.12s fill on
+the pressed segment is the whole feedback, and the grid is simply the answer.
+
+**The cost that was accepted.** The prerendered home lists every sheet and React replaces it on
+mount, so a returning visitor with a remembered grade sees the grid narrow once as the page wakes.
+The alternative — forgetting the choice every visit — makes a parent re-tap on every visit for a
+household that is almost always shopping for the same child. The control sits directly above the
+grid with its state filled in, so the narrowing is explained by the thing that caused it.
+
+**Accessibility.** The group is named (`app.gradeFilter`), each segment is a real button with
+`aria-pressed`, the pressed one is distinguished by fill and weight as well as hue, cells are
+44px+ (51px desktop, 49px mobile), and the focus ring is unclipped on interior segments because
+the focused segment raises its `z-index` and nothing above it hides overflow. The result count is
+spoken through a polite live region rather than printed on the cover, where the grid already
+answers it.
+
+Verified: 309 tests, lint and build clean; the prerendered home still links all 11 worksheets
+under a single `h1` and carries no filter markup (it is client-only, like the resume card);
+15 route × viewport combinations (1280, 390 and 320 wide × en/fr/de/ru/zh) with zero horizontal
+overflow from the control and no clipped segment at any width; focus ring captured on the first
+and an interior segment; print output untouched — the catalog is `no-print`.

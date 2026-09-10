@@ -118,6 +118,10 @@ export default {
     language: 'Language',
     resume: 'Pick up where you left off',
     skipToContent: 'Skip to content',
+    gradeFilter: 'Grade',
+    allGrades: 'All',
+    ages: 'Ages {ages}',
+    sheetCount: { one: '{n} sheet', other: '{n} sheets' },
   },
 
   common: {

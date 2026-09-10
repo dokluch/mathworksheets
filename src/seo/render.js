@@ -814,7 +814,7 @@ export function renderMarkdown(route) {
 /* ────────────────────────────── llms.txt (English only) ────────────────────────────── */
 
 /** Grade numbers a worksheet covers: "1–3" → [1, 2, 3]. */
-function gradeNumbers(grades) {
+export function gradeNumbers(grades) {
   const parts = String(grades).split(/[–-]/).map(g => Number(g.trim()))
   if (parts.length === 1) return parts
   const out = []

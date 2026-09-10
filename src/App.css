@@ -113,6 +113,30 @@
   color: var(--color-text);
 }
 
+/* — Grade filter (landing page) — */
+
+/* A control for the grid, so it sits with the grid rather than on a plate of
+   its own: no card, no keyline, no eyebrow above it. The group names itself. */
+.grade-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 0 var(--sq);
+}
+
+/* Said to a screen reader only: the grid itself already answers "how many". */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* =============================================
    SITE HEADER — brand · About · language
    ============================================= */
@@ -1015,6 +1039,33 @@
   .catalog-grid:not(.catalog-grid--compact) .catalog-card:last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
+
+  /* Four equal cells across the board, like the settings groups: a centred
+     natural-width bar reads as a stray object on a narrow screen. The stacked
+     variant's cell width is declared later in this file, so these rules name
+     both classes to outrank it rather than relying on order. */
+  .grade-filter {
+    width: 100%;
+  }
+
+  .grade-filter .btn-group--stacked {
+    display: flex;
+    width: 100%;
+  }
+
+  .grade-filter .btn-group--stacked .btn-toggle {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 8px 4px;
+  }
+
+  .grade-filter .btn-group--stacked .btn-toggle-label {
+    font-size: 13px;
+  }
+
+  .grade-filter .btn-group--stacked .btn-toggle-sub {
+    font-size: 11px;
+  }
 }
 
 @media (max-width: 380px) {
@@ -1458,6 +1509,41 @@ a.back-btn {
 
 .btn-toggle:last-child {
   border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Stacked variant: a label over a quieter figure line (the catalog's grade
+   filter). Fill and weight carry the state — the muted line is never the only
+   signal, and the age band is a figure, so it is set in the figure face. */
+.btn-group--stacked .btn-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 112px;
+  padding: 8px 18px;
+}
+
+.btn-toggle-label {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.btn-toggle-sub {
+  font-family: var(--font-figure);
+  font-variant-numeric: tabular-nums;
+  font-size: 11.5px;
+  line-height: 1.2;
+  color: var(--color-text-muted);
+  transition: color 0.12s ease;
+}
+
+.btn-toggle.active .btn-toggle-label {
+  font-weight: 600;
+}
+
+.btn-toggle.active .btn-toggle-sub {
+  color: rgba(255, 255, 255, 0.72);
 }
 
 /* =============================================

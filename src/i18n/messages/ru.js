@@ -109,6 +109,10 @@ export default {
     language: 'Язык',
     resume: 'Продолжить с того же места',
     skipToContent: 'Перейти к содержимому',
+    gradeFilter: 'Класс',
+    allGrades: 'Все',
+    ages: '{ages} лет',
+    sheetCount: { one: '{n} лист', few: '{n} листа', many: '{n} листов', other: '{n} листа' },
   },
 
   common: {

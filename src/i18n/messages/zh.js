@@ -109,6 +109,10 @@ export default {
     language: '语言',
     resume: '继续上次的练习',
     skipToContent: '跳到主要内容',
+    gradeFilter: '年级',
+    allGrades: '全部',
+    ages: '{ages} 岁',
+    sheetCount: { other: '{n} 张练习题' },
   },
 
   common: {

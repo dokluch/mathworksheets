@@ -35,12 +35,16 @@ export function SettingRow({ label, htmlFor, children }) {
   )
 }
 
-/** Joined toggle buttons; exactly one option is pressed. `onChange` receives the option value untouched. */
-export function SegmentedControl({ options, value, onChange, ariaLabel }) {
+/**
+ * Joined toggle buttons; exactly one option is pressed. `onChange` receives the option value untouched.
+ * An option may carry a `sublabel` — a quieter second line under its label — and `className` selects a
+ * layout variant of the group. Options without a sublabel render exactly as before.
+ */
+export function SegmentedControl({ options, value, onChange, ariaLabel, className }) {
   const rowLabelId = useContext(RowLabelContext)
   return (
     <div
-      className="btn-group"
+      className={`btn-group${className ? ` ${className}` : ''}`}
       role="group"
       aria-label={ariaLabel}
       aria-labelledby={ariaLabel ? undefined : rowLabelId ?? undefined}
@@ -55,7 +59,12 @@ export function SegmentedControl({ options, value, onChange, ariaLabel }) {
             aria-pressed={selected}
             onClick={() => onChange(option.value)}
           >
-            {option.label}
+            {option.sublabel === undefined ? option.label : (
+              <>
+                <span className="btn-toggle-label">{option.label}</span>
+                <span className="btn-toggle-sub">{option.sublabel}</span>
+              </>
+            )}
           </button>
         )
       })}

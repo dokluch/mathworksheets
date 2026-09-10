@@ -75,5 +75,5 @@ Node 24, npm 11. No TypeScript.
 
 ## Analytics events (GA4)
 
-`page_view`, `select_worksheet`, `regenerate_worksheet`, `print_worksheet` (with `setting_*` params), `solve_equation`, `switch_locale` (with `locale`).
+`page_view`, `select_worksheet`, `select_grade` (with `grade`: `all`, `1`, `2` or `3`), `regenerate_worksheet`, `print_worksheet` (with `setting_*` params), `solve_equation`, `switch_locale` (with `locale`).
 Key events (`print_worksheet`, `solve_equation`) are marked in the GA4 admin UI, not in code.
