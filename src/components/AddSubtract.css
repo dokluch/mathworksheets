@@ -179,7 +179,6 @@
 
    The counter is absolutely positioned so it adds no height: the notebook
    sheets are laid out in whole squares and any extra flow would break the grid. */
-.problem-grid,
 .colarith-grid,
 .compare-grid,
 .rounding-grid,
@@ -187,7 +186,6 @@
   counter-reset: problem;
 }
 
-.problem-item,
 .colarith-item,
 .compare-item,
 .rounding-item,
@@ -196,7 +194,6 @@
   position: relative;
 }
 
-.tool-panel:has(.answer-key) .problem-item::before,
 .tool-panel:has(.answer-key) .colarith-item::before,
 .tool-panel:has(.answer-key) .compare-item::before,
 .tool-panel:has(.answer-key) .rounding-item::before,
@@ -212,45 +209,8 @@
   color: var(--color-text-muted);
 }
 
-/* ── Problem grid ── */
-.problem-grid {
-  display: grid;
-  gap: 6px 24px;
-  overflow-x: auto;
-}
-
-.problem-item {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--color-border-light);
-}
-
-.problem-text {
-  font-family: var(--font-figure);
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.problem-text .val {
-  font-variant-numeric: tabular-nums;
-  min-width: 1.2em;
-  text-align: center;
-}
-
-.problem-text .op {
-  color: var(--color-text);
-  font-weight: 600;
-  font-size: 20px;
-  line-height: 1;
-}
-
+/* ── Answer blank ──
+   The write-in line of the list sheets (Patterns, Rounding, Comparison). */
 .blank-slot {
   display: inline-block;
   width: 48px;
@@ -259,59 +219,6 @@
   border-radius: 0;
   vertical-align: bottom;
   background: linear-gradient(to top, var(--color-primary-faint), transparent);
-}
-
-/* ── Stacked problem layout ── */
-.stacked-grid {
-  gap: 20px 24px;
-}
-
-.problem-item-stacked {
-  border-bottom: none;
-  padding: 4px 0;
-  justify-content: center;
-}
-
-.stacked-problem {
-  font-family: var(--font-figure);
-  font-size: 16px;
-  font-weight: 500;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-end;
-  min-width: 60px;
-}
-
-.stacked-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-  min-height: 28px;
-}
-
-.stacked-row .op {
-  color: var(--color-text);
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 1;
-}
-
-.stacked-row .val {
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-  min-width: 1.2em;
-}
-
-.stacked-row .blank-slot {
-  width: 40px;
-}
-
-.stacked-line {
-  width: 100%;
-  height: 0;
-  border-bottom: 2.5px solid var(--color-text);
-  margin: 4px 0;
 }
 
 /* ── Print styles ── */
@@ -377,7 +284,6 @@
     color: #111;
   }
 
-  .tool-panel:has(.answer-key) .problem-item::before,
   .tool-panel:has(.answer-key) .colarith-item::before,
   .tool-panel:has(.answer-key) .compare-item::before,
   .tool-panel:has(.answer-key) .rounding-item::before,
@@ -385,36 +291,13 @@
     color: #555;
   }
 
-  /* Ink discipline: operators and the meta line print as ink, never grey. */
-  .problem-text .op,
-  .stacked-row .op {
-    color: #111;
-  }
-
+  /* Ink discipline: the meta line prints as ink, never grey. */
   .ws-meta {
     color: #333;
-  }
-
-  .problem-item {
-    border-bottom-color: #ddd;
-    break-inside: avoid-page;
-    page-break-inside: avoid;
-  }
-
-  .problem-text {
-    font-size: 15px;
   }
 
   .blank-slot {
     border-bottom-color: #666;
     background: none;
-  }
-
-  .stacked-line {
-    border-bottom-color: #333;
-  }
-
-  .problem-item-stacked {
-    border-bottom: none;
   }
 }

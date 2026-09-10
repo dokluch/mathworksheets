@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid, problemsPerPage, notebookLayout, PRINT_WIDTH, PRINT_SQUARE } from '../hooks/useNotebookGrid'
+import { useNotebookGrid, problemsPerPage, fitsPrint } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import { frameLayout, generateProblems } from '../lib/longDivision'
@@ -82,17 +82,6 @@ function renderProblem(problem, frame, t) {
       <span className="coldiv-rule coldiv-rule-h" aria-hidden="true" />
     </div>
   )
-}
-
-/** True when `columns` problems of `cellsWide` squares still fit letter landscape at 1/4in. */
-function fitsPrint(columns, cellsWide) {
-  return !notebookLayout({
-    width: PRINT_WIDTH,
-    columns,
-    cellsWide,
-    square: PRINT_SQUARE,
-    minSquare: PRINT_SQUARE,
-  }).overflow
 }
 
 export default function ColumnDivision() {
