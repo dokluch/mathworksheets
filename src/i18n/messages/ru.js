@@ -107,7 +107,6 @@ export default {
     worksheetTypes: 'Типы рабочих листов',
     sourceOnGitHub: 'Исходный код на GitHub',
     language: 'Язык',
-    resume: 'Продолжить с того же места',
     skipToContent: 'Перейти к содержимому',
     gradeFilter: 'Класс',
     allGrades: 'Все',

@@ -116,7 +116,6 @@ export default {
     worksheetTypes: 'Worksheet types',
     sourceOnGitHub: 'Source on GitHub',
     language: 'Language',
-    resume: 'Pick up where you left off',
     skipToContent: 'Skip to content',
     gradeFilter: 'Grade',
     allGrades: 'All',

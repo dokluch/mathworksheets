@@ -66,54 +66,8 @@
 }
 
 /* =============================================
-   RESUME CARD — the remembered sheet, offered not forced
+   GRADE FILTER — narrows the landing catalog
    ============================================= */
-
-.resume-card {
-  display: inline-flex;
-  align-items: stretch;
-  gap: 12px;
-  margin: 0 0 calc(var(--sq) * 1.2);
-  padding: 10px 18px 10px 12px;
-  background: var(--cover-wash);
-  border: 1px solid var(--cover-line);
-  border-radius: var(--radius);
-  color: var(--on-cover);
-  text-decoration: none;
-  transition: background 0.15s ease, border-color 0.15s ease;
-  --focus-inner: var(--cover);
-}
-
-.resume-card:hover {
-  background: var(--cover-wash-strong);
-  border-color: var(--cover-line-strong);
-}
-
-.resume-card-tab {
-  width: 4px;
-  /* A 4px bar takes the cap, not a corner step: --radius would round it into
-     a lozenge. This is the one place a raw radius is the right answer. */
-  border-radius: 2px;
-  background: var(--card-color, var(--mark));
-}
-
-.resume-card-text {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  flex-wrap: wrap;
-  font-size: 15px;
-  color: var(--on-cover);
-}
-
-.resume-card-label {
-  font-family: var(--font-cover);
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-/* — Grade filter (landing page) — */
 
 /* A control for the grid, so it sits with the grid rather than on a plate of
    its own: no card, no keyline, no eyebrow above it. The group names itself. */

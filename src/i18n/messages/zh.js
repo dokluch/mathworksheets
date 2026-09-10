@@ -107,7 +107,6 @@ export default {
     worksheetTypes: '练习题类型',
     sourceOnGitHub: 'GitHub 上的源代码',
     language: '语言',
-    resume: '继续上次的练习',
     skipToContent: '跳到主要内容',
     gradeFilter: '年级',
     allGrades: '全部',

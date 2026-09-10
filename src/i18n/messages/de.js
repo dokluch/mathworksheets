@@ -107,7 +107,6 @@ export default {
     worksheetTypes: 'Arten von Arbeitsblättern',
     sourceOnGitHub: 'Quellcode auf GitHub',
     language: 'Sprache',
-    resume: 'Dort weitermachen, wo Sie aufgehört haben',
     skipToContent: 'Zum Inhalt springen',
     gradeFilter: 'Klasse',
     allGrades: 'Alle',

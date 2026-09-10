@@ -107,7 +107,6 @@ export default {
     worksheetTypes: 'Tipi di schede',
     sourceOnGitHub: 'Codice sorgente su GitHub',
     language: 'Lingua',
-    resume: 'Riprendi da dove eri rimasto',
     skipToContent: 'Vai al contenuto',
     gradeFilter: 'Classe',
     allGrades: 'Tutte',

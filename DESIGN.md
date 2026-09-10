@@ -217,7 +217,7 @@ One light ground in three tones, one warm mark, and a small residual control acc
 - **Marking Red** (`mark`): the one warm colour. Spent on exactly four things — the Print button, the global focus ring, the set-stamp animation, and text selection. `mark-deep` carries prose links and the primary-button hover.
 
 ### Tertiary — the nine subject inks
-Each worksheet carries its own ink (`ink-multiply` … `ink-eqexplore`), assigned in `src/worksheets.js`. They appear as geometry and as icon tint: the 5px band across the head of a catalog card, the 4px tab on a resume card, and the stroke colour of the sidebar/chip icon (19px) and the worksheet-title icon (22px). They are never used as text colour, never as a fill, and never as the only signal of which sheet is selected — the active row also inverts to paper and bolds its label.
+Each worksheet carries its own ink (`ink-multiply` … `ink-eqexplore`), assigned in `src/worksheets.js`. They appear as geometry and as icon tint: the 5px band across the head of a catalog card and the stroke colour of the sidebar/chip icon (19px) and the worksheet-title icon (22px). They are never used as text colour, never as a fill, and never as the only signal of which sheet is selected — the active row also inverts to paper and bolds its label.
 
 ### Neutral
 - **Sheet Paper** (`paper`): every real sheet — worksheet, settings panel, static prose plate, language menu, catalog card, brand label, the active sidebar row.
@@ -253,7 +253,7 @@ Each worksheet carries its own ink (`ink-multiply` … `ink-eqexplore`), assigne
 - **Display** (Archivo 700, `clamp(20px, 2.6vw, 30px)`, 1.15, −0.02em): the catalog hero sentence, balanced and capped at 32ch. Renders at 30px/34.5px at 1440.
 - **Headline** (Archivo 800, 25px/27.5px, −0.02em): the worksheet page `h1`, on the board, with its subject icon.
 - **Title** (Archivo 700, 22px/26.4px, −0.015em): static-page `h2`, with more space above (`calc(var(--sq) * 1.6)`) than below (`--half-sq`).
-- **Subtitle** (Archivo 700, 16px, −0.01em): catalog card labels and the resume-card label; the site brand is Archivo 800 17px/−0.015em (15px on mobile).
+- **Subtitle** (Archivo 700, 16px, −0.01em): catalog card labels; the site brand is Archivo 800 17px/−0.015em (15px on mobile).
 - **Lead** (Inter 400, 19px/28.5px): the opening paragraph of a static page.
 - **Body** (Inter 400, 16px/26.4px): prose, constrained by `--measure: 608px` — an absolute measure, roughly 68 characters, not `ch`, so headings and body share one left edge.
 - **UI** (Inter 500–700, 13–14px, 1.25–1.3): nav links, setting labels, toggles, buttons, card descriptions, sheet title (Inter 700 20px).
@@ -270,7 +270,7 @@ Each worksheet carries its own ink (`ink-multiply` … `ink-eqexplore`), assigne
 
 **The module.** `--sq: 26px` and `--half-sq: 13px` are the notebook square, matching `SCREEN_SQUARE = 26` in `useNotebookGrid.js`, so the chrome measures in the same unit as the sheet it configures.
 
-Where the module actually governs: catalog grid gap (`--sq`), catalog vertical padding (`1.5sq` / `2sq`), hero and resume-card margins, static-page heading rhythm (`1.6sq` above / `half-sq` below), footer padding, the worksheet-details plate, and the site header's vertical padding (`--half-sq`).
+Where the module actually governs: catalog grid gap (`--sq`), catalog vertical padding (`1.5sq` / `2sq`), hero and grade-filter margins, static-page heading rhythm (`1.6sq` above / `half-sq` below), footer padding, the worksheet-details plate, and the site header's vertical padding (`--half-sq`).
 
 Where it does not: component-internal padding is a conventional 8/10/12/16/20/24px scale (buttons `10px 20px`, settings body `18px 24px 20px`, sheet `32px 36px`, nav `8px 12px`). The interface sits *on* the square at the block level and *off* it inside components. Record that honestly rather than pretending the ruling is total.
 
@@ -297,7 +297,7 @@ Because both grounds are light, the keyline is not optional garnish: it is the p
 ### Named Rules
 **The Keyline-First Rule.** Separation on the board is a 1px ink ring at low alpha, not a border and not a heavier shadow. A paper plate that drops its keyline has broken the governing rule, not just lost a detail.
 
-**The Flat Cover Rule.** Nothing on the board is elevated except paper. Board-side controls (nav links, back button, sidebar rows, resume card, empty state) use `cover-wash` / `cover-wash-strong` tonal washes instead of shadow.
+**The Flat Cover Rule.** Nothing on the board is elevated except paper. Board-side controls (nav links, back button, sidebar rows, empty state) use `cover-wash` / `cover-wash-strong` tonal washes instead of shadow.
 
 ## Shapes
 
@@ -337,9 +337,6 @@ Site header on `cover-deep` with a 2px `cover-line` bottom rule. The wordmark is
 
 ### Skip link
 Paper chip parked at `translateY(calc(-100% - 20px))`, top-left, 44px tall, z-index 100; slides to 0 on `:focus-visible` over 0.16s.
-
-### Resume card
-The remembered sheet, offered not forced: a board-side link on `cover-wash` with a `cover-line` border, a 4px subject tab, and an Archivo 700 16px label. Hover goes to `cover-wash-strong` and `cover-line-strong`.
 
 ### Grade filter
 The landing catalog's segmented toggle in its stacked variant: All / Grade 1 / Grade 2 / Grade 3, each label (Inter 500 14px) over its age band (JetBrains Mono 11.5px graphite, tabular). Active fills `control-ink`, the label goes 600 and the figure line to 72% white — fill and weight carry the state, never the colour alone. Desktop is an intrinsic bar of 112px cells centred over the grid; ≤768px it is four equal cells across the full board. No plate, no keyline, no eyebrow: it is a control for the grid, so it sits with the grid.
@@ -706,8 +703,7 @@ unchanged (the block is `no-print`).
 
 **What changed.** The landing catalog gained a grade filter between the hero and the grid:
 All / Grade 1 / Grade 2 / Grade 3. Choosing a grade narrows the grid to the sheets whose band
-covers it (4, 9 and 11 of 11 sheets); the choice is remembered per device alongside the locale
-and the resumed sheet.
+covers it (4, 9 and 11 of 11 sheets); the choice is remembered per device alongside the locale.
 
 **Why it is a toggle and not a new object.** The catalog already owns one control language — the
 segmented toggle that configures every worksheet. Reusing it means a parent who has set a number
@@ -739,7 +735,34 @@ spoken through a polite live region rather than printed on the cover, where the 
 answers it.
 
 Verified: 309 tests, lint and build clean; the prerendered home still links all 11 worksheets
-under a single `h1` and carries no filter markup (it is client-only, like the resume card);
+under a single `h1` and carries no filter markup (it is client-only, added on hydration);
 15 route × viewport combinations (1280, 390 and 320 wide × en/fr/de/ru/zh) with zero horizontal
 overflow from the control and no clipped segment at any width; focus ring captured on the first
 and an interior segment; print output untouched — the catalog is `no-print`.
+
+## Revision — the catalog stops remembering
+
+**Date:** 2026-09-10
+
+**What changed.** The resume card is gone: the offer to "pick up where you left off", the
+`app.activeTab` key behind it, its seven translations and its board-side styling. The landing
+page is now the hero, the grade filter and the grid.
+
+**Why.** The card answered a question this product does not raise. A worksheet is finished when
+it is printed; there is no progress to return to, no half-done state on the page, and the
+generator draws fresh problems on every visit — so "where you left off" was, in practice, the
+last thing printed, which is exactly the sheet a parent is least likely to want twice in a row.
+It read as an app's continue-button grafted onto a printer.
+
+**What replaced it.** Nothing, and that is the point. The catalog gained the grade filter in the
+same revision, which answers the real question a returning parent has — *which of these is for my
+child* — where the resume card only answered *what did you do last time*. One control that narrows
+eleven sheets beats one shortcut to one sheet.
+
+**What this removes from the record.** The 4px subject tab (the last place a subject ink appeared
+outside a catalog card's head and an icon stroke), the resume-card entry in Components, and the
+one board-side control that carried a label in Subtitle type.
+
+Verified: 308 tests, lint and build clean; nothing writes `app.activeTab` any more and no stored
+value is read; the landing page keeps its single `h1` and its prerendered card list; print output
+untouched.

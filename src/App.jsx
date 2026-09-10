@@ -67,16 +67,8 @@ const COMPONENTS = {
 }
 
 export default function App() {
-  const [persistedSheet, setPersistedSheet] = usePersistedState('app', 'activeTab', null)
   const [persistedLocale, setPersistedLocale] = usePersistedState('app', 'locale', DEFAULT_LOCALE)
   const [activeSheet, navigate, activePage, locale, setLocale, pathInLocale] = useRoute(persistedLocale)
-
-  // Keep "pick up where you left off" working across sessions. Only ever
-  // record a sheet: reading a static page must not forget it, and neither
-  // must returning to the catalog — which is where the offer is now shown.
-  useEffect(() => {
-    if (activeSheet) setPersistedSheet(activeSheet)
-  }, [activeSheet, setPersistedSheet])
 
   const localeCtx = useMemo(() => ({ locale, t: (key, params) => translate(locale, key, params) }), [locale])
   const t = localeCtx.t
@@ -147,12 +139,6 @@ export default function App() {
     }
   }, [activeSheet])
 
-  // Offered on the catalog rather than redirected to, so the front door stays
-  // the front door and Back still returns here.
-  const resumeSheet = !activeSheet && !activePage && persistedSheet
-    ? worksheets.find(w => w.id === persistedSheet)
-    : null
-
   // Same route object the prerender step uses, so WorksheetDetails renders the
   // identical HTML and the crawlable copy survives hydration.
   const activeRoute = useMemo(
@@ -222,17 +208,6 @@ export default function App() {
         ) : (
           <main className="catalog no-print catalog--full" id="main">
             <p className="catalog-hero">{t('app.subtitle')}</p>
-
-            {resumeSheet && (
-              <a className="resume-card" {...cardLink(resumeSheet)}>
-                <span className="resume-card-tab" style={{ '--card-color': resumeSheet.color }} aria-hidden="true" />
-                {/* One line, no eyebrow: the sentence carries the label
-                    rather than a label carrying a sentence. */}
-                <span className="resume-card-text">
-                  {t('app.resume')} <b className="resume-card-label">{resumeSheet.label}</b>
-                </span>
-              </a>
-            )}
 
             <GradeFilter value={grade} onChange={selectGrade} count={shownWorksheets.length} />
 

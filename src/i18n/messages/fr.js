@@ -107,7 +107,6 @@ export default {
     worksheetTypes: 'Types de fiches',
     sourceOnGitHub: 'Code source sur GitHub',
     language: 'Langue',
-    resume: 'Reprendre où vous en étiez',
     skipToContent: 'Aller au contenu',
     gradeFilter: 'Niveau',
     allGrades: 'Tous',

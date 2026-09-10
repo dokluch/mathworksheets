@@ -35,32 +35,26 @@ describe('App', () => {
     }
   })
 
-  it('clicking a card opens the worksheet, updates the URL, persists it and tracks the selection', () => {
+  it('clicking a card opens the worksheet, updates the URL and tracks the selection', () => {
     render(<App />)
     fireEvent.click(screen.getByRole('link', { name: /Rounding/ }))
     expect(window.location.pathname).toBe('/worksheets/rounding')
     expect(screen.getByRole('main', { name: 'Rounding' })).toBeTruthy()
-    expect(JSON.parse(localStorage.getItem('mathsheets')).app.activeTab).toBe('rounding')
     expect(trackEvent).toHaveBeenCalledWith('select_worksheet', { worksheet_id: 'rounding' })
   })
 
-  // The remembered sheet is offered on the catalog, not redirected to: typing
-  // the domain must still reach the catalog, and Back must still return here.
-  it('offers the remembered worksheet on / without leaving the catalog', () => {
-    localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'patterns' }, patterns: { level: 2 } }))
+  // / is the catalog and nothing else: no sheet is remembered, so typing the
+  // domain never lands a parent inside last week's worksheet.
+  it('stays on the catalog at / and remembers no sheet', () => {
+    render(<App />)
+    fireEvent.click(screen.getByRole('link', { name: /Rounding/ }))
+    expect(JSON.parse(localStorage.getItem('mathsheets')).app.activeTab).toBeUndefined()
+
+    cleanup()
+    window.history.replaceState(null, '', '/')
     render(<App />)
     expect(document.querySelector('.worksheet-main')).toBeNull()
     expect(window.location.pathname).toBe('/')
-
-    const resume = document.querySelector('.resume-card')
-    expect(resume).toBeTruthy()
-    expect(resume.getAttribute('href')).toBe('/worksheets/patterns')
-    expect(resume.textContent).toContain('Patterns')
-  })
-
-  it('offers no resume card when nothing is remembered', () => {
-    render(<App />)
-    expect(document.querySelector('.resume-card')).toBeNull()
   })
 
   // The grade filter narrows the landing grid. Default is All, so a first
@@ -208,8 +202,7 @@ describe('App', () => {
     expect(footer.textContent).toContain('Superposition Labs Inc.')
   })
 
-  it('clicking a footer link opens the static page in-app and keeps the remembered worksheet', () => {
-    localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'patterns' } }))
+  it('clicking a footer link opens the static page in-app', () => {
     window.history.replaceState(null, '', '/worksheets/patterns')
     render(<App />)
     fireEvent.click(screen.getByRole('link', { name: 'Privacy' }))
@@ -217,12 +210,10 @@ describe('App', () => {
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Privacy Policy')
     expect(document.querySelector('.worksheet-main')).toBeNull()
     expect(screen.getByRole('main').className).toContain('static-page')
-    expect(JSON.parse(localStorage.getItem('mathsheets')).app.activeTab).toBe('patterns')
     expect(window.scrollTo).toHaveBeenCalled()
   })
 
   it('opens the static page named in the URL and routes its internal links in-app', () => {
-    localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'rounding' } }))
     window.history.replaceState(null, '', '/about')
     render(<App />)
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(`About ${BRAND}`)
@@ -284,7 +275,6 @@ describe('App', () => {
     expect(screen.getByRole('main', { name: localizeWorksheet(rounding, 'fr').label })).toBeTruthy()
     expect(screen.getByRole('link', { name: new RegExp(t('fr', 'app.allSheets')) }).getAttribute('href')).toBe('/fr')
     expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('fr')
-    expect(JSON.parse(localStorage.getItem('mathsheets')).app.activeTab).toBe('rounding')
     expect(trackEvent).toHaveBeenCalledWith('switch_locale', { locale: 'fr' })
     expect(screen.queryByRole('menu')).toBeNull()
   })
@@ -305,12 +295,12 @@ describe('App', () => {
   })
 
   it('the remembered choice applies to / and to any unprefixed URL; a prefixed URL wins without overwriting it', () => {
-    localStorage.setItem('mathsheets', JSON.stringify({ app: { locale: 'de', activeTab: null } }))
+    localStorage.setItem('mathsheets', JSON.stringify({ app: { locale: 'de' } }))
     render(<App />)
     expect(window.location.pathname).toBe('/de')
     expect(document.documentElement.lang).toBe('de')
     cleanup()
-    localStorage.setItem('mathsheets', JSON.stringify({ app: { locale: 'fr', activeTab: 'patterns' } }))
+    localStorage.setItem('mathsheets', JSON.stringify({ app: { locale: 'fr' } }))
     window.history.replaceState(null, '', '/worksheets/comparison')
     render(<App />)
     expect(window.location.pathname).toBe('/fr/worksheets/comparison')
@@ -423,8 +413,8 @@ describe('App', () => {
   })
 
   it('tracks print_worksheet with the sheet id and its settings on beforeprint', () => {
-    localStorage.setItem('mathsheets', JSON.stringify({ app: { activeTab: 'addsub' }, addsub: { ops: 'add', maxVal: 20 } }))
-    // The URL selects the sheet now that / stays on the catalog.
+    localStorage.setItem('mathsheets', JSON.stringify({ addsub: { ops: 'add', maxVal: 20 } }))
+    // The URL selects the sheet.
     window.history.replaceState(null, '', '/worksheets/add-subtract')
     render(<App />)
     window.dispatchEvent(new Event('beforeprint'))
