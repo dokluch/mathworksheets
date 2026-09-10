@@ -94,6 +94,13 @@ export function notebookLayout({ width, columns, cellsWide, square = SCREEN_SQUA
   return { square: sq, gap, offset, overflow: minBlock * sq > width }
 }
 
+/** True when `columns` problems of `cellsWide` squares fit the printable width at 1/4in squares. */
+export function fitsPrint(columns, cellsWide) {
+  return !notebookLayout({
+    width: PRINT_WIDTH, columns, cellsWide, square: PRINT_SQUARE, minSquare: PRINT_SQUARE,
+  }).overflow
+}
+
 /**
  * Rows of problems that fit on one printed page, given the digit rows per
  * problem: header band, headerGap, then n items of (rows + 1) squares

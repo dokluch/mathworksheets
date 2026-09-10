@@ -1,139 +1,86 @@
 import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
+import { useNotebookGrid } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
+import './ColumnAddition.css'
 import WorksheetHeader from './WorksheetHeader'
 import { setStamp } from '../lib/setStamp'
 import AnswerKey from './AnswerKey'
-import { usePreviewScale } from '../hooks/usePreviewScale'
+import {
+  BLANK_A, BLANK_B, BLANK_RESULT, SHEET_SPACING, generateSheet, getBlankAnswer, sheetShape,
+} from '../lib/addSubtract'
 
 const PRESETS = [10, 20, 100, 1000]
 
-const SIXTY_SEVEN_ANSWER = 67
+/** U+2212, as everywhere on the site: a hyphen is too short to read as minus in a square. */
+const glyph = op => (op === '-' ? '−' : op)
 
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min
+function describe(p) {
+  const shown = (pos, value) => (p.blankPos === pos ? '?' : value)
+  const expr = `${shown(BLANK_A, p.a)} ${glyph(p.op)} ${shown(BLANK_B, p.b)}`
+  const res = shown(BLANK_RESULT, p.result)
+  return p.reversed ? `${res} = ${expr}` : `${expr} = ${res}`
 }
 
-function getOpList(ops) {
-  const opList = []
-  if (ops === 'add' || ops === 'both') opList.push('+')
-  if (ops === 'sub' || ops === 'both') opList.push('-')
-  return opList
+const Blank = () => <span className="colarith-blank" />
+
+/* Stacked: operands right-aligned over a rule so place values share a column,
+   and the result drawn as one box per digit. */
+function renderDigitRow(value, width, blank) {
+  const text = String(value)
+  const cells = Array.from({ length: width }, (_, i) => text[i - (width - text.length)] ?? '')
+  return (
+    <div className="colarith-digit-row">
+      {cells.map((cell, idx) => (
+        <span key={idx} className={`colarith-cell ${cell ? '' : 'colarith-cell-empty'}`}>
+          {cell ? (blank ? <Blank /> : cell) : ''}
+        </span>
+      ))}
+    </div>
+  )
 }
 
-function chooseOp(ops) {
-  const opList = getOpList(ops)
-  return opList[Math.floor(Math.random() * opList.length)]
+function renderStackedProblem(p, digits) {
+  return (
+    <div className="colarith-problem" aria-label={describe({ ...p, reversed: false })}>
+      <div className="colarith-row">
+        <span className="colarith-op" aria-hidden="true" />
+        {renderDigitRow(p.a, digits, p.blankPos === BLANK_A)}
+      </div>
+      <div className="colarith-row">
+        <span className="colarith-op" aria-hidden="true">{glyph(p.op)}</span>
+        {renderDigitRow(p.b, digits, p.blankPos === BLANK_B)}
+      </div>
+      <div className="colarith-line" />
+      <div className="colarith-row">
+        <span className="colarith-op" aria-hidden="true" />
+        {renderDigitRow(p.result, digits, p.blankPos === BLANK_RESULT)}
+      </div>
+    </div>
+  )
 }
 
-function generateProblem(ops, maxVal) {
-  const op = chooseOp(ops)
+/* Inline: written left to right the way a child writes in a squared exercise
+   book, one symbol per square, the unknown as one box per digit. */
+function renderInlineProblem(p) {
+  const number = (pos, value) => [...String(value)].map((digit, i) => (
+    <span key={`${pos}-${i}`} className="colarith-cell">
+      {p.blankPos === pos ? <Blank /> : digit}
+    </span>
+  ))
+  const symbol = (key, text) => <span key={key} className="colarith-op" aria-hidden="true">{text}</span>
 
-  let a, b, result
-  if (op === '+') {
-    result = randInt(2, maxVal)
-    a = randInt(1, result - 1)
-    b = result - a
-  } else {
-    a = randInt(2, maxVal)
-    b = randInt(1, a - 1)
-    result = a - b
-  }
-
-  // Randomly choose blank position: left operand, right operand, or result
-  const blankPos = Math.floor(Math.random() * 3)
-
-  // Randomly choose format: normal (a op b = result) or reversed (result = a op b)
-  const reversed = Math.random() < 0.3
-
-  return { a, b, op, result, blankPos, reversed }
-}
-
-function getBlankAnswer(problem) {
-  if (problem.blankPos === 0) return problem.a
-  if (problem.blankPos === 1) return problem.b
-  return problem.result
-}
-
-function generateProblemAvoidingAnswer(answer, ops, maxVal) {
-  for (let attempt = 0; attempt < 20; attempt++) {
-    const problem = generateProblem(ops, maxVal)
-    if (getBlankAnswer(problem) !== answer) return problem
-  }
-
-  return generateProblemWithAnswer(answer === 2 ? 3 : 2, ops, maxVal)
-}
-
-function generateProblemWithAnswer(answer, ops, maxVal) {
-  const op = chooseOp(ops)
-  const blankPos = Math.floor(Math.random() * 3)
-  const reversed = Math.random() < 0.3
-  const effectiveMax = Math.max(maxVal, answer + 1)
-
-  let a, b, result
-
-  if (op === '+') {
-    if (blankPos === 0) {
-      a = answer
-      result = randInt(answer + 1, effectiveMax)
-      b = result - a
-    } else if (blankPos === 1) {
-      b = answer
-      result = randInt(answer + 1, effectiveMax)
-      a = result - b
-    } else {
-      result = answer
-      a = randInt(1, answer - 1)
-      b = result - a
-    }
-  } else {
-    if (blankPos === 0) {
-      a = answer
-      b = randInt(1, answer - 1)
-      result = a - b
-    } else if (blankPos === 1) {
-      b = answer
-      a = randInt(answer + 1, effectiveMax)
-      result = a - b
-    } else {
-      result = answer
-      a = randInt(answer + 1, effectiveMax)
-      b = a - result
-    }
-  }
-
-  return { a, b, op, result, blankPos, reversed }
-}
-
-const Blank = () => <span className="blank-slot" />
-
-function renderProblem(p) {
-  const left = p.blankPos === 0 ? <Blank /> : <span className="val">{p.a}</span>
-  const right = p.blankPos === 1 ? <Blank /> : <span className="val">{p.b}</span>
-  const res = p.blankPos === 2 ? <Blank /> : <span className="val">{p.result}</span>
-
-  const expr = <>{left} <span className="op">{p.op}</span> {right}</>
-  if (p.reversed) {
-    return <>{res} <span className="op">=</span> {expr}</>
-  }
-  return <>{expr} <span className="op">=</span> {res}</>
-}
-
-function renderStackedProblem(p) {
-  const aDisplay = p.blankPos === 0 ? <Blank /> : <span className="val">{p.a}</span>
-  const bDisplay = p.blankPos === 1 ? <Blank /> : <span className="val">{p.b}</span>
-  const resDisplay = p.blankPos === 2 ? <Blank /> : <span className="val">{p.result}</span>
+  const expr = [...number(BLANK_A, p.a), symbol('op', glyph(p.op)), ...number(BLANK_B, p.b)]
+  const res = number(BLANK_RESULT, p.result)
+  const cells = p.reversed
+    ? [...res, symbol('eq', '='), ...expr]
+    : [...expr, symbol('eq', '='), ...res]
 
   return (
-    <div className="stacked-problem">
-      <div className="stacked-row stacked-top">{aDisplay}</div>
-      <div className="stacked-row stacked-mid">
-        <span className="op">{p.op}</span>{bDisplay}
-      </div>
-      <div className="stacked-line" />
-      <div className="stacked-row stacked-bottom">{resDisplay}</div>
+    <div className="colarith-problem" aria-label={describe(p)}>
+      <div className="colarith-row">{cells}</div>
     </div>
   )
 }
@@ -147,34 +94,20 @@ export default function AddSubtract() {
   const [sixtySevenMode, setSixtySevenMode] = usePersistedState('addsub', 'sixtySevenMode', true)
   const [answerKey, setAnswerKey] = usePersistedState('addsub', 'answerKey', false)
   const [seed, setSeed] = useState(0)
-  const [fitRef, fitStyle] = usePreviewScale()
 
-  const stackedCounts = { 2: 14, 3: 18, 4: 24 }
-  const inlineCounts = { 2: 20, 3: 30, 4: 40 }
-  const problemCount = layout === 'stacked'
-    ? (stackedCounts[columns] || 18)
-    : (inlineCounts[columns] || 30)
+  const stacked = layout === 'stacked'
+  const shape = sheetShape({ stacked, maxVal, columns, sixtySevenMode })
+  const [sheetRef, sheetStyle] = useNotebookGrid({
+    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
+  })
 
   const problems = useMemo(() => {
     void seed // depend on seed for re-randomization
-    const useSixtySevenMode = sixtySevenMode && (columns === 2 || columns === 3)
-    const items = []
-    for (let i = 0; i < problemCount; i++) {
-      items.push(
-        useSixtySevenMode
-          ? generateProblemAvoidingAnswer(SIXTY_SEVEN_ANSWER, ops, maxVal)
-          : generateProblem(ops, maxVal)
-      )
-    }
-    if (useSixtySevenMode) {
-      const rows = Math.floor(problemCount / columns)
-      for (let column = 0; column < columns; column++) {
-        const row = randInt(0, rows - 1)
-        items[row * columns + column] = generateProblemWithAnswer(SIXTY_SEVEN_ANSWER, ops, maxVal)
-      }
-    }
-    return items
-  }, [ops, maxVal, columns, problemCount, seed, sixtySevenMode])
+    // Re-derived from plain state so the memo depends on the settings alone.
+    const isStacked = layout === 'stacked'
+    const { columns: cols, count, sixtySeven } = sheetShape({ stacked: isStacked, maxVal, columns, sixtySevenMode })
+    return generateSheet({ ops, maxVal, columns: cols, count, stacked: isStacked, sixtySeven })
+  }, [ops, maxVal, columns, layout, sixtySevenMode, seed])
 
   return (
     <div className="tool-panel">
@@ -208,7 +141,7 @@ export default function AddSubtract() {
           />
         </SettingRow>
         <SettingRow label={t('common.columns')}>
-          <SegmentedControl value={columns} onChange={setColumns} options={[2, 3, 4].map(c => ({ value: c, label: c }))} />
+          <SegmentedControl value={shape.columns} onChange={setColumns} options={shape.columnOptions.map(c => ({ value: c, label: c }))} />
         </SettingRow>
         <SettingRow label={t('common.options')}>
           <CheckboxOption checked={sixtySevenMode} onChange={setSixtySevenMode}>
@@ -220,33 +153,27 @@ export default function AddSubtract() {
         </SettingRow>
       </SettingsPanel>
 
-      {problems && (
-        <div className="sheet-fit" ref={fitRef} style={fitStyle}>
-          <div className={`worksheet print-area cols-${columns}`}>
-            <WorksheetHeader
-              title={t('addsub.title')}
-              meta={`${ops === 'add' ? '(+)' : ops === 'sub' ? '(−)' : '(+ / −)'} · ${t('common.withinMeta', { n: maxVal })}`}
-              stamp={setStamp(problems)}
-            />
+      <div
+        ref={sheetRef}
+        className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
+        style={sheetStyle}
+      >
+        <WorksheetHeader
+          title={t('addsub.title')}
+          meta={`${ops === 'add' ? '(+)' : ops === 'sub' ? '(−)' : '(+ / −)'} · ${t('common.withinMeta', { n: maxVal })}`}
+          stamp={setStamp(problems)}
+        />
 
-            <div
-              className={`problem-grid ${layout === 'stacked' ? 'stacked-grid' : ''}`}
-              style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-            >
-              {problems.map((p, i) => (
-                <div key={i} className={`problem-item ${layout === 'stacked' ? 'problem-item-stacked' : ''}`}>
-                  {layout === 'stacked'
-                    ? renderStackedProblem(p)
-                    : <span className="problem-text">{renderProblem(p)}</span>
-                  }
-                </div>
-              ))}
+        <div className="colarith-grid">
+          {problems.map((p, i) => (
+            <div key={i} className="colarith-item">
+              {stacked ? renderStackedProblem(p, shape.frame.digits) : renderInlineProblem(p)}
             </div>
-          </div>
+          ))}
         </div>
-      )}
+      </div>
 
-      {answerKey && problems && (
+      {answerKey && (
         <AnswerKey
           title={t('addsub.title')}
           stamp={setStamp(problems)}
