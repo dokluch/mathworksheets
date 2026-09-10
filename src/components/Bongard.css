@@ -1,0 +1,91 @@
+/* ── Bongard problems ── */
+/* The gutter between problems is wider than the divider inside one (34 panel
+   units, layout.js), so a page reads as separate problems first and as
+   left-versus-right within each second. */
+.bongard-grid {
+  display: grid;
+  gap: 32px 48px;
+  counter-reset: problem;
+}
+
+.bongard-per-2 .bongard-grid,
+.bongard-per-4 .bongard-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.bongard-per-6 .bongard-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bongard-item {
+  position: relative;
+  counter-increment: problem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* The figure is one SVG that scales to its cell's width on screen; on paper
+   the cell also has a fixed height and the SVG fits inside both (see print). */
+.bongard-figure {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--color-text);
+}
+
+/* Numbered only when an answer key prints alongside, on the same condition
+   as every other sheet (see AddSubtract.css). */
+.tool-panel:has(.answer-key) .bongard-item {
+  padding-left: 16px;
+}
+
+.tool-panel:has(.answer-key) .bongard-item::before {
+  content: counter(problem);
+  position: absolute;
+  top: 2px;
+  left: 0;
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--color-text-muted);
+}
+
+/* The answers are sentences, not numbers: two columns instead of six. */
+.tool-panel:has(.bongard-sheet) .answer-key-list {
+  columns: 2;
+  column-gap: 32px;
+}
+
+/* ── Print styles ── */
+@media print {
+  .bongard-grid {
+    gap: 28px 60px;
+  }
+
+  /* Two rows must fit under the header on a landscape page. The heights are
+     what remains of PRINT_HEIGHT (hooks/useNotebookGrid.js) after the sheet's
+     top padding, the header and the instruction line, halved with the gap. */
+  .bongard-item {
+    height: 266px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* One row: the figure's own aspect ratio, not the page, limits its height. */
+  .bongard-per-2 .bongard-item {
+    height: 340px;
+  }
+
+  .bongard-figure {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    color: #111;
+  }
+
+  .tool-panel:has(.answer-key) .bongard-item::before {
+    color: #555;
+  }
+}

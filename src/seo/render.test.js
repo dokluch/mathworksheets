@@ -71,7 +71,8 @@ describe('catalog invariants', () => {
     // string rendered on all seven locales' pages. This is the guard.
     for (const ws of WORKSHEETS) {
       for (const example of ws.examples) {
-        expect(example).toMatch(/^[0-9x\s+\-−×÷=<>?□→.,()]+$/)
+        // Geometric-shape glyphs are the Bongard sheet's notation: a picture, not a sentence.
+        expect(example).toMatch(/^[0-9x\s+\-−×÷=<>?□→.,()○●△▲■▪▯▭│]+$/)
       }
     }
   })

@@ -200,6 +200,28 @@ export default {
     title: 'Sequenze numeriche',
     instructions: 'Completa i numeri mancanti in ogni sequenza.',
   },
+  bongard: {
+    title: 'Problemi di Bongard',
+    instructions: 'Le sei caselle a sinistra seguono tutte una regola che nessuna delle sei a destra rispetta. Qual è la regola?',
+    perPage: 'Problemi per pagina',
+    easy: 'Facile',
+    medium: 'Medio',
+    hard: 'Difficile',
+    all: 'Misto',
+    figureLabel: 'Problema di Bongard {n}: sei caselle a sinistra, sei a destra',
+    rules: {
+      bp001: 'Sinistra: caselle vuote. Destra: nella casella è disegnato qualcosa.',
+      bp002: 'Sinistra: figure grandi. Destra: figure piccole.',
+      bp003: 'Sinistra: figure solo con il contorno. Destra: figure piene, colorate.',
+      bp004: 'Sinistra: figure convesse, senza rientranze. Destra: figure con una rientranza o un incavo.',
+      bp005: 'Sinistra: figure con i lati dritti. Destra: figure con linee curve.',
+      bp006: 'Sinistra: triangoli. Destra: figure con quattro lati.',
+      bp007: 'Sinistra: figure allungate dall’alto in basso. Destra: figure allungate in larghezza.',
+      bp008: 'Sinistra: la figura è nella parte destra della casella. Destra: la figura è nella parte sinistra.',
+      bp009: 'Sinistra: contorni lisci. Destra: contorni a zigzag.',
+      bp010: 'Sinistra: triangoli. Destra: figure con quattro lati, che il contorno sia liscio o a zigzag.',
+    },
+  },
 
   order: {
     easy: 'Facile',
@@ -239,6 +261,22 @@ export default {
   },
 
   worksheets: {
+    bongard: {
+      label: 'Problemi di Bongard',
+      shortDesc: 'Trova la regola che divide le caselle',
+      longDesc: 'Rompicapi di logica visiva alla maniera di Michail Bongard: le sei caselle a sinistra seguono tutte una regola, le sei a destra la infrangono tutte, e il bambino deve dire qual è la regola. Ogni problema viene ridisegnato ogni volta, così la regola resta la stessa mentre le figure cambiano. Due, quattro o sei problemi per pagina, con le risposte su un foglio delle soluzioni separato.',
+      skills: ['ragionamento visivo', 'ordinare e classificare', 'forme', 'spiegare una regola'],
+      settings: [
+        'Problemi per pagina: 2, 4 o 6',
+        'Livello: facile, medio, difficile o misto',
+        'Stampare le soluzioni',
+      ],
+      faq: [
+        { q: 'Che cos’è un problema di Bongard?', a: 'Un rompicapo inventato dallo scienziato sovietico Michail Bongard nel 1967. Dodici caselle sono divise in due gruppi da sei: quelle a sinistra condividono una proprietà (per esempio, tutte le figure sono triangoli) e quelle a destra non ce l’hanno. Non c’è niente da calcolare: bisogna guardare, confrontare e dire a parole in che cosa i due gruppi sono diversi.' },
+        { q: 'Come deve scrivere la regola il bambino?', a: 'Con una frase breve che descriva il lato sinistro, per esempio «figure piene» oppure «la figura è in alto». Una regola che vale per tutte e sei le caselle a sinistra e per nessuna a destra è corretta, anche se le parole sono diverse da quelle delle soluzioni. Se il bambino esita, chiedetegli che cosa dovrebbe cambiare perché una casella di destra stia bene a sinistra.' },
+        { q: 'Perché i disegni cambiano ogni volta?', a: 'Ogni problema è generato dalla sua regola, non copiato da un’immagine: figure, dimensioni e posizioni vengono estratte a sorte a ogni stampa e poi verificate rispetto alla regola. Un bambino che ha già risolto «triangoli contro quadrilateri» ritrova la stessa idea in disegni nuovi, ed è proprio così che si vede se ha capito la regola o ha imparato la pagina a memoria.' },
+      ],
+    },
     multiply: {
       label: 'Moltiplicazione',
       shortDesc: 'Tabelline e tavola pitagorica',

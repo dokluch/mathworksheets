@@ -206,6 +206,30 @@ const MARKS = {
       {digit(7, 5, '=')}{box(8, 5)}
     </>
   ),
+  // Two groups of six boxes with a rule between them: triangles on the left,
+  // four-sided shapes on the right, the first problem a child usually meets.
+  bongard: () => {
+    const cell = (c, r, mark) => (
+      <g key={`p${c}-${r}`}>
+        <rect x={ln(c) + 1} y={ln(r) + 1} width={2 * SQ - 2} height={2 * SQ - 2} fill="none" stroke="currentColor" strokeWidth="0.9" opacity="0.7" />
+        {mark}
+      </g>
+    )
+    const tri = (c, r, k) => (
+      <path d={`M ${ln(c + 1)} ${ln(r) + 4 + k} L ${ln(c) + 4 + k} ${ln(r + 2) - 4} L ${ln(c + 2) - 4 - k} ${ln(r + 2) - 4} Z`} fill="none" stroke="currentColor" strokeWidth="1" />
+    )
+    const quad = (c, r, k) => (
+      <rect x={ln(c) + 4 + k} y={ln(r) + 4 + k} width={2 * SQ - 8 - 2 * k} height={2 * SQ - 8 - 2 * k} fill={k ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1" />
+    )
+    const rows = [1, 3, 5]
+    return (
+      <>
+        {rows.flatMap((r, i) => [cell(1, r, tri(1, r, i)), cell(3, r, tri(3, r, 2 - i))])}
+        {vrule(6.5, 1, 7, 1)}
+        {rows.flatMap((r, i) => [cell(8, r, quad(8, r, i)), cell(10, r, quad(10, r, (i + 1) % 3))])}
+      </>
+    )
+  },
   // The one screen-only sheet: an equation with a movable term.
   eqexplore: () => (
     <>

@@ -200,6 +200,28 @@ export default {
     title: 'Series numéricas',
     instructions: 'Completa los números que faltan en cada serie.',
   },
+  bongard: {
+    title: 'Problemas de Bongard',
+    instructions: 'Las seis casillas de la izquierda cumplen una regla que ninguna de las seis de la derecha cumple. ¿Cuál es la regla?',
+    perPage: 'Problemas por página',
+    easy: 'Fácil',
+    medium: 'Medio',
+    hard: 'Difícil',
+    all: 'Mezclado',
+    figureLabel: 'Problema de Bongard {n}: seis casillas a la izquierda, seis a la derecha',
+    rules: {
+      bp001: 'Izquierda: casillas vacías. Derecha: hay algo dibujado en la casilla.',
+      bp002: 'Izquierda: figuras grandes. Derecha: figuras pequeñas.',
+      bp003: 'Izquierda: figuras solo con contorno. Derecha: figuras rellenas.',
+      bp004: 'Izquierda: figuras convexas, sin hendiduras. Derecha: figuras con una hendidura o hueco.',
+      bp005: 'Izquierda: figuras de lados rectos. Derecha: figuras con líneas curvas.',
+      bp006: 'Izquierda: triángulos. Derecha: figuras de cuatro lados.',
+      bp007: 'Izquierda: figuras alargadas de arriba abajo. Derecha: figuras alargadas a lo ancho.',
+      bp008: 'Izquierda: la figura está en el lado derecho de la casilla. Derecha: la figura está en el lado izquierdo.',
+      bp009: 'Izquierda: contornos lisos. Derecha: contornos en zigzag.',
+      bp010: 'Izquierda: triángulos. Derecha: figuras de cuatro lados, sea el contorno liso o en zigzag.',
+    },
+  },
 
   order: {
     easy: 'Fácil',
@@ -239,6 +261,22 @@ export default {
   },
 
   worksheets: {
+    bongard: {
+      label: 'Problemas de Bongard',
+      shortDesc: 'Encuentra la regla que separa las casillas',
+      longDesc: 'Acertijos de lógica visual al estilo de Mijaíl Bongard: las seis casillas de la izquierda cumplen una regla, las seis de la derecha la incumplen, y el niño tiene que decir cuál es la regla. Cada problema se vuelve a dibujar cada vez, de modo que la regla se mantiene mientras las figuras cambian. Dos, cuatro o seis problemas por página, con las respuestas en una hoja de soluciones aparte.',
+      skills: ['razonamiento visual', 'ordenar y clasificar', 'formas', 'explicar una regla'],
+      settings: [
+        'Problemas por página: 2, 4 o 6',
+        'Nivel: fácil, medio, difícil o mezclado',
+        'Imprimir una hoja de soluciones',
+      ],
+      faq: [
+        { q: '¿Qué es un problema de Bongard?', a: 'Un acertijo inventado por el científico soviético Mijaíl Bongard en 1967. Doce casillas se reparten en dos grupos de seis: las de la izquierda comparten una propiedad (por ejemplo, todas las figuras son triángulos) y las de la derecha no la tienen. No hay nada que calcular; hay que mirar, comparar y nombrar en qué se diferencian los dos grupos.' },
+        { q: '¿Cómo debe escribir la regla el niño?', a: 'Con una frase corta que describa el lado izquierdo, por ejemplo «figuras rellenas» o «la figura está arriba». Una regla que se cumple en las seis casillas de la izquierda y en ninguna de la derecha es correcta aunque las palabras no coincidan con la solución. Si el niño duda, pregúntele qué tendría que cambiar para que una casilla de la derecha encajara a la izquierda.' },
+        { q: '¿Por qué cambian los dibujos cada vez?', a: 'Cada problema se genera a partir de su regla, no se copia de una imagen: las figuras, sus tamaños y sus posiciones se sortean en cada impresión y luego se comprueban contra la regla. Un niño que ya resolvió «triángulos contra cuadriláteros» vuelve a encontrar la misma idea con dibujos nuevos, que es justo lo que hace falta para saber si entendió la regla o memorizó la página.' },
+      ],
+    },
     multiply: {
       label: 'Multiplicación',
       shortDesc: 'Tablas de multiplicar y cuadrícula',

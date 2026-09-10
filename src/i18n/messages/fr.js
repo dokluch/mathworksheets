@@ -200,6 +200,28 @@ export default {
     title: 'Suites de nombres',
     instructions: 'Complète les nombres manquants de chaque suite.',
   },
+  bongard: {
+    title: 'Problèmes de Bongard',
+    instructions: 'Les six cases de gauche suivent toutes une règle que les six cases de droite ne suivent pas. Quelle est la règle ?',
+    perPage: 'Problèmes par page',
+    easy: 'Facile',
+    medium: 'Moyen',
+    hard: 'Difficile',
+    all: 'Mélangé',
+    figureLabel: 'Problème de Bongard {n} : six cases à gauche, six à droite',
+    rules: {
+      bp001: 'À gauche : des cases vides. À droite : quelque chose est dessiné dans la case.',
+      bp002: 'À gauche : de grandes figures. À droite : de petites figures.',
+      bp003: 'À gauche : des figures en contour. À droite : des figures pleines, coloriées.',
+      bp004: 'À gauche : des figures convexes, sans creux. À droite : des figures avec un creux ou une entaille.',
+      bp005: 'À gauche : des figures à côtés droits. À droite : des figures à lignes courbes.',
+      bp006: 'À gauche : des triangles. À droite : des figures à quatre côtés.',
+      bp007: 'À gauche : des figures allongées de haut en bas. À droite : des figures allongées en largeur.',
+      bp008: 'À gauche : la figure est du côté droit de la case. À droite : la figure est du côté gauche.',
+      bp009: 'À gauche : des contours lisses. À droite : des contours en zigzag.',
+      bp010: 'À gauche : des triangles. À droite : des figures à quatre côtés, que le contour soit lisse ou en zigzag.',
+    },
+  },
 
   order: {
     easy: 'Facile',
@@ -239,6 +261,22 @@ export default {
   },
 
   worksheets: {
+    bongard: {
+      label: 'Problèmes de Bongard',
+      shortDesc: 'Trouver la règle qui sépare les cases',
+      longDesc: 'Des énigmes de logique visuelle à la manière de Mikhaïl Bongard : les six cases de gauche suivent toutes une règle, les six cases de droite l’enfreignent toutes, et l’enfant doit dire quelle est cette règle. Chaque problème est redessiné à chaque fois, si bien que la règle reste la même alors que les figures changent. Deux, quatre ou six problèmes par page, avec les réponses sur un corrigé séparé.',
+      skills: ['raisonnement visuel', 'trier et classer', 'formes', 'expliquer une règle'],
+      settings: [
+        'Problèmes par page : 2, 4 ou 6',
+        'Niveau : facile, moyen, difficile ou mélangé',
+        'Imprimer un corrigé',
+      ],
+      faq: [
+        { q: 'Qu’est-ce qu’un problème de Bongard ?', a: 'Une énigme inventée par le scientifique soviétique Mikhaïl Bongard en 1967. Douze cases sont réparties en deux groupes de six : celles de gauche partagent une propriété (par exemple, toutes les figures sont des triangles) et celles de droite ne l’ont pas. Il n’y a rien à calculer ; il faut regarder, comparer et nommer ce que les deux groupes ont de différent.' },
+        { q: 'Comment l’enfant doit-il écrire la règle ?', a: 'En une phrase courte qui décrit le côté gauche, par exemple « figures pleines » ou « la figure est en haut ». Une règle qui s’applique aux six cases de gauche et à aucune de droite est correcte, même si les mots diffèrent du corrigé. Si l’enfant hésite, demandez-lui ce qui devrait changer pour qu’une case de droite ait sa place à gauche.' },
+        { q: 'Pourquoi les dessins changent-ils à chaque fois ?', a: 'Chaque problème est engendré à partir de sa règle et non copié d’une image : les figures, leurs tailles et leurs positions sont tirées au sort à chaque impression, puis vérifiées contre la règle. Un enfant qui a déjà résolu « triangles contre quadrilatères » retrouve la même idée dans de nouveaux dessins, ce qui est exactement ce qu’il faut pour vérifier qu’il a compris la règle et non mémorisé la page.' },
+      ],
+    },
     multiply: {
       label: 'Multiplication',
       shortDesc: 'Tables de multiplication et grille',

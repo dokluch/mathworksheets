@@ -200,6 +200,28 @@ export default {
     title: 'Zahlenfolgen',
     instructions: 'Trage die fehlenden Zahlen in jeder Folge ein.',
   },
+  bongard: {
+    title: 'Bongard-Probleme',
+    instructions: 'Die sechs Kästchen links folgen alle einer Regel, die keines der sechs Kästchen rechts erfüllt. Wie lautet die Regel?',
+    perPage: 'Aufgaben pro Seite',
+    easy: 'Leicht',
+    medium: 'Mittel',
+    hard: 'Schwer',
+    all: 'Gemischt',
+    figureLabel: 'Bongard-Problem {n}: sechs Kästchen links, sechs rechts',
+    rules: {
+      bp001: 'Links: leere Kästchen. Rechts: im Kästchen ist etwas gezeichnet.',
+      bp002: 'Links: große Figuren. Rechts: kleine Figuren.',
+      bp003: 'Links: Figuren nur als Umriss. Rechts: ausgefüllte Figuren.',
+      bp004: 'Links: konvexe Figuren ohne Delle. Rechts: Figuren mit einer Delle oder Einbuchtung.',
+      bp005: 'Links: Figuren mit geraden Seiten. Rechts: Figuren mit gebogenen Linien.',
+      bp006: 'Links: Dreiecke. Rechts: Vierecke.',
+      bp007: 'Links: Figuren, die nach oben und unten lang gezogen sind. Rechts: Figuren, die in die Breite gezogen sind.',
+      bp008: 'Links: Die Figur liegt auf der rechten Seite des Kästchens. Rechts: Die Figur liegt auf der linken Seite.',
+      bp009: 'Links: glatte Umrisse. Rechts: Zickzack-Umrisse.',
+      bp010: 'Links: Dreiecke. Rechts: Vierecke, egal ob der Umriss glatt oder zickzackförmig ist.',
+    },
+  },
 
   order: {
     easy: 'Leicht',
@@ -239,6 +261,22 @@ export default {
   },
 
   worksheets: {
+    bongard: {
+      label: 'Bongard-Probleme',
+      shortDesc: 'Die Regel finden, die die Kästchen trennt',
+      longDesc: 'Visuelle Logikrätsel nach Michail Bongard: Die sechs Kästchen links folgen alle einer Regel, die sechs rechts verstoßen alle dagegen, und das Kind soll sagen, wie die Regel lautet. Jede Aufgabe wird jedes Mal neu gezeichnet, sodass die Regel gleich bleibt, während sich die Figuren ändern. Zwei, vier oder sechs Aufgaben pro Seite, mit den Antworten auf einem getrennten Lösungsblatt.',
+      skills: ['visuelles Denken', 'Sortieren und Ordnen', 'Formen', 'eine Regel erklären'],
+      settings: [
+        'Aufgaben pro Seite: 2, 4 oder 6',
+        'Stufe: leicht, mittel, schwer oder gemischt',
+        'Ein Lösungsblatt drucken',
+      ],
+      faq: [
+        { q: 'Was ist ein Bongard-Problem?', a: 'Ein Rätsel, das der sowjetische Wissenschaftler Michail Bongard 1967 erfunden hat. Zwölf Kästchen sind in zwei Sechsergruppen aufgeteilt: Die linken haben eine Eigenschaft gemeinsam (zum Beispiel sind alle Figuren Dreiecke), die rechten haben sie nicht. Es gibt nichts zu rechnen; man muss hinsehen, vergleichen und benennen, worin sich die beiden Gruppen unterscheiden.' },
+        { q: 'Wie soll das Kind die Regel aufschreiben?', a: 'In einem kurzen Satz, der die linke Seite beschreibt, etwa „ausgefüllte Figuren“ oder „die Figur ist oben“. Eine Regel, die auf alle sechs linken und auf kein rechtes Kästchen zutrifft, ist richtig, auch wenn die Wörter vom Lösungsblatt abweichen. Zögert das Kind, fragen Sie, was sich ändern müsste, damit ein rechtes Kästchen nach links passt.' },
+        { q: 'Warum ändern sich die Bilder jedes Mal?', a: 'Jede Aufgabe wird aus ihrer Regel erzeugt und nicht von einem Bild abgemalt: Figuren, Größen und Positionen werden bei jedem Druck neu ausgewürfelt und anschließend gegen die Regel geprüft. Ein Kind, das „Dreiecke gegen Vierecke“ schon gelöst hat, trifft dieselbe Idee in neuen Zeichnungen wieder, und genau so zeigt sich, ob es die Regel verstanden oder die Seite auswendig gelernt hat.' },
+      ],
+    },
     multiply: {
       label: 'Multiplikation',
       shortDesc: 'Einmaleins und Tabellen üben',

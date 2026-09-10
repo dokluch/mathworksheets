@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useMemo, useState } from 'react'
-import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator, IconDivide, IconMathSymbols } from '@tabler/icons-react'
+import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator, IconDivide, IconMathSymbols, IconPuzzle } from '@tabler/icons-react'
 import { usePersistedState, getPersistedTab } from './hooks/usePersistedState'
 import { useRoute, sheetIdToPath } from './hooks/useRoute'
 import { worksheetRoute, gradeLevelText } from './seo/render'
@@ -27,6 +27,7 @@ import ColumnAddition from './components/ColumnAddition'
 import ColumnMultiplication from './components/ColumnMultiplication'
 import ColumnDivision from './components/ColumnDivision'
 import OrderOfOperations from './components/OrderOfOperations'
+import Bongard from './components/Bongard'
 
 /*
  * Icons for the dense contexts — the desktop sidebar and the mobile chip row —
@@ -45,6 +46,7 @@ const ICONS = {
   rounding: IconTargetArrow,
   patterns: IconTrendingUp,
   order: IconMathSymbols,
+  bongard: IconPuzzle,
   eqexplore: IconEqual,
 }
 
@@ -58,6 +60,7 @@ const COMPONENTS = {
   rounding: Rounding,
   patterns: Patterns,
   order: OrderOfOperations,
+  bongard: Bongard,
   eqexplore: EquationExplorer,
 }
 

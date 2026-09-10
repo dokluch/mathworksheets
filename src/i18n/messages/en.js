@@ -210,6 +210,28 @@ export default {
     title: 'Number Patterns',
     instructions: 'Fill in the missing numbers in each sequence.',
   },
+  bongard: {
+    title: 'Bongard Problems',
+    instructions: 'All six boxes on the left follow one rule that none of the six boxes on the right follow. What is the rule?',
+    perPage: 'Problems per page',
+    easy: 'Easy',
+    medium: 'Medium',
+    hard: 'Hard',
+    all: 'Mixed',
+    figureLabel: 'Bongard problem {n}: six boxes on the left, six on the right',
+    rules: {
+      bp001: 'Left: empty boxes. Right: something is drawn in the box.',
+      bp002: 'Left: large figures. Right: small figures.',
+      bp003: 'Left: outline figures. Right: solid, filled-in figures.',
+      bp004: 'Left: convex figures, with no dents. Right: figures with a dent or hollow.',
+      bp005: 'Left: figures with straight sides. Right: figures with curved lines.',
+      bp006: 'Left: triangles. Right: four-sided figures.',
+      bp007: 'Left: figures stretched up and down. Right: figures stretched sideways.',
+      bp008: 'Left: the figure sits on the right side of the box. Right: the figure sits on the left side.',
+      bp009: 'Left: smooth outlines. Right: zigzag outlines.',
+      bp010: 'Left: triangles. Right: four-sided figures, whether the outline is smooth or zigzag.',
+    },
+  },
 
   order: {
     easy: 'Easy',

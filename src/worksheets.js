@@ -252,6 +252,33 @@ export const WORKSHEETS = [
     interactive: false,
   },
   {
+    id: 'bongard',
+    slug: 'bongard-problems',
+    label: 'Bongard Problems',
+    shortDesc: 'Find the rule that splits the boxes',
+    longDesc:
+      'Visual logic puzzles in the style of Mikhail Bongard: six boxes on the left all follow one rule, six on the right all break it, and the child has to say what the rule is. ' +
+      'Every problem is redrawn fresh each time, so the rule stays the same while the figures change. Two, four or six problems per page, with the answers on a separate key.',
+    grades: '1–3',
+    skills: ['visual reasoning', 'sorting and classifying', 'shapes', 'explaining a rule'],
+    settings: [
+      'Problems per page: 2, 4 or 6',
+      'Level: easy, medium, hard or mixed',
+      'Print an answer key',
+    ],
+    examples: ['○ △ □ │ ● ▲ ■', '▲ ▲ ▲ │ ■ ■ ■', '■ ■ ■ │ ▪ ▪ ▪', '▯ ▯ ▯ │ ▭ ▭ ▭'],
+    prerequisites: [],
+    nextSteps: ['patterns'],
+    updated: '2026-09-08',
+    faq: [
+      { q: 'What is a Bongard problem?', a: 'A puzzle invented by the Soviet scientist Mikhail Bongard in 1967. Twelve boxes are split into two groups of six: the ones on the left share a property (say, every figure is a triangle) and the ones on the right lack it. There is nothing to calculate; the task is to look, compare and put into words what makes the two groups different.' },
+      { q: 'How should a child write the rule?', a: 'As a short phrase describing the left side, such as “filled-in shapes” or “the shape is at the top”. Any rule that is true of all six boxes on the left and none on the right is correct, even when the words differ from the answer key. If a child is stuck, ask what would have to change for a box on the right to belong on the left.' },
+      { q: 'Why do the pictures change every time?', a: 'Each problem is generated from its rule rather than copied from a picture: the figures, their sizes and positions are drawn at random on every print and then checked against the rule. A child who has solved “triangles versus four-sided shapes” once meets the same idea again in new drawings, which is exactly the test of whether the rule was understood or the page memorised.' },
+    ],
+    color: '#6b7a1f',
+    interactive: false,
+  },
+  {
     id: 'eqexplore',
     slug: 'equation-explorer',
     label: 'Equation Explorer',
