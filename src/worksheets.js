@@ -202,20 +202,21 @@ export const WORKSHEETS = [
     label: 'Patterns',
     shortDesc: 'Number sequences & series',
     longDesc:
-      'Number sequences with missing terms at three difficulty levels: constant steps (easy), multiplying or alternating steps (medium) and combined rules (hard). ' +
-      'Children find the rule and fill in the blanks, which builds early algebraic thinking.',
+      'Number sequences with missing terms at three difficulty levels: skip counting up and down (easy); bigger steps, doubling and halving, alternating steps and square numbers (medium); ' +
+      'geometric progressions, growing steps, Fibonacci-style sums, cubes, double-and-add rules and two sequences braided together (hard). ' +
+      'Every page mixes the families of its level and never repeats a sequence. Children find the rule and fill in the blanks, which builds early algebraic thinking.',
     grades: '1–3',
     skills: ['number patterns', 'skip counting', 'sequences', 'algebraic thinking'],
     settings: [
       'Level: easy, medium or hard',
     ],
-    examples: ['2, 4, 6, □, 10', '5, 10, 15, □, 25', '1, 2, 4, 8, □', '30, 27, 24, □, 18'],
+    examples: ['2, 4, 6, □, 10', '1, 2, 4, 8, □', '1, 1, 2, 3, 5, □', '1, 4, 9, 16, □'],
     prerequisites: [],
     nextSteps: ['multiply'],
-    updated: '2026-09-07',
+    updated: '2026-09-10',
     faq: [
       { q: 'What do number patterns teach?', a: 'Finding the rule behind 2, 4, 6, □, 10 is early algebraic thinking: a child looks for a relationship rather than performing a given operation. It also reinforces skip counting, which supports the times tables.' },
-      { q: 'What is the difference between the three levels?', a: 'Easy uses a constant step, such as adding 3 each time. Medium multiplies or alternates between two steps. Hard combines rules, so a child has to test a guess against several terms before trusting it.' },
+      { q: 'What is the difference between the three levels?', a: 'Easy uses a constant step, such as adding 3 each time, counting up or down. Medium adds bigger steps, doubling and halving, alternating steps and the square numbers. Hard brings in geometric progressions, steps that grow each time, Fibonacci-style sums, cubes, double-and-add rules and two sequences braided together, so a child has to test a guess against several terms before trusting it. From Medium up a gap can also sit at the start or in the middle of the run.' },
       { q: 'My child is stuck on a sequence. What should I do?', a: 'Ask what changes from one number to the next and write the gaps underneath. Once the gaps are visible the rule usually becomes obvious, and the habit of writing them down transfers to harder sequences.' },
     ],
     color: '#5b4a91',
