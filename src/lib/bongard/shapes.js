@@ -9,6 +9,11 @@
  * and the geometry below (bounding box, area, convexity, point-in-polygon)
  * works on that list. A checker therefore measures what is actually drawn,
  * never a label the generator attached.
+ *
+ * A closed shape's `fill` is 'none' (an outline), 'solid' (black), 'paper'
+ * (white with its outline, for a figure lying on top of another and hiding
+ * what is under it) or 'hole' (white without an outline, for a hole cut
+ * through a black figure). Shapes paint in order, so the last is on top.
  */
 export const BOX = 100
 
@@ -205,6 +210,50 @@ export function hullProportions(points) {
   return { width, diameter }
 }
 
+/**
+ * The direction a figure runs in, from the second moments of its outline
+ * sampled evenly: `angle` in degrees, 0 along x and 90 along y on screen,
+ * and `elongation`, the spread across the axis over the spread along it —
+ * 1 for a circle or a square, small for a slit.
+ */
+export function principalAxis(points, closed = true) {
+  const pts = resample(points, closed, 1)
+  const n = pts.length
+  const mx = pts.reduce((a, p) => a + p[0], 0) / n
+  const my = pts.reduce((a, p) => a + p[1], 0) / n
+  let sxx = 0, syy = 0, sxy = 0
+  for (const [x, y] of pts) {
+    sxx += (x - mx) ** 2
+    syy += (y - my) ** 2
+    sxy += (x - mx) * (y - my)
+  }
+  const angle = ((Math.atan2(2 * sxy, sxx - syy) / 2) * 180) / Math.PI
+  const mean = (sxx + syy) / 2
+  const half = Math.hypot((sxx - syy) / 2, sxy)
+  const elongation = mean + half > 0 ? Math.sqrt(Math.max(0, mean - half) / (mean + half)) : 1
+  return { angle: ((angle % 180) + 180) % 180, elongation }
+}
+
+/** Distance from a point to the straight line through two others. */
+export function distToLine([px, py], [ax, ay], [bx, by]) {
+  const len = Math.hypot(bx - ax, by - ay)
+  return len ? Math.abs((bx - ax) * (py - ay) - (by - ay) * (px - ax)) / len : Math.hypot(px - ax, py - ay)
+}
+
+/** How close the straightest three of some points come to one line: 0 when three are exactly on one. */
+export function straightest(points) {
+  let best = Infinity
+  for (let i = 0; i < points.length; i++) {
+    for (let j = i + 1; j < points.length; j++) {
+      for (let k = j + 1; k < points.length; k++) {
+        const [a, b, c] = [points[i], points[j], points[k]]
+        best = Math.min(best, distToLine(a, b, c), distToLine(b, a, c), distToLine(c, a, b))
+      }
+    }
+  }
+  return best
+}
+
 export function distToSegment([px, py], [ax, ay], [bx, by]) {
   const dx = bx - ax
   const dy = by - ay
@@ -272,7 +321,7 @@ export function selfContact(shape, skip = 6) {
 }
 
 /** Turn at each vertex of a line, in degrees: positive turns clockwise on screen. */
-function turns(points, closed) {
+export function turns(points, closed) {
   const pts = []
   for (const p of points) {
     const q = pts[pts.length - 1]
@@ -305,6 +354,20 @@ export function sharpestInwardTurn(points) {
   return Math.max(0, ...turns(points, true).map(t => -s * t))
 }
 
+/**
+ * The sharpest corner pointing out of the figure, as degrees of turn: a
+ * right angle turns 90, an acute tip turns more, a smooth bulge hardly at all.
+ */
+export function sharpestOutwardTurn(points) {
+  const s = Math.sign(signedArea(points))
+  return Math.max(0, ...turns(points, true).map(t => s * t))
+}
+
+/** The sharpest corner of a closed outline whichever way it points. */
+export function sharpestTurn(points) {
+  return Math.max(0, ...turns(points, true).map(Math.abs))
+}
+
 export function pointInPolygon([x, y], points) {
   let inside = false
   for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
@@ -313,6 +376,20 @@ export function pointInPolygon([x, y], points) {
     if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside
   }
   return inside
+}
+
+/**
+ * How two closed shapes sit together: 'apart', 'partial' where the outlines
+ * cross, 'contains' when `a` holds all of `b`, 'inside' when `b` holds all
+ * of `a`. `a` and `b` are the shares of each outline that lie in the other.
+ */
+export function overlap(a, b) {
+  const pa = resample(outline(a), true, 2)
+  const pb = resample(outline(b), true, 2)
+  const aIn = pa.filter(p => pointInPolygon(p, pb)).length / pa.length
+  const bIn = pb.filter(p => pointInPolygon(p, pa)).length / pb.length
+  const kind = bIn === 1 ? 'contains' : aIn === 1 ? 'inside' : aIn === 0 && bIn === 0 ? 'apart' : 'partial'
+  return { kind, a: aIn, b: bIn }
 }
 
 /* ── Transforms (about the origin; shapes are built centred there, then placed) ── */

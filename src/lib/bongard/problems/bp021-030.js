@@ -9,7 +9,7 @@
 import {
   BOX, panel, polygon, curve, circle, outline, bbox, shapeSize, pointInPolygon, distToOutline, selfContact, rotate,
 } from '../shapes.js'
-import { figure, sized, placeRandom, placeApart, arc, MARGIN } from '../gen.js'
+import { figure, sized, placeRandom, placeApart, arc, token, tokenKind, walk, MARGIN } from '../gen.js'
 
 const one = p => (p.shapes.length === 1 ? p.shapes[0] : null)
 const isBlack = s => s.fill === 'solid'
@@ -17,23 +17,6 @@ const isBlack = s => s.fill === 'solid'
 /* ── BP21–BP28: small upright tokens ── */
 
 const TOKENS = ['circle', 'triangle', 'square']
-
-/** An upright circle, triangle or square `size` across, as Bongard scatters them. */
-function token(r, kind, size, fill = 'none') {
-  if (kind === 'circle') return circle(0, 0, size / 2, { fill })
-  if (kind === 'square') {
-    const h = (size * 0.92) / 2
-    return polygon([[-h, -h], [h, -h], [h, h], [-h, h]], { fill })
-  }
-  const f = r.chance(0.25) ? -1 : 1
-  return sized(polygon([[0, -f], [0.866, 0.5 * f], [-0.866, 0.5 * f]], { fill }), size)
-}
-
-function kindOf(s) {
-  if (s.kind === 'circle') return 'circle'
-  if (s.kind !== 'polygon' || !s.closed) return 'other'
-  return { 3: 'triangle', 4: 'square' }[s.points.length] ?? 'other'
-}
 
 /** Tokens for a list of { kind, fill } scattered apart, largest placed first. */
 const scatterTokens = (r, items, size, gap = 7) =>
@@ -46,21 +29,6 @@ const majority = (a, b) => (a > b ? true : b > a ? false : null)
 const fills = (r, n, black) => r.shuffle(Array.from({ length: n }, (_, i) => (i < black ? 'solid' : 'none')))
 
 /* ── BP30: lines that cross themselves or not ── */
-
-/** A wandering line: steps of 10 units, each turning up to `turn` degrees. */
-function walk(r, n, turn) {
-  let x = 0
-  let y = 0
-  let h = r.num(0, 360)
-  const pts = [[0, 0]]
-  for (let i = 1; i < n; i++) {
-    h += r.num(-turn, turn)
-    x += 10 * Math.cos((h * Math.PI) / 180)
-    y += 10 * Math.sin((h * Math.PI) / 180)
-    pts.push([x, y])
-  }
-  return pts
-}
 
 function crossingLine(r) {
   switch (r.pick(['walk', 'loops', 'overshoot', 'star', 'bowtie', 'eight'])) {
@@ -217,7 +185,7 @@ export const problems = [
       return panel(scatterTokens(r, kinds.map(kind => ({ kind })), () => r.num(9, 12)))
     },
     check(p) {
-      return p.shapes.length ? p.shapes.some(s => kindOf(s) === 'circle') : null
+      return p.shapes.length ? p.shapes.some(s => tokenKind(s) === 'circle') : null
     },
   },
   {
@@ -233,7 +201,7 @@ export const problems = [
     check(p) {
       const blacks = p.shapes.filter(isBlack)
       if (blacks.length !== 1) return null
-      const kind = kindOf(blacks[0])
+      const kind = tokenKind(blacks[0])
       return kind === 'triangle' ? true : kind === 'circle' ? false : null
     },
   },
@@ -254,7 +222,7 @@ export const problems = [
       return panel(scatterTokens(r, items, () => r.num(9, 11)))
     },
     check(p) {
-      return p.shapes.length ? p.shapes.some(s => isBlack(s) && kindOf(s) === 'triangle') : null
+      return p.shapes.length ? p.shapes.some(s => isBlack(s) && tokenKind(s) === 'triangle') : null
     },
   },
   {
@@ -289,7 +257,7 @@ export const problems = [
       return panel(scatterTokens(r, items, () => r.num(9, 11)))
     },
     check(p) {
-      const circles = p.shapes.filter(s => kindOf(s) === 'circle')
+      const circles = p.shapes.filter(s => tokenKind(s) === 'circle')
       return circles.length ? majority(circles.filter(isBlack).length, circles.filter(s => !isBlack(s)).length) : null
     },
   },

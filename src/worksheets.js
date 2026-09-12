@@ -256,7 +256,7 @@ export const WORKSHEETS = [
     id: 'bongard',
     slug: 'bongard-problems',
     label: 'Bongard Problems',
-    shortDesc: 'Find the rule that splits the boxes',
+    shortDesc: 'Find what the left boxes share and the right ones lack',
     longDesc:
       'Visual logic puzzles in the style of Mikhail Bongard: six boxes on the left all follow one rule, six on the right all break it, and the child has to say what the rule is. ' +
       'Every problem is redrawn fresh each time, so the rule stays the same while the figures change. Two, four or six problems per page, with the answers on a separate key.',

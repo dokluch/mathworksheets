@@ -7,14 +7,16 @@ import { PANEL, GAP, DIVIDER, PROBLEM_W, PROBLEM_H } from './layout.js'
  * takes the sheet's ink on screen and on paper alike.
  */
 
+const FILL = { solid: 'currentColor', paper: '#fff', hole: '#fff' }
+
 function Shape({ shape }) {
   const { d, transform } = toPath(shape)
   return (
     <path
       d={d}
       transform={transform}
-      fill={shape.fill === 'solid' ? 'currentColor' : 'none'}
-      stroke="currentColor"
+      fill={FILL[shape.fill] ?? 'none'}
+      stroke={shape.fill === 'hole' ? 'none' : 'currentColor'}
       strokeWidth={shape.jagged ? 1.3 : 2}
       strokeLinejoin="round"
       strokeLinecap="round"

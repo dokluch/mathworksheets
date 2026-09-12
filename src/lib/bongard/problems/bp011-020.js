@@ -11,7 +11,7 @@ import {
   hullProportions, selfContact, totalTurning, sharpestInwardTurn, resample, rotate,
 } from '../shapes.js'
 import {
-  figure, sized, placeRandom, placeGroup, randomPolygon, zigzag, arc, band, body, fitter, spiralPoints,
+  figure, sized, placeRandom, placeGroup, randomPolygon, zigzag, arc, band, body, fitter, spiralPoints, walk,
 } from '../gen.js'
 import { distanceField, mainNeck, partsAbove, partNear, cellCentre } from '../field.js'
 
@@ -138,21 +138,6 @@ function compactFigure(r) {
 }
 
 /* ── BP14: much or little line ── */
-
-/** A wandering line: steps of 10 units, each turning up to `turn` degrees. */
-function walk(r, n, turn) {
-  let x = 0
-  let y = 0
-  let h = r.num(0, 360)
-  const pts = [[0, 0]]
-  for (let i = 1; i < n; i++) {
-    h += r.num(-turn, turn)
-    x += 10 * Math.cos((h * Math.PI) / 180)
-    y += 10 * Math.sin((h * Math.PI) / 180)
-    pts.push([x, y])
-  }
-  return pts
-}
 
 /** A line of loops, like a stretched telephone cord: `a` per radian forward, loops of radius `b`. */
 function coil(loops, a, b) {

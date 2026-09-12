@@ -11,8 +11,10 @@ import { rngHelpers } from './rng.js'
 import { problems as bp001 } from './problems/bp001-010.js'
 import { problems as bp011 } from './problems/bp011-020.js'
 import { problems as bp021 } from './problems/bp021-030.js'
+import { problems as bp031 } from './problems/bp031-040.js'
+import { problems as bp041 } from './problems/bp041-050.js'
 
-export const PROBLEMS = [...bp001, ...bp011, ...bp021]
+export const PROBLEMS = [...bp001, ...bp011, ...bp021, ...bp031, ...bp041]
 export const PROBLEM_BY_ID = Object.fromEntries(PROBLEMS.map(p => [p.id, p]))
 
 export const BANDS = ['easy', 'medium', 'hard']

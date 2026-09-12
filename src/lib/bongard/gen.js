@@ -6,7 +6,7 @@
  * Math.random directly, so a test can replay a problem from a seed.
  */
 import {
-  BOX, polygon, curve, circle, ellipse, outline, bbox, convexity, translate, scale, rotate,
+  BOX, polygon, curve, circle, ellipse, outline, bbox, convexity, translate, scale, rotate, pointInPolygon, distToOutline, distToLine,
 } from './shapes.js'
 
 const TAU = Math.PI * 2
@@ -119,6 +119,39 @@ export function figure(r, kind, { fill = 'none', size = 30 } = {}) {
   return sized(s, size)
 }
 
+/** An upright circle, triangle or square `size` across, as Bongard scatters them. */
+export function token(r, kind, size, fill = 'none') {
+  if (kind === 'circle') return circle(0, 0, size / 2, { fill })
+  if (kind === 'square') {
+    const h = (size * 0.92) / 2
+    return polygon([[-h, -h], [h, -h], [h, h], [-h, h]], { fill })
+  }
+  const f = r.chance(0.25) ? -1 : 1
+  return sized(polygon([[0, -f], [0.866, 0.5 * f], [-0.866, 0.5 * f]], { fill }), size)
+}
+
+/** What a drawn shape is, as a child would name it: circle, triangle, square or other. */
+export function tokenKind(s) {
+  if (s.kind === 'circle') return 'circle'
+  if (s.kind !== 'polygon' || !s.closed) return 'other'
+  return { 3: 'triangle', 4: 'square' }[s.points.length] ?? 'other'
+}
+
+/** A wandering line: steps of 10 units, each turning up to `turn` degrees. */
+export function walk(r, n, turn) {
+  let x = 0
+  let y = 0
+  let h = r.num(0, 360)
+  const pts = [[0, 0]]
+  for (let i = 1; i < n; i++) {
+    h += r.num(-turn, turn)
+    x += 10 * Math.cos((h * Math.PI) / 180)
+    y += 10 * Math.sin((h * Math.PI) / 180)
+    pts.push([x, y])
+  }
+  return pts
+}
+
 /** Scales a shape so its longest side is `size`, and centres it on the origin. */
 export function sized(shape, size) {
   const b = bbox(outline(shape))
@@ -178,6 +211,63 @@ export function scatter(r, count, size, minGap = 4) {
     }
   }
   return placed
+}
+
+/**
+ * Random spots for origin-centred shapes, none touching, drawn again until
+ * `accept(centres)` agrees with the layout; null when no layout suits.
+ */
+export function scatterWhere(r, shapes, gap, accept = () => true) {
+  const radii = shapes.map(s => {
+    const b = bbox(outline(s))
+    return Math.hypot(b.w, b.h) / 2
+  })
+  for (let tries = 0; tries < 80; tries++) {
+    const spots = radii.map(rad => [r.num(MARGIN + rad, BOX - MARGIN - rad), r.num(MARGIN + rad, BOX - MARGIN - rad)])
+    const apart = spots.every((p, i) => spots.every((q, j) => j <= i || Math.hypot(p[0] - q[0], p[1] - q[1]) >= radii[i] + radii[j] + gap))
+    if (apart && accept(spots)) return shapes.map((s, i) => translate(s, ...spots[i]))
+  }
+  return null
+}
+
+/**
+ * `inner` moved up to `reach` from where it is so it lies inside `outer`,
+ * `clear` units off the outline; where it is already, if no move suits;
+ * null when it does not fit at all.
+ */
+export function placeInside(r, outer, inner, reach, clear = 2.5) {
+  const pts = outline(outer)
+  const fits = s => outline(s).every(q => pointInPolygon(q, pts) && distToOutline(q, pts) >= clear)
+  for (let tries = 0; tries < 12 && reach > 0; tries++) {
+    const moved = translate(inner, r.num(-reach, reach), r.num(-reach, reach))
+    if (fits(moved)) return moved
+  }
+  return fits(inner) ? inner : null
+}
+
+/** Three spots on one straight line, spread out and well inside the box. */
+export function spotsOnLine(r, pad = MARGIN + 3) {
+  for (let tries = 0; tries < 60; tries++) {
+    const a = (r.num(0, 180) * Math.PI) / 180
+    const c = [r.num(30, 70), r.num(30, 70)]
+    const pts = [r.num(-32, -12), r.num(-5, 5), r.num(12, 32)].map(t => [c[0] + t * Math.cos(a), c[1] + t * Math.sin(a)])
+    if (pts.every(([x, y]) => x >= pad && x <= BOX - pad && y >= pad && y <= BOX - pad)) return pts
+  }
+  return null
+}
+
+/** A spot at least `clear` off every line through two of `spots`, and `gap` from each of them. */
+export function spotOffLines(r, spots, clear = 6, gap = 9, pad = MARGIN + 3) {
+  for (let tries = 0; tries < 80; tries++) {
+    const q = [r.num(pad, BOX - pad), r.num(pad, BOX - pad)]
+    if (spots.some(s => Math.hypot(s[0] - q[0], s[1] - q[1]) < gap)) continue
+    let ok = true
+    for (let i = 0; i < spots.length && ok; i++) {
+      for (let j = i + 1; j < spots.length && ok; j++) ok = distToLine(q, spots[i], spots[j]) >= clear
+    }
+    if (ok) return q
+  }
+  return null
 }
 
 /**
