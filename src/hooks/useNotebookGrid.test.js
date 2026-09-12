@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   notebookLayout, rowsPerPage, problemsPerPage,
-  PRINT_WIDTH, PRINT_HEIGHT, PRINT_SQUARE, PAD, SCREEN_SQUARE, MIN_SQUARE, HEADER_BAND, ROW_GAP,
+  PRINT_WIDTH, PRINT_HEIGHT, PRINT_SQUARE, PAD, SCREEN_SQUARE, MIN_SQUARE, HEADER_BAND, ROW_GAP, headerRows
 } from './useNotebookGrid'
 
 function blockSquares(columns, cellsWide, { gap, offset }) {
@@ -98,5 +98,25 @@ describe('problemsPerPage', () => {
     expect(PRINT_HEIGHT).toBeLessThanOrEqual(usable)
     const n = rowsPerPage(3, { rowGap: 0, headerGap: 0 })
     expect(pageSquares(3, n, 0, 0) * PRINT_SQUARE).toBeLessThanOrEqual(PRINT_HEIGHT)
+  })
+})
+
+describe('headerRows', () => {
+  it('rounds a header up to whole squares so the problems under it stay on the ruling', () => {
+    expect(headerRows(72, 18, 4)).toBe(4)
+    // 4.74 and 6.08 squares: the bands that knocked sheets off the grid on phones.
+    expect(headerRows(85.3, 18, 4)).toBe(5)
+    expect(headerRows(109.4, 18, 4)).toBe(7)
+    expect(headerRows(90, 18, 4)).toBe(5)
+  })
+
+  it('never drops below the minimum, and ignores sub-pixel noise', () => {
+    expect(headerRows(40, 26, 3)).toBe(3)
+    expect(headerRows(0, 18, 4)).toBe(4)
+    expect(headerRows(72.4, 18, 4)).toBe(4)
+  })
+
+  it('falls back to the minimum before the grid has a square size', () => {
+    expect(headerRows(100, 0, 4)).toBe(4)
   })
 })

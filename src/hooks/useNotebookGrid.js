@@ -116,6 +116,18 @@ export function problemsPerPage({ columns, rows, rowGap, headerGap }) {
 }
 
 /**
+ * Whole squares a worksheet header needs on screen: its content height rounded
+ * up to the grid, and never fewer than `minimum`. A band of 4.74 squares pushed
+ * every problem under it off the ruling, so the band always ends on a grid
+ * line. The half-pixel allowance keeps sub-pixel layout noise from adding a
+ * whole empty row.
+ */
+export function headerRows(contentHeight, square, minimum) {
+  if (!(square > 0)) return minimum
+  return Math.max(minimum, Math.ceil((contentHeight - 0.5) / square))
+}
+
+/**
  * @param {{ columns: number, cellsWide: number, rows: number, rowGap?: number, headerGap?: number }} o
  *   rows: digit rows per problem (rules between rows take no space);
  *   rowGap / headerGap: empty squares between problem rows / below the header (default ROW_GAP)
@@ -125,14 +137,25 @@ export function problemsPerPage({ columns, rows, rowGap, headerGap }) {
 export function useNotebookGrid({ columns, cellsWide, rows, rowGap = ROW_GAP, headerGap = ROW_GAP }) {
   const ref = useRef(null)
   const [width, setWidth] = useState(null)
+  const [headerHeight, setHeaderHeight] = useState(0)
 
   useLayoutEffect(() => {
     const el = ref.current
     if (!el || typeof ResizeObserver === 'undefined') return undefined
-    const measure = () => setWidth(el.clientWidth)
+    const header = el.querySelector('.worksheet-header')
+    // The header's own box is sized from --nb-header-rows, so measuring it would
+    // only read back our own answer. Its content is measured instead: the
+    // headline and any instructions, which wrap as the width or language changes.
+    const measure = () => {
+      setWidth(el.clientWidth)
+      if (!header) return
+      const content = [...header.children].reduce((sum, child) => sum + child.getBoundingClientRect().height, 0)
+      setHeaderHeight(content + (parseFloat(getComputedStyle(header).borderBottomWidth) || 0))
+    }
     measure()
     const observer = new ResizeObserver(measure)
     observer.observe(el)
+    for (const child of header?.children ?? []) observer.observe(child)
     return () => observer.disconnect()
   }, [])
 
@@ -158,6 +181,8 @@ export function useNotebookGrid({ columns, cellsWide, rows, rowGap = ROW_GAP, he
     '--nb-row-gap': rowGap,
     '--nb-header-gap': headerGap,
     '--nb-page-sq': PAGE_SQUARES,
+    // Rounded up to whole squares, with no floor: the stylesheet sets the minimum per breakpoint.
+    '--nb-header-rows': headerRows(headerHeight, screen.square, 0),
   }
 
   return [ref, style]

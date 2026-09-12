@@ -743,29 +743,6 @@ under a single `h1` and carries no filter markup (it is client-only, added on hy
 overflow from the control and no clipped segment at any width; focus ring captured on the first
 and an interior segment; print output untouched — the catalog is `no-print`.
 
-## Revision — the catalog reaches grade 6
-
-**Date:** 2026-09-12
-
-**What changed.** The grade filter grew from four cells to seven: All / Grade 1 … Grade 6, with
-All carrying "Ages 6–12". Column multiplication and long division now cover grades 3–4, and the
-column addition sheet gained subtraction with borrowing.
-
-**Why the filter became a grid.** Seven intrinsic 112px cells are 784px wide, which overflows
-between 769px and roughly 825px, and seven cells across a phone leave 45px each — too narrow for
-"Ages 10–11". Both layouts are now CSS grids of equal cells. On a wide screen that is one centred
-row, so the pill's `:first-child`/`:last-child` border collapsing still holds. On a narrow one All
-spans the top row and the grades wrap into two rows of three; wrapping defeats that collapsing, so
-each cell carries its own border, the rows overlap by a pixel, and the filled segment raises its
-`z-index` so its edge wins over its neighbours'.
-
-**Why All stays on top rather than joining the grades.** A 4 + 3 split leaves an empty slot that
-reads as a missing grade, and All is the one cell that is not a grade at all.
-
-Verified: tests, lint and build clean; the filter at 320, 390, 769, 830 and 1280px in en, de and zh
-with no overflow from the control. At 320px the page still overflows by about 50px, from the site
-header's language button, which predates this revision.
-
 ## Revision — the catalog stops remembering
 
 **Date:** 2026-09-10
@@ -792,3 +769,51 @@ one board-side control that carried a label in Subtitle type.
 Verified: 308 tests, lint and build clean; nothing writes `app.activeTab` any more and no stored
 value is read; the landing page keeps its single `h1` and its prerendered card list; print output
 untouched.
+
+## Revision — the catalog reaches grade 6
+
+**Date:** 2026-09-12
+
+**What changed.** The grade filter grew from four cells to seven: All / Grade 1 … Grade 6, with
+All carrying "Ages 6–12". Column multiplication and long division now cover grades 3–4, and the
+column addition sheet gained subtraction with borrowing.
+
+**Why the filter became a grid.** Seven intrinsic 112px cells are 784px wide, which overflows
+between 769px and roughly 825px, and seven cells across a phone leave 45px each — too narrow for
+"Ages 10–11". Both layouts are now CSS grids of equal cells. On a wide screen that is one centred
+row, so the pill's `:first-child`/`:last-child` border collapsing still holds. On a narrow one All
+spans the top row and the grades wrap into two rows of three; wrapping defeats that collapsing, so
+each cell carries its own border, the rows overlap by a pixel, and the filled segment raises its
+`z-index` so its edge wins over its neighbours'.
+
+**Why All stays on top rather than joining the grades.** A 4 + 3 split leaves an empty slot that
+reads as a missing grade, and All is the one cell that is not a grade at all.
+
+Verified: tests, lint and build clean; the filter at 320, 390, 769, 830 and 1280px in en, de and zh
+with no overflow from the control. At 320px the page still overflows by about 50px, from the site
+header's language button, which predates this revision.
+
+## Revision — the notebook header ends on a grid line
+
+**Date:** 2026-09-12
+
+**What changed.** The band at the head of every notebook sheet used to be exactly three squares on
+a wide screen and "at least four" on a phone. It is now always a whole number of squares: three or
+four at minimum, more when the content needs it. `useNotebookGrid` measures the header's content,
+rounds it up to whole squares and publishes `--nb-header-rows`; the stylesheet takes the larger of
+that and each breakpoint's floor. Paper is untouched and stays at exactly three.
+
+**Why.** On a phone the band's height was `auto`, so a title that wrapped made it 4.49, 4.74 or 6.08
+squares tall, and every problem under it sat a fraction of a square off the ruling. That was
+already true of Add & Subtract and Column Multiplication in English and of Long Division in German,
+Russian and French; the longer titles of the new sheets made it common. Just above the phone
+breakpoint the reverse happened: the band stayed at three squares and a German or Russian headline
+spilled out of it.
+
+**Why the content is measured, not the band.** The band's height is the answer the hook publishes,
+so reading it back would only return the previous answer. The headline's own height does not
+depend on the band, which centres it, so there is no feedback loop.
+
+Verified: 495 tests and lint clean. Every notebook sheet in en, de, ru and fr at 390px ends its band
+on a whole square with no problem off the ruling (17 of 28 were off before). At 769px in en, de and
+ru no headline is taller than its band. Print stays at three squares in every language.

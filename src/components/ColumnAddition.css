@@ -118,11 +118,16 @@
   overflow-x: auto;
 }
 
-/* Solid band over the top of the sheet (top padding + 2 squares) so the title is not drawn over squares. */
+/* Solid band over the top of the sheet (top padding + 2 squares) so the title is not drawn over squares.
+   Three squares is the floor, not a fixed height: a long title — German or
+   Russian most often — wraps just above the phone breakpoint, and a pinned band
+   let it spill out. useNotebookGrid measures the content and publishes
+   --nb-header-rows, so the band grows by whole squares and the problems under
+   it stay on the ruling. Paper stays at exactly three — see the print block. */
 .colarith-notebook .worksheet-header {
   display: flex;
   align-items: center;
-  height: calc(3 * var(--nb-sq));
+  height: calc(max(3, var(--nb-header-rows, 0)) * var(--nb-sq));
   margin: calc(-1 * var(--nb-sq)) calc(-1 * var(--nb-sq)) calc(var(--nb-header-gap, 1) * var(--nb-sq));
   padding: 0 var(--nb-sq);
   border-bottom-width: 2px;
@@ -202,13 +207,12 @@
   height: calc(var(--nb-sq) - 6px);
 }
 
-/* On screen the band may grow: Name / Date / Set wrap onto a second line on
-   phones and the fixed height was cutting the title's ascenders off. Paper
-   keeps the exact square count — see the print block below. */
+/* On phones Name / Date / Set wrap onto their own line, so the floor is four
+   squares. The band still grows by whole squares beyond that: a height of 4.74
+   squares used to push every problem under it off the ruling. */
 @media (max-width: 768px) {
   .colarith-notebook .worksheet-header {
-    height: auto;
-    min-height: calc(4 * var(--nb-sq));
+    height: calc(max(4, var(--nb-header-rows, 0)) * var(--nb-sq));
   }
 }
 
