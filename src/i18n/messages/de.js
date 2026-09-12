@@ -205,7 +205,7 @@ export default {
   },
   bongard: {
     title: 'Bongard-Probleme',
-    instructions: 'Die sechs Kästchen links folgen alle einer Regel, die keines der sechs Kästchen rechts erfüllt. Wie lautet die Regel?',
+    instructions: 'Die sechs Kästchen links haben etwas gemeinsam, das keines der sechs Kästchen rechts hat. Was ist es?',
     perPage: 'Aufgaben pro Seite',
     easy: 'Leicht',
     medium: 'Mittel',

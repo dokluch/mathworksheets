@@ -205,7 +205,7 @@ export default {
   },
   bongard: {
     title: '邦加德问题',
-    instructions: '左边六个格子都遵守同一条规则，右边六个格子都不遵守。这条规则是什么？',
+    instructions: '左边六个格子有一个共同点，右边六个格子都没有。这个共同点是什么？',
     perPage: '每页题数',
     easy: '简单',
     medium: '中等',

@@ -215,7 +215,7 @@ export default {
   },
   bongard: {
     title: 'Bongard Problems',
-    instructions: 'All six boxes on the left follow one rule that none of the six boxes on the right follow. What is the rule?',
+    instructions: 'The six boxes on the left share one feature that none of the six on the right have. What is it?',
     perPage: 'Problems per page',
     easy: 'Easy',
     medium: 'Medium',

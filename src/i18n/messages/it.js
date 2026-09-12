@@ -205,7 +205,7 @@ export default {
   },
   bongard: {
     title: 'Problemi di Bongard',
-    instructions: 'Le sei caselle a sinistra seguono tutte una regola che nessuna delle sei a destra rispetta. Qual è la regola?',
+    instructions: 'Le sei caselle a sinistra hanno qualcosa in comune che nessuna delle sei a destra ha. Che cos’è?',
     perPage: 'Problemi per pagina',
     easy: 'Facile',
     medium: 'Medio',

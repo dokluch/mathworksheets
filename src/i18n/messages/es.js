@@ -205,7 +205,7 @@ export default {
   },
   bongard: {
     title: 'Problemas de Bongard',
-    instructions: 'Las seis casillas de la izquierda cumplen una regla que ninguna de las seis de la derecha cumple. ¿Cuál es la regla?',
+    instructions: 'Las seis casillas de la izquierda tienen algo en común que ninguna de las seis de la derecha tiene. ¿Qué es?',
     perPage: 'Problemas por página',
     easy: 'Fácil',
     medium: 'Medio',

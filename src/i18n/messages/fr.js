@@ -205,7 +205,7 @@ export default {
   },
   bongard: {
     title: 'Problèmes de Bongard',
-    instructions: 'Les six cases de gauche suivent toutes une règle que les six cases de droite ne suivent pas. Quelle est la règle ?',
+    instructions: 'Les six cases de gauche ont un point commun qu’aucune des six cases de droite n’a. Lequel ?',
     perPage: 'Problèmes par page',
     easy: 'Facile',
     medium: 'Moyen',
