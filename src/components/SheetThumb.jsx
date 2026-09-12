@@ -267,6 +267,22 @@ const MARKS = {
       {digit(7, 5, '5')}{rule(7, 8, 6, 1.1)}{digit(7, 6, '8')}
     </>
   ),
+  // A mixed-number sum on the top line and a plain difference under it, each
+  // with its answer boxed: whole part on the bar line, then numerator over denominator.
+  fracaddsub: () => (
+    <>
+      {digit(2, 1.5, '1')}{digit(3, 1, '3')}{rule(3, 4, 2, 1.1)}{digit(3, 2, '4')}
+      {digit(4, 1.5, '+')}
+      {digit(5, 1.5, '2')}{digit(6, 1, '5')}{rule(6, 7, 2, 1.1)}{digit(6, 2, '6')}
+      {digit(7, 1.5, '=')}
+      {box(8, 1.5)}{box(9, 1)}{rule(9, 10, 2, 1.1)}{box(9, 2)}
+      {digit(3, 5, '5')}{rule(3, 4, 6, 1.1)}{digit(3, 6, '6')}
+      {digit(4, 5.5, '−')}
+      {digit(5, 5, '1')}{rule(5, 6, 6, 1.1)}{digit(5, 6, '4')}
+      {digit(6, 5.5, '=')}
+      {box(7, 5)}{rule(7, 8, 6, 1.1)}{box(7, 6)}
+    </>
+  ),
   // The one screen-only sheet: an equation with a movable term.
   eqexplore: () => (
     <>

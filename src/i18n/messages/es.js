@@ -222,6 +222,22 @@ export default {
     compareAria: 'Compara {a} y {b}: mayor que, menor que o igual',
   },
 
+  fracaddsub: {
+    title: 'Suma y resta de fracciones',
+    level: 'Nivel',
+    like: 'Igual denominador',
+    unlike: 'Distinto denominador',
+    mixed: 'Números mixtos',
+    answerForm: 'Respuestas',
+    mixedForm: 'Número mixto',
+    improperForm: 'Fracción impropia',
+    // How this language's schools write an answer above 1 (as divide.defaultNotation); the setting overrides it once chosen.
+    defaultAnswerForm: 'improper',
+    meta: '{level} · denominadores hasta {n}',
+    addAria: '{a} más {b}',
+    subAria: '{a} menos {b}',
+  },
+
   compare: {
     title: 'Comparación',
   },
@@ -541,6 +557,25 @@ export default {
         { q: '¿Cuándo se aprende a simplificar y comparar fracciones?', a: 'Las fracciones equivalentes y la comparación de fracciones con distinto denominador se trabajan en 4.º y 5.º de primaria, y la simplificación se afianza en 5.º y 6.º. Todo se apoya en las tablas de multiplicar: encontrar un divisor común es leer una tabla al revés.' },
         { q: '¿Por qué tantas comparaciones comparten numerador o denominador?', a: 'Son las parejas en las que los niños se equivocan. Con el mismo denominador solo cuentan los numeradores, pero con el mismo numerador la fracción con mayor denominador es la menor, lo que va contra la intuición de que un número más grande vale más. La ficha mezcla ambos casos a propósito, junto con parejas como 2/4 y 3/6 que son iguales.' },
         { q: '¿Qué límite de denominador elijo?', a: 'Hasta 10 se queda en medios, tercios, cuartos, quintos y décimos, que es donde empiezan las fracciones. Hasta 12 añade sextos, octavos y doceavos para las equivalentes, y hasta 20 es para niños que ya simplifican con soltura y necesitan buscar divisores comunes mayores.' },
+      ],
+    },
+    fracaddsub: {
+      label: 'Suma y resta de fracciones',
+      shortDesc: 'Igual y distinto denominador, y números mixtos',
+      longDesc: 'Sumas y restas de fracciones sobre una cuadrícula de cuaderno, con el numerador sobre el denominador y una línea para el cálculo bajo cada ejercicio. Se empieza con igual denominador, se sigue con denominadores distintos cuyo denominador común no pasa del límite elegido y se termina con números mixtos, donde la mitad de las sumas pasan de un entero y la mitad de las restas piden uno prestado. Los resultados nunca son negativos y las soluciones dan la forma más simple, como número mixto o como fracción impropia.',
+      skills: ['suma de fracciones', 'resta de fracciones', 'común denominador', 'números mixtos', 'fracción irreducible'],
+      settings: [
+        'Nivel: igual denominador, distinto denominador o números mixtos',
+        'Operación: suma, resta o ambas',
+        'Denominadores: hasta 10, 12 o 20',
+        'Respuestas: número mixto o fracción impropia',
+        'Columnas: 2, 3 o 4 (de 12 a 24 ejercicios)',
+        'Imprimir la hoja de respuestas',
+      ],
+      faq: [
+        { q: '¿Por qué hay que igualar los denominadores antes de sumar?', a: 'El denominador dice el tamaño de las partes, y no se pueden contar juntas partes de tamaños distintos. Un tercio y un cuarto se convierten en cuatro doceavos y tres doceavos, y solo entonces los numeradores suman siete doceavos. En el nivel de distinto denominador el común denominador nunca pasa del límite, para que ese paso no se convierta en una búsqueda.' },
+        { q: '¿Qué es un número mixto y cuándo se escribe así la respuesta?', a: 'Un número mixto es un entero con una fracción, como 2 3/4. En muchas aulas de España se deja la fracción impropia 11/4, mientras que en otros países se pide el número mixto. El ajuste Respuestas sigue tu idioma por defecto y se puede cambiar en cualquier sentido.' },
+        { q: '¿Por qué se pide siempre la forma más simple?', a: 'Simplificar al final comprueba que el niño sigue viendo los factores comunes cuando ya ha hecho la cuenta, y así cada ejercicio tiene una única respuesta correcta con la que corregir. 3/8 + 1/8 son 4/8, que las soluciones escriben como 1/2.' },
       ],
     },
     eqexplore: {

@@ -234,6 +234,22 @@ export default {
     compareAria: 'Compare {a} and {b} with greater than, less than or equal',
   },
 
+  fracaddsub: {
+    title: 'Add & Subtract Fractions',
+    level: 'Level',
+    like: 'Like denominators',
+    unlike: 'Unlike denominators',
+    mixed: 'Mixed numbers',
+    answerForm: 'Answers',
+    mixedForm: 'Mixed number',
+    improperForm: 'Improper fraction',
+    // How this language's schools write an answer above 1 (as divide.defaultNotation); the setting overrides it once chosen.
+    defaultAnswerForm: 'mixed',
+    meta: '{level} · denominators up to {n}',
+    addAria: '{a} plus {b}',
+    subAria: '{a} minus {b}',
+  },
+
   compare: {
     title: 'Comparison',
   },

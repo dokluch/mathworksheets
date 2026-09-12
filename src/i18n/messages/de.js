@@ -222,6 +222,22 @@ export default {
     compareAria: 'Vergleiche {a} und {b}: größer, kleiner oder gleich',
   },
 
+  fracaddsub: {
+    title: 'Brüche addieren und subtrahieren',
+    level: 'Stufe',
+    like: 'Gleichnamig',
+    unlike: 'Ungleichnamig',
+    mixed: 'Gemischte Zahlen',
+    answerForm: 'Ergebnis',
+    mixedForm: 'Gemischte Zahl',
+    improperForm: 'Unechter Bruch',
+    // How this language's schools write an answer above 1 (as divide.defaultNotation); the setting overrides it once chosen.
+    defaultAnswerForm: 'mixed',
+    meta: '{level} · Nenner bis {n}',
+    addAria: '{a} plus {b}',
+    subAria: '{a} minus {b}',
+  },
+
   compare: {
     title: 'Zahlenvergleich',
   },
@@ -541,6 +557,25 @@ export default {
         { q: 'Wann lernen Kinder, Brüche zu kürzen und zu vergleichen?', a: 'Erweitern und Vergleichen von Brüchen mit verschiedenen Nennern ist in den meisten Lehrplänen Stoff der Klassen 5 und 6, in manchen Ländern schon der Klasse 4. Alles baut auf dem Einmaleins auf: einen gemeinsamen Teiler zu finden heißt, eine Einmaleinsreihe rückwärts zu lesen.' },
         { q: 'Warum haben so viele Vergleiche den gleichen Zähler oder Nenner?', a: 'Genau bei diesen Paaren irren sich Kinder. Bei gleichem Nenner zählen nur die Zähler, bei gleichem Zähler ist aber der Bruch mit dem größeren Nenner der kleinere, und das widerspricht dem Gefühl, dass eine größere Zahl mehr bedeutet. Das Blatt mischt beides absichtlich, zusammen mit Paaren wie 2/4 und 3/6, die gleich sind.' },
         { q: 'Welche Nennergrenze sollte ich wählen?', a: 'Bis 10 bleibt es bei Halben, Dritteln, Vierteln, Fünfteln und Zehnteln, wo das Bruchrechnen beginnt. Bis 12 kommen Sechstel, Achtel und Zwölftel zum Erweitern dazu, und bis 20 ist für Kinder, die schon sicher kürzen und größere gemeinsame Teiler suchen sollen.' },
+      ],
+    },
+    fracaddsub: {
+      label: 'Brüche addieren und subtrahieren',
+      shortDesc: 'Gleichnamige und ungleichnamige Brüche, gemischte Zahlen',
+      longDesc: 'Addition und Subtraktion von Brüchen auf einem Karogitter, der Zähler über dem Nenner und unter jeder Aufgabe eine Zeile für den Rechenweg. Es beginnt mit gleichnamigen Brüchen, geht weiter mit ungleichnamigen, deren Hauptnenner innerhalb der gewählten Grenze bleibt, und endet mit gemischten Zahlen, bei denen die Hälfte der Summen über ein Ganzes geht und die Hälfte der Differenzen ein Ganzes entbündelt. Ergebnisse sind nie negativ, und das Lösungsblatt gibt die gekürzte Form an, als gemischte Zahl oder als unechten Bruch.',
+      skills: ['Brüche addieren', 'Brüche subtrahieren', 'Hauptnenner', 'gemischte Zahlen', 'vollständig gekürzt'],
+      settings: [
+        'Stufe: gleichnamig, ungleichnamig oder gemischte Zahlen',
+        'Rechenart: Addition, Subtraktion oder beides',
+        'Nenner: bis 10, 12 oder 20',
+        'Ergebnis: gemischte Zahl oder unechter Bruch',
+        'Spalten: 2, 3 oder 4 (12–24 Aufgaben)',
+        'Lösungsblatt drucken',
+      ],
+      faq: [
+        { q: 'Warum müssen die Nenner vor dem Addieren gleich sein?', a: 'Der Nenner gibt die Größe der Teile an, und Teile verschiedener Größe kann man nicht zusammenzählen. Ein Drittel und ein Viertel werden zu vier Zwölfteln und drei Zwölfteln, und erst dann ergeben die Zähler sieben Zwölftel. Auf der Stufe „ungleichnamig“ bleibt der Hauptnenner immer innerhalb der Grenze, damit dieser Schritt nicht zur Suche wird.' },
+        { q: 'Was ist eine gemischte Zahl, und wann schreibt man das Ergebnis so?', a: 'Eine gemischte Zahl besteht aus einer ganzen Zahl und einem Bruch, etwa 2 3/4. In Deutschland wird ein Ergebnis über 1 meist so geschrieben, in Frankreich, Spanien und Italien bleibt oft der unechte Bruch 11/4 stehen. Die Einstellung Ergebnis richtet sich zunächst nach deiner Sprache und lässt sich in beide Richtungen umstellen.' },
+        { q: 'Warum soll jedes Ergebnis vollständig gekürzt sein?', a: 'Das Kürzen am Ende prüft, ob das Kind nach dem Rechnen noch gemeinsame Teiler erkennt, und jede Aufgabe hat so genau eine richtige Lösung zum Vergleichen. 3/8 + 1/8 ergibt 4/8, was auf dem Lösungsblatt als 1/2 steht.' },
       ],
     },
     eqexplore: {

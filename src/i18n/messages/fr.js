@@ -222,6 +222,22 @@ export default {
     compareAria: 'Comparer {a} et {b} : plus grand, plus petit ou égal',
   },
 
+  fracaddsub: {
+    title: 'Additionner et soustraire des fractions',
+    level: 'Niveau',
+    like: 'Même dénominateur',
+    unlike: 'Dénominateurs différents',
+    mixed: 'Nombres mixtes',
+    answerForm: 'Réponses',
+    mixedForm: 'Nombre mixte',
+    improperForm: 'Fraction impropre',
+    // How this language's schools write an answer above 1 (as divide.defaultNotation); the setting overrides it once chosen.
+    defaultAnswerForm: 'improper',
+    meta: '{level} · dénominateurs jusqu’à {n}',
+    addAria: '{a} plus {b}',
+    subAria: '{a} moins {b}',
+  },
+
   compare: {
     title: 'Comparaison',
   },
@@ -541,6 +557,25 @@ export default {
         { q: 'Quand apprend-on à simplifier et à comparer des fractions ?', a: 'Les fractions égales et la comparaison de fractions de dénominateurs différents arrivent au CM1 et au CM2, et la simplification se poursuit en 6e. Tout repose sur les tables de multiplication : trouver un diviseur commun, c’est lire une table à l’envers.' },
         { q: 'Pourquoi tant de comparaisons ont-elles le même numérateur ou le même dénominateur ?', a: 'Ce sont les paires sur lesquelles les enfants se trompent. Avec le même dénominateur, seuls les numérateurs comptent ; avec le même numérateur, c’est le plus grand dénominateur qui donne la plus petite fraction, ce qui contredit l’intuition qu’un plus grand nombre vaut plus. La fiche mélange les deux exprès, avec des paires comme 2/4 et 3/6 qui sont égales.' },
         { q: 'Quelle limite de dénominateur choisir ?', a: 'Jusqu’à 10, on reste sur les demis, tiers, quarts, cinquièmes et dixièmes, là où commencent les fractions. Jusqu’à 12 ajoute les sixièmes, huitièmes et douzièmes pour les fractions égales, et jusqu’à 20 s’adresse aux enfants qui simplifient déjà vite et doivent chercher de plus grands diviseurs communs.' },
+      ],
+    },
+    fracaddsub: {
+      label: 'Additionner et soustraire des fractions',
+      shortDesc: 'Même dénominateur, dénominateurs différents et nombres mixtes',
+      longDesc: 'Additions et soustractions de fractions posées sur un quadrillage de cahier, le numérateur au-dessus du dénominateur, avec une ligne de calcul sous chaque exercice. On commence avec le même dénominateur, puis des dénominateurs différents dont le dénominateur commun reste dans la limite choisie, puis des nombres mixtes, où la moitié des sommes dépassent une unité et la moitié des différences en empruntent une. Les résultats ne sont jamais négatifs et le corrigé donne la forme la plus simple, en nombre mixte ou en fraction.',
+      skills: ['addition de fractions', 'soustraction de fractions', 'dénominateur commun', 'nombres mixtes', 'fraction irréductible'],
+      settings: [
+        'Niveau : même dénominateur, dénominateurs différents ou nombres mixtes',
+        'Opération : addition, soustraction ou les deux',
+        'Dénominateurs : jusqu’à 10, 12 ou 20',
+        'Réponses : nombre mixte ou fraction impropre',
+        'Colonnes : 2, 3 ou 4 (12 à 24 exercices)',
+        'Imprimer un corrigé',
+      ],
+      faq: [
+        { q: 'Pourquoi faut-il le même dénominateur pour additionner ?', a: 'Le dénominateur indique la taille des parts, et on ne peut pas compter ensemble des parts de tailles différentes. Un tiers et un quart deviennent quatre douzièmes et trois douzièmes, et seulement alors les numérateurs s’additionnent pour donner sept douzièmes. Au niveau « dénominateurs différents », le dénominateur commun reste toujours dans la limite, pour que cette étape ne tourne pas à la chasse au trésor.' },
+        { q: 'Qu’est-ce qu’un nombre mixte, et faut-il écrire la réponse ainsi ?', a: 'Un nombre mixte associe un entier et une fraction, comme 2 3/4. En France, on garde le plus souvent la fraction 11/4 ou on écrit 2 + 3/4, alors que d’autres pays demandent le nombre mixte. Le réglage Réponses suit votre langue par défaut et se change dans les deux sens.' },
+        { q: 'Pourquoi attend-on toujours la forme la plus simple ?', a: 'Simplifier à la fin vérifie que l’enfant voit encore les diviseurs communs une fois le calcul fait, et chaque exercice n’a alors qu’une seule bonne réponse à corriger. 3/8 + 1/8 font 4/8, que le corrigé écrit 1/2.' },
       ],
     },
     eqexplore: {

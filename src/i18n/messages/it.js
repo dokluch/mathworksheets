@@ -222,6 +222,22 @@ export default {
     compareAria: 'Confronta {a} e {b}: maggiore, minore o uguale',
   },
 
+  fracaddsub: {
+    title: 'Addizione e sottrazione di frazioni',
+    level: 'Livello',
+    like: 'Stesso denominatore',
+    unlike: 'Denominatori diversi',
+    mixed: 'Numeri misti',
+    answerForm: 'Risposte',
+    mixedForm: 'Numero misto',
+    improperForm: 'Frazione impropria',
+    // How this language's schools write an answer above 1 (as divide.defaultNotation); the setting overrides it once chosen.
+    defaultAnswerForm: 'improper',
+    meta: '{level} · denominatori fino a {n}',
+    addAria: '{a} più {b}',
+    subAria: '{a} meno {b}',
+  },
+
   compare: {
     title: 'Confronto',
   },
@@ -541,6 +557,25 @@ export default {
         { q: 'Quando si impara a semplificare e confrontare le frazioni?', a: 'Le frazioni equivalenti e il confronto tra frazioni con denominatori diversi si affrontano in quarta e quinta primaria, e la semplificazione si consolida in prima media. Tutto poggia sulle tabelline: trovare un divisore comune significa leggere una tabellina al contrario.' },
         { q: 'Perché tanti confronti hanno lo stesso numeratore o lo stesso denominatore?', a: 'Sono le coppie su cui i bambini sbagliano. Con lo stesso denominatore contano solo i numeratori, ma con lo stesso numeratore la frazione con il denominatore più grande è la più piccola, e questo va contro l’intuizione che un numero più grande valga di più. La scheda mescola i due casi apposta, insieme a coppie come 2/4 e 3/6 che sono uguali.' },
         { q: 'Quale limite di denominatore scelgo?', a: 'Fino a 10 si resta su mezzi, terzi, quarti, quinti e decimi, da dove partono le frazioni. Fino a 12 aggiunge sesti, ottavi e dodicesimi per le frazioni equivalenti, e fino a 20 è per chi semplifica già con sicurezza e deve cercare divisori comuni più grandi.' },
+      ],
+    },
+    fracaddsub: {
+      label: 'Addizione e sottrazione di frazioni',
+      shortDesc: 'Stesso denominatore, denominatori diversi e numeri misti',
+      longDesc: 'Addizioni e sottrazioni di frazioni su una griglia a quadretti, con il numeratore sopra il denominatore e una riga per i calcoli sotto ogni esercizio. Si comincia con lo stesso denominatore, si passa a denominatori diversi il cui denominatore comune resta entro il limite scelto e si arriva ai numeri misti, dove metà delle somme supera un intero e metà delle differenze ne prende uno in prestito. I risultati non sono mai negativi e le soluzioni riportano la forma più semplice, come numero misto o come frazione impropria.',
+      skills: ['addizione di frazioni', 'sottrazione di frazioni', 'denominatore comune', 'numeri misti', 'frazione ridotta ai minimi termini'],
+      settings: [
+        'Livello: stesso denominatore, denominatori diversi o numeri misti',
+        'Operazione: addizione, sottrazione o entrambe',
+        'Denominatori: fino a 10, 12 o 20',
+        'Risposte: numero misto o frazione impropria',
+        'Colonne: 2, 3 o 4 (da 12 a 24 esercizi)',
+        'Stampa le soluzioni',
+      ],
+      faq: [
+        { q: 'Perché i denominatori devono essere uguali prima di sommare?', a: 'Il denominatore dice quanto sono grandi le parti, e parti di grandezza diversa non si possono contare insieme. Un terzo e un quarto diventano quattro dodicesimi e tre dodicesimi, e solo allora i numeratori danno sette dodicesimi. Al livello con denominatori diversi il denominatore comune resta sempre entro il limite, così questo passaggio non diventa una caccia al tesoro.' },
+        { q: 'Che cos’è un numero misto e quando si scrive così la risposta?', a: 'Un numero misto è un intero seguito da una frazione, come 2 3/4. Nella scuola italiana si lascia spesso la frazione impropria 11/4, mentre altri paesi chiedono il numero misto. L’impostazione Risposte segue la tua lingua e si può cambiare in entrambe le direzioni.' },
+        { q: 'Perché la risposta va sempre ridotta ai minimi termini?', a: 'Semplificare alla fine verifica che il bambino riconosca ancora i divisori comuni dopo il calcolo, e ogni esercizio ha così una sola risposta corretta con cui confrontarsi. 3/8 + 1/8 fa 4/8, che le soluzioni scrivono come 1/2.' },
       ],
     },
     eqexplore: {

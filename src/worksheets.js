@@ -300,7 +300,7 @@ export const WORKSHEETS = [
     ],
     examples: ['6/8 = □/□', '2/3 = □/12', '3/4 □ 5/8', '5/10 = □/□'],
     prerequisites: ['divide', 'multiply'],
-    nextSteps: [],
+    nextSteps: ['fracaddsub'],
     updated: '2026-09-12',
     faq: [
       { q: 'When do children learn to simplify and compare fractions?', a: 'Equivalent fractions and comparing fractions with different denominators are grade 4 work in most curricula, and simplifying to lowest terms follows in grades 4 and 5. Both rest on the times tables: finding a common factor is a division fact read the other way.' },
@@ -308,6 +308,36 @@ export const WORKSHEETS = [
       { q: 'Which denominator limit should I choose?', a: 'Up to 10 keeps to halves, thirds, quarters, fifths and tenths, which is where fractions start. Up to 12 adds sixths, eighths and twelfths for equivalent fractions, and up to 20 is for children who already simplify quickly and need larger common factors to find.' },
     ],
     color: '#7d3b3f',
+    interactive: false,
+  },
+  {
+    id: 'fracaddsub',
+    slug: 'add-subtract-fractions',
+    label: 'Add & Subtract Fractions',
+    shortDesc: 'Like and unlike denominators, and mixed numbers',
+    longDesc:
+      'Addition and subtraction of fractions written on a notebook grid, numerator over denominator, with a line of working under every problem. ' +
+      'Start with like denominators, move to unlike denominators whose common denominator stays within the chosen limit, then to mixed numbers, where half the sums carry past a whole and half the differences borrow one. Answers are never negative and the answer key gives the simplest form, as a mixed number or an improper fraction.',
+    grades: '4–6',
+    skills: ['adding fractions', 'subtracting fractions', 'common denominators', 'mixed numbers', 'simplest form'],
+    settings: [
+      'Level: like denominators, unlike denominators or mixed numbers',
+      'Operation: addition, subtraction or both',
+      'Denominators: up to 10, 12 or 20',
+      'Answers: a mixed number or an improper fraction',
+      'Columns: 2, 3 or 4 (12–24 problems)',
+      'Print an answer key',
+    ],
+    examples: ['3/8 + 2/8 = □/□', '2/3 − 1/4 = □/□', '2 3/4 + 1 5/6 = □ □/□', '5 1/3 − 2 5/6 = □ □/□'],
+    prerequisites: ['fractions'],
+    nextSteps: [],
+    updated: '2026-09-12',
+    faq: [
+      { q: 'Why must the denominators match before adding?', a: 'A denominator names the size of the pieces, and pieces of different sizes cannot be counted together. One third and one quarter become four twelfths and three twelfths, and only then do the numerators add to seven twelfths. The unlike level keeps every common denominator within the limit, so that step never turns into a hunt.' },
+      { q: 'What is a mixed number, and when should an answer be written as one?', a: 'A mixed number is a whole number and a fraction, such as 2 3/4. Many schools ask for answers above 1 in that form, while others, including most French, Spanish and Italian classrooms, keep the improper fraction 11/4. The Answers setting follows your language by default and can be switched either way.' },
+      { q: 'Why is every answer expected in simplest form?', a: 'Simplifying at the end checks that the child can still see common factors after the arithmetic is done, and it gives every problem exactly one correct answer to mark against. 3/8 + 1/8 is 4/8, which the answer key writes as 1/2.' },
+    ],
+    color: '#685d31',
     interactive: false,
   },
   {
