@@ -126,11 +126,11 @@ const leaves = (node, out = []) => {
  * One gate, applied to the tree the renderer will print — which is safe only
  * because `isCanonical` guarantees the printed string reproduces this tree.
  *
- * Requiring every leaf and every factor to be at least 2 also does a second
- * job: it makes a bracket always change the answer. `a − (b ± c)` differs from
- * `a − b ± c` unless c is 0, and `(a + b)·c` from `a + b·c` unless a is 0 or c
- * is 1. So the sheet never prints a bracket a child could ignore, and there is
- * no per-render check to pay for — the test suite asserts it instead.
+ * It also refuses a bracket a child could ignore. Leaves of at least 2 make
+ * most brackets matter — `a − (b ± c)` differs from `a − b ± c` unless c is 0,
+ * and `(a + b)·c` from `a + b·c` unless a is 0 or c is 1 — but not every one:
+ * 73 − (6 − 2)·3 and 73 − 6 − 2·3 are both 61. So the printed expression is
+ * also read with its brackets taken out, and must then give another answer.
  */
 export function isValid(node) {
   if (!node || !isCanonical(node)) return false
@@ -146,7 +146,24 @@ export function isValid(node) {
     if (o === '*' && !(inTables(a) && inTables(b))) return false
     if (o === '/' && !(inTables(b) && inTables(value) && a % b === 0)) return false
   }
-  return true
+
+  const tokens = renderTokens(node)
+  return !tokens.some(k => k.t === '(') || valueWithoutBrackets(tokens) !== answer
+}
+
+/** Printed tokens read by precedence alone, as if the brackets were not there. */
+function valueWithoutBrackets(tokens) {
+  const flat = tokens.filter(k => k.t === 'n' || k.t === 'op')
+  const terms = [flat[0].v]
+  const signs = []
+  for (let i = 1; i < flat.length; i += 2) {
+    const o = flat[i].v
+    const v = flat[i + 1].v
+    if (o === '*') terms[terms.length - 1] *= v
+    else if (o === '/') terms[terms.length - 1] /= v
+    else { signs.push(o); terms.push(v) }
+  }
+  return terms.reduce((sum, v, i) => (signs[i - 1] === '-' ? sum - v : sum + v))
 }
 
 /* ── Shapes ───────────────────────────────────────────────────────────────── */

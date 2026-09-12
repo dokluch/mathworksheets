@@ -318,3 +318,21 @@ describe('seeded generation', () => {
     }
   })
 })
+
+describe('a bracket a child could ignore', () => {
+  it('is refused even when every number is at least 2', () => {
+    // 73 − (6 − 2) · 3 is 61, and so is 73 − 6 − 2 · 3.
+    const ignorable = op('-', num(73), op('*', op('-', num(6), num(2)), num(3)))
+    expect(evaluate(ignorable)).toBe(61)
+    expect(isValid(ignorable)).toBe(false)
+    expect(isValid(op('-', num(73), op('*', op('-', num(7), num(2)), num(3))))).toBe(true)
+  })
+
+  it('never reaches a sheet from the seeds that used to deal one', () => {
+    for (const seed of [415, 5380, 8230, 10224, 14752, 16056]) {
+      const [{ tokens, answer }] = generateSheet(1, 'hard', true, mulberry32(seed))
+      if (!tokens.some(k => k.t === '(')) continue
+      expect(parsePrinted(printed(tokens, 'dot').replace(/[()]/g, '')).value, String(seed)).not.toBe(answer)
+    }
+  })
+})
