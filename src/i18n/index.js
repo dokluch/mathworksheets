@@ -4,22 +4,30 @@
  *
  * No DOM, no React, no Node APIs: like src/seo/render.js this runs in the Vite
  * config, the prerender script, the Vercel edge middleware and in tests.
+ *
+ * Only English is bundled here. The other catalogs are registered on demand:
+ * the browser loads the one it needs (./load.js) so a visitor downloads one
+ * language, not seven; Node, the edge and the tests register them all
+ * (./all.js). A catalog that is not registered falls back to English.
  */
 import { WORKSHEETS } from '../worksheets.js'
 import { PAGES } from '../pages.js'
 import { BRAND, OPERATOR, CONTACT_EMAIL, GITHUB_URL, LICENSE_NAME, LICENSE_URL, SITE_URL } from '../seo/site.js'
 import { DEFAULT_LOCALE, LOCALE_META } from './locales.js'
 import en from './messages/en.js'
-import fr from './messages/fr.js'
-import es from './messages/es.js'
-import de from './messages/de.js'
-import it from './messages/it.js'
-import ru from './messages/ru.js'
-import zh from './messages/zh.js'
 
 export * from './locales.js'
 
-export const MESSAGES = { en, fr, es, de, it, ru, zh }
+export const MESSAGES = { en }
+
+/** Adds a locale's catalog to the registry. */
+export function registerMessages(locale, messages) {
+  MESSAGES[locale] = messages
+}
+
+export function hasMessages(locale) {
+  return Object.hasOwn(MESSAGES, locale)
+}
 
 export function getMessages(locale) {
   return MESSAGES[locale] ?? MESSAGES[DEFAULT_LOCALE]

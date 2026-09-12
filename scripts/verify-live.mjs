@@ -11,6 +11,7 @@
  *
  * The GA section needs the Chromium build once: `npx playwright install chromium`.
  */
+import '../src/i18n/all.js'
 import { WORKSHEETS } from '../src/worksheets.js'
 import { PAGES } from '../src/pages.js'
 import { LOCALES, LOCALE_META } from '../src/i18n/index.js'

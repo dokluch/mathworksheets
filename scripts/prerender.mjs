@@ -9,6 +9,7 @@
  */
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
+import '../src/i18n/all.js'
 import { buildSiteFiles } from '../src/seo/render.js'
 
 export async function prerender(distDir, { now = new Date(), log = console.log } = {}) {

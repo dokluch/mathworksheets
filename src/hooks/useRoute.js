@@ -18,6 +18,17 @@ export function pathToSheetId(pathname) {
   return findWorksheetBySlug(m[1])?.id ?? null
 }
 
+/**
+ * The locale a first load renders in: a locale prefix in the path wins, and an
+ * unprefixed path takes the remembered choice. main.jsx loads this locale's
+ * catalog before mounting, so it must match what useRoute resolves.
+ */
+export function initialLocale(pathname, remembered) {
+  const fromPath = localeFromPath(pathname)
+  if (fromPath !== DEFAULT_LOCALE) return fromPath
+  return isLocale(remembered) ? remembered : DEFAULT_LOCALE
+}
+
 /** worksheet id → '/<locale>/worksheets/<slug>', null/unknown → the locale's home */
 export function sheetIdToPath(id, locale = DEFAULT_LOCALE) {
   const ws = id ? findWorksheetById(id) : null
@@ -84,9 +95,9 @@ export function useRoute(fallbackLocale = DEFAULT_LOCALE) {
   const [route, setRoute] = useState(() => {
     if (typeof window === 'undefined') return homeRoute()
     const pathname = normalizePath(window.location.pathname)
-    let fromPath = routeForPath(pathname)
-    if (fromPath.locale === DEFAULT_LOCALE && isLocale(fallbackLocale) && fallbackLocale !== DEFAULT_LOCALE) fromPath = sameRouteIn(fromPath, fallbackLocale)
-    return fromPath
+    const fromPath = routeForPath(pathname)
+    const locale = initialLocale(pathname, fallbackLocale)
+    return locale === fromPath.locale ? fromPath : sameRouteIn(fromPath, locale)
   })
 
   const routeRef = useRef(route)

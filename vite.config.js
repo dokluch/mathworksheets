@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import './src/i18n/all.js'
 import { injectRoute, homeRoute, findRoute } from './src/seo/render.js'
 
 /**
@@ -27,6 +28,8 @@ export default defineConfig({
   server: { port: 5176 },
   test: {
     environment: 'node',
+    // Every language is registered for the tests, as for the build.
+    setupFiles: ['./src/i18n/all.js'],
     include: ['src/**/*.test.{js,jsx}', 'scripts/**/*.test.{js,mjs}', '*.test.{js,mjs}'],
   },
 })

@@ -5,7 +5,8 @@ import { useRoute, sheetIdToPath } from './hooks/useRoute'
 import { worksheetRoute, gradeLevelText, gradeNumbers } from './seo/render'
 import { findWorksheetById } from './worksheets'
 import { trackEvent, settingsToParams } from './lib/analytics'
-import { t as translate, localizedWorksheets, DEFAULT_LOCALE } from './i18n/index.js'
+import { t as translate, localizedWorksheets, hasMessages, DEFAULT_LOCALE } from './i18n/index.js'
+import { loadLocale } from './i18n/load.js'
 import { LocaleContext } from './i18n/context.js'
 import './App.css'
 import LanguageSwitcher from './components/LanguageSwitcher'
@@ -143,10 +144,16 @@ export default function App() {
   }, [navigate])
 
   // Only an explicit choice is remembered; it then applies to every unprefixed URL (see useRoute).
+  // A catalog not yet loaded is fetched before the switch, so the page never
+  // repaints in English on its way to the new language.
   const switchLocale = useCallback((code) => {
     trackEvent('switch_locale', { locale: code })
-    setPersistedLocale(code)
-    setLocale(code)
+    const apply = () => {
+      setPersistedLocale(code)
+      setLocale(code)
+    }
+    if (hasMessages(code)) apply()
+    else loadLocale(code).then(apply, apply)
   }, [setLocale, setPersistedLocale])
 
   const ActiveComponent = activeSheet ? COMPONENTS[activeSheet] : null

@@ -17,6 +17,7 @@
  * never hit this function thanks to the matcher.
  */
 import { next, rewrite } from '@vercel/functions'
+import './src/i18n/all.js'
 import { negotiate } from './src/seo/negotiate.js'
 import { findRoute, normalizePath, renderNotFoundMarkdown, renderNotFoundHtml } from './src/seo/render.js'
 import { absoluteUrl } from './src/seo/site.js'
