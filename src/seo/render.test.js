@@ -73,7 +73,8 @@ describe('catalog invariants', () => {
     for (const ws of WORKSHEETS) {
       for (const example of ws.examples) {
         // Geometric-shape glyphs are the Bongard sheet's notation: a picture, not a sentence.
-        expect(example).toMatch(/^[0-9x\s+\-−×÷=<>?□→.,()○●△▲■▪▯▭│]+$/)
+        // The slash is a fraction bar written on one line, and reads the same in every language.
+        expect(example).toMatch(/^[0-9x\s+\-−×÷=<>?□→.,()/○●△▲■▪▯▭│]+$/)
       }
     }
   })

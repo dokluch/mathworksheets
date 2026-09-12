@@ -283,6 +283,34 @@ export const WORKSHEETS = [
     interactive: false,
   },
   {
+    id: 'fractions',
+    slug: 'fractions',
+    label: 'Fractions',
+    shortDesc: 'Simplify, find equivalent fractions and compare',
+    longDesc:
+      'Fraction practice written the way it is in a squared exercise book, numerator over denominator with the bar on the grid line: simplify a fraction to lowest terms, complete an equivalent fraction such as 2/3 = □/12, or compare two fractions with >, < or =. ' +
+      'Comparisons set the traps children fall into: the same numerator over different denominators, one more on top and bottom, and pairs that look different but are equal. Denominators go up to 10, 12 or 20.',
+    grades: '4–5',
+    skills: ['simplifying fractions', 'equivalent fractions', 'comparing fractions', 'common factors'],
+    settings: [
+      'Practice: simplify, equivalent fractions, compare, or a mix of all three',
+      'Denominators: up to 10, 12 or 20',
+      'Columns: 2, 3 or 4 (16–32 problems)',
+      'Print an answer key',
+    ],
+    examples: ['6/8 = □/□', '2/3 = □/12', '3/4 □ 5/8', '5/10 = □/□'],
+    prerequisites: ['divide', 'multiply'],
+    nextSteps: [],
+    updated: '2026-09-12',
+    faq: [
+      { q: 'When do children learn to simplify and compare fractions?', a: 'Equivalent fractions and comparing fractions with different denominators are grade 4 work in most curricula, and simplifying to lowest terms follows in grades 4 and 5. Both rest on the times tables: finding a common factor is a division fact read the other way.' },
+      { q: 'Why do so many comparisons share a numerator or a denominator?', a: 'Those are the pairs children get wrong. With the same denominator only the numerators matter, but with the same numerator the larger denominator is the smaller fraction, which runs against the instinct that a bigger number means more. The sheet mixes both on purpose, along with pairs such as 2/4 and 3/6 that are equal.' },
+      { q: 'Which denominator limit should I choose?', a: 'Up to 10 keeps to halves, thirds, quarters, fifths and tenths, which is where fractions start. Up to 12 adds sixths, eighths and twelfths for equivalent fractions, and up to 20 is for children who already simplify quickly and need larger common factors to find.' },
+    ],
+    color: '#7d3b3f',
+    interactive: false,
+  },
+  {
     id: 'bongard',
     slug: 'bongard-problems',
     label: 'Bongard Problems',

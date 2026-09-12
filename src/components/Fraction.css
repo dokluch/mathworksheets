@@ -1,0 +1,79 @@
+/* ── Fractions on the notebook grid ──
+   Every box is whole squares (--nb-sq), like the column sheets: a fraction is a
+   grid two rows tall, and its bar is painted over the grid line between the
+   rows rather than taking space, so the digits stay centred in their squares. */
+
+.colarith-notebook .frac-row {
+  display: flex;
+  align-items: stretch;
+  height: calc(2 * var(--nb-sq));
+}
+
+.colarith-notebook .frac {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--frac-w), var(--nb-sq));
+  grid-template-rows: repeat(2, var(--nb-sq));
+}
+
+/* The bar sits on the grid line, inset a few pixels each side so a fraction
+   beside a sign or another fraction reads as its own mark. */
+.colarith-notebook .frac::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: calc(var(--nb-sq) - 1px);
+  height: 2px;
+  background: var(--color-text);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.colarith-notebook .frac-mixed {
+  display: flex;
+  align-items: stretch;
+}
+
+/* A square wide and two tall, so its glyph is centred on the bar line. */
+.colarith-notebook .frac-tall {
+  width: var(--nb-sq);
+  height: calc(2 * var(--nb-sq));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.colarith-notebook .frac-sign {
+  font-size: calc(var(--nb-sq) * 0.9);
+  color: var(--color-text);
+}
+
+/* The column sheets underline an answer square. Under a numerator that line
+   would sit three pixels above the fraction bar and read as a double rule, so
+   a fraction's answers are outlined boxes instead. */
+.colarith-notebook .frac-box {
+  display: inline-block;
+  /* Ten pixels short of the square leaves five either side, so a numerator's
+     box clears the bar by four even after the bar's own two. */
+  width: calc(var(--nb-sq) - 10px);
+  height: calc(var(--nb-sq) - 10px);
+  border: 1.5px solid var(--color-primary);
+  border-radius: 2px;
+  background: var(--color-primary-faint);
+}
+
+@media print {
+  .colarith-notebook .frac::after {
+    background: #333;
+  }
+
+  .colarith-notebook .frac-sign {
+    color: #111;
+  }
+
+  .colarith-notebook .frac-box {
+    border-color: #555;
+    background: none;
+  }
+}

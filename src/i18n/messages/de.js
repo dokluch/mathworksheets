@@ -206,6 +206,22 @@ export default {
     quotientAria: { one: 'Ergebnis: {n} leeres Kästchen', other: 'Ergebnis: {n} leere Kästchen' },
   },
 
+  fractions: {
+    title: 'Brüche',
+    practice: 'Übung',
+    simplify: 'Kürzen',
+    equivalent: 'Erweitern',
+    compare: 'Vergleichen',
+    mixed: 'Gemischt',
+    denominators: 'Nenner',
+    upTo: 'Bis {n}',
+    meta: '{practice} · Nenner bis {n}',
+    simplifyAria: 'Kürze {a}',
+    equivalentNumAria: '{a} ist gleich wie viel durch {d}',
+    equivalentDenAria: '{a} ist gleich {n} durch wie viel',
+    compareAria: 'Vergleiche {a} und {b}: größer, kleiner oder gleich',
+  },
+
   compare: {
     title: 'Zahlenvergleich',
   },
@@ -508,6 +524,23 @@ export default {
         { q: 'Warum rechnet mein Kind bei 70 − 7 · 9 das Ergebnis 567 aus?', a: 'Weil es streng von links nach rechts gerechnet hat: 70 − 7 ergibt 63, und 63 · 9 ergibt 567. Richtig wird zuerst multipliziert, also 70 − 63 = 7. Das ist der häufigste Fehler auf diesen Blättern, und am schnellsten hilft es, das Kind die Malaufgabe unterstreichen zu lassen, bevor es etwas aufschreibt.' },
         { q: 'Was ändern die Klammern?', a: 'Klammern setzen das, was in ihnen steht, an den Anfang der Reihe. 30 − 17 + 9 ergibt 22, aber 30 − (17 + 9) ergibt 4, weil die Klammer die Addition zuerst erzwingt. Jede Klammer auf diesen Blättern verändert das Ergebnis, keine davon lässt sich folgenlos übergehen.' },
         { q: 'Wozu die Kästchenreihe hinter dem Gleichheitszeichen?', a: 'Es gibt ein Kästchen je Ziffer des Ergebnisses, damit ein Kind sieht, ob es eine einzelne Ziffer, eine Zahl im Zehnerbereich oder eine im Hunderterbereich sucht. Das ist eine Kontrollhilfe und kein Hinweis auf den Wert: ein Ergebnis, das nicht in die Kästchen passt, ist ein Zeichen, die Reihenfolge noch einmal anzusehen.' },
+      ],
+    },
+    fractions: {
+      label: 'Brüche',
+      shortDesc: 'Kürzen, erweitern und Brüche vergleichen',
+      longDesc: 'Bruchrechnen so geschrieben wie im Karoheft, der Zähler über dem Nenner und der Bruchstrich auf der Gitterlinie: einen Bruch kürzen, einen Bruch erweitern wie 2/3 = □/12 oder zwei Brüche mit >, < oder = vergleichen. Die Vergleiche stellen die typischen Fallen: gleicher Zähler bei verschiedenen Nennern, oben und unten je eins mehr, und Paare, die verschieden aussehen, aber gleich sind. Nenner bis 10, 12 oder 20.',
+      skills: ['Brüche kürzen', 'Brüche erweitern', 'Brüche vergleichen', 'gemeinsame Teiler'],
+      settings: [
+        'Übung: kürzen, erweitern, vergleichen oder alles gemischt',
+        'Nenner: bis 10, 12 oder 20',
+        'Spalten: 2, 3 oder 4 (16–32 Aufgaben)',
+        'Lösungsblatt drucken',
+      ],
+      faq: [
+        { q: 'Wann lernen Kinder, Brüche zu kürzen und zu vergleichen?', a: 'Erweitern und Vergleichen von Brüchen mit verschiedenen Nennern ist in den meisten Lehrplänen Stoff der Klassen 5 und 6, in manchen Ländern schon der Klasse 4. Alles baut auf dem Einmaleins auf: einen gemeinsamen Teiler zu finden heißt, eine Einmaleinsreihe rückwärts zu lesen.' },
+        { q: 'Warum haben so viele Vergleiche den gleichen Zähler oder Nenner?', a: 'Genau bei diesen Paaren irren sich Kinder. Bei gleichem Nenner zählen nur die Zähler, bei gleichem Zähler ist aber der Bruch mit dem größeren Nenner der kleinere, und das widerspricht dem Gefühl, dass eine größere Zahl mehr bedeutet. Das Blatt mischt beides absichtlich, zusammen mit Paaren wie 2/4 und 3/6, die gleich sind.' },
+        { q: 'Welche Nennergrenze sollte ich wählen?', a: 'Bis 10 bleibt es bei Halben, Dritteln, Vierteln, Fünfteln und Zehnteln, wo das Bruchrechnen beginnt. Bis 12 kommen Sechstel, Achtel und Zwölftel zum Erweitern dazu, und bis 20 ist für Kinder, die schon sicher kürzen und größere gemeinsame Teiler suchen sollen.' },
       ],
     },
     eqexplore: {

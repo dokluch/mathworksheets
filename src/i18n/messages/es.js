@@ -206,6 +206,22 @@ export default {
     quotientAria: { one: 'cociente: {n} casilla vacía', other: 'cociente: {n} casillas vacías' },
   },
 
+  fractions: {
+    title: 'Fracciones',
+    practice: 'Práctica',
+    simplify: 'Simplificar',
+    equivalent: 'Equivalentes',
+    compare: 'Comparar',
+    mixed: 'Mezcla',
+    denominators: 'Denominadores',
+    upTo: 'Hasta {n}',
+    meta: '{practice} · denominadores hasta {n}',
+    simplifyAria: 'Simplifica {a}',
+    equivalentNumAria: '{a} es igual a cuánto sobre {d}',
+    equivalentDenAria: '{a} es igual a {n} sobre cuánto',
+    compareAria: 'Compara {a} y {b}: mayor que, menor que o igual',
+  },
+
   compare: {
     title: 'Comparación',
   },
@@ -508,6 +524,23 @@ export default {
         { q: '¿Por qué mi hijo obtiene 567 en 70 − 7 × 9?', a: 'Porque calculó estrictamente de izquierda a derecha: 70 − 7 son 63, y 63 × 9 son 567. La lectura correcta multiplica primero, lo que da 70 − 63 = 7. Este es el error más común en estas hojas, y la solución más rápida es pedir al niño que subraye la multiplicación antes de escribir nada.' },
         { q: '¿Qué cambian los paréntesis?', a: 'Los paréntesis adelantan al principio de la cola lo que contienen. 30 − 17 + 9 es 22, pero 30 − (17 + 9) es 4, porque el paréntesis obliga a sumar primero. Todos los paréntesis de estas hojas cambian la respuesta, así que ninguno puede pasarse por alto sin consecuencias.' },
         { q: '¿Por qué cada respuesta lleva una fila de casillas?', a: 'Hay una casilla por cada cifra de la respuesta, para que el niño vea si busca una sola cifra, un número de decenas o uno de centenas. Es una ayuda para comprobar más que una pista sobre el valor: una respuesta que no cabe en las casillas avisa de que hay que revisar el orden.' },
+      ],
+    },
+    fractions: {
+      label: 'Fracciones',
+      shortDesc: 'Simplificar, fracciones equivalentes y comparar',
+      longDesc: 'Práctica de fracciones escrita como en un cuaderno de cuadros, con el numerador sobre el denominador y la raya sobre la línea de la cuadrícula: simplificar una fracción, completar una fracción equivalente como 2/3 = □/12 o comparar dos fracciones con >, < o =. Las comparaciones tienden las trampas habituales: el mismo numerador con distinto denominador, uno más arriba y abajo, y parejas que parecen distintas pero son iguales. Denominadores hasta 10, 12 o 20.',
+      skills: ['simplificar fracciones', 'fracciones equivalentes', 'comparar fracciones', 'divisores comunes'],
+      settings: [
+        'Práctica: simplificar, fracciones equivalentes, comparar o una mezcla de las tres',
+        'Denominadores: hasta 10, 12 o 20',
+        'Columnas: 2, 3 o 4 (de 16 a 32 ejercicios)',
+        'Imprimir la hoja de respuestas',
+      ],
+      faq: [
+        { q: '¿Cuándo se aprende a simplificar y comparar fracciones?', a: 'Las fracciones equivalentes y la comparación de fracciones con distinto denominador se trabajan en 4.º y 5.º de primaria, y la simplificación se afianza en 5.º y 6.º. Todo se apoya en las tablas de multiplicar: encontrar un divisor común es leer una tabla al revés.' },
+        { q: '¿Por qué tantas comparaciones comparten numerador o denominador?', a: 'Son las parejas en las que los niños se equivocan. Con el mismo denominador solo cuentan los numeradores, pero con el mismo numerador la fracción con mayor denominador es la menor, lo que va contra la intuición de que un número más grande vale más. La ficha mezcla ambos casos a propósito, junto con parejas como 2/4 y 3/6 que son iguales.' },
+        { q: '¿Qué límite de denominador elijo?', a: 'Hasta 10 se queda en medios, tercios, cuartos, quintos y décimos, que es donde empiezan las fracciones. Hasta 12 añade sextos, octavos y doceavos para las equivalentes, y hasta 20 es para niños que ya simplifican con soltura y necesitan buscar divisores comunes mayores.' },
       ],
     },
     eqexplore: {

@@ -37,6 +37,7 @@ colors:
   ink-patterns: "#5b4a91"
   ink-eqexplore: "#1f7a8c"
   ink-bongard: "#6b7a1f"
+  ink-fractions: "#7d3b3f"
   ruling-screen: "rgba(148, 163, 184, 0.28)"
   ruling-print: "rgba(107, 114, 128, 0.42)"
 typography:

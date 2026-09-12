@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useMemo, useState } from 'react'
-import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator, IconDivide, IconMathXDivideY, IconMathSymbols, IconPuzzle } from '@tabler/icons-react'
+import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator, IconDivide, IconMathXDivideY, IconMathSymbols, IconPuzzle, IconMath1Divide2 } from '@tabler/icons-react'
 import { usePersistedState, getPersistedTab } from './hooks/usePersistedState'
 import { useRoute, sheetIdToPath } from './hooks/useRoute'
 import { worksheetRoute, gradeLevelText, gradeNumbers } from './seo/render'
@@ -31,6 +31,7 @@ import Division from './components/Division'
 import ColumnDivision from './components/ColumnDivision'
 import OrderOfOperations from './components/OrderOfOperations'
 import Bongard from './components/Bongard'
+import Fractions from './components/Fractions'
 
 /*
  * Icons for the dense contexts — the desktop sidebar and the mobile chip row —
@@ -52,6 +53,7 @@ const ICONS = {
   order: IconMathSymbols,
   bongard: IconPuzzle,
   eqexplore: IconEqual,
+  fractions: IconMath1Divide2,
 }
 
 const COMPONENTS = {
@@ -67,6 +69,7 @@ const COMPONENTS = {
   order: OrderOfOperations,
   bongard: Bongard,
   eqexplore: EquationExplorer,
+  fractions: Fractions,
 }
 
 export default function App() {

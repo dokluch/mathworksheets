@@ -54,7 +54,7 @@ const digit = (c, r, text, opts = {}) => (
     // A glyph placed by an `x` override shares its cell with its siblings, so the offset keys it.
     key={`d${opts.x ?? c}-${r}`}
     x={opts.x ?? cx(c)}
-    y={cy(r)}
+    y={opts.y ?? cy(r)}
     fontFamily="'JetBrains Mono', ui-monospace, monospace"
     fontSize={opts.size ?? DIGIT}
     fontWeight={opts.weight ?? 600}
@@ -106,34 +106,38 @@ const box = (c, r) => (
 )
 
 /* Which products the times table prints and which it leaves to the child:
-   roughly the half-filled scatter the prefill slider defaults to. With a digit
-   to a square, a product right after a filled neighbour in its row runs into
-   it (9 then 12 read as 912), so no row fills two adjacent cells. */
-const MULT_FILLED = new Set(['0-0', '0-1', '0-3', '1-0', '1-2', '2-0', '2-3'])
+   roughly the half-filled scatter the prefill slider defaults to. */
+const MULT_FILLED = new Set(['0-0', '0-3', '1-1', '1-2'])
 
 /* Each mark set mirrors the arrangement of the sheet it stands for. */
 const MARKS = {
-  // A times table. Its cells are two squares wide, because the real sheet's are
-  // wider than a notebook square too — a two-digit product has to fit one cell.
-  // A number still takes one square per digit, right-aligned in its cell, so the
-  // units line up down a column and no digit is centred across a grid line.
+  // A times table. The real sheet is a bordered table of square cells wider than
+  // a notebook square — a two-digit product has to fit one — so each product
+  // here gets a 2 × 2 cell. The table is ruled in its own lines over a paper
+  // ground that hides the squares beneath it, because the ruling would run
+  // straight through the centre of every cell. The factor column stays one
+  // square wide, which keeps the 9 × 6 table centred on the 13 × 8 page.
   multiply: () => {
     const factors = [2, 3, 4, 5]
-    const multipliers = [2, 3, 4]
-    const num = (i, r, n, opacity) => {
-      const text = String(n)
-      const start = 5 + i * 2 - text.length
-      return text.split('').map((char, k) => digit(start + k, r, char, { opacity }))
-    }
+    const multipliers = [2, 3]
+    // The factor column is squares 2–3 and the head row 1–3; the cells follow.
+    const colX = i => ln(4 + i * 2)
+    const rowY = r => ln(4 + r * 2)
+    const cellLines = { fill: 'none', stroke: 'currentColor', strokeWidth: 0.6, opacity: 0.5 }
     return (
       <>
-        {digit(2, 2, '×', { opacity: 0.7 })}
+        <rect x={ln(2)} y={ln(1)} width={9 * SQ} height={6 * SQ} style={{ fill: 'var(--paper)' }} />
+        <rect x={ln(2)} y={ln(1)} width={9 * SQ} height={6 * SQ} {...cellLines} />
+        <path d={`M ${ln(5)} ${ln(1)} V ${ln(7)} M ${ln(7)} ${ln(1)} V ${ln(7)} M ${ln(9)} ${ln(1)} V ${ln(7)} M ${ln(2)} ${ln(5)} H ${ln(11)}`} {...cellLines} />
         {rule(2, 11, 3, 1)}
-        {vrule(3, 2, 6, 1)}
-        {factors.flatMap((n, i) => num(i, 2, n, 0.8))}
-        {multipliers.map((n, i) => digit(2, 3 + i, String(n), { opacity: 0.8 }))}
-        {multipliers.flatMap((m, r) => factors.flatMap((f, c) => (
-          MULT_FILLED.has(`${r}-${c}`) ? num(c, 3 + r, m * f, 0.5) : []
+        {vrule(3, 1, 7, 1)}
+        {digit(2, 1, '×', { y: ln(2), opacity: 0.7 })}
+        {factors.map((n, i) => digit(3 + i * 2, 1, String(n), { x: colX(i), y: ln(2), opacity: 0.8 }))}
+        {multipliers.map((n, r) => digit(2, 3 + r * 2, String(n), { y: rowY(r), opacity: 0.8 }))}
+        {multipliers.flatMap((m, r) => factors.map((f, c) => (
+          MULT_FILLED.has(`${r}-${c}`)
+            ? digit(c, 3 + r * 2, String(m * f), { x: colX(c), y: rowY(r), opacity: 0.5 })
+            : null
         )))}
       </>
     )
@@ -250,6 +254,19 @@ const MARKS = {
       </>
     )
   },
+  // Fractions as a squared book writes them: numerator over denominator with
+  // the bar on the grid line between, and the sign on that line. A fractional
+  // row (1.5, 5.5) centres a glyph or box on the line itself.
+  fractions: () => (
+    <>
+      {digit(5, 1, '6')}{rule(5, 6, 2, 1.1)}{digit(5, 2, '8')}
+      {digit(6, 1.5, '=')}
+      {box(7, 1)}{rule(7, 8, 2, 1.1)}{box(7, 2)}
+      {digit(5, 5, '3')}{rule(5, 6, 6, 1.1)}{digit(5, 6, '4')}
+      {box(6, 5.5)}
+      {digit(7, 5, '5')}{rule(7, 8, 6, 1.1)}{digit(7, 6, '8')}
+    </>
+  ),
   // The one screen-only sheet: an equation with a movable term.
   eqexplore: () => (
     <>

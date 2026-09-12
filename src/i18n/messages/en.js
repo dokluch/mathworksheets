@@ -218,6 +218,22 @@ export default {
     quotientAria: { one: 'quotient: {n} empty box', other: 'quotient: {n} empty boxes' },
   },
 
+  fractions: {
+    title: 'Fractions',
+    practice: 'Practice',
+    simplify: 'Simplify',
+    equivalent: 'Equivalent',
+    compare: 'Compare',
+    mixed: 'Mix',
+    denominators: 'Denominators',
+    upTo: 'Up to {n}',
+    meta: '{practice} · denominators up to {n}',
+    simplifyAria: 'Simplify {a}',
+    equivalentNumAria: '{a} equals what over {d}',
+    equivalentDenAria: '{a} equals {n} over what',
+    compareAria: 'Compare {a} and {b} with greater than, less than or equal',
+  },
+
   compare: {
     title: 'Comparison',
   },

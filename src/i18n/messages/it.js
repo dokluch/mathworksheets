@@ -206,6 +206,22 @@ export default {
     quotientAria: { one: 'quoziente: {n} casella vuota', other: 'quoziente: {n} caselle vuote' },
   },
 
+  fractions: {
+    title: 'Frazioni',
+    practice: 'Esercizio',
+    simplify: 'Semplifica',
+    equivalent: 'Equivalenti',
+    compare: 'Confronta',
+    mixed: 'Misto',
+    denominators: 'Denominatori',
+    upTo: 'Fino a {n}',
+    meta: '{practice} · denominatori fino a {n}',
+    simplifyAria: 'Semplifica {a}',
+    equivalentNumAria: '{a} è uguale a quanto su {d}',
+    equivalentDenAria: '{a} è uguale a {n} su quanto',
+    compareAria: 'Confronta {a} e {b}: maggiore, minore o uguale',
+  },
+
   compare: {
     title: 'Confronto',
   },
@@ -508,6 +524,23 @@ export default {
         { q: 'Perché mio figlio ottiene 567 da 70 − 7 · 9?', a: 'Perché ha calcolato rigorosamente da sinistra a destra: 70 − 7 fa 63, e 63 · 9 fa 567. La lettura corretta moltiplica per prima cosa, e dà 70 − 63 = 7. È l’errore più comune su queste schede, e il rimedio più rapido è chiedere al bambino di sottolineare la moltiplicazione prima di scrivere qualsiasi cosa.' },
         { q: 'Che cosa cambiano le parentesi?', a: 'Le parentesi spostano in testa alla fila ciò che contengono. 30 − 17 + 9 fa 22, ma 30 − (17 + 9) fa 4, perché la parentesi impone di sommare per primo. Ogni parentesi di queste schede cambia il risultato, quindi nessuna può essere ignorata senza conseguenze.' },
         { q: 'Perché ogni risultato ha una fila di caselle?', a: 'C’è una casella per ogni cifra del risultato, così un bambino vede se sta cercando una cifra sola, un numero di decine o uno di centinaia. È un aiuto alla verifica più che un indizio sul valore: un risultato che non entra nelle caselle segnala che conviene rivedere l’ordine.' },
+      ],
+    },
+    fractions: {
+      label: 'Frazioni',
+      shortDesc: 'Semplificare, frazioni equivalenti e confronto',
+      longDesc: 'Esercizi sulle frazioni scritti come su un quaderno a quadretti, il numeratore sopra il denominatore e la linea di frazione sulla riga della griglia: semplificare una frazione, completare una frazione equivalente come 2/3 = □/12 o confrontare due frazioni con >, < o =. I confronti tendono le trappole tipiche: lo stesso numeratore con denominatori diversi, uno in più sopra e sotto, e coppie che sembrano diverse ma sono uguali. Denominatori fino a 10, 12 o 20.',
+      skills: ['semplificare le frazioni', 'frazioni equivalenti', 'confrontare le frazioni', 'divisori comuni'],
+      settings: [
+        'Esercizio: semplificare, frazioni equivalenti, confrontare o un misto dei tre',
+        'Denominatori: fino a 10, 12 o 20',
+        'Colonne: 2, 3 o 4 (da 16 a 32 esercizi)',
+        'Stampa le soluzioni',
+      ],
+      faq: [
+        { q: 'Quando si impara a semplificare e confrontare le frazioni?', a: 'Le frazioni equivalenti e il confronto tra frazioni con denominatori diversi si affrontano in quarta e quinta primaria, e la semplificazione si consolida in prima media. Tutto poggia sulle tabelline: trovare un divisore comune significa leggere una tabellina al contrario.' },
+        { q: 'Perché tanti confronti hanno lo stesso numeratore o lo stesso denominatore?', a: 'Sono le coppie su cui i bambini sbagliano. Con lo stesso denominatore contano solo i numeratori, ma con lo stesso numeratore la frazione con il denominatore più grande è la più piccola, e questo va contro l’intuizione che un numero più grande valga di più. La scheda mescola i due casi apposta, insieme a coppie come 2/4 e 3/6 che sono uguali.' },
+        { q: 'Quale limite di denominatore scelgo?', a: 'Fino a 10 si resta su mezzi, terzi, quarti, quinti e decimi, da dove partono le frazioni. Fino a 12 aggiunge sesti, ottavi e dodicesimi per le frazioni equivalenti, e fino a 20 è per chi semplifica già con sicurezza e deve cercare divisori comuni più grandi.' },
       ],
     },
     eqexplore: {

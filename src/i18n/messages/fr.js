@@ -206,6 +206,22 @@ export default {
     quotientAria: { one: 'quotient : {n} case vide', other: 'quotient : {n} cases vides' },
   },
 
+  fractions: {
+    title: 'Fractions',
+    practice: 'Exercice',
+    simplify: 'Simplifier',
+    equivalent: 'Équivalentes',
+    compare: 'Comparer',
+    mixed: 'Mélange',
+    denominators: 'Dénominateurs',
+    upTo: 'Jusqu’à {n}',
+    meta: '{practice} · dénominateurs jusqu’à {n}',
+    simplifyAria: 'Simplifier {a}',
+    equivalentNumAria: '{a} égale combien sur {d}',
+    equivalentDenAria: '{a} égale {n} sur combien',
+    compareAria: 'Comparer {a} et {b} : plus grand, plus petit ou égal',
+  },
+
   compare: {
     title: 'Comparaison',
   },
@@ -508,6 +524,23 @@ export default {
         { q: 'Pourquoi mon enfant trouve-t-il 567 pour 70 − 7 × 9 ?', a: 'Parce qu’il a calculé strictement de gauche à droite : 70 − 7 font 63, et 63 × 9 font 567. La lecture correcte multiplie d’abord, ce qui donne 70 − 63 = 7. C’est l’erreur la plus fréquente sur ces fiches, et le remède le plus rapide est de demander à l’enfant de souligner la multiplication avant d’écrire quoi que ce soit.' },
         { q: 'Qu’est-ce que les parenthèses changent ?', a: 'Les parenthèses font passer ce qu’elles contiennent en tête de file. 30 − 17 + 9 fait 22, mais 30 − (17 + 9) fait 4, car la parenthèse impose l’addition d’abord. Chaque parenthèse de ces fiches change la réponse, si bien qu’aucune ne peut être ignorée sans conséquence.' },
         { q: 'Pourquoi chaque réponse a-t-elle une rangée de cases ?', a: 'Il y a une case par chiffre de la réponse, pour qu’un enfant voie s’il cherche un chiffre seul, un nombre en dizaines ou un nombre en centaines. C’est une aide à la vérification plutôt qu’un indice sur la valeur : une réponse qui n’entre pas dans les cases signale qu’il faut revoir l’ordre des opérations.' },
+      ],
+    },
+    fractions: {
+      label: 'Fractions',
+      shortDesc: 'Simplifier, trouver des fractions égales et comparer',
+      longDesc: 'Des exercices de fractions écrits comme dans un cahier à carreaux, le numérateur au-dessus du dénominateur et la barre sur la ligne du quadrillage : simplifier une fraction, compléter une fraction égale comme 2/3 = □/12, ou comparer deux fractions avec >, < ou =. Les comparaisons tendent les pièges habituels : même numérateur sur des dénominateurs différents, un de plus en haut et en bas, et des paires qui semblent différentes mais sont égales. Dénominateurs jusqu’à 10, 12 ou 20.',
+      skills: ['simplifier une fraction', 'fractions égales', 'comparer des fractions', 'diviseurs communs'],
+      settings: [
+        'Exercice : simplifier, fractions égales, comparer ou un mélange des trois',
+        'Dénominateurs : jusqu’à 10, 12 ou 20',
+        'Colonnes : 2, 3 ou 4 (16 à 32 exercices)',
+        'Imprimer un corrigé',
+      ],
+      faq: [
+        { q: 'Quand apprend-on à simplifier et à comparer des fractions ?', a: 'Les fractions égales et la comparaison de fractions de dénominateurs différents arrivent au CM1 et au CM2, et la simplification se poursuit en 6e. Tout repose sur les tables de multiplication : trouver un diviseur commun, c’est lire une table à l’envers.' },
+        { q: 'Pourquoi tant de comparaisons ont-elles le même numérateur ou le même dénominateur ?', a: 'Ce sont les paires sur lesquelles les enfants se trompent. Avec le même dénominateur, seuls les numérateurs comptent ; avec le même numérateur, c’est le plus grand dénominateur qui donne la plus petite fraction, ce qui contredit l’intuition qu’un plus grand nombre vaut plus. La fiche mélange les deux exprès, avec des paires comme 2/4 et 3/6 qui sont égales.' },
+        { q: 'Quelle limite de dénominateur choisir ?', a: 'Jusqu’à 10, on reste sur les demis, tiers, quarts, cinquièmes et dixièmes, là où commencent les fractions. Jusqu’à 12 ajoute les sixièmes, huitièmes et douzièmes pour les fractions égales, et jusqu’à 20 s’adresse aux enfants qui simplifient déjà vite et doivent chercher de plus grands diviseurs communs.' },
       ],
     },
     eqexplore: {
