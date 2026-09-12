@@ -1,8 +1,8 @@
 /** Italian messages. Same key set as en.js plus `worksheets.<id>` and `pages.<id>` (see i18n.test.js). */
 export default {
   site: {
-    tagline: 'Schede di matematica da stampare per le classi 1ª–3ª',
-    description: 'Super Awesome Math: schede di matematica gratuite, stampabili e casuali per le classi 1ª–3ª della primaria. Tabelline, addizioni e sottrazioni, addizione in colonna, moltiplicazione in colonna, confronto, arrotondamento, sequenze numeriche e un esploratore di equazioni interattivo.',
+    tagline: 'Schede di matematica da stampare, dalla 1ª primaria alla 1ª media',
+    description: 'Super Awesome Math: schede di matematica gratuite, stampabili e casuali dalla 1ª primaria alla 1ª media. Tabelline, addizioni e sottrazioni, addizione e sottrazione in colonna, moltiplicazione in colonna, divisione, confronto, arrotondamento, sequenze numeriche, ordine delle operazioni e un esploratore di equazioni interattivo.',
     brandAlt: 'Schede di matematica',
   },
 
@@ -35,7 +35,7 @@ export default {
     footerSite: 'Sito',
     home: {
       subtitle: 'Schede di esercizi gratuite e casuali, da stampare con un clic.',
-      intro1: '{brand} è un generatore gratuito e open source di schede di matematica da stampare per bambini di 6–9 anni (classi 1ª–3ª). Ogni scheda viene generata a caso ogni volta che la apri o la rigeneri, così i bambini si esercitano su problemi nuovi invece di memorizzare una pagina. Scegli una scheda, regola la difficoltà (intervallo di numeri, cifre, disposizione, colonne) e stampala dal browser; le impostazioni vengono ricordate su questo dispositivo.',
+      intro1: '{brand} è un generatore gratuito e open source di schede di matematica da stampare per bambini di 6–12 anni (dalla 1ª primaria alla 1ª media). Ogni scheda viene generata a caso ogni volta che la apri o la rigeneri, così i bambini si esercitano su problemi nuovi invece di memorizzare una pagina. Scegli una scheda, regola la difficoltà (intervallo di numeri, cifre, disposizione, colonne) e stampala dal browser; le impostazioni vengono ricordate su questo dispositivo.',
       intro2: 'Il catalogo comprende tabelline, addizioni e sottrazioni con numeri mancanti, addizione in colonna con riporto, moltiplicazione in colonna, divisioni con e senza resto, confronto di numeri con >, < e =, arrotondamento alla decina, al centinaio e al migliaio, sequenze numeriche ed espressioni a più passaggi in cui l’ordine delle operazioni decide il risultato. L’esploratore di equazioni è un’attività a schermo in cui i bambini spostano i termini attraverso il segno di uguale e verificano la risposta su una linea dei numeri.',
       worksheets: 'Schede',
       howItWorks: 'Come funziona',
@@ -43,7 +43,7 @@ export default {
       step2: 'Imposta la difficoltà: limite dei numeri, cifre, colonne o livello.',
       step3: 'Premi Rigenera per un nuovo set casuale, poi Stampa. Le schede stanno in una pagina A4 o Letter.',
       audienceHeading: 'Per insegnanti, genitori e agenti IA',
-      audienceText: 'Le schede vengono generate nel browser: nulla viene caricato, non c’è account né costo. {brand} è stato creato da un genitore per integrare il programma di matematica delle classi 1ª–3ª ed è libero da usare e adattare per scopi non commerciali.',
+      audienceText: 'Le schede vengono generate nel browser: nulla viene caricato, non c’è account né costo. {brand} è stato creato da un genitore per integrare il programma di matematica dalla 1ª primaria alla 1ª media ed è libero da usare e adattare per scopi non commerciali.',
     },
     worksheet: {
       skills: 'Abilità',
@@ -66,7 +66,7 @@ export default {
     llmsNote: 'indice per i modelli linguistici',
     catalogNote: 'catalogo delle schede leggibile dalle macchine',
     sitemapLink: 'Sitemap',
-    homeIntro: '{brand} è un generatore gratuito e open source di schede di matematica da stampare per bambini di 6–9 anni (classi 1ª–3ª). Ogni scheda viene generata a caso ogni volta che viene aperta o rigenerata. Scegli una scheda, regola la difficoltà (intervallo di numeri, cifre, disposizione, colonne) e stampala dal browser; le impostazioni vengono ricordate per dispositivo. Le schede vengono generate lato client: nessun account, nessun caricamento, nessun costo.',
+    homeIntro: '{brand} è un generatore gratuito e open source di schede di matematica da stampare per bambini di 6–12 anni (dalla 1ª primaria alla 1ª media). Ogni scheda viene generata a caso ogni volta che viene aperta o rigenerata. Scegli una scheda, regola la difficoltà (intervallo di numeri, cifre, disposizione, colonne) e stampala dal browser; le impostazioni vengono ricordate per dispositivo. Le schede vengono generate lato client: nessun account, nessun caricamento, nessun costo.',
     worksheetItem: '{link}: {shortDesc} (classi {grades})',
     howItWorks: 'Come funziona',
     step1: 'Scegli una scheda.',
@@ -108,7 +108,7 @@ export default {
   },
 
   app: {
-    subtitle: 'Schede di matematica da stampare per le classi 1ª–3ª',
+    subtitle: 'Schede di matematica da stampare, dalla 1ª primaria alla 1ª media',
     allSheets: 'Tutte le schede',
     worksheetTypes: 'Tipi di schede',
     sourceOnGitHub: 'Codice sorgente su GitHub',
@@ -527,7 +527,7 @@ export default {
     about: {
       title: 'Informazioni su {brand}',
       navLabel: 'Chi siamo',
-      description: '{brand} è un generatore gratuito e open source di schede di matematica da stampare per le classi 1ª–3ª, creato da un genitore per offrire a ogni bambino esercizi semplici senza alcun costo.',
+      description: '{brand} è un generatore gratuito e open source di schede di matematica da stampare dalla 1ª primaria alla 1ª media, creato da un genitore per offrire a ogni bambino esercizi semplici senza alcun costo.',
       sections: [
         {
           heading: 'Perché esiste questo sito',
@@ -577,7 +577,7 @@ export default {
         {
           heading: 'Cosa ottieni',
           items: [
-            'Schede da stampare per le classi 1ª–3ª: tabelline, addizioni e sottrazioni, addizione in colonna, moltiplicazione in colonna, confronto di numeri, arrotondamento, sequenze numeriche e ordine delle operazioni.',
+            'Schede da stampare dalla 1ª primaria alla 1ª media: tabelline, addizioni e sottrazioni, addizione e sottrazione in colonna, moltiplicazione in colonna, divisione, confronto di numeri, arrotondamento, sequenze numeriche e ordine delle operazioni.',
             'Un esploratore di equazioni a schermo per giocare con le equazioni e verificare le risposte su una linea dei numeri.',
             'Difficoltà regolabile: intervalli di numeri, cifre, colonne e disposizione, ricordati sul tuo dispositivo per la prossima volta.',
             'Nessun account, nessuna registrazione, nessuna pubblicità, nessun costo. Nulla viene caricato: le schede vengono generate nel tuo browser.',
@@ -647,7 +647,7 @@ export default {
         {
           heading: 'Bambini',
           paragraphs: [
-            '{brand} crea schede per bambini di circa 6–9 anni, ma il sito è pensato per gli adulti che le stampano. Non raccogliamo consapevolmente informazioni personali da nessuno, bambini compresi, e il sito non contiene account, messaggistica né contenuti generati dagli utenti.',
+            '{brand} crea schede per bambini di circa 6–12 anni, ma il sito è pensato per gli adulti che le stampano. Non raccogliamo consapevolmente informazioni personali da nessuno, bambini compresi, e il sito non contiene account, messaggistica né contenuti generati dagli utenti.',
           ],
         },
         {

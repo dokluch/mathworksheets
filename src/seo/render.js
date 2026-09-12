@@ -13,6 +13,7 @@
 import { WORKSHEETS, findWorksheetBySlug, findWorksheetById } from '../worksheets.js'
 import { PAGES, findPageBySlug, findPageById } from '../pages.js'
 import { AGENT_GUIDANCE } from '../agents.js'
+import { GRADES, GRADE_AGES } from '../lib/grades.js'
 import {
   SITE_URL, BRAND, AUTHOR, GITHUB_URL,
   LICENSE_URL, LICENSE_NAME, OG_IMAGE_PATH, THEME_COLOR, ACCENT_COLOR, OPERATOR, CONTACT_EMAIL, BRAND_ALT, absoluteUrl,
@@ -210,9 +211,7 @@ export function pageDescription(route) {
   })
 }
 
-const GRADE_AGES = { '1': '6-7', '2': '7-8', '3': '8-9' }
-
-/** schema.org typicalAgeRange for a grade band like "2" or "1–3". Derived, not translated. */
+/** schema.org typicalAgeRange for a grade band like "2" or "4–6". Derived, not translated. */
 export function agesForGrades(grades) {
   const parts = String(grades).split(/[–-]/).map(g => g.trim())
   const lo = GRADE_AGES[parts[0]]
@@ -819,7 +818,7 @@ export function renderMarkdown(route) {
 
 /* ────────────────────────────── llms.txt (English only) ────────────────────────────── */
 
-/** Grade numbers a worksheet covers: "1–3" → [1, 2, 3]. */
+/** Grade numbers a worksheet covers: "4–6" → [4, 5, 6]. */
 export function gradeNumbers(grades) {
   const parts = String(grades).split(/[–-]/).map(g => Number(g.trim()))
   if (parts.length === 1) return parts
@@ -834,7 +833,7 @@ export function gradeNumbers(grades) {
  * carrying?" from llms.txt alone, without fetching eight pages.
  */
 function choosingBlock() {
-  const byGrade = [1, 2, 3].map(g => {
+  const byGrade = GRADES.map(Number).map(g => {
     const matches = WORKSHEETS.filter(w => gradeNumbers(w.grades).includes(g))
     return `- Grade ${g} (ages ${GRADE_AGES[String(g)]}): ${matches.map(w => w.label).join(', ')}`
   }).join('\n')
@@ -903,7 +902,7 @@ export function renderLlmsTxt() {
     .join('\n')
   return `# ${BRAND}
 
-> ${BRAND} (“${t(DEFAULT_LOCALE, 'site.brandAlt')}”) is a free, open-source web app with printable, randomized math worksheets for grades 1–3: multiplication tables, addition and subtraction, column addition, long multiplication, comparison, rounding, number patterns, plus an interactive equation explorer. Site: ${SITE_URL}/
+> ${BRAND} (“${t(DEFAULT_LOCALE, 'site.brandAlt')}”) is a free, open-source web app with printable, randomized math worksheets for grades 1–6: multiplication tables, addition and subtraction, column addition and subtraction, long multiplication, division, comparison, rounding, number patterns, order of operations, plus an interactive equation explorer. Site: ${SITE_URL}/
 
 Worksheets are generated in the browser and printed from the print dialog; there is no account, no server API and no cost (${LICENSE_NAME}). Every HTML page has a Markdown twin: append \`.md\` to the path or request the page with \`Accept: text/markdown\`. Pages are also available in ${otherLocales.map(l => LOCALE_META[l].englishName).join(', ')} under a two-letter path prefix: insert the two-letter code after the origin, for example \`${exampleLocalizedPath()}\`.
 
@@ -981,7 +980,7 @@ export function renderAgentsMarkdown() {
 
   return `# Agent instructions — ${BRAND}
 
-> ${BRAND} (“${BRAND_ALT}”) is a free, open-source generator of printable, randomized math worksheets for grades 1–3, operated by ${OPERATOR} This file is the canonical instruction set for AI assistants, answer engines and crawlers: it says when the site is the right answer, when it is not, how to fetch it and how to cite it.
+> ${BRAND} (“${BRAND_ALT}”) is a free, open-source generator of printable, randomized math worksheets for grades 1–6, operated by ${OPERATOR} This file is the canonical instruction set for AI assistants, answer engines and crawlers: it says when the site is the right answer, when it is not, how to fetch it and how to cite it.
 
 Site: ${SITE_URL}/
 Operator: ${OPERATOR}

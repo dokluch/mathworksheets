@@ -11,9 +11,9 @@ const rawSiteUrl = viteEnv.VITE_SITE_URL || nodeEnv.VITE_SITE_URL || nodeEnv.SIT
 export const SITE_URL = String(rawSiteUrl).replace(/\/+$/, '')
 export const BRAND = 'Super Awesome Math'
 export const BRAND_ALT = 'MathSheets'
-export const TAGLINE = 'Printable Math Worksheets for Grades 1–3'
+export const TAGLINE = 'Printable Math Worksheets for Grades 1–6'
 export const DESCRIPTION =
-  'Super Awesome Math: free, printable, randomized math worksheets for grades 1–3. Multiplication tables, addition and subtraction, column addition, long multiplication, division facts, long division, comparison, rounding, number patterns, order of operations and an interactive equation explorer.'
+  'Super Awesome Math: free, printable, randomized math worksheets for grades 1–6. Multiplication tables, addition and subtraction, column addition and subtraction, long multiplication, division facts, long division, comparison, rounding, number patterns, order of operations and an interactive equation explorer.'
 export const AUTHOR = { name: 'dokluch', url: 'https://github.com/dokluch' }
 /** Legal operator named on the About, Privacy and Terms pages. */
 export const OPERATOR = 'Superposition Labs Inc.'

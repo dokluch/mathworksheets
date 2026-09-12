@@ -1,8 +1,8 @@
 /** Spanish messages. Same key set as en.js plus `worksheets.<id>` (see i18n.test.js). */
 export default {
   site: {
-    tagline: 'Fichas de matemáticas para imprimir de 1.º a 3.º de primaria',
-    description: 'Super Awesome Math: fichas de matemáticas gratuitas, imprimibles y aleatorias para 1.º a 3.º de primaria. Tablas de multiplicar, sumas y restas, suma en columna, multiplicación en columna, comparación, redondeo, series numéricas y un explorador de ecuaciones interactivo.',
+    tagline: 'Fichas de matemáticas para imprimir de 1.º a 6.º de primaria',
+    description: 'Super Awesome Math: fichas de matemáticas gratuitas, imprimibles y aleatorias para 1.º a 6.º de primaria. Tablas de multiplicar, sumas y restas, suma y resta en columna, multiplicación en columna, división, comparación, redondeo, series numéricas, orden de las operaciones y un explorador de ecuaciones interactivo.',
     brandAlt: 'Fichas de matemáticas',
   },
 
@@ -35,7 +35,7 @@ export default {
     footerSite: 'Sitio',
     home: {
       subtitle: 'Fichas de práctica gratuitas y aleatorias que imprimes con un clic.',
-      intro1: '{brand} es un generador gratuito y de código abierto de fichas de matemáticas para imprimir, para niños de 6 a 9 años (1.º a 3.º de primaria). Cada ficha se genera al azar cada vez que la abres o la regeneras, así los niños practican con ejercicios nuevos en vez de memorizar una página. Elige una ficha, ajusta la dificultad (rango de números, cifras, disposición, columnas) e imprímela desde el navegador; tus ajustes se recuerdan en este dispositivo.',
+      intro1: '{brand} es un generador gratuito y de código abierto de fichas de matemáticas para imprimir, para niños de 6 a 12 años (1.º a 6.º de primaria). Cada ficha se genera al azar cada vez que la abres o la regeneras, así los niños practican con ejercicios nuevos en vez de memorizar una página. Elige una ficha, ajusta la dificultad (rango de números, cifras, disposición, columnas) e imprímela desde el navegador; tus ajustes se recuerdan en este dispositivo.',
       intro2: 'El catálogo incluye tablas de multiplicar, sumas y restas con huecos, suma en columna con llevadas, multiplicación en columna, divisiones sencillas con y sin resto, comparación de números con >, < y =, redondeo a la decena, centena y millar más cercanos, series numéricas y expresiones de varios pasos en las que el orden de las operaciones decide la respuesta. El explorador de ecuaciones es una actividad en pantalla en la que los niños mueven términos a través del signo igual y comprueban su respuesta en una recta numérica.',
       worksheets: 'Fichas',
       howItWorks: 'Cómo funciona',
@@ -43,7 +43,7 @@ export default {
       step2: 'Ajusta la dificultad: límite de números, cifras, columnas o nivel.',
       step3: 'Pulsa Regenerar para un nuevo conjunto aleatorio y luego Imprimir. Las fichas caben en una página A4 o Carta.',
       audienceHeading: 'Para docentes, familias y agentes de IA',
-      audienceText: 'Las fichas se generan en el navegador: no se sube nada, no hay cuenta ni coste. {brand} lo creó un padre para complementar el currículo de matemáticas de 1.º a 3.º y es libre de usar y adaptar con fines no comerciales.',
+      audienceText: 'Las fichas se generan en el navegador: no se sube nada, no hay cuenta ni coste. {brand} lo creó un padre para complementar el currículo de matemáticas de 1.º a 6.º y es libre de usar y adaptar con fines no comerciales.',
     },
     worksheet: {
       skills: 'Habilidades',
@@ -66,7 +66,7 @@ export default {
     llmsNote: 'índice para modelos de lenguaje',
     catalogNote: 'catálogo de fichas legible por máquinas',
     sitemapLink: 'Sitemap',
-    homeIntro: '{brand} es un generador gratuito y de código abierto de fichas de matemáticas para imprimir, para niños de 6 a 9 años (1.º a 3.º de primaria). Cada ficha se genera al azar cada vez que se abre o se regenera. Elige una ficha, ajusta la dificultad (rango de números, cifras, disposición, columnas) e imprímela desde el navegador; los ajustes se recuerdan por dispositivo. Las fichas se generan en el cliente: sin cuenta, sin subidas, sin coste.',
+    homeIntro: '{brand} es un generador gratuito y de código abierto de fichas de matemáticas para imprimir, para niños de 6 a 12 años (1.º a 6.º de primaria). Cada ficha se genera al azar cada vez que se abre o se regenera. Elige una ficha, ajusta la dificultad (rango de números, cifras, disposición, columnas) e imprímela desde el navegador; los ajustes se recuerdan por dispositivo. Las fichas se generan en el cliente: sin cuenta, sin subidas, sin coste.',
     worksheetItem: '{link}: {shortDesc} (cursos {grades})',
     howItWorks: 'Cómo funciona',
     step1: 'Elige una ficha.',
@@ -108,7 +108,7 @@ export default {
   },
 
   app: {
-    subtitle: 'Fichas de matemáticas para imprimir de 1.º a 3.º de primaria',
+    subtitle: 'Fichas de matemáticas para imprimir de 1.º a 6.º de primaria',
     allSheets: 'Todas las fichas',
     worksheetTypes: 'Tipos de fichas',
     sourceOnGitHub: 'Código fuente en GitHub',
@@ -527,7 +527,7 @@ export default {
     about: {
       title: 'Acerca de {brand}',
       navLabel: 'Acerca de',
-      description: '{brand} es un generador gratuito y de código abierto de fichas de matemáticas para imprimir de 1.º a 3.º de primaria, creado por un padre para que cualquier niño pueda practicar de forma sencilla y sin coste.',
+      description: '{brand} es un generador gratuito y de código abierto de fichas de matemáticas para imprimir de 1.º a 6.º de primaria, creado por un padre para que cualquier niño pueda practicar de forma sencilla y sin coste.',
       sections: [
         {
           heading: 'Por qué existe este sitio',
@@ -577,7 +577,7 @@ export default {
         {
           heading: 'Qué obtienes',
           items: [
-            'Fichas para imprimir de 1.º a 3.º: tablas de multiplicar, sumas y restas, suma en columna, multiplicación en columna, comparación de números, redondeo, series numéricas y orden de las operaciones.',
+            'Fichas para imprimir de 1.º a 6.º: tablas de multiplicar, sumas y restas, suma y resta en columna, multiplicación en columna, división, comparación de números, redondeo, series numéricas y orden de las operaciones.',
             'Un explorador de ecuaciones en pantalla para jugar con ecuaciones y comprobar las respuestas en una recta numérica.',
             'Dificultad ajustable: rangos de números, cifras, columnas y disposición, recordados en tu dispositivo para la próxima vez.',
             'Sin cuenta, sin registro, sin anuncios, sin coste. No se sube nada: las fichas se generan en tu navegador.',
@@ -647,7 +647,7 @@ export default {
         {
           heading: 'Menores',
           paragraphs: [
-            '{brand} crea fichas para niños de aproximadamente 6 a 9 años, pero el sitio está pensado para los adultos que las imprimen. No recopilamos a sabiendas información personal de nadie, niños incluidos, y el sitio no contiene cuentas, mensajería ni contenido generado por usuarios.',
+            '{brand} crea fichas para niños de aproximadamente 6 a 12 años, pero el sitio está pensado para los adultos que las imprimen. No recopilamos a sabiendas información personal de nadie, niños incluidos, y el sitio no contiene cuentas, mensajería ni contenido generado por usuarios.',
           ],
         },
         {

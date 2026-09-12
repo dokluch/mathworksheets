@@ -18,8 +18,8 @@ export const PAGES = [
     slug: 'about',
     title: `About ${BRAND}`,
     navLabel: 'About',
-    description: `${BRAND} is a free, open-source generator of printable math worksheets for grades 1–3, built by a parent to give every child simple practice at no cost.`,
-    updated: '2026-09-05',
+    description: `${BRAND} is a free, open-source generator of printable math worksheets for grades 1–6, built by a parent to give every child simple practice at no cost.`,
+    updated: '2026-09-12',
     sections: [
       {
         heading: 'Why this site exists',
@@ -69,7 +69,7 @@ export const PAGES = [
       {
         heading: 'What you get',
         items: [
-          'Printable worksheets for grades 1–3: multiplication tables, addition and subtraction, column addition, long multiplication, comparing numbers, rounding, number patterns and order of operations.',
+          'Printable worksheets for grades 1–6: multiplication tables, addition and subtraction, column addition and subtraction, long multiplication, division, comparing numbers, rounding, number patterns and order of operations.',
           'An on-screen Equation Explorer for playing with equations and checking answers on a number line.',
           'Adjustable difficulty: number ranges, digits, columns and layout, remembered on your device for next time.',
           'No account, no sign-up, no ads, no cost. Nothing is uploaded: worksheets are generated in your browser.',
@@ -103,7 +103,7 @@ export const PAGES = [
     title: 'Privacy Policy',
     navLabel: 'Privacy',
     description: `Privacy policy for ${BRAND}: no accounts, nothing uploaded, settings stay in your browser, and cookieless Google Analytics with consent denied by default.`,
-    updated: '2026-09-04',
+    updated: '2026-09-12',
     sections: [
       {
         heading: 'Summary',
@@ -142,7 +142,7 @@ export const PAGES = [
       {
         heading: 'Children',
         paragraphs: [
-          `${BRAND} makes worksheets for children aged roughly 6 to 9, but the site is meant to be used by the adults who print them. We do not knowingly collect personal information from anyone, children included, and the site contains no accounts, messaging or user-generated content.`,
+          `${BRAND} makes worksheets for children aged roughly 6 to 12, but the site is meant to be used by the adults who print them. We do not knowingly collect personal information from anyone, children included, and the site contains no accounts, messaging or user-generated content.`,
         ],
       },
       {

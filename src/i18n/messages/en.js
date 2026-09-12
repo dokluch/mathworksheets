@@ -44,7 +44,7 @@ export default {
     footerSite: 'Site',
     home: {
       subtitle: 'Free, randomized practice sheets you can print in one click.',
-      intro1: '{brand} is a free, open-source generator of printable math worksheets for grades 1–3 (ages 6–9). Each sheet is randomized every time you open or regenerate it, so children get fresh practice instead of memorising one page. Pick a worksheet, adjust the difficulty (number range, digits, layout, columns) and print it from your browser; your settings are remembered on this device for next time.',
+      intro1: '{brand} is a free, open-source generator of printable math worksheets for grades 1–6 (ages 6–12). Each sheet is randomized every time you open or regenerate it, so children get fresh practice instead of memorising one page. Pick a worksheet, adjust the difficulty (number range, digits, layout, columns) and print it from your browser; your settings are remembered on this device for next time.',
       intro2: 'The catalog covers multiplication tables, addition and subtraction drills with missing numbers, vertical column addition with carrying, long multiplication, division facts with and without remainders, long division, comparing numbers with >, < and =, rounding to the nearest 10, 100 and 1000, number patterns, and multi-step expressions where the order of operations decides the answer. The Equation Explorer is an on-screen activity where children move terms across the equals sign and check their answer on a number line.',
       worksheets: 'Worksheets',
       howItWorks: 'How it works',
@@ -52,7 +52,7 @@ export default {
       step2: 'Set the difficulty: number limit, digits, columns or level.',
       step3: 'Press Regenerate for a new random set, then Print. Sheets are laid out to fit an A4 or Letter page.',
       audienceHeading: 'For teachers, parents and AI agents',
-      audienceText: 'Worksheets are generated in the browser: nothing is uploaded, there is no account and no cost. {brand} was built by a parent to supplement a grade 1–3 math curriculum and is free to use and adapt for non-commercial purposes.',
+      audienceText: 'Worksheets are generated in the browser: nothing is uploaded, there is no account and no cost. {brand} was built by a parent to supplement a grade 1–6 math curriculum and is free to use and adapt for non-commercial purposes.',
     },
     worksheet: {
       skills: 'Skills',
@@ -75,7 +75,7 @@ export default {
     llmsNote: 'index for language models',
     catalogNote: 'machine-readable worksheet catalog',
     sitemapLink: 'Sitemap',
-    homeIntro: '{brand} is a free, open-source generator of printable math worksheets for grades 1–3 (ages 6–9). Each sheet is randomized every time it is opened or regenerated. Pick a worksheet, adjust the difficulty (number range, digits, layout, columns) and print it from the browser; settings are remembered per device. Worksheets are generated client-side: no account, no upload, no cost.',
+    homeIntro: '{brand} is a free, open-source generator of printable math worksheets for grades 1–6 (ages 6–12). Each sheet is randomized every time it is opened or regenerated. Pick a worksheet, adjust the difficulty (number range, digits, layout, columns) and print it from the browser; settings are remembered per device. Worksheets are generated client-side: no account, no upload, no cost.',
     worksheetItem: '{link}: {shortDesc} (grades {grades})',
     howItWorks: 'How it works',
     step1: 'Choose a worksheet.',
@@ -117,7 +117,7 @@ export default {
   },
 
   app: {
-    subtitle: 'Printable math worksheets for grades 1–3',
+    subtitle: 'Printable math worksheets for grades 1–6',
     allSheets: 'All sheets',
     worksheetTypes: 'Worksheet types',
     sourceOnGitHub: 'Source on GitHub',

@@ -1,5 +1,5 @@
 import { SegmentedControl } from './controls/SettingsPanel'
-import { ALL_GRADES, GRADES } from '../lib/grades'
+import { ALL_GRADES, GRADES, GRADE_BAND } from '../lib/grades'
 import { agesForGrades } from '../seo/render'
 import { useT } from '../i18n/context'
 
@@ -7,14 +7,16 @@ import { useT } from '../i18n/context'
 const ageRange = grades => agesForGrades(grades).replace('-', '–')
 
 /**
- * Grade filter for the landing catalog: All / Grade 1 / Grade 2 / Grade 3, each over its age band,
+ * Grade filter for the landing catalog: All / Grade 1 … Grade 6, each over its age band,
  * because a parent knows their child's age before they know the grade a sheet is written for.
- * All carries "ages 6–9" so the four cells are two lines on one baseline rather than one ragged row.
+ * All carries the whole band ("ages 6–12") so the cells are two lines on one baseline rather
+ * than one ragged row. Seven cells no longer fit a natural-width bar, so the group lays out as
+ * a grid: one row of seven on a wide screen, All over two rows of three on a narrow one.
  */
 export default function GradeFilter({ value, onChange, count }) {
   const t = useT()
   const options = [
-    { value: ALL_GRADES, label: t('app.allGrades'), sublabel: t('app.ages', { ages: ageRange('1–3') }) },
+    { value: ALL_GRADES, label: t('app.allGrades'), sublabel: t('app.ages', { ages: ageRange(GRADE_BAND) }) },
     ...GRADES.map(grade => ({
       value: grade,
       label: t('seo.gradeOne', { grades: grade }),

@@ -1,8 +1,8 @@
 /** German messages. Same key set as en.js plus `worksheets.<id>` and `pages.<id>` (see i18n.test.js). */
 export default {
   site: {
-    tagline: 'Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3',
-    description: 'Super Awesome Math: kostenlose, zufällig erzeugte Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3. Einmaleins, Addition und Subtraktion, schriftliche Addition, schriftliche Multiplikation, Zahlenvergleich, Runden, Zahlenfolgen und ein interaktiver Gleichungs-Explorer.',
+    tagline: 'Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–6',
+    description: 'Super Awesome Math: kostenlose, zufällig erzeugte Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–6. Einmaleins, Addition und Subtraktion, schriftliche Addition und Subtraktion, schriftliche Multiplikation, Division, Zahlenvergleich, Runden, Zahlenfolgen, Rechenreihenfolge und ein interaktiver Gleichungs-Explorer.',
     brandAlt: 'Mathe-Arbeitsblätter',
   },
 
@@ -35,7 +35,7 @@ export default {
     footerSite: 'Website',
     home: {
       subtitle: 'Kostenlose, zufällig erzeugte Übungsblätter, die du mit einem Klick ausdruckst.',
-      intro1: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3 (6–9 Jahre). Jedes Blatt wird bei jedem Öffnen oder Neu-Erzeugen zufällig zusammengestellt, sodass Kinder frische Aufgaben üben, statt eine Seite auswendig zu lernen. Wähle ein Arbeitsblatt, stelle den Schwierigkeitsgrad ein (Zahlenraum, Stellen, Layout, Spalten) und drucke es aus dem Browser; deine Einstellungen werden auf diesem Gerät gespeichert.',
+      intro1: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–6 (6–12 Jahre). Jedes Blatt wird bei jedem Öffnen oder Neu-Erzeugen zufällig zusammengestellt, sodass Kinder frische Aufgaben üben, statt eine Seite auswendig zu lernen. Wähle ein Arbeitsblatt, stelle den Schwierigkeitsgrad ein (Zahlenraum, Stellen, Layout, Spalten) und drucke es aus dem Browser; deine Einstellungen werden auf diesem Gerät gespeichert.',
       intro2: 'Der Katalog umfasst Einmaleins-Tabellen, Additions- und Subtraktionsaufgaben mit Lücken, schriftliche Addition mit Übertrag, schriftliche Multiplikation, Geteiltaufgaben mit und ohne Rest, Zahlenvergleich mit >, < und =, Runden auf Zehner, Hunderter und Tausender Zahlenfolgen sowie mehrschrittige Terme, bei denen die Rechenreihenfolge das Ergebnis entscheidet. Der Gleichungs-Explorer ist eine Bildschirmübung, bei der Kinder Terme über das Gleichheitszeichen schieben und ihre Antwort am Zahlenstrahl überprüfen.',
       worksheets: 'Arbeitsblätter',
       howItWorks: 'So funktioniert es',
@@ -43,7 +43,7 @@ export default {
       step2: 'Stelle den Schwierigkeitsgrad ein: Zahlenraum, Stellen, Spalten oder Stufe.',
       step3: 'Klicke auf Neu erzeugen für einen neuen Zufallssatz und dann auf Drucken. Die Blätter passen auf eine A4- oder Letter-Seite.',
       audienceHeading: 'Für Lehrkräfte, Eltern und KI-Agenten',
-      audienceText: 'Die Arbeitsblätter werden im Browser erzeugt: Nichts wird hochgeladen, es gibt kein Konto und keine Kosten. {brand} wurde von einem Elternteil als Ergänzung zum Mathe-Lehrplan der Klassen 1–3 entwickelt und darf für nicht-kommerzielle Zwecke frei genutzt und angepasst werden.',
+      audienceText: 'Die Arbeitsblätter werden im Browser erzeugt: Nichts wird hochgeladen, es gibt kein Konto und keine Kosten. {brand} wurde von einem Elternteil als Ergänzung zum Mathe-Lehrplan der Klassen 1–6 entwickelt und darf für nicht-kommerzielle Zwecke frei genutzt und angepasst werden.',
     },
     worksheet: {
       skills: 'Fähigkeiten',
@@ -66,7 +66,7 @@ export default {
     llmsNote: 'Index für Sprachmodelle',
     catalogNote: 'maschinenlesbarer Arbeitsblatt-Katalog',
     sitemapLink: 'Sitemap',
-    homeIntro: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3 (6–9 Jahre). Jedes Blatt wird bei jedem Öffnen oder Neu-Erzeugen zufällig zusammengestellt. Wähle ein Arbeitsblatt, stelle den Schwierigkeitsgrad ein (Zahlenraum, Stellen, Layout, Spalten) und drucke es aus dem Browser; die Einstellungen werden pro Gerät gespeichert. Die Arbeitsblätter entstehen clientseitig: kein Konto, kein Upload, keine Kosten.',
+    homeIntro: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–6 (6–12 Jahre). Jedes Blatt wird bei jedem Öffnen oder Neu-Erzeugen zufällig zusammengestellt. Wähle ein Arbeitsblatt, stelle den Schwierigkeitsgrad ein (Zahlenraum, Stellen, Layout, Spalten) und drucke es aus dem Browser; die Einstellungen werden pro Gerät gespeichert. Die Arbeitsblätter entstehen clientseitig: kein Konto, kein Upload, keine Kosten.',
     worksheetItem: '{link}: {shortDesc} (Klassen {grades})',
     howItWorks: 'So funktioniert es',
     step1: 'Wähle ein Arbeitsblatt.',
@@ -108,7 +108,7 @@ export default {
   },
 
   app: {
-    subtitle: 'Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3',
+    subtitle: 'Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–6',
     allSheets: 'Alle Blätter',
     worksheetTypes: 'Arten von Arbeitsblättern',
     sourceOnGitHub: 'Quellcode auf GitHub',
@@ -527,7 +527,7 @@ export default {
     about: {
       title: 'Über {brand}',
       navLabel: 'Über uns',
-      description: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3, von einem Elternteil entwickelt, damit jedes Kind kostenlos einfach üben kann.',
+      description: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–6, von einem Elternteil entwickelt, damit jedes Kind kostenlos einfach üben kann.',
       sections: [
         {
           heading: 'Warum es diese Website gibt',
@@ -577,7 +577,7 @@ export default {
         {
           heading: 'Was du bekommst',
           items: [
-            'Arbeitsblätter zum Ausdrucken für die Klassen 1–3: Einmaleins, Addition und Subtraktion, schriftliche Addition, schriftliche Multiplikation, Zahlenvergleich, Runden, Zahlenfolgen und Rechenreihenfolge.',
+            'Arbeitsblätter zum Ausdrucken für die Klassen 1–6: Einmaleins, Addition und Subtraktion, schriftliche Addition und Subtraktion, schriftliche Multiplikation, Division, Zahlenvergleich, Runden, Zahlenfolgen und Rechenreihenfolge.',
             'Einen Gleichungs-Explorer am Bildschirm, um mit Gleichungen zu spielen und Antworten am Zahlenstrahl zu prüfen.',
             'Einstellbare Schwierigkeit: Zahlenräume, Stellen, Spalten und Layout, auf deinem Gerät für das nächste Mal gespeichert.',
             'Kein Konto, keine Anmeldung, keine Werbung, keine Kosten. Nichts wird hochgeladen: Die Arbeitsblätter entstehen in deinem Browser.',
@@ -647,7 +647,7 @@ export default {
         {
           heading: 'Kinder',
           paragraphs: [
-            '{brand} erstellt Arbeitsblätter für Kinder von etwa 6 bis 9 Jahren, die Website richtet sich aber an die Erwachsenen, die sie ausdrucken. Wir erheben wissentlich keine personenbezogenen Daten – auch nicht von Kindern –, und die Website enthält keine Konten, keine Nachrichtenfunktion und keine nutzergenerierten Inhalte.',
+            '{brand} erstellt Arbeitsblätter für Kinder von etwa 6 bis 12 Jahren, die Website richtet sich aber an die Erwachsenen, die sie ausdrucken. Wir erheben wissentlich keine personenbezogenen Daten – auch nicht von Kindern –, und die Website enthält keine Konten, keine Nachrichtenfunktion und keine nutzergenerierten Inhalte.',
           ],
         },
         {

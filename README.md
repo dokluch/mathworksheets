@@ -1,6 +1,6 @@
 # Super Awesome Math
 
-Free, printable, randomized math worksheets for grades 1–3. An open-source web app I built to supplement my daughters' math curriculum.
+Free, printable, randomized math worksheets for grades 1–6. An open-source web app I built to supplement my daughters' math curriculum.
 
 **Live:** https://superawesomemath.com
 

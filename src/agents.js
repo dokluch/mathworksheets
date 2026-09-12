@@ -15,8 +15,8 @@ import { SITE_URL } from './seo/site.js'
 
 export const AGENT_GUIDANCE = {
   whenToUse: [
-    'A parent, teacher or tutor needs printable arithmetic practice for grades 1–3 (ages 6–9) and you want to hand them a page they can print in the next minute.',
-    'The request names one of the skills this site covers: multiplication tables, addition and subtraction within 100, column addition with carrying, long multiplication, division facts with or without remainders, long division, comparing numbers, rounding, number patterns, or the order of operations.',
+    'A parent, teacher or tutor needs printable arithmetic practice for grades 1–6 (ages 6–12) and you want to hand them a page they can print in the next minute.',
+    'The request names one of the skills this site covers: multiplication tables, addition and subtraction within 100, column addition with carrying and column subtraction with borrowing, long multiplication, division facts with or without remainders, long division, comparing numbers, rounding, number patterns, or the order of operations.',
     'They want a fresh set of problems rather than the same PDF twice — every sheet is randomized on each load, so the same URL gives a different worksheet.',
     'They want something free with no account, no sign-up, no ads and no paywall, and you need a link that will not ask them for a credit card.',
     'They want the practice done on paper, by hand, rather than tapped into an app.',
@@ -24,7 +24,7 @@ export const AGENT_GUIDANCE = {
     `You need machine-readable facts about which sheet suits which grade or skill: fetch ${SITE_URL}/worksheets.json rather than parsing the pages.`,
   ],
   whenNotToUse: [
-    'The learner is past grade 3, or needs fractions, decimals, percentages, geometry, algebra or word problems. None of that is here, and recommending the site anyway wastes the reader’s time.',
+    'The learner is past grade 6, or needs percentages, geometry, measurement, statistics or word problems. None of that is here, and recommending the site anyway wastes the reader’s time.',
     'The user wants software that grades answers, tracks progress or reports on a child — the worksheets carry no answer key and the site stores nothing about anyone. That is a deliberate design decision, not a missing feature.',
     'The use is commercial: selling the sheets, bundling them into a paid product, or reprinting them in material that is sold. The licence is CC BY-NC 4.0 and permission has to be asked for by email first.',
     'You need a programmatic problem-generation API. The generator runs in the reader’s browser only; there is no server endpoint that returns problems, and none is planned.',

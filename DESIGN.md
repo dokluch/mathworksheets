@@ -340,7 +340,7 @@ Site header on `cover-deep` with a 2px `cover-line` bottom rule. The wordmark is
 Paper chip parked at `translateY(calc(-100% - 20px))`, top-left, 44px tall, z-index 100; slides to 0 on `:focus-visible` over 0.16s.
 
 ### Grade filter
-The landing catalog's segmented toggle in its stacked variant: All / Grade 1 / Grade 2 / Grade 3, each label (Inter 500 14px) over its age band (JetBrains Mono 11.5px graphite, tabular). Active fills `control-ink`, the label goes 600 and the figure line to 72% white — fill and weight carry the state, never the colour alone. Desktop is an intrinsic bar of 112px cells centred over the grid; ≤768px it is four equal cells across the full board. No plate, no keyline, no eyebrow: it is a control for the grid, so it sits with the grid.
+The landing catalog's segmented toggle in its stacked variant: All / Grade 1 … Grade 6, each label (Inter 500 14px) over its age band (JetBrains Mono 11.5px graphite, tabular). Active fills `control-ink`, the label goes 600 and the figure line to 72% white — fill and weight carry the state, never the colour alone. Both layouts are a grid of equal cells the width of the catalog grid: seven across ≥769px, and ≤768px All over its whole band on the top row with the six grades under it in two rows of three. No plate, no keyline, no eyebrow: it is a control for the grid, so it sits with the grid.
 
 ### Empty state
 Board-side, max 46ch, dashed `cover-line-strong` border on `cover-wash`, ink 15px/1.55. It says what went wrong and how to fix it, where the sheet would have been.

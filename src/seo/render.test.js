@@ -2,7 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { WORKSHEETS } from '../worksheets.js'
 import { PAGES } from '../pages.js'
 import { AGENT_GUIDANCE } from '../agents.js'
-import { SITE_URL, BRAND, BRAND_ALT, OPERATOR, CONTACT_EMAIL, OG_IMAGE_PATH, GITHUB_URL, LICENSE_NAME } from './site.js'
+import { SITE_URL, BRAND, BRAND_ALT, OPERATOR, CONTACT_EMAIL, OG_IMAGE_PATH, GITHUB_URL, LICENSE_NAME, TAGLINE } from './site.js'
+import { GRADES, GRADE_BAND } from '../lib/grades.js'
 import { LOCALES, LOCALE_META, localizeWorksheet, localizePage } from '../i18n/index.js'
 import {
   routes, findRoute, normalizePath, homeRoute, worksheetRoute, pageRoute, sameRouteIn,
@@ -95,7 +96,10 @@ describe('catalog invariants', () => {
   it('agesForGrades derives an age band from every grade value', () => {
     expect(agesForGrades('2')).toBe('7-8')
     expect(agesForGrades('1–3')).toBe('6-9')
-    for (const ws of WORKSHEETS) expect(agesForGrades(ws.grades)).toMatch(/^\d-\d$/)
+    expect(agesForGrades('4')).toBe('9-10')
+    expect(agesForGrades('4–6')).toBe('9-12')
+    expect(agesForGrades(GRADE_BAND)).toBe('6-12')
+    for (const ws of WORKSHEETS) expect(agesForGrades(ws.grades)).toMatch(/^\d+-\d+$/)
   })
 
   it('gradeNumbers expands a band into every grade it covers', () => {
@@ -105,7 +109,7 @@ describe('catalog invariants', () => {
       const grades = gradeNumbers(ws.grades)
       expect(grades.length).toBeGreaterThan(0)
       for (const g of grades) expect(g).toBeGreaterThanOrEqual(1)
-      for (const g of grades) expect(g).toBeLessThanOrEqual(3)
+      for (const g of grades) expect(g).toBeLessThanOrEqual(GRADES.length)
     }
   })
 })
@@ -154,7 +158,7 @@ describe('routes', () => {
 describe('renderHead', () => {
   it('home has brand title, canonical, absolute OG image, markdown alternate and JSON-LD', () => {
     const head = renderHead(homeRoute())
-    expect(head).toContain(`<title>${BRAND} – Printable Math Worksheets for Grades 1–3</title>`)
+    expect(head).toContain(`<title>${BRAND} – ${TAGLINE}</title>`)
     expect(head).toContain(`<link rel="canonical" href="${SITE_URL}/" />`)
     expect(head).toContain(`<meta property="og:url" content="${SITE_URL}/" />`)
     expect(head).toContain(`<meta property="og:image" content="${SITE_URL}/og/home.png" />`)
@@ -215,7 +219,7 @@ describe('renderStaticContent', () => {
     expect(textOf(html).length).toBeGreaterThanOrEqual(500)
     expect((html.match(/<h1\b/g) || []).length).toBe(1)
     // The H1 carries the brand icon (inline SVG, aria-hidden) followed by the brand text.
-    expect(html).toMatch(new RegExp(`<h1 class="catalog-title"><svg [^>]*aria-hidden="true"[^>]*>[\\s\\S]*?</svg>${BRAND} – Printable Math Worksheets for Grades 1–3</h1>`))
+    expect(html).toMatch(new RegExp(`<h1 class="catalog-title"><svg [^>]*aria-hidden="true"[^>]*>[\\s\\S]*?</svg>${BRAND} – ${TAGLINE}</h1>`))
     assertSequential(headingLevels(html))
     for (const ws of WORKSHEETS) expect(html).toContain(`href="/worksheets/${ws.slug}"`)
     // Reader-facing pages no longer carry the agent-links paragraph; agents
@@ -381,7 +385,7 @@ describe('injectRoute', () => {
     const twice = injectRoute(once, worksheetRoute(WORKSHEETS[1]))
     expect((twice.match(/<title>/g) || []).length).toBe(1)
     expect(twice).toContain('Add &amp; Subtract Worksheets</h1>')
-    expect(twice).not.toContain('Printable Math Worksheets for Grades 1–3</h1>')
+    expect(twice).not.toContain(`${TAGLINE}</h1>`)
   })
 
   it('throws when markers are missing', () => {
@@ -454,7 +458,7 @@ describe('llms.txt (llmstxt.org format)', () => {
     const preamble = txt.split(/^## /m)[0]
     expect(preamble).toContain('Choosing a worksheet — by grade:')
     expect(preamble).toContain('Choosing a worksheet — by skill:')
-    for (const grade of [1, 2, 3]) expect(preamble).toContain(`- Grade ${grade} (ages `)
+    for (const grade of GRADES) expect(preamble).toContain(`- Grade ${grade} (ages `)
     // The query this exists to answer: "2nd grader learning carrying".
     expect(preamble).toContain('carrying / regrouping')
     for (const ws of WORKSHEETS) expect(preamble).toContain(ws.label)

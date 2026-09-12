@@ -1,8 +1,8 @@
 /** French messages. Same key set as en.js plus `worksheets.<id>` (see i18n.test.js). */
 export default {
   site: {
-    tagline: 'Fiches de maths à imprimer pour le CP, CE1 et CE2',
-    description: 'Super Awesome Math : fiches de mathématiques gratuites, imprimables et aléatoires pour les 6–9 ans (CP à CE2). Tables de multiplication, additions et soustractions, addition posée, multiplication posée, comparaison, arrondi, suites de nombres et un explorateur d’équations interactif.',
+    tagline: 'Fiches de maths à imprimer, du CP à la 6e',
+    description: 'Super Awesome Math : fiches de mathématiques gratuites, imprimables et aléatoires pour les 6–12 ans (du CP à la 6e). Tables de multiplication, additions et soustractions, addition et soustraction posées, multiplication posée, division, comparaison, arrondi, suites de nombres, ordre des opérations et un explorateur d’équations interactif.',
     brandAlt: 'Fiches de maths',
   },
 
@@ -35,7 +35,7 @@ export default {
     footerSite: 'Site',
     home: {
       subtitle: 'Des fiches d’entraînement gratuites et aléatoires, à imprimer en un clic.',
-      intro1: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer pour les 6–9 ans (CP, CE1, CE2). Chaque fiche est tirée au sort à chaque ouverture ou régénération : les enfants s’entraînent sur de nouveaux exercices au lieu de mémoriser une page. Choisissez une fiche, réglez la difficulté (plage de nombres, chiffres, disposition, colonnes) et imprimez-la depuis votre navigateur ; vos réglages sont mémorisés sur cet appareil.',
+      intro1: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer pour les 6–12 ans (du CP à la 6e). Chaque fiche est tirée au sort à chaque ouverture ou régénération : les enfants s’entraînent sur de nouveaux exercices au lieu de mémoriser une page. Choisissez une fiche, réglez la difficulté (plage de nombres, chiffres, disposition, colonnes) et imprimez-la depuis votre navigateur ; vos réglages sont mémorisés sur cet appareil.',
       intro2: 'Le catalogue couvre les tables de multiplication, les additions et soustractions à trous, l’addition posée avec retenue, la multiplication posée, les tables de division avec ou sans reste, la comparaison de nombres avec >, < et =, l’arrondi à la dizaine, à la centaine et au millier, les suites de nombres, ainsi que les expressions à plusieurs étapes où l’ordre des opérations décide de la réponse. L’explorateur d’équations est une activité à l’écran où l’enfant déplace des termes de part et d’autre du signe égal et vérifie sa réponse sur une droite numérique.',
       worksheets: 'Fiches',
       howItWorks: 'Comment ça marche',
@@ -43,7 +43,7 @@ export default {
       step2: 'Réglez la difficulté : limite des nombres, chiffres, colonnes ou niveau.',
       step3: 'Cliquez sur Régénérer pour un nouveau tirage, puis sur Imprimer. Les fiches tiennent sur une page A4 ou Letter.',
       audienceHeading: 'Pour les enseignants, les parents et les agents IA',
-      audienceText: 'Les fiches sont générées dans le navigateur : rien n’est envoyé, pas de compte, aucun coût. {brand} a été créé par un parent pour compléter le programme de maths du CP au CE2 ; il est libre d’utilisation et d’adaptation à des fins non commerciales.',
+      audienceText: 'Les fiches sont générées dans le navigateur : rien n’est envoyé, pas de compte, aucun coût. {brand} a été créé par un parent pour compléter le programme de maths du CP à la 6e ; il est libre d’utilisation et d’adaptation à des fins non commerciales.',
     },
     worksheet: {
       skills: 'Compétences',
@@ -66,7 +66,7 @@ export default {
     llmsNote: 'index pour les modèles de langage',
     catalogNote: 'catalogue des fiches lisible par les machines',
     sitemapLink: 'Sitemap',
-    homeIntro: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer pour les 6–9 ans (CP à CE2). Chaque fiche est tirée au sort à chaque ouverture ou régénération. Choisissez une fiche, réglez la difficulté (plage de nombres, chiffres, disposition, colonnes) et imprimez-la depuis le navigateur ; les réglages sont mémorisés par appareil. Les fiches sont générées côté client : pas de compte, pas d’envoi, aucun coût.',
+    homeIntro: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer pour les 6–12 ans (du CP à la 6e). Chaque fiche est tirée au sort à chaque ouverture ou régénération. Choisissez une fiche, réglez la difficulté (plage de nombres, chiffres, disposition, colonnes) et imprimez-la depuis le navigateur ; les réglages sont mémorisés par appareil. Les fiches sont générées côté client : pas de compte, pas d’envoi, aucun coût.',
     worksheetItem: '{link} : {shortDesc} (niveaux {grades})',
     howItWorks: 'Comment ça marche',
     step1: 'Choisissez une fiche.',
@@ -108,7 +108,7 @@ export default {
   },
 
   app: {
-    subtitle: 'Fiches de maths à imprimer pour le CP, CE1 et CE2',
+    subtitle: 'Fiches de maths à imprimer, du CP à la 6e',
     allSheets: 'Toutes les fiches',
     worksheetTypes: 'Types de fiches',
     sourceOnGitHub: 'Code source sur GitHub',
@@ -527,7 +527,7 @@ export default {
     about: {
       title: 'À propos de {brand}',
       navLabel: 'À propos',
-      description: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer pour le CP, le CE1 et le CE2, créé par un parent pour offrir à chaque enfant des exercices simples, sans frais.',
+      description: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer, du CP à la 6e, créé par un parent pour offrir à chaque enfant des exercices simples, sans frais.',
       sections: [
         {
           heading: 'Pourquoi ce site existe',
@@ -577,7 +577,7 @@ export default {
         {
           heading: 'Ce que vous obtenez',
           items: [
-            'Des fiches à imprimer du CP au CE2 : tables de multiplication, additions et soustractions, addition posée, multiplication posée, comparaison de nombres, arrondi, suites de nombres et ordre des opérations.',
+            'Des fiches à imprimer du CP à la 6e : tables de multiplication, additions et soustractions, addition et soustraction posées, multiplication posée, division, comparaison de nombres, arrondi, suites de nombres et ordre des opérations.',
             'Un explorateur d’équations à l’écran pour manipuler des équations et vérifier les réponses sur une droite numérique.',
             'Une difficulté réglable : plages de nombres, chiffres, colonnes et disposition, mémorisés sur votre appareil pour la prochaine fois.',
             'Pas de compte, pas d’inscription, pas de publicité, aucun coût. Rien n’est envoyé : les fiches sont générées dans votre navigateur.',
@@ -647,7 +647,7 @@ export default {
         {
           heading: 'Enfants',
           paragraphs: [
-            '{brand} crée des fiches pour des enfants d’environ 6 à 9 ans, mais le site s’adresse aux adultes qui les impriment. Nous ne collectons sciemment aucune information personnelle, y compris auprès d’enfants, et le site ne contient ni comptes, ni messagerie, ni contenu généré par les utilisateurs.',
+            '{brand} crée des fiches pour des enfants d’environ 6 à 12 ans, mais le site s’adresse aux adultes qui les impriment. Nous ne collectons sciemment aucune information personnelle, y compris auprès d’enfants, et le site ne contient ni comptes, ni messagerie, ni contenu généré par les utilisateurs.',
           ],
         },
         {

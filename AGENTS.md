@@ -5,7 +5,7 @@ Guidance for coding agents (Claude Code, Codex, Cursor, …) working in this rep
 ## What this is
 
 Super Awesome Math (formerly "MathSheets") is a React 19 + Vite single-page app that generates printable,
-randomized math worksheets for grades 1–3 client-side. Live site: https://superawesomemath.com
+randomized math worksheets for grades 1–6 client-side. Live site: https://superawesomemath.com
 (hosted on Vercel, zero-config Vite preset plus `vercel.json` and a Routing Middleware).
 
 ## Commands
@@ -76,5 +76,5 @@ Node 24, npm 11. No TypeScript.
 
 ## Analytics events (GA4)
 
-`page_view`, `select_worksheet`, `select_grade` (with `grade`: `all`, `1`, `2` or `3`), `regenerate_worksheet`, `print_worksheet` (with `copies` and `setting_*` params), `solve_equation`, `switch_locale` (with `locale`).
+`page_view`, `select_worksheet`, `select_grade` (with `grade`: `all` or `1`–`6`), `regenerate_worksheet`, `print_worksheet` (with `copies` and `setting_*` params), `solve_equation`, `switch_locale` (with `locale`).
 Key events (`print_worksheet`, `solve_equation`) are marked in the GA4 admin UI, not in code.

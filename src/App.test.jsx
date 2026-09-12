@@ -85,9 +85,12 @@ describe('App', () => {
 
   it('names the age band under every grade', () => {
     render(<App />)
-    expect(screen.getByRole('button', { name: /^All/ }).textContent).toContain('Ages 6–9')
+    expect(screen.getByRole('button', { name: /^All/ }).textContent).toContain('Ages 6–12')
     expect(screen.getByRole('button', { name: /^Grade 1/ }).textContent).toContain('Ages 6–7')
     expect(screen.getByRole('button', { name: /^Grade 3/ }).textContent).toContain('Ages 8–9')
+    // Two-digit ages are where a naive single-digit band regex used to give way.
+    expect(screen.getByRole('button', { name: /^Grade 4/ }).textContent).toContain('Ages 9–10')
+    expect(screen.getByRole('button', { name: /^Grade 6/ }).textContent).toContain('Ages 11–12')
   })
 
   it('remembers the chosen grade on this device', () => {
@@ -123,7 +126,7 @@ describe('App', () => {
     window.history.replaceState(null, '', '/worksheets/long-division')
     render(<App />)
     expect(document.querySelector('.grade-filter')).toBeNull()
-    // long-division is grade 3 only: a filtered sidebar would hide the open sheet.
+    // long-division is grades 3–4: a filtered sidebar would hide the open sheet.
     const sidebar = document.querySelector('.catalog--sidebar')
     expect(sidebar.querySelectorAll('.catalog-card').length).toBe(WORKSHEETS.length)
   })

@@ -994,23 +994,60 @@
     grid-column: 1 / -1;
   }
 
-  /* Four equal cells across the board, like the settings groups: a centred
-     natural-width bar reads as a stray object on a narrow screen. The stacked
-     variant's cell width is declared later in this file, so these rules name
-     both classes to outrank it rather than relying on order. */
+  /* Seven cells across the board would leave 45px each, too narrow for the age
+     line, so the group wraps: All takes the top row over its whole band, the
+     six grades sit under it in two rows of three. Wrapping defeats the pill's
+     :first-child/:last-child border collapsing, so every cell carries its own
+     border here and the rows are pulled together by a negative margin. */
   .grade-filter {
     width: 100%;
   }
 
   .grade-filter .btn-group--stacked {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     width: 100%;
   }
 
   .grade-filter .btn-group--stacked .btn-toggle {
-    flex: 1 1 0;
     min-width: 0;
     padding: 8px 4px;
+    border-left: 1px solid var(--color-border-dark);
+    border-radius: 0;
+  }
+
+  .grade-filter .btn-group--stacked .btn-toggle:first-child {
+    grid-column: 1 / -1;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  /* The cells that open a row keep their left edge; the rest overlap it. */
+  .grade-filter .btn-group--stacked .btn-toggle:nth-child(3n),
+  .grade-filter .btn-group--stacked .btn-toggle:nth-child(3n + 1) {
+    margin-left: -1px;
+  }
+
+  .grade-filter .btn-group--stacked .btn-toggle:not(:first-child) {
+    margin-top: -1px;
+  }
+
+  .grade-filter .btn-group--stacked .btn-toggle:nth-child(5) {
+    border-bottom-left-radius: var(--radius);
+  }
+
+  .grade-filter .btn-group--stacked .btn-toggle:last-child {
+    border-bottom-right-radius: var(--radius);
+  }
+
+  /* The filled segment paints over the borders it overlaps; the horizontal
+     collapsing rule would otherwise tint the first cell of the next row. */
+  .grade-filter .btn-group--stacked .btn-toggle.active {
+    position: relative;
+    z-index: 1;
+  }
+
+  .grade-filter .btn-group--stacked .btn-toggle.active + .btn-toggle {
+    border-left-color: var(--color-border-dark);
   }
 
   .grade-filter .btn-group--stacked .btn-toggle-label {
@@ -1476,6 +1513,24 @@ a.back-btn {
   gap: 2px;
   min-width: 112px;
   padding: 8px 18px;
+}
+
+/* Seven cells no longer fit an intrinsic bar between 769px and the grid's own
+   width, so the grade filter's group is a grid of equal cells that ends where
+   the catalog grid ends. One row, so the pill's own border collapsing holds.
+   Scoped to the wide screens: the narrow layout wraps into three columns and is
+   declared earlier in this file, where it would lose to an unscoped rule. */
+@media (min-width: 769px) {
+  .grade-filter .btn-group--stacked {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    width: 100%;
+  }
+
+  .grade-filter .btn-group--stacked .btn-toggle {
+    min-width: 0;
+    padding: 8px 6px;
+  }
 }
 
 .btn-toggle-label {
