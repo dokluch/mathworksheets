@@ -372,6 +372,36 @@ export const WORKSHEETS = [
     interactive: false,
   },
   {
+    id: 'factors',
+    slug: 'factors-and-primes',
+    label: 'Factors & Primes',
+    shortDesc: 'Prime factorization, GCD and LCM, prime or composite',
+    longDesc:
+      'Three kinds of practice with factors and multiples on a notebook grid. Write a number as a product of primes, smallest first, with one box per digit of each factor; find the greatest common divisor and the least common multiple of a pair; or mark each number prime or composite. ' +
+      'The primes practice leans on the numbers that fool children, odd composites such as 51, 57 and 91 that pass the checks for 2 and 5. Numbers go up to 100 or 500, and the multiplication sign prints as × or ·, following the convention of each language.',
+    grades: '4–6',
+    skills: ['prime factorization', 'greatest common divisor', 'least common multiple', 'prime and composite numbers', 'divisibility'],
+    settings: [
+      'Practice: prime factors, GCD and LCM, or prime or composite',
+      'Range: numbers within 100 or within 500',
+      'Sign: × or ·',
+      'Columns: 2, 3 or 4, as many as the practice allows',
+      'Print an answer key',
+    ],
+    examples: ['84 = □ × □ × □ × □', '90 = □ × □ × □ × □', '51 → □', '91 → □'],
+    prerequisites: ['multiply', 'divide'],
+    nextSteps: ['fractions'],
+    updated: '2026-09-12',
+    faq: [
+      { q: 'What is a prime factorization, and why write the factors in order?', a: 'Every whole number above 1 is a product of primes in exactly one way, apart from the order: 84 is 2 × 2 × 3 × 7. Writing the factors smallest first gives every problem a single answer to check against, and it makes repeated factors easy to count, which is what the GCD and LCM are built from.' },
+      { q: 'How do you find the GCD and LCM of two numbers?', a: 'Factorize both. The greatest common divisor multiplies the primes they share, as many times as both have them; the least common multiple multiplies every prime either one has, as many times as the one with more. For 12 = 2 × 2 × 3 and 18 = 2 × 3 × 3 that gives a GCD of 6 and an LCM of 36.' },
+      { q: 'Why does the sheet keep showing numbers like 51 and 91?', a: 'Those are the composites that look prime. A child who checks for 2 and 5 and stops will call 51 prime, but it is 3 × 17, and 91 is 7 × 13. About half of every primes page is composite, and most of those are odd numbers not ending in 5, so the only way through is to keep dividing.' },
+      { q: 'Which range should I start with?', a: 'Within 100 suits grades 4 and 5, where the primes to try are 2, 3, 5 and 7. Within 500 needs 11, 13, 17 and 19 as well, and a factorization there can end with a two- or three-digit prime, so it fits grade 6 or a child who already factorizes quickly.' },
+    ],
+    color: '#278227',
+    interactive: false,
+  },
+  {
     id: 'bongard',
     slug: 'bongard-problems',
     label: 'Bongard Problems',

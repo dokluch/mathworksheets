@@ -258,6 +258,26 @@ export default {
     divAria: '{a} diviso {b}',
   },
 
+  factors: {
+    title: 'Divisori e numeri primi',
+    practice: 'Esercizio',
+    factorize: 'Fattori primi',
+    gcdlcm: 'MCD e mcm',
+    primes: 'Primo o composto',
+    // Printed in a label four notebook squares wide (LABEL_SQUARES in src/lib/factors.js).
+    gcdMark: 'MCD',
+    lcmMark: 'mcm',
+    // A semicolon wherever a comma is the decimal mark, so a pair cannot read as a decimal.
+    pairSeparator: ';',
+    primeMark: 'P',
+    compositeMark: 'C',
+    metaGcdlcm: '{gcd} e {lcm}',
+    metaPrimes: '{prime} = primo · {composite} = composto',
+    factorizeAria: 'Scomponi {n} in fattori primi',
+    gcdlcmAria: 'Il MCD e il mcm di {a} e {b}',
+    primesAria: '{n} è primo o composto?',
+  },
+
   compare: {
     title: 'Confronto',
   },
@@ -616,6 +636,25 @@ export default {
         { q: 'Perché un risultato come 16,0 tiene lo zero?', a: 'Il risultato si scrive con tante cifre decimali quante ne hanno i numeri sopra, così la colonna resta completa e il bambino controlla ogni quadretto. 12,5 + 3,5 si scrive 16,0 sulla scheda e nelle soluzioni; 16 ha lo stesso valore, ed entrambi sono giusti.' },
         { q: 'Che cosa succede alla virgola quando si moltiplica per 10?', a: 'Ogni cifra si sposta di un posto a sinistra, quindi la virgola sembra spostarsi di un posto a destra: 3,45 · 10 = 34,5, e · 100 dà 345. Dividendo le cifre si spostano dall’altra parte, per questo 27 : 1000 ha bisogno di zeri davanti: 0,027. I quadretti del risultato contano ogni carattere, virgola compresa, così è il bambino a decidere dove va.' },
         { q: 'Perché posso scegliere tra virgola e punto?', a: 'In Italia, Francia, Spagna, Germania e Russia si scrive 3,5, mentre nei paesi di lingua inglese e in Cina si scrive 3.5. La scheda parte dall’uso della tua lingua e ricorda la tua scelta, e si può cambiare in entrambe le direzioni.' },
+      ],
+    },
+    factors: {
+      label: 'Divisori e numeri primi',
+      shortDesc: 'Scomposizione in fattori primi, MCD e mcm, primo o composto',
+      longDesc: 'Tre esercizi su divisori e multipli su una griglia a quadretti. Scomporre un numero in fattori primi, dal più piccolo al più grande, con un quadretto per ogni cifra di ogni fattore; trovare il massimo comune divisore e il minimo comune multiplo di due numeri; oppure dire se ogni numero è primo o composto. L’esercizio sui primi insiste sui numeri che ingannano i bambini, composti dispari come 51, 57 o 91 che superano i criteri di divisibilità per 2 e per 5. I numeri arrivano fino a 100 o a 500, e il segno di moltiplicazione si stampa come × o come ·, secondo l’uso di ogni lingua.',
+      skills: ['scomposizione in fattori primi', 'massimo comune divisore', 'minimo comune multiplo', 'numeri primi e composti', 'criteri di divisibilità'],
+      settings: [
+        'Esercizio: fattori primi, MCD e mcm, oppure primo o composto',
+        'Numeri: fino a 100 o fino a 500',
+        'Segno: × o ·',
+        'Colonne: 2, 3 o 4, quante l’esercizio ne consente',
+        'Stampa le soluzioni',
+      ],
+      faq: [
+        { q: 'Che cos’è la scomposizione in fattori primi, e perché si ordinano i fattori?', a: 'Ogni numero naturale maggiore di 1 si scrive in un solo modo come prodotto di numeri primi, a meno dell’ordine: 84 = 2 · 2 · 3 · 7. Scrivere i fattori dal più piccolo al più grande dà una sola risposta da controllare e rende facile contare i fattori ripetuti, su cui si basano MCD e mcm.' },
+        { q: 'Come si trovano MCD e mcm di due numeri?', a: 'Si scompongono entrambi. Il MCD moltiplica i fattori primi comuni, tante volte quante compaiono in tutti e due; il mcm moltiplica tutti i fattori presenti in almeno uno dei due, tante volte quante nel numero che ne ha di più. Per 12 = 2 · 2 · 3 e 18 = 2 · 3 · 3 si ottengono MCD 6 e mcm 36.' },
+        { q: 'Perché la scheda propone spesso numeri come 51 e 91?', a: 'Sono numeri composti che sembrano primi. Un bambino che prova con 2 e con 5 e si ferma dirà che 51 è primo, invece 51 = 3 · 17 e 91 = 7 · 13. Circa metà di ogni scheda è fatta di composti, e quasi tutti sono dispari e non finiscono per 5, quindi l’unico modo è continuare a dividere.' },
+        { q: 'Con quale intervallo conviene cominciare?', a: 'Fino a 100 va bene in quinta primaria, dove basta provare 2, 3, 5 e 7. Fino a 500 richiede anche 11, 13, 17 e 19, e la scomposizione può finire con un fattore primo grande: è adatto alla prima media o a chi scompone già con sicurezza.' },
       ],
     },
     eqexplore: {

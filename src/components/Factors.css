@@ -1,0 +1,33 @@
+/* ── Factors & Primes ──
+   The GCD and LCM labels span four notebook squares (LABEL_SQUARES in
+   src/lib/factors.js), so GCD, PGCD, ggT, НОД and 最大公因数 all end on the
+   same grid line and the answer boxes after them stay on the ruling. They are
+   declared after ColumnAddition.css, so they win over its one-square operator. */
+
+/* The label's text sits against the answer boxes, not at the far end of its
+   four squares: "GCD" fills barely one of them, and left-aligned it left the
+   boxes stranded three squares away from the word that names them. */
+.colarith-notebook .factors-label {
+  width: calc(4 * var(--nb-sq));
+  justify-content: flex-end;
+  padding-right: 4px;
+  font-size: calc(var(--nb-sq) * 0.62);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* A pair reads left to right, so its rows start together rather than ending together. */
+.colarith-notebook .factors-pair {
+  align-items: flex-start;
+}
+
+.colarith-notebook .factors-pair .colarith-row {
+  justify-content: flex-start;
+}
+
+@media print {
+  .colarith-notebook .factors-label {
+    color: #111;
+  }
+}

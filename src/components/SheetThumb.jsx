@@ -295,6 +295,15 @@ const MARKS = {
       {blank(10, 6)}{blank(11, 6)}
     </>
   ),
+  // A factorization with a box per factor, and two numbers to mark prime or composite.
+  factors: () => (
+    <>
+      {digit(2, 2, '8')}{digit(3, 2, '4')}{digit(4, 2, '=')}
+      {blank(5, 2)}{digit(6, 2, '×')}{blank(7, 2)}{digit(8, 2, '×')}{blank(9, 2)}{digit(10, 2, '×')}{blank(11, 2)}
+      {digit(3, 5, '5')}{digit(4, 5, '1')}{blank(6, 5)}
+      {digit(8, 5, '9')}{digit(9, 5, '1')}{blank(11, 5)}
+    </>
+  ),
   // The one screen-only sheet: an equation with a movable term.
   eqexplore: () => (
     <>

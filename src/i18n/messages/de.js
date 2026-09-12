@@ -258,6 +258,26 @@ export default {
     divAria: '{a} geteilt durch {b}',
   },
 
+  factors: {
+    title: 'Teiler und Primzahlen',
+    practice: 'Übung',
+    factorize: 'Primfaktoren',
+    gcdlcm: 'ggT und kgV',
+    primes: 'Primzahl oder nicht',
+    // Printed in a label four notebook squares wide (LABEL_SQUARES in src/lib/factors.js).
+    gcdMark: 'ggT',
+    lcmMark: 'kgV',
+    // A semicolon wherever a comma is the decimal mark, so a pair cannot read as a decimal.
+    pairSeparator: ';',
+    primeMark: 'P',
+    compositeMark: 'Z',
+    metaGcdlcm: '{gcd} und {lcm}',
+    metaPrimes: '{prime} = Primzahl · {composite} = zusammengesetzt',
+    factorizeAria: 'Zerlege {n} in Primfaktoren',
+    gcdlcmAria: 'Der ggT und das kgV von {a} und {b}',
+    primesAria: 'Ist {n} eine Primzahl?',
+  },
+
   compare: {
     title: 'Zahlenvergleich',
   },
@@ -616,6 +636,25 @@ export default {
         { q: 'Warum behält ein Ergebnis wie 16,0 seine Null?', a: 'Das Ergebnis wird mit so vielen Nachkommastellen geschrieben wie die Zahlen darüber, damit die Spalte voll bleibt und das Kind jedes Kästchen prüft. 12,5 + 3,5 steht auf dem Blatt und auf dem Lösungsblatt als 16,0; 16 hat denselben Wert, und beides ist richtig.' },
         { q: 'Was passiert mit dem Komma, wenn man mit 10 multipliziert?', a: 'Jede Ziffer rückt eine Stelle nach links, also scheint das Komma eine Stelle nach rechts zu wandern: 3,45 · 10 = 34,5, und · 100 ergibt 345. Beim Dividieren rücken die Ziffern in die andere Richtung, deshalb braucht 27 : 1000 Nullen davor: 0,027. Die Kästchen des Ergebnisses zählen jedes Zeichen mit, auch das Komma, damit das Kind selbst entscheidet, wohin es kommt.' },
         { q: 'Warum kann ich zwischen Komma und Punkt wählen?', a: 'In Deutschland, Frankreich, Spanien, Italien und Russland schreibt man 3,5, in englischsprachigen Ländern und in China 3.5. Das Blatt beginnt mit der Schreibweise deiner Sprache und merkt sich deine Wahl, und es lässt sich in beide Richtungen umstellen.' },
+      ],
+    },
+    factors: {
+      label: 'Teiler und Primzahlen',
+      shortDesc: 'Primfaktorzerlegung, ggT und kgV, Primzahl oder nicht',
+      longDesc: 'Drei Übungen zu Teilern und Vielfachen auf einem Karogitter. Eine Zahl in Primfaktoren zerlegen, der kleinste zuerst, mit einem Kästchen für jede Ziffer jedes Faktors; den größten gemeinsamen Teiler und das kleinste gemeinsame Vielfache zweier Zahlen finden; oder bei jeder Zahl entscheiden, ob sie eine Primzahl ist. Die Primzahl-Übung setzt auf die Zahlen, die Kinder täuschen: ungerade zusammengesetzte Zahlen wie 51, 57 oder 91, die die Teilbarkeitsregeln für 2 und 5 bestehen. Die Zahlen reichen bis 100 oder 500, und das Malzeichen wird je nach Sprache als × oder · gedruckt.',
+      skills: ['Primfaktorzerlegung', 'größter gemeinsamer Teiler', 'kleinstes gemeinsames Vielfaches', 'Primzahlen und zusammengesetzte Zahlen', 'Teilbarkeitsregeln'],
+      settings: [
+        'Übung: Primfaktoren, ggT und kgV, oder Primzahl oder nicht',
+        'Zahlenraum: bis 100 oder bis 500',
+        'Zeichen: × oder ·',
+        'Spalten: 2, 3 oder 4, soweit die Übung es zulässt',
+        'Lösungsblatt drucken',
+      ],
+      faq: [
+        { q: 'Was ist eine Primfaktorzerlegung, und warum ordnet man die Faktoren?', a: 'Jede natürliche Zahl größer als 1 lässt sich bis auf die Reihenfolge nur auf eine Weise als Produkt von Primzahlen schreiben: 84 = 2 · 2 · 3 · 7. Wer die Faktoren der Größe nach ordnet, hat genau eine Lösung zum Vergleichen und kann wiederholte Faktoren leicht zählen, und auf diesen bauen ggT und kgV auf.' },
+        { q: 'Wie findet man ggT und kgV zweier Zahlen?', a: 'Man zerlegt beide. Der ggT multipliziert die gemeinsamen Primfaktoren, so oft sie in beiden vorkommen; das kgV multipliziert alle Primfaktoren, die in einer der Zahlen vorkommen, so oft wie in der Zahl, die sie am häufigsten hat. Für 12 = 2 · 2 · 3 und 18 = 2 · 3 · 3 ergibt das einen ggT von 6 und ein kgV von 36.' },
+        { q: 'Warum kommen so oft Zahlen wie 51 und 91 vor?', a: 'Das sind zusammengesetzte Zahlen, die wie Primzahlen aussehen. Ein Kind, das nur 2 und 5 prüft, hält 51 für eine Primzahl, dabei ist 51 = 3 · 17 und 91 = 7 · 13. Etwa die Hälfte jedes Blatts ist zusammengesetzt, und die meisten davon sind ungerade und enden nicht auf 5, also hilft nur weiterteilen.' },
+        { q: 'Mit welchem Zahlenraum sollte ich anfangen?', a: 'Bis 100 passt zu Klasse 5, wo es genügt, 2, 3, 5 und 7 zu probieren. Bis 500 verlangt auch 11, 13, 17 und 19, und die Zerlegung kann mit einem großen Primfaktor enden, das passt zu Klasse 6 oder zu Kindern, die schon sicher zerlegen.' },
       ],
     },
     eqexplore: {

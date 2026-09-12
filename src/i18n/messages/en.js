@@ -270,6 +270,26 @@ export default {
     divAria: '{a} divided by {b}',
   },
 
+  factors: {
+    title: 'Factors & Primes',
+    practice: 'Practice',
+    factorize: 'Prime factors',
+    gcdlcm: 'GCD & LCM',
+    primes: 'Prime or composite',
+    // Printed in a label four notebook squares wide (LABEL_SQUARES in src/lib/factors.js).
+    gcdMark: 'GCD',
+    lcmMark: 'LCM',
+    // A semicolon wherever a comma is the decimal mark, so a pair cannot read as a decimal.
+    pairSeparator: ',',
+    primeMark: 'P',
+    compositeMark: 'C',
+    metaGcdlcm: '{gcd} and {lcm}',
+    metaPrimes: '{prime} = prime · {composite} = composite',
+    factorizeAria: 'Write {n} as a product of primes',
+    gcdlcmAria: 'The greatest common divisor and least common multiple of {a} and {b}',
+    primesAria: 'Is {n} prime or composite?',
+  },
+
   compare: {
     title: 'Comparison',
   },

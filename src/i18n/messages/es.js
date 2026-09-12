@@ -258,6 +258,26 @@ export default {
     divAria: '{a} entre {b}',
   },
 
+  factors: {
+    title: 'Factores y números primos',
+    practice: 'Práctica',
+    factorize: 'Factores primos',
+    gcdlcm: 'MCD y mcm',
+    primes: 'Primo o compuesto',
+    // Printed in a label four notebook squares wide (LABEL_SQUARES in src/lib/factors.js).
+    gcdMark: 'MCD',
+    lcmMark: 'mcm',
+    // A semicolon wherever a comma is the decimal mark, so a pair cannot read as a decimal.
+    pairSeparator: ';',
+    primeMark: 'P',
+    compositeMark: 'C',
+    metaGcdlcm: '{gcd} y {lcm}',
+    metaPrimes: '{prime} = primo · {composite} = compuesto',
+    factorizeAria: 'Descompón {n} en factores primos',
+    gcdlcmAria: 'El MCD y el mcm de {a} y {b}',
+    primesAria: '¿{n} es primo o compuesto?',
+  },
+
   compare: {
     title: 'Comparación',
   },
@@ -616,6 +636,25 @@ export default {
         { q: '¿Por qué una respuesta como 16,0 conserva el cero?', a: 'La respuesta se escribe con tantas cifras decimales como los números de arriba, para que la columna quede completa y el niño revise cada casilla. 12,5 + 3,5 se escribe 16,0 en la ficha y en las soluciones; 16 vale lo mismo, y ambas respuestas son correctas.' },
         { q: '¿Qué le pasa a la coma al multiplicar por 10?', a: 'Cada cifra se desplaza un lugar a la izquierda, así que la coma parece moverse un lugar a la derecha: 3,45 × 10 = 34,5, y × 100 da 345. Al dividir las cifras se mueven hacia el otro lado, por eso 27 ÷ 1000 necesita ceros delante: 0,027. Las casillas de la respuesta cuentan cada carácter, la coma incluida, de modo que el niño decide dónde va.' },
         { q: '¿Por qué se puede elegir entre coma y punto?', a: 'En España, Francia, Alemania, Italia y Rusia se escribe 3,5, mientras que en los países de habla inglesa, en China y en varios países hispanohablantes de América se escribe 3.5. La ficha empieza con la costumbre de tu idioma y recuerda tu elección, y se puede cambiar en cualquier sentido.' },
+      ],
+    },
+    factors: {
+      label: 'Factores y números primos',
+      shortDesc: 'Descomposición en factores primos, MCD y mcm, primo o compuesto',
+      longDesc: 'Tres tipos de práctica con divisores y múltiplos sobre una cuadrícula de cuaderno. Descomponer un número en factores primos, de menor a mayor, con una casilla por cada cifra de cada factor; hallar el máximo común divisor y el mínimo común múltiplo de dos números; o decir si cada número es primo o compuesto. La práctica de primos insiste en los números que confunden a los niños, compuestos impares como 51, 57 o 91 que superan las pruebas del 2 y del 5. Los números llegan hasta 100 o 500, y el signo de multiplicar se imprime como × o como ·, según la costumbre de cada idioma.',
+      skills: ['descomposición en factores primos', 'máximo común divisor', 'mínimo común múltiplo', 'números primos y compuestos', 'criterios de divisibilidad'],
+      settings: [
+        'Práctica: factores primos, MCD y mcm, o primo o compuesto',
+        'Números: hasta 100 o hasta 500',
+        'Signo: × o ·',
+        'Columnas: 2, 3 o 4, según lo que permita la práctica',
+        'Imprimir la hoja de respuestas',
+      ],
+      faq: [
+        { q: '¿Qué es descomponer en factores primos y por qué se ordenan los factores?', a: 'Todo número natural mayor que 1 se escribe de una sola manera como producto de primos, sin contar el orden: 84 = 2 × 2 × 3 × 7. Escribir los factores de menor a mayor da una única respuesta que comprobar y facilita contar los factores repetidos, que son la base del MCD y del mcm.' },
+        { q: '¿Cómo se hallan el MCD y el mcm de dos números?', a: 'Se descomponen los dos. El MCD multiplica los factores primos comunes, tantas veces como aparecen en ambos; el mcm multiplica todos los factores que tiene cualquiera de los dos, tantas veces como en el que más los tiene. Para 12 = 2 × 2 × 3 y 18 = 2 × 3 × 3 resulta un MCD de 6 y un mcm de 36.' },
+        { q: '¿Por qué aparecen tanto números como 51 y 91?', a: 'Son compuestos que parecen primos. Un niño que prueba con 2 y con 5 y se detiene dirá que 51 es primo, pero 51 = 3 × 17 y 91 = 7 × 13. Cerca de la mitad de cada ficha son compuestos, y la mayoría son impares que no terminan en 5, así que la única forma de acertar es seguir dividiendo.' },
+        { q: '¿Con qué rango empiezo?', a: 'Hasta 100 va bien en 5.º de primaria, donde basta con probar 2, 3, 5 y 7. Hasta 500 exige también 11, 13, 17 y 19, y la descomposición puede terminar en un primo grande, así que encaja en 6.º o con un niño que ya descompone con soltura.' },
       ],
     },
     eqexplore: {

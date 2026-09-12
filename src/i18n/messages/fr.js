@@ -258,6 +258,26 @@ export default {
     divAria: '{a} divisé par {b}',
   },
 
+  factors: {
+    title: 'Diviseurs et nombres premiers',
+    practice: 'Exercice',
+    factorize: 'Décomposition',
+    gcdlcm: 'PGCD et PPCM',
+    primes: 'Premier ou composé',
+    // Printed in a label four notebook squares wide (LABEL_SQUARES in src/lib/factors.js).
+    gcdMark: 'PGCD',
+    lcmMark: 'PPCM',
+    // A semicolon wherever a comma is the decimal mark, so a pair cannot read as a decimal.
+    pairSeparator: ';',
+    primeMark: 'P',
+    compositeMark: 'C',
+    metaGcdlcm: '{gcd} et {lcm}',
+    metaPrimes: '{prime} = premier · {composite} = composé',
+    factorizeAria: 'Décomposer {n} en produit de nombres premiers',
+    gcdlcmAria: 'Le PGCD et le PPCM de {a} et {b}',
+    primesAria: '{n} est-il premier ou composé ?',
+  },
+
   compare: {
     title: 'Comparaison',
   },
@@ -616,6 +636,25 @@ export default {
         { q: 'Pourquoi une réponse comme 16,0 garde-t-elle son zéro ?', a: 'La réponse s’écrit avec autant de chiffres après la virgule que les nombres au-dessus, pour que la colonne reste pleine et que l’enfant vérifie chaque case. 12,5 + 3,5 s’écrit 16,0 sur la fiche et dans le corrigé ; 16 a la même valeur, et les deux sont justes.' },
         { q: 'Que devient la virgule quand on multiplie par 10 ?', a: 'Chaque chiffre se décale d’un rang vers la gauche, donc la virgule semble avancer d’un rang vers la droite : 3,45 × 10 = 34,5, et × 100 donne 345. Diviser décale les chiffres dans l’autre sens, d’où les zéros devant dans 27 ÷ 1000 = 0,027. Les cases de la réponse comptent chaque caractère, virgule comprise : c’est à l’enfant de placer la virgule.' },
         { q: 'Pourquoi peut-on choisir entre la virgule et le point ?', a: 'Les écoles françaises, espagnoles, allemandes, italiennes et russes écrivent 3,5, tandis que les écoles anglophones et chinoises écrivent 3.5. La fiche part de l’usage de votre langue et retient votre choix ; on peut la changer dans les deux sens.' },
+      ],
+    },
+    factors: {
+      label: 'Diviseurs et nombres premiers',
+      shortDesc: 'Décomposition en facteurs premiers, PGCD et PPCM, premier ou composé',
+      longDesc: 'Trois exercices sur les diviseurs et les multiples, sur un quadrillage de cahier. Décomposer un nombre en produit de facteurs premiers, du plus petit au plus grand, avec une case par chiffre de chaque facteur ; trouver le PGCD et le PPCM de deux nombres ; ou dire si chaque nombre est premier ou composé. L’exercice sur les nombres premiers insiste sur ceux qui piègent les enfants, des nombres composés impairs comme 51, 57 ou 91, qui passent les tests de divisibilité par 2 et par 5. Les nombres vont jusqu’à 100 ou 500, et le signe de multiplication s’imprime en × ou en ·, selon l’usage de chaque langue.',
+      skills: ['décomposition en facteurs premiers', 'PGCD', 'PPCM', 'nombres premiers et composés', 'critères de divisibilité'],
+      settings: [
+        'Exercice : facteurs premiers, PGCD et PPCM, ou premier ou composé',
+        'Nombres : jusqu’à 100 ou jusqu’à 500',
+        'Signe : × ou ·',
+        'Colonnes : 2, 3 ou 4, selon ce que l’exercice permet',
+        'Imprimer un corrigé',
+      ],
+      faq: [
+        { q: 'Qu’est-ce qu’une décomposition en facteurs premiers, et pourquoi ranger les facteurs ?', a: 'Tout nombre entier supérieur à 1 s’écrit d’une seule façon comme produit de nombres premiers, à l’ordre près : 84 = 2 × 2 × 3 × 7. Ranger les facteurs du plus petit au plus grand donne une seule réponse à vérifier, et permet de compter facilement les facteurs répétés, dont on se sert pour le PGCD et le PPCM.' },
+        { q: 'Comment trouver le PGCD et le PPCM de deux nombres ?', a: 'On décompose les deux. Le PGCD multiplie les facteurs premiers communs, autant de fois qu’ils apparaissent dans les deux ; le PPCM multiplie tous les facteurs présents dans l’un ou l’autre, autant de fois que dans celui qui en a le plus. Pour 12 = 2 × 2 × 3 et 18 = 2 × 3 × 3, cela donne un PGCD de 6 et un PPCM de 36.' },
+        { q: 'Pourquoi la fiche propose-t-elle souvent des nombres comme 51 ou 91 ?', a: 'Ce sont des nombres composés qui ont l’air premiers. Un enfant qui teste 2 et 5 puis s’arrête dira que 51 est premier, alors que 51 = 3 × 17 et 91 = 7 × 13. Environ la moitié de chaque fiche est composée, et la plupart de ces nombres sont impairs et ne finissent pas par 5 : il faut continuer à diviser.' },
+        { q: 'Par quelle limite commencer ?', a: 'Jusqu’à 100 convient au CM1 et au CM2, où il suffit d’essayer 2, 3, 5 et 7. Jusqu’à 500 demande aussi 11, 13, 17 et 19, et la décomposition peut se terminer par un grand facteur premier : cela convient à la 6e ou à un enfant qui décompose déjà vite.' },
       ],
     },
     eqexplore: {
