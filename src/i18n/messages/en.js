@@ -23,6 +23,12 @@ export default {
     gradeRange: 'Grades {grades}',
     ogAltHome: '{brand} – {tagline}',
     ogAltWorksheet: '{label} worksheet preview – {brand}',
+    // Badges on the generated Open Graph cards (scripts/og-images.mjs).
+    ogBadgeFree: 'Free',
+    ogBadgeRandomized: 'Randomized',
+    ogBadgePrintReady: 'Print-ready',
+    ogBadgePrintable: 'Printable',
+    ogBadgeInteractive: 'Interactive',
     worksheetHeading: '{label} Worksheets',
     worksheetName: '{brand} {label}',
     worksheetList: '{brand} worksheets',
