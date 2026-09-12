@@ -14,6 +14,12 @@ export default {
     gradeRange: '{grades} 年级',
     ogAltHome: '{brand} – {tagline}',
     ogAltWorksheet: '{label}练习题预览 – {brand}',
+    // Badges on the generated Open Graph cards (scripts/og-images.mjs).
+    ogBadgeFree: '免费',
+    ogBadgeRandomized: '随机生成',
+    ogBadgePrintReady: '可直接打印',
+    ogBadgePrintable: '可打印',
+    ogBadgeInteractive: '互动',
     worksheetHeading: '{label}练习题',
     worksheetName: '{brand} {label}',
     worksheetList: '{brand} 练习题',

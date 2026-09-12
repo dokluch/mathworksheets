@@ -1,14 +1,23 @@
 #!/usr/bin/env node
 /**
- * Generate the Open Graph preview image for every page from the real app:
+ * Generate the Open Graph preview image for every page in every locale from
+ * the real app:
  *
- *   npm run og            # writes public/og/<slug>.png and home.png
- *   npm run og -- rounding   # only the pages whose slug matches
+ *   npm run og                 # writes public/og/<slug>.png (English) and
+ *                              # public/og/<locale>/<slug>.png, plus home.png
+ *   npm run og -- rounding     # one page, every locale
+ *   npm run og -- fr           # one locale, every page
+ *   npm run og -- fr/rounding  # one page in one locale (en/rounding for English)
  *
- * Each worksheet is opened in headless Chromium (Playwright), its printable
- * area is screenshotted and composed into a 1200×630 card with the brand,
- * title and description. Math.random is seeded per page so re-running the
- * script only changes an image when the worksheet itself changed.
+ * Each worksheet is opened in headless Chromium (Playwright) at its localized
+ * URL, its printable area is screenshotted and composed into a 1200×630 card
+ * with the brand, translated title, description, badges and tagline.
+ * Math.random is seeded per page so re-running the script only changes an
+ * image when the worksheet itself changed.
+ *
+ * Cards are then quantised in place with pngquant when it is installed
+ * (`brew install pngquant`); without it the lossless PNG is kept and a warning
+ * is printed once.
  *
  * The same run rasterises public/favicon.svg into favicon.png and
  * apple-touch-icon.png (see ICONS).
@@ -17,11 +26,17 @@
  * browser download and the previews are identical across deployments.
  * Requires the Chromium build once: `npx playwright install chromium`.
  */
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile, stat } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 import { resolve } from 'node:path'
 import { WORKSHEETS } from '../src/worksheets.js'
-import { BRAND, TAGLINE, ACCENT_COLOR } from '../src/seo/site.js'
-import { escapeHtml, homeRoute, worksheetRoute, ogImagePath, brandIcon } from '../src/seo/render.js'
+import { BRAND, ACCENT_COLOR } from '../src/seo/site.js'
+import { escapeHtml, homeRoute, worksheetRoute, ogImagePath, gradeLevelText, brandIcon } from '../src/seo/render.js'
+import { LOCALES, LOCALE_META, t, localizeWorksheet } from '../src/i18n/index.js'
+
+const exec = promisify(execFile)
 
 export const OG_WIDTH = 1200
 export const OG_HEIGHT = 630
@@ -32,6 +47,13 @@ export const ICONS = [
   { file: 'apple-touch-icon.png', size: 180 },
 ]
 
+/** pngquant binary: $PNGQUANT, then the usual Homebrew locations, then PATH. */
+export const PNGQUANT = process.env.PNGQUANT
+  || ['/opt/homebrew/bin/pngquant', '/usr/local/bin/pngquant'].find(existsSync)
+  || 'pngquant'
+/** Lossy palette quantisation: 65–90 keeps the card visually identical at a fraction of the bytes. */
+export const PNGQUANT_ARGS = ['--force', '--skip-if-larger', '--strip', '--speed', '1', '--quality', '65-90', '--ext', '.png']
+
 /** Selector of the element that shows "what's inside" for a page. */
 export function previewSelector(route) {
   if (route.kind === 'home') return '.catalog--full .catalog-grid'
@@ -40,45 +62,93 @@ export function previewSelector(route) {
   return '.print-area'
 }
 
-/** Everything the generator needs per page, independent of the browser. */
-export function ogTargets(filter = '') {
-  const all = [
+/** 'home' or the worksheet slug: the locale-independent name of a card. */
+export function targetSlug(route) {
+  return route.kind === 'worksheet' ? route.worksheet.slug : 'home'
+}
+
+/**
+ * Does a target match the CLI filter?
+ *   ''            everything
+ *   'rounding'    that page in every locale (substring of the slug)
+ *   'fr'          every page of that locale
+ *   'fr/round'    substring of '<locale>/<slug>' ('en/…' for English)
+ */
+export function matchesFilter(target, filter = '') {
+  if (!filter) return true
+  const slug = targetSlug(target.route)
+  if (filter.includes('/')) return `${target.route.locale}/${slug}`.includes(filter)
+  if (LOCALES.includes(filter)) return target.route.locale === filter
+  return slug.includes(filter)
+}
+
+/** Everything the generator needs per page and locale, independent of the browser. */
+export function ogTargets(filter = '', locales = LOCALES) {
+  const all = locales.flatMap(locale => [
     {
-      route: homeRoute(),
+      route: homeRoute(locale),
       title: BRAND,
-      subtitle: 'Printable math worksheets for grades 1–3',
-      badges: ['Free', 'Randomized', 'Print-ready'],
+      subtitle: t(locale, 'app.subtitle'),
+      badges: ['ogBadgeFree', 'ogBadgeRandomized', 'ogBadgePrintReady'].map(k => t(locale, `seo.${k}`)),
       color: ACCENT_COLOR,
     },
-    ...WORKSHEETS.map(ws => ({
-      route: worksheetRoute(ws),
-      title: ws.label,
-      subtitle: ws.shortDesc,
-      badges: [`Grades ${ws.grades}`, ws.interactive ? 'Interactive' : 'Printable', ...ws.skills.slice(0, 2)],
-      color: ws.color,
-    })),
-  ]
+    ...WORKSHEETS.map(source => {
+      const ws = localizeWorksheet(source, locale)
+      return {
+        route: worksheetRoute(source, locale),
+        title: ws.label,
+        subtitle: ws.shortDesc,
+        badges: [
+          gradeLevelText(ws, locale),
+          t(locale, ws.interactive ? 'seo.ogBadgeInteractive' : 'seo.ogBadgePrintable'),
+          ...ws.skills.slice(0, 2),
+        ],
+        color: ws.color,
+      }
+    }),
+  ])
   return all
-    .map(t => ({ ...t, file: ogImagePath(t.route).replace(/^\//, '') }))
-    .filter(t => !filter || t.route.path.includes(filter) || t.file.includes(filter))
+    .map(target => ({
+      ...target,
+      locale: target.route.locale,
+      lang: LOCALE_META[target.route.locale].lang,
+      tagline: t(target.route.locale, 'site.tagline'),
+      file: ogImagePath(target.route).replace(/^\//, ''),
+    }))
+    .filter(target => matchesFilter(target, filter))
+}
+
+/** Google Fonts request for a card: Inter covers Latin and Cyrillic; Chinese adds Noto Sans SC for the CJK glyphs. */
+export function fontsHref(lang) {
+  const families = ['Inter:wght@500;600;700;800', 'JetBrains+Mono:wght@500']
+  if (/^zh/.test(lang)) families.push('Noto+Sans+SC:wght@500;700;800')
+  return `https://fonts.googleapis.com/css2?${families.map(f => `family=${f}`).join('&')}&display=swap`
+}
+
+/** Title size that keeps two lines inside the 416px text column for long translated labels. */
+export function titleSize(title) {
+  const n = [...title].length
+  if (n > 26) return 40
+  if (n > 18) return 48
+  return 56
 }
 
 /** The 1200×630 card. `shot` is a PNG data URI of the page preview (optional). */
-export function renderCard({ title, subtitle, badges, color, lines = [] }, shot) {
+export function renderCard({ title, subtitle, badges, color, lines = [], lang = 'en', tagline = t('en', 'site.tagline') }, shot) {
   const badgeHtml = badges.map(b => `<span class="badge">${escapeHtml(b)}</span>`).join('')
   const preview = shot
     ? `<img class="shot" src="${shot}" alt="" />`
     : `<pre class="lines">${lines.map(escapeHtml).join('\n')}</pre>`
   return `<!doctype html>
-<html lang="en"><head><meta charset="utf-8" />
+<html lang="${escapeHtml(lang)}"><head><meta charset="utf-8" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+<link href="${fontsHref(lang)}" rel="stylesheet" />
 <style>
   * { box-sizing: border-box; margin: 0; }
   html, body { width: ${OG_WIDTH}px; height: ${OG_HEIGHT}px; overflow: hidden; }
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
     color: #0f172a;
     background:
       radial-gradient(900px 500px at 100% 0%, color-mix(in srgb, ${color} 16%, white) 0%, transparent 60%),
@@ -104,7 +174,7 @@ export function renderCard({ title, subtitle, badges, color, lines = [] }, shot)
     color: ${ACCENT_COLOR};
   }
   .brand svg { width: 26px; height: 26px; }
-  h1 { font-size: 56px; line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; color: ${color}; }
+  h1 { font-size: ${titleSize(title)}px; line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; color: ${color}; overflow-wrap: anywhere; }
   h1.plain { color: #0f172a; }
   p { font-size: 25px; line-height: 1.35; color: #475569; font-weight: 500; }
   .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
@@ -127,10 +197,11 @@ export function renderCard({ title, subtitle, badges, color, lines = [] }, shot)
     padding: 40px 44px; color: #0f172a;
   }
   .tagline {
-    position: absolute; right: 28px; bottom: 24px;
+    position: absolute; right: 28px; bottom: 24px; max-width: 640px;
     font-size: 15px; font-weight: 600; color: #334155; letter-spacing: 0.01em;
     background: #fff; border: 1px solid #e2e8f0; border-radius: 999px; padding: 8px 16px;
     box-shadow: 0 6px 20px -8px rgba(15, 23, 42, 0.35);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 </style></head>
 <body>
@@ -144,7 +215,7 @@ export function renderCard({ title, subtitle, badges, color, lines = [] }, shot)
     <div class="badges">${badgeHtml}</div>
   </div>
   <div class="stage"><div class="card">${preview}</div></div>
-  <div class="tagline">${escapeHtml(TAGLINE)}</div>
+  <div class="tagline">${escapeHtml(tagline)}</div>
 </body></html>`
 }
 
@@ -166,6 +237,30 @@ function hashSeed(text) {
   let h = 2166136261
   for (const ch of text) h = Math.imul(h ^ ch.charCodeAt(0), 16777619)
   return h >>> 0
+}
+
+let pngquantMissing = false
+
+/**
+ * Quantise a PNG in place with pngquant. Returns the bytes saved, 0 when the
+ * file was left alone (pngquant missing, result would be larger, or the
+ * quality floor could not be met — exit codes 98 and 99).
+ */
+export async function quantize(file, log = console.log) {
+  if (pngquantMissing) return 0
+  const before = (await stat(file)).size
+  try {
+    await exec(PNGQUANT, [...PNGQUANT_ARGS, file])
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      pngquantMissing = true
+      log(`pngquant not found (${PNGQUANT}); keeping lossless PNGs – install it with \`brew install pngquant\``)
+      return 0
+    }
+    if (err.code === 98 || err.code === 99) return 0
+    throw err
+  }
+  return before - (await stat(file)).size
 }
 
 async function renderIcons(browser, log) {
@@ -221,8 +316,9 @@ export async function generate({ filter = '', log = console.log } = {}) {
       await mkdir(resolve(out, '..'), { recursive: true })
       await writeFile(out, await page.screenshot({ type: 'png' }))
       await context.close()
+      const saved = await quantize(out, log)
       written.push(target.file)
-      log(`og: ${target.file}`)
+      log(`og: ${target.file}${saved ? ` (pngquant −${Math.round(saved / 1024)} KB)` : ''}`)
     }
   } finally {
     await browser.close()

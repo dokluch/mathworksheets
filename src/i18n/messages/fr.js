@@ -14,6 +14,12 @@ export default {
     gradeRange: 'Niveaux {grades}',
     ogAltHome: '{brand} – {tagline}',
     ogAltWorksheet: 'Aperçu de la fiche {label} – {brand}',
+    // Badges on the generated Open Graph cards (scripts/og-images.mjs).
+    ogBadgeFree: 'Gratuit',
+    ogBadgeRandomized: 'Aléatoire',
+    ogBadgePrintReady: 'Prêt à imprimer',
+    ogBadgePrintable: 'À imprimer',
+    ogBadgeInteractive: 'Interactif',
     worksheetHeading: 'Fiches {label}',
     worksheetName: '{brand} {label}',
     worksheetList: 'Fiches {brand}',

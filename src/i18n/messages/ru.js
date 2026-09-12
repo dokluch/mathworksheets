@@ -14,6 +14,12 @@ export default {
     gradeRange: '{grades} классы',
     ogAltHome: '{brand} – {tagline}',
     ogAltWorksheet: 'Предпросмотр рабочего листа «{label}» – {brand}',
+    // Badges on the generated Open Graph cards (scripts/og-images.mjs).
+    ogBadgeFree: 'Бесплатно',
+    ogBadgeRandomized: 'Случайные задания',
+    ogBadgePrintReady: 'Готово к печати',
+    ogBadgePrintable: 'Для печати',
+    ogBadgeInteractive: 'Интерактивно',
     worksheetHeading: 'Рабочие листы «{label}»',
     worksheetName: '{brand} {label}',
     worksheetList: 'Рабочие листы {brand}',

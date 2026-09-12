@@ -603,7 +603,7 @@ describe('i18n routes and surfaces', () => {
     expect(sameRouteIn(findRoute('/worksheets/rounding'), 'ru').path).toBe('/ru/worksheets/rounding')
   })
 
-  it('head carries hreflang for every locale plus x-default, og:locale(:alternate), inLanguage and a shared og:image', () => {
+  it('head carries hreflang for every locale plus x-default, og:locale(:alternate), inLanguage and a localized og:image', () => {
     for (const locale of LOCALES) {
       for (const route of [homeRoute(locale), worksheetRoute(ws, locale), pageRoute(PAGES[0], locale)]) {
         const head = renderHead(route)
@@ -615,8 +615,14 @@ describe('i18n routes and surfaces', () => {
         expect(head).toContain(`<meta property="og:locale" content="${LOCALE_META[locale].og}" />`)
         expect((head.match(/og:locale:alternate/g) || []).length).toBe(LOCALES.length - 1)
         expect(head).toContain(`type="text/markdown" href="${SITE_URL}${route.md}"`)
-        expect(head).toContain(`<meta property="og:image" content="${SITE_URL}${ogImagePath(sameRouteIn(route, 'en'))}" />`)
+        const image = ogImagePath(route)
+        expect(image).toBe(locale === 'en' ? ogImagePath(sameRouteIn(route, 'en')) : ogImagePath(sameRouteIn(route, 'en')).replace('/og/', `/og/${locale}/`))
+        if (route.kind === 'page') expect(image).toBe(ogImagePath(homeRoute(locale)))
+        expect(head).toContain(`<meta property="og:image" content="${SITE_URL}${image}" />`)
+        expect(head).toContain(`<meta name="twitter:image" content="${SITE_URL}${image}" />`)
         const json = JSON.parse(head.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])
+        const app = json['@graph'].find(n => n['@type'] === 'WebApplication')
+        if (app) expect(app.screenshot).toBe(`${SITE_URL}${ogImagePath(homeRoute(locale))}`)
         const langs = json['@graph'].filter(n => n.inLanguage).map(n => n.inLanguage)
         expect(langs.length).toBeGreaterThan(0)
         for (const l of langs) expect(l).toBe(LOCALE_META[locale].lang)
