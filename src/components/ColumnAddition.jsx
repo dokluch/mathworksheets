@@ -68,22 +68,21 @@ export default function ColumnAddition() {
   const [digits, setDigits] = usePersistedState('coladd', 'digits', 3)
   // Addition is the default, so a sheet that was set up before subtraction
   // existed opens exactly as it was left.
-  const [op, setOp] = usePersistedState('coladd', 'op', 'add')
+  const [op, setOp] = usePersistedState('coladd', 'op', 'add', OPS)
   const [columns, setColumns] = usePersistedState('coladd', 'columns', 3)
   const [preferCarry, setPreferCarry] = usePersistedState('coladd', 'preferCarry', true)
   const [answerKey, setAnswerKey] = usePersistedState('coladd', 'answerKey', false)
 
-  const activeOp = OPS.includes(op) ? op : OPS[0]
   // Rows: two operands and the result. Problems are short, so they sit one
   // blank row apart (the next problem's carry row) and fill one printed page.
   const shape = sheetShape({ digits, columns })
   const width = digitColumns(digits)
-  const title = t(TITLE_KEY[activeOp])
+  const title = t(TITLE_KEY[op])
 
   const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
     shape,
-    generate: (rng, { count }) => generateSheet({ count, digits, preferCarry, op: activeOp }, rng),
-    deps: [digits, preferCarry, activeOp],
+    generate: (rng, { count }) => generateSheet({ count, digits, preferCarry, op }, rng),
+    deps: [digits, preferCarry, op],
   })
 
   return (
@@ -91,7 +90,7 @@ export default function ColumnAddition() {
       <SettingsPanel actions={<PanelActions worksheetId="coladd" onRegenerate={regenerate} />}>
         <SettingRow label={t('common.operation')}>
           <SegmentedControl
-            value={activeOp}
+            value={op}
             onChange={setOp}
             options={[
               { value: 'add', label: '+' },

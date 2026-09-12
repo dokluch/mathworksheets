@@ -37,30 +37,27 @@ function renderProblem(p, answerForm) {
 
 export default function FractionAddSub() {
   const t = useT()
-  const [level, setLevel] = usePersistedState('fracaddsub', 'level', 'like')
-  const [op, setOp] = usePersistedState('fracaddsub', 'op', 'both')
-  const [limit, setLimit] = usePersistedState('fracaddsub', 'limit', 12)
+  const [level, setLevel] = usePersistedState('fracaddsub', 'level', 'like', LEVELS)
+  const [op, setOp] = usePersistedState('fracaddsub', 'op', 'both', OPS)
+  const [limit, setLimit] = usePersistedState('fracaddsub', 'limit', 12, LIMITS)
   // Frozen on the first visit, like the division sign: a mixed number where the
   // language's schools write one, an improper fraction where they do not.
   const [answerForm, setAnswerForm] = usePersistedState('fracaddsub', 'answerForm', t('fracaddsub.defaultAnswerForm'))
   const [columns, setColumns] = usePersistedState('fracaddsub', 'columns', 3)
   const [answerKey, setAnswerKey] = usePersistedState('fracaddsub', 'answerKey', false)
 
-  const activeLevel = LEVELS.includes(level) ? level : LEVELS[0]
-  const activeOp = OPS.includes(op) ? op : OPS[2]
-  const activeLimit = LIMITS.includes(limit) ? limit : LIMITS[1]
   const activeForm = ANSWER_FORMS.includes(answerForm) ? answerForm : ANSWER_FORMS[0]
-  const shape = sheetShape({ level: activeLevel, limit: activeLimit, answerForm: activeForm, columns })
+  const shape = sheetShape({ level, limit, answerForm: activeForm, columns })
   // The answer form only repaints the boxes; it deals a new sheet only when it
   // changes how many columns fit, which the shape carries.
   const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
     shape,
-    generate: (rng, { count }) => generateSheet({ level: activeLevel, op: activeOp, limit: activeLimit, count }, rng),
-    deps: [activeLevel, activeOp, activeLimit],
+    generate: (rng, { count }) => generateSheet({ level, op, limit, count }, rng),
+    deps: [level, op, limit],
   })
 
   const title = t('fracaddsub.title')
-  const meta = t('fracaddsub.meta', { level: t(`fracaddsub.${activeLevel}`), n: activeLimit })
+  const meta = t('fracaddsub.meta', { level: t(`fracaddsub.${level}`), n: limit })
   const label = p => t(p.op === 'add' ? 'fracaddsub.addAria' : 'fracaddsub.subAria', { a: written(p.a), b: written(p.b) })
 
   return (
@@ -68,14 +65,14 @@ export default function FractionAddSub() {
       <SettingsPanel actions={<PanelActions worksheetId="fracaddsub" onRegenerate={regenerate} />}>
         <SettingRow label={t('fracaddsub.level')}>
           <SegmentedControl
-            value={activeLevel}
+            value={level}
             onChange={setLevel}
             options={LEVELS.map(value => ({ value, label: t(`fracaddsub.${value}`) }))}
           />
         </SettingRow>
         <SettingRow label={t('common.operation')}>
           <SegmentedControl
-            value={activeOp}
+            value={op}
             onChange={setOp}
             options={[
               { value: 'add', label: '+' },
@@ -86,12 +83,12 @@ export default function FractionAddSub() {
         </SettingRow>
         <SettingRow label={t('fractions.denominators')}>
           <SegmentedControl
-            value={activeLimit}
+            value={limit}
             onChange={setLimit}
             options={LIMITS.map(n => ({ value: n, label: t('fractions.upTo', { n }) }))}
           />
         </SettingRow>
-        {activeLevel === 'mixed' && (
+        {level === 'mixed' && (
           <SettingRow label={t('fracaddsub.answerForm')}>
             <SegmentedControl
               value={activeForm}

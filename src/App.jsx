@@ -118,8 +118,7 @@ export default function App() {
   // Which grade the landing catalog is narrowed to. Remembered per device like the
   // other settings: a household picks for the same child most visits. A value left
   // by an older build, or a grade that no longer exists, opens the full catalog.
-  const [persistedGrade, setGrade] = usePersistedState('app', 'grade', ALL_GRADES)
-  const grade = isGrade(persistedGrade) ? persistedGrade : ALL_GRADES
+  const [grade, setGrade] = usePersistedState('app', 'grade', ALL_GRADES, value => value === ALL_GRADES || isGrade(value))
   const selectGrade = useCallback(next => {
     trackEvent('select_grade', { grade: next })
     setGrade(next)

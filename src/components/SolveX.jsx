@@ -45,41 +45,39 @@ function Equation({ tokens, notation }) {
 
 export default function SolveX() {
   const t = useT()
-  const [level, setLevel] = usePersistedState('solvex', 'level', 'one')
-  const [range, setRange] = usePersistedState('solvex', 'range', 20)
+  const [level, setLevel] = usePersistedState('solvex', 'level', 'one', LEVELS)
+  const [range, setRange] = usePersistedState('solvex', 'range', 20, RANGES)
   // The × and ÷ signs follow the language on first visit, as on Order of Operations.
   const [notation, setNotation] = usePersistedState('solvex', 'notation', t('order.defaultNotation'))
   const [columns, setColumns] = usePersistedState('solvex', 'columns', 3)
   const [answerKey, setAnswerKey] = usePersistedState('solvex', 'answerKey', false)
 
-  const activeLevel = LEVELS.includes(level) ? level : LEVELS[0]
-  const activeRange = RANGES.includes(range) ? range : RANGES[1]
   const activeNotation = NOTATIONS.includes(notation) ? notation : NOTATIONS[0]
 
-  const shape = sheetShape({ level: activeLevel, range: activeRange, columns })
+  const shape = sheetShape({ level, range, columns })
   // The signs only repaint; they never deal a new sheet.
   const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
     shape,
-    generate: (rng, { count }) => generateSheet({ level: activeLevel, range: activeRange, count }, rng),
-    deps: [activeLevel, activeRange],
+    generate: (rng, { count }) => generateSheet({ level, range, count }, rng),
+    deps: [level, range],
   })
 
   const title = t('solvex.title')
-  const meta = t('solvex.meta', { level: t(`solvex.${activeLevel}`), n: activeRange })
+  const meta = t('solvex.meta', { level: t(`solvex.${level}`), n: range })
 
   return (
     <div className="tool-panel">
       <SettingsPanel actions={<PanelActions worksheetId="solvex" onRegenerate={regenerate} />}>
         <SettingRow label={t('solvex.level')}>
           <SegmentedControl
-            value={activeLevel}
+            value={level}
             onChange={setLevel}
             options={LEVELS.map(value => ({ value, label: t(`solvex.${value}`) }))}
           />
         </SettingRow>
         <SettingRow label={t('solvex.answers')}>
           <SegmentedControl
-            value={activeRange}
+            value={range}
             onChange={setRange}
             options={RANGES.map(n => ({ value: n, label: t('fractions.upTo', { n }) }))}
           />
@@ -117,7 +115,7 @@ export default function SolveX() {
           >
             <Equation tokens={p.tokens} notation={activeNotation} />
             {/* Bare ruling for the working: more rows as the level rises. */}
-            <div className="solvex-work" style={{ '--solvex-rows': WORK_ROWS[activeLevel] }} aria-hidden="true" />
+            <div className="solvex-work" style={{ '--solvex-rows': WORK_ROWS[level] }} aria-hidden="true" />
           </div>
         )}
       </NotebookSheet>

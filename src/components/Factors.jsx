@@ -76,15 +76,13 @@ function PrimesProblem({ p, label }) {
 
 export default function Factors() {
   const t = useT()
-  const [practice, setPractice] = usePersistedState('factors', 'practice', 'factorize')
-  const [range, setRange] = usePersistedState('factors', 'range', RANGES[0])
+  const [practice, setPractice] = usePersistedState('factors', 'practice', 'factorize', PRACTICES)
+  const [range, setRange] = usePersistedState('factors', 'range', RANGES[0], RANGES)
   // The multiplication sign follows the language on first visit, as on Order of Operations.
   const [notation, setNotation] = usePersistedState('factors', 'notation', t('order.defaultNotation'))
   const [columns, setColumns] = usePersistedState('factors', 'columns', 3)
   const [answerKey, setAnswerKey] = usePersistedState('factors', 'answerKey', false)
 
-  const activePractice = PRACTICES.includes(practice) ? practice : PRACTICES[0]
-  const activeRange = RANGES.includes(range) ? range : RANGES[0]
   const activeNotation = NOTATIONS.includes(notation) ? notation : NOTATIONS[0]
   const sign = glyph('*', activeNotation)
   const gcdMark = t('factors.gcdMark')
@@ -92,19 +90,19 @@ export default function Factors() {
   const primeMark = t('factors.primeMark')
   const compositeMark = t('factors.compositeMark')
 
-  const shape = sheetShape({ practice: activePractice, range: activeRange, columns })
+  const shape = sheetShape({ practice, range, columns })
   // The sign only repaints; it never deals a new sheet.
   const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
     shape,
-    generate: (rng, { count }) => generateSheet({ practice: activePractice, range: activeRange, count }, rng),
-    deps: [activePractice, activeRange],
+    generate: (rng, { count }) => generateSheet({ practice, range, count }, rng),
+    deps: [practice, range],
   })
 
   const title = t('factors.title')
-  const within = t('common.withinMeta', { n: activeRange + 1 })
-  const meta = activePractice === 'gcdlcm'
+  const within = t('common.withinMeta', { n: range + 1 })
+  const meta = practice === 'gcdlcm'
     ? t('factors.metaGcdlcm', { gcd: gcdMark, lcm: lcmMark })
-    : activePractice === 'primes'
+    : practice === 'primes'
       ? `${within} · ${t('factors.metaPrimes', { prime: primeMark, composite: compositeMark })}`
       : within
 
@@ -135,22 +133,22 @@ export default function Factors() {
       <SettingsPanel actions={<PanelActions worksheetId="factors" onRegenerate={regenerate} />}>
         <SettingRow label={t('factors.practice')}>
           <SegmentedControl
-            value={activePractice}
+            value={practice}
             onChange={setPractice}
             options={PRACTICES.map(value => ({ value, label: t(`factors.${value}`) }))}
           />
         </SettingRow>
         {/* Pairs are built from a common factor, not drawn from a range. */}
-        {activePractice !== 'gcdlcm' && (
+        {practice !== 'gcdlcm' && (
           <SettingRow label={t('common.range')}>
             <SegmentedControl
-              value={activeRange}
+              value={range}
               onChange={setRange}
               options={RANGES.map(value => ({ value, label: t('common.within', { n: value + 1 }) }))}
             />
           </SettingRow>
         )}
-        {activePractice === 'factorize' && (
+        {practice === 'factorize' && (
           <SettingRow label={t('divide.notation')}>
             <SegmentedControl
               value={activeNotation}

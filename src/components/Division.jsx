@@ -38,7 +38,7 @@ function renderProblem(p, { sign, mark, allowRemainder, label }) {
 
 export default function Division() {
   const t = useT()
-  const [limit, setLimit] = usePersistedState('divide', 'limit', 100)
+  const [limit, setLimit] = usePersistedState('divide', 'limit', 100, LIMITS)
   // The locale's division sign is frozen on the first visit, as on Order of
   // Operations: ÷ where schools print it, a colon where they write that.
   const [notation, setNotation] = usePersistedState('divide', 'notation', t('divide.defaultNotation'))
@@ -46,28 +46,27 @@ export default function Division() {
   const [allowRemainder, setAllowRemainder] = usePersistedState('divide', 'allowRemainder', false)
   const [answerKey, setAnswerKey] = usePersistedState('divide', 'answerKey', false)
 
-  const activeLimit = LIMITS.includes(limit) ? limit : LIMITS[LIMITS.length - 1]
   const activeNotation = NOTATIONS.includes(notation) ? notation : NOTATIONS[0]
-  const shape = sheetShape({ limit: activeLimit, allowRemainder, columns })
+  const shape = sheetShape({ limit, allowRemainder, columns })
   // Changing the sign only repaints; it never deals a new sheet.
   const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
     shape,
-    generate: (rng, { count }) => generateSheet({ limit: activeLimit, allowRemainder, count }, rng),
-    deps: [activeLimit, allowRemainder],
+    generate: (rng, { count }) => generateSheet({ limit, allowRemainder, count }, rng),
+    deps: [limit, allowRemainder],
   })
 
   const sign = glyph('/', activeNotation)
   const mark = t('divide.remainderMark')
   const meta = allowRemainder
-    ? `${t('common.withinMeta', { n: activeLimit })} · ${t('divide.withRemainders')}`
-    : t('common.withinMeta', { n: activeLimit })
+    ? `${t('common.withinMeta', { n: limit })} · ${t('divide.withRemainders')}`
+    : t('common.withinMeta', { n: limit })
 
   return (
     <div className="tool-panel">
       <SettingsPanel actions={<PanelActions worksheetId="divide" onRegenerate={regenerate} />}>
         <SettingRow label={t('common.limit')}>
           <SegmentedControl
-            value={activeLimit}
+            value={limit}
             onChange={setLimit}
             options={LIMITS.map(n => ({ value: n, label: t('common.within', { n }) }))}
           />

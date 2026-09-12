@@ -67,14 +67,13 @@ function renderProblem(problem, width, t) {
 
 export default function ColumnMultiplication() {
   const t = useT()
-  const [preset, setPreset] = usePersistedState('colmul', 'preset', '4x2')
+  const [preset, setPreset] = usePersistedState('colmul', 'preset', '4x2', value => PRESETS.some(item => item.value === value))
   const [columns, setColumns] = usePersistedState('colmul', 'columns', 3)
   const [answerKey, setAnswerKey] = usePersistedState('colmul', 'answerKey', false)
 
-  // 4 × 2 is the default and the fallback: a stored value from an older build,
-  // or one we have since dropped, opens the sheet the catalog copy describes
-  // rather than whichever preset happens to sit last in the list.
-  const activePreset = PRESETS.find(item => item.value === preset) || PRESETS.find(item => item.value === '4x2')
+  // 4 × 2 is the default, so a preset we have since dropped opens the sheet the
+  // catalog copy describes rather than whichever preset sits last in the list.
+  const activePreset = PRESETS.find(item => item.value === preset)
   const { aDigits, bDigits } = activePreset
   // Exactly one printed page.
   const shape = sheetShape({ aDigits, bDigits, columns })

@@ -5,10 +5,19 @@ import { useState, useEffect } from 'react'
 // stored only here — renaming it would silently reset returning users to English.
 const STORAGE_KEY = 'mathsheets'
 
+// The blob is parsed once per distinct stored string. A worksheet mounts five
+// or six of these hooks, and each used to parse the whole blob again.
+let cachedRaw = null
+let cachedState = {}
+
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : {}
+    if (raw !== cachedRaw) {
+      cachedState = raw ? JSON.parse(raw) : {}
+      cachedRaw = raw
+    }
+    return cachedState
   } catch {
     return {}
   }
@@ -16,16 +25,29 @@ function loadState() {
 
 function saveState(state) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+    const raw = JSON.stringify(state)
+    localStorage.setItem(STORAGE_KEY, raw)
+    cachedRaw = raw
+    cachedState = state
   } catch { /* quota exceeded - ignore */ }
 }
 
-export function usePersistedState(tabId, key, defaultValue) {
+const accepts = (allowed, value) => (
+  allowed == null || (typeof allowed === 'function' ? allowed(value) : allowed.includes(value))
+)
+
+/**
+ * A setting remembered in this browser, per worksheet (`tabId`) and `key`.
+ *
+ * `allowed`, an array of valid values or a predicate, rejects a value an older
+ * build left behind: the default is used instead, and written back. Leave it
+ * out where the default is not the fallback, as for the settings whose default
+ * follows the language on a first visit.
+ */
+export function usePersistedState(tabId, key, defaultValue, allowed) {
   const [value, setValue] = useState(() => {
-    const all = loadState()
-    const tab = all[tabId]
-    if (tab && key in tab) return tab[key]
-    return defaultValue
+    const tab = loadState()[tabId]
+    return tab && key in tab && accepts(allowed, tab[key]) ? tab[key] : defaultValue
   })
 
   useEffect(() => {

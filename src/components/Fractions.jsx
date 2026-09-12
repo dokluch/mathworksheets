@@ -59,36 +59,34 @@ function answerText(p) {
 
 export default function Fractions() {
   const t = useT()
-  const [practice, setPractice] = usePersistedState('fractions', 'practice', 'simplify')
-  const [limit, setLimit] = usePersistedState('fractions', 'limit', 12)
+  const [practice, setPractice] = usePersistedState('fractions', 'practice', 'simplify', PRACTICES)
+  const [limit, setLimit] = usePersistedState('fractions', 'limit', 12, LIMITS)
   const [columns, setColumns] = usePersistedState('fractions', 'columns', 3)
   const [answerKey, setAnswerKey] = usePersistedState('fractions', 'answerKey', false)
 
-  const activePractice = PRACTICES.includes(practice) ? practice : PRACTICES[0]
-  const activeLimit = LIMITS.includes(limit) ? limit : LIMITS[1]
-  const shape = sheetShape({ limit: activeLimit, columns })
+  const shape = sheetShape({ limit, columns })
   const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
     shape,
-    generate: (rng, { count }) => generateSheet({ practice: activePractice, limit: activeLimit, count }, rng),
-    deps: [activePractice, activeLimit],
+    generate: (rng, { count }) => generateSheet({ practice, limit, count }, rng),
+    deps: [practice, limit],
   })
 
   const title = t('fractions.title')
-  const meta = t('fractions.meta', { practice: t(`fractions.${activePractice}`), n: activeLimit })
+  const meta = t('fractions.meta', { practice: t(`fractions.${practice}`), n: limit })
 
   return (
     <div className="tool-panel">
       <SettingsPanel actions={<PanelActions worksheetId="fractions" onRegenerate={regenerate} />}>
         <SettingRow label={t('fractions.practice')}>
           <SegmentedControl
-            value={activePractice}
+            value={practice}
             onChange={setPractice}
             options={PRACTICES.map(value => ({ value, label: t(`fractions.${value}`) }))}
           />
         </SettingRow>
         <SettingRow label={t('fractions.denominators')}>
           <SegmentedControl
-            value={activeLimit}
+            value={limit}
             onChange={setLimit}
             options={LIMITS.map(n => ({ value: n, label: t('fractions.upTo', { n }) }))}
           />

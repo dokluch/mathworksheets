@@ -82,35 +82,32 @@ function PowersProblem({ p, mark, notation, label }) {
 
 export default function Decimals() {
   const t = useT()
-  const [mode, setMode] = usePersistedState('decimals', 'mode', 'column')
-  const [ops, setOps] = usePersistedState('decimals', 'ops', 'both')
-  const [places, setPlaces] = usePersistedState('decimals', 'places', 'two')
+  const [mode, setMode] = usePersistedState('decimals', 'mode', 'column', MODES)
+  const [ops, setOps] = usePersistedState('decimals', 'ops', 'both', OPS)
+  const [places, setPlaces] = usePersistedState('decimals', 'places', 'two', PLACES)
   // Frozen on the first visit, like the division sign: a comma where the
   // language's schools write one, a point where they do not.
   const [mark, setMark] = usePersistedState('decimals', 'mark', t('decimals.defaultMark'))
   const [columns, setColumns] = usePersistedState('decimals', 'columns', 3)
   const [answerKey, setAnswerKey] = usePersistedState('decimals', 'answerKey', false)
 
-  const activeMode = MODES.includes(mode) ? mode : MODES[0]
-  const activeOps = OPS.includes(ops) ? ops : OPS[2]
-  const activePlaces = PLACES.includes(places) ? places : PLACES[1]
   const markChar = MARKS[mark] ?? MARKS.point
   // The × and ÷ signs follow the language, as on Order of Operations and Division.
   const defaultNotation = t('divide.defaultNotation')
   const notation = NOTATIONS.includes(defaultNotation) ? defaultNotation : NOTATIONS[0]
 
-  const shape = sheetShape({ mode: activeMode, places: activePlaces, columns })
+  const shape = sheetShape({ mode, places, columns })
   // The mark only repaints; it never deals a new sheet.
   const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
     shape,
-    generate: (rng, { count }) => generateSheet({ mode: activeMode, places: activePlaces, ops: activeOps, count }, rng),
-    deps: [activeMode, activePlaces, activeOps],
+    generate: (rng, { count }) => generateSheet({ mode, places, ops, count }, rng),
+    deps: [mode, places, ops],
   })
 
   const title = t('decimals.title')
-  const meta = activeMode === 'powers'
+  const meta = mode === 'powers'
     ? t('decimals.metaPowers')
-    : t('decimals.metaColumn', { places: t(PLACE_KEYS[activePlaces]) })
+    : t('decimals.metaColumn', { places: t(PLACE_KEYS[places]) })
   const label = p => t(ARIA_KEYS[p.op], {
     a: formatDecimal(p.a, markChar),
     b: p.b ? formatDecimal(p.b, markChar) : p.power,
@@ -121,16 +118,16 @@ export default function Decimals() {
       <SettingsPanel actions={<PanelActions worksheetId="decimals" onRegenerate={regenerate} />}>
         <SettingRow label={t('decimals.mode')}>
           <SegmentedControl
-            value={activeMode}
+            value={mode}
             onChange={setMode}
             options={MODES.map(value => ({ value, label: t(`decimals.${value}`) }))}
           />
         </SettingRow>
-        {activeMode === 'column' && (
+        {mode === 'column' && (
           <>
             <SettingRow label={t('common.operation')}>
               <SegmentedControl
-                value={activeOps}
+                value={ops}
                 onChange={setOps}
                 options={[
                   { value: 'add', label: '+' },
@@ -141,7 +138,7 @@ export default function Decimals() {
             </SettingRow>
             <SettingRow label={t('decimals.places')}>
               <SegmentedControl
-                value={activePlaces}
+                value={places}
                 onChange={setPlaces}
                 options={PLACES.map(value => ({ value, label: t(PLACE_KEYS[value]) }))}
               />
@@ -180,9 +177,9 @@ export default function Decimals() {
         answerKey={answerKey}
         answer={p => formatDecimal(p.result, markChar)}
       >
-        {p => (activeMode === 'powers'
+        {p => (mode === 'powers'
           ? <PowersProblem p={p} mark={markChar} notation={notation} label={label(p)} />
-          : <ColumnProblem p={p} places={activePlaces} mark={markChar} label={label(p)} />)}
+          : <ColumnProblem p={p} places={places} mark={markChar} label={label(p)} />)}
       </NotebookSheet>
     </div>
   )

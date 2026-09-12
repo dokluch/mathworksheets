@@ -75,7 +75,7 @@ function renderProblem(problem, frame, t) {
 
 export default function ColumnDivision() {
   const t = useT()
-  const [preset, setPreset] = usePersistedState('coldiv', 'preset', '3x1')
+  const [preset, setPreset] = usePersistedState('coldiv', 'preset', '3x1', value => PRESETS.some(item => item.value === value))
   // usePersistedState reads its default only in the useState initialiser and
   // writes on mount, so the locale's convention is frozen on the first visit
   // and an explicit choice wins from then on.
@@ -84,7 +84,7 @@ export default function ColumnDivision() {
   const [allowRemainder, setAllowRemainder] = usePersistedState('coldiv', 'allowRemainder', false)
   const [answerKey, setAnswerKey] = usePersistedState('coldiv', 'answerKey', false)
 
-  const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[0]
+  const activePreset = PRESETS.find(item => item.value === preset)
   const { dividendDigits, divisorDigits } = activePreset
   const activeNotation = NOTATIONS.includes(notation) ? notation : NOTATIONS[0]
   // The stored column count is kept when a frame is too wide for it, so the
