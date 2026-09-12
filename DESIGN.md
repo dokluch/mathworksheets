@@ -287,7 +287,7 @@ Where it does not: component-internal padding is a conventional 8/10/12/16/20/24
 
 **Containers.** Catalog grid max 940px, `repeat(auto-fill, minmax(268px, 1fr))` (296px cards at 1440); static prose plate is a centred 856px paper band with the board showing down both margins; worksheet content max 960px; prose measure 608px.
 
-**Responsive.** One breakpoint at 768/769px, plus 380px for the single-column catalog.
+**Responsive.** One breakpoint at 768/769px, plus 380px for the single-column catalog and 410px for the compact site header.
 - ≥769px with a sheet active: the app is a fixed-height two-column split — a 220px catalog sidebar (compact rows on the board, separated by a 1px `border` rule) and a scrolling worksheet column. Settings flow two per row (`flex: 1 1 calc(50% - 16px)`), and a control that cannot shrink takes a full row instead.
 - ≤768px: catalog becomes a horizontally scrolling, snap-aligned chip rail under the header, each topic's chips led by its caption; the landing grid becomes two columns at 12px gap (one column ≤380px); settings stack, segmented groups go full width and never wrap, numeric inputs go 16px to stop iOS zoom.
 
@@ -348,7 +348,7 @@ The shared control primitive for every printable worksheet, holding the same pos
 Numeric input: 72px wide, 1px `border-dark`, 3px corners, centred 14px on paper. Focus drops the outline for a `control-ink` border plus a 3px `rgba(26,31,36,0.12)` halo. Checkboxes and sliders use `accent-color: var(--color-primary)`.
 
 ### Navigation
-Site header on `cover-deep` with a 2px `cover-line` bottom rule. The wordmark is a masthead printed straight onto that stock — Archivo 800 at 19px, tracked −0.022em, beside a 22px stroked ruler icon — with no plate, no keyline and no hover lift. It is still a link home, so the wordmark (not the mark) carries a 2px underline in `cover-line-strong` on hover. Nav links are ink Inter 600 13px on transparent, hovering to `cover-wash`. The language button is an outlined board control; its menu is a paper plate (172px min) with 44px rows, `paper-hover` on hover, and the current locale in `control-ink` 600.
+Site header on `cover-deep` with a 2px `cover-line` bottom rule. The wordmark is a masthead printed straight onto that stock — Archivo 800 at 19px, tracked −0.022em, beside a 22px stroked ruler icon — with no plate, no keyline and no hover lift. It is still a link home, so the wordmark (not the mark) carries a 2px underline in `cover-line-strong` on hover. Nav links are ink Inter 600 13px on transparent, hovering to `cover-wash`. The language button is an outlined board control; its menu is a paper plate (172px min) with 44px rows, `paper-hover` on hover, and the current locale in `control-ink` 600. Below 410px the header tightens so the wordmark, About and the language button share one row in every language: the language button keeps only its globe (its accessible name still says which language is chosen), the wordmark drops to 14px beside an 18px mark, and the side padding to 8px. Up to 768px the header may wrap as a last resort rather than push the page sideways.
 
 ### Skip link
 Paper chip parked at `translateY(calc(-100% - 20px))`, top-left, 44px tall, z-index 100; slides to 0 on `:focus-visible` over 0.16s.
@@ -912,3 +912,24 @@ in English, German, Chinese and Russian show five sections and five groups with 
 overflow, the open sheet stays in view on the rail, and tabbing through the sidebar never stops on
 a caption; Grade 1 leaves Arithmetic, Number sense and Patterns & logic; print output is unchanged;
 the seven home social cards and the README screenshots are regenerated.
+
+## Revision — the header fits a 320px phone
+
+**Date:** 2026-09-12
+
+**What changed.** Below 410px the site header keeps the language button to its globe, sets the
+wordmark at 14px beside an 18px mark, and narrows the side and link padding. Up to 768px the
+header may wrap instead of overflowing.
+
+**Why.** On a 320px phone the wordmark, About and the full language button came to about 390px,
+and because nothing in that row could shrink, the whole page scrolled sideways. The same row also
+overflowed by 2–13px from 381px up in French, Spanish, German, Italian and Russian, whose About
+labels are longer. The breakpoint sits at 410px because the Spanish header, the longest, needs
+407px on one row.
+
+**What stayed.** Every control keeps its 44px target, the language button its outline and the
+wordmark its mark. The wrap is a backstop for a fallback font wider than Archivo; with the shipped
+fonts no language wraps at any width.
+
+Verified: 22 widths from 320 to 1280px in all seven languages, with no horizontal overflow, no
+wrapped header and no target under 44px.

@@ -180,6 +180,12 @@
 @media (max-width: 768px) {
   .site-header {
     padding: 8px 12px;
+    /* A last resort, never the plan: a label in a wide fallback font drops to
+       a second row rather than pushing the whole page sideways. */
+    flex-wrap: wrap;
+  }
+  .site-nav {
+    margin-left: auto;
   }
   .site-brand {
     /* Holds the wordmark on one line beside About and the language button. */
@@ -1131,6 +1137,47 @@
 @media (max-width: 380px) {
   .catalog-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Below 410px the wordmark, About and the full language button no longer fit
+   one row in the longer languages: with "Acerca de" they need 407px, and on a
+   320px phone they came to about 390px and pushed the whole page sideways. The
+   language button keeps only its globe (its label still names the language)
+   and the wordmark and spacing tighten. Every target stays 44px. */
+@media (max-width: 410px) {
+  .site-header {
+    gap: 6px;
+    padding-inline: 8px;
+  }
+
+  .site-nav {
+    gap: 0;
+  }
+
+  .site-brand {
+    font-size: 14px;
+    gap: 5px;
+  }
+
+  .site-brand svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .site-nav-link {
+    padding: 8px 6px;
+  }
+
+  .lang-btn {
+    min-width: 44px;
+    padding: 8px;
+    justify-content: center;
+  }
+
+  .lang-btn-code,
+  .lang-btn-chevron {
+    display: none;
   }
 }
 
