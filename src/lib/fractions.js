@@ -1,5 +1,5 @@
-import { fitsPrint, problemsPerPage } from '../hooks/useNotebookGrid'
 import { asHelpers } from './rng.js'
+import { COLUMN_OPTIONS, DEDUPE_TRIES, TIGHT_SPACING, columnOptionsFor, dealer, makeSheetShape } from './sheet.js'
 import { compareFractions, fractionSquares, gcd, reduce } from './fractionMath.js'
 
 /**
@@ -15,14 +15,12 @@ import { compareFractions, fractionSquares, gcd, reduce } from './fractionMath.j
 export const LIMITS = [10, 12, 20]
 export const KINDS = ['simplify', 'equivalent', 'compare']
 export const PRACTICES = [...KINDS, 'mixed']
-export const COLUMN_OPTIONS = [2, 3, 4]
+export { COLUMN_OPTIONS, columnOptionsFor }
 /** Problems sit one empty square apart — the spare row each item carries above it. */
-export const SHEET_SPACING = { rowGap: 0, headerGap: 0 }
+export const SHEET_SPACING = TIGHT_SPACING
 export const PROBLEM_ROWS = 2
 /** Share of comparisons that come out equal, so = is an answer that has to be checked for. */
 export const EQUAL_SHARE = 0.15
-/** Retries before a comparison is allowed to repeat one already on the page. */
-const DEDUPE_TRIES = 12
 
 /** Every proper fraction up to the limit that still has a common factor to cancel. */
 export function simplifyPool(limit) {
@@ -46,15 +44,6 @@ export function equivalentPool(limit) {
     }
   }
   return pool
-}
-
-/** Deals without replacement and reshuffles only once the deck is spent. */
-function dealer(pool, r) {
-  let deck = []
-  return () => {
-    if (!deck.length) deck = r.shuffle(pool)
-    return deck.pop()
-  }
 }
 
 const SIGNS = { '-1': '<', 0: '=', 1: '>' }
@@ -196,16 +185,5 @@ export function sheetFrame({ limit }) {
   return { rows: PROBLEM_ROWS, cellsWide: width + 1 + width }
 }
 
-/** Column counts that print at 1/4in squares without shrinking the grid. */
-export function columnOptionsFor(cellsWide) {
-  return COLUMN_OPTIONS.filter(columns => fitsPrint(columns, cellsWide))
-}
-
-/** Everything that follows from the settings, as in src/lib/division.js. */
-export function sheetShape({ limit, columns }) {
-  const frame = sheetFrame({ limit })
-  const columnOptions = columnOptionsFor(frame.cellsWide)
-  const active = columnOptions.includes(columns) ? columns : columnOptions[columnOptions.length - 1]
-  const count = problemsPerPage({ columns: active, rows: frame.rows, ...SHEET_SPACING })
-  return { columnOptions, columns: active, frame, count }
-}
+/** Everything that follows from the settings (see makeSheetShape in src/lib/sheet.js). */
+export const sheetShape = makeSheetShape({ sheetFrame, spacing: SHEET_SPACING })

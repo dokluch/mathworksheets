@@ -1,4 +1,5 @@
 import { asHelpers } from './rng.js'
+import { TIGHT_SPACING, makeSheetShape } from './sheet.js'
 
 /**
  * Problem generation for the Column Addition & Subtraction sheet: vertical
@@ -16,7 +17,7 @@ import { asHelpers } from './rng.js'
 export const DIGIT_PRESETS = [2, 3, 4]
 export const OPS = ['add', 'subtract', 'mixed']
 /** Problems sit one blank row apart — the next problem's carry row. */
-export const SHEET_SPACING = { rowGap: 0, headerGap: 0 }
+export const SHEET_SPACING = TIGHT_SPACING
 /** Rows a problem occupies: two operands and the result. */
 export const PROBLEM_ROWS = 3
 /** Share of problems that must regroup when the option is on; the rest are variety. */
@@ -108,3 +109,11 @@ export function generateSheet({ count, digits, preferCarry, op = 'add' }, rng = 
 export function digitColumns(digits) {
   return digits + 1
 }
+
+/** Squares a problem is budgeted: its digit columns and the operator square beside them. */
+export function sheetFrame({ digits }) {
+  return { rows: PROBLEM_ROWS, cellsWide: digitColumns(digits) + 1 }
+}
+
+/** Everything that follows from the settings (see makeSheetShape in src/lib/sheet.js). */
+export const sheetShape = makeSheetShape({ sheetFrame, spacing: SHEET_SPACING })

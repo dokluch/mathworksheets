@@ -1,5 +1,5 @@
-import { fitsPrint, problemsPerPage } from '../hooks/useNotebookGrid'
 import { asHelpers } from './rng.js'
+import { COLUMN_OPTIONS, TIGHT_SPACING, columnOptionsFor, dealer, makeSheetShape } from './sheet.js'
 
 /**
  * Problem generation and notebook geometry for the Division sheet: division
@@ -13,9 +13,9 @@ import { asHelpers } from './rng.js'
  */
 
 export const LIMITS = [20, 50, 100]
-export const COLUMN_OPTIONS = [2, 3, 4]
+export { COLUMN_OPTIONS, columnOptionsFor }
 /** Problems sit one empty square apart (the next problem's spare row), as on inline Add & Subtract. */
-export const SHEET_SPACING = { rowGap: 0, headerGap: 0 }
+export const SHEET_SPACING = TIGHT_SPACING
 
 export const DIVISOR_MIN = 2
 export const DIVISOR_MAX = 10
@@ -43,15 +43,6 @@ export function factPairs(limit, withRemainder) {
     }
   }
   return pairs
-}
-
-/** Deals without replacement and reshuffles only once the deck is spent, so a page repeats nothing while the facts last. */
-function dealer(pairs, r) {
-  let deck = []
-  return () => {
-    if (!deck.length) deck = r.shuffle(pairs)
-    return deck.pop()
-  }
 }
 
 export function generateSheet({ limit, allowRemainder, count }, rng = Math.random) {
@@ -83,20 +74,9 @@ export function sheetFrame({ limit, allowRemainder }) {
   return { rows: 1, cellsWide: base + tail }
 }
 
-/** Column counts that print at 1/4in squares without shrinking the grid. */
-export function columnOptionsFor(cellsWide) {
-  return COLUMN_OPTIONS.filter(columns => fitsPrint(columns, cellsWide))
-}
-
 /**
  * Everything that follows from the settings: the column counts on offer, the
  * columns actually used (a persisted 4 falls back once the remainder box makes
  * the problems too wide), the geometry and how many problems fill one page.
  */
-export function sheetShape({ limit, allowRemainder, columns }) {
-  const frame = sheetFrame({ limit, allowRemainder })
-  const columnOptions = columnOptionsFor(frame.cellsWide)
-  const active = columnOptions.includes(columns) ? columns : columnOptions[columnOptions.length - 1]
-  const count = problemsPerPage({ columns: active, rows: frame.rows, ...SHEET_SPACING })
-  return { columnOptions, columns: active, frame, count }
-}
+export const sheetShape = makeSheetShape({ sheetFrame, spacing: SHEET_SPACING })

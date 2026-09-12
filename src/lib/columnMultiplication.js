@@ -1,4 +1,5 @@
 import { asHelpers } from './rng.js'
+import { makeSheetShape } from './sheet.js'
 
 /**
  * Problem generation and notebook geometry for the Column Multiplication sheet:
@@ -58,3 +59,14 @@ export function digitColumns(aDigits, bDigits) {
 export function problemRows(bDigits) {
   return 3 + bDigits
 }
+
+/** Problems are tall, so a blank row separates them and another sits under the header. */
+export const SHEET_SPACING = { rowGap: 1, headerGap: 1 }
+
+/** Squares a problem is budgeted: its digit columns and the operator square beside them. */
+export function sheetFrame({ aDigits, bDigits }) {
+  return { rows: problemRows(bDigits), cellsWide: digitColumns(aDigits, bDigits) + 1 }
+}
+
+/** Everything that follows from the settings (see makeSheetShape in src/lib/sheet.js). */
+export const sheetShape = makeSheetShape({ sheetFrame, spacing: SHEET_SPACING })

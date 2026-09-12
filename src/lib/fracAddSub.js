@@ -1,5 +1,5 @@
-import { fitsPrint, problemsPerPage } from '../hooks/useNotebookGrid'
 import { asHelpers } from './rng.js'
+import { COLUMN_OPTIONS, columnOptionsFor, dealUnique, dealer, makeSheetShape } from './sheet.js'
 import { addFractions, compareFractions, fromMixed, lcm, mixedSquares, subFractions, toMixed } from './fractionMath.js'
 
 /**
@@ -22,7 +22,7 @@ export const LEVELS = ['like', 'unlike', 'mixed']
 export const OPS = ['add', 'sub', 'both']
 export const LIMITS = [10, 12, 20]
 export const ANSWER_FORMS = ['mixed', 'improper']
-export const COLUMN_OPTIONS = [2, 3, 4]
+export { COLUMN_OPTIONS, columnOptionsFor }
 /** One line of working under every problem, for the common denominator. */
 export const SHEET_SPACING = { rowGap: 1, headerGap: 0 }
 export const PROBLEM_ROWS = 2
@@ -30,7 +30,6 @@ export const PROBLEM_ROWS = 2
 export const WHOLE_MAX = 9
 /** Share of mixed-number problems that carry past a whole or borrow one. */
 export const REGROUP_SHARE = 0.5
-const DEDUPE_TRIES = 12
 const MIXED_TRIES = 60
 
 /**
@@ -62,15 +61,6 @@ export function problemPool(level, op, limit) {
     }
   }
   return pool
-}
-
-/** Deals without replacement and reshuffles only once the deck is spent. */
-function dealer(pool, r) {
-  let deck = []
-  return () => {
-    if (!deck.length) deck = r.shuffle(pool)
-    return deck.pop()
-  }
 }
 
 function build(level, op, a, b) {
@@ -136,13 +126,7 @@ export function generateSheet({ level, op, limit, count }, rng = Math.random) {
     }
   }
 
-  const seen = new Set()
-  return ops.map(problemOp => {
-    let item = next(problemOp)
-    for (let tries = 0; tries < DEDUPE_TRIES && seen.has(key(item)); tries++) item = next(problemOp)
-    seen.add(key(item))
-    return item
-  })
+  return dealUnique(ops.length, i => next(ops[i]), key)
 }
 
 /**
@@ -172,16 +156,5 @@ export function sheetFrame({ level, limit, answerForm }) {
   return { rows: PROBLEM_ROWS, cellsWide: operand + 1 + operand + 1 + answer }
 }
 
-/** Column counts that print at 1/4in squares without shrinking the grid. */
-export function columnOptionsFor(cellsWide) {
-  return COLUMN_OPTIONS.filter(columns => fitsPrint(columns, cellsWide))
-}
-
-/** Everything that follows from the settings, as in src/lib/division.js. */
-export function sheetShape({ level, limit, answerForm, columns }) {
-  const frame = sheetFrame({ level, limit, answerForm })
-  const columnOptions = columnOptionsFor(frame.cellsWide)
-  const active = columnOptions.includes(columns) ? columns : columnOptions[columnOptions.length - 1]
-  const count = problemsPerPage({ columns: active, rows: frame.rows, ...SHEET_SPACING })
-  return { columnOptions, columns: active, frame, count }
-}
+/** Everything that follows from the settings (see makeSheetShape in src/lib/sheet.js). */
+export const sheetShape = makeSheetShape({ sheetFrame, spacing: SHEET_SPACING })

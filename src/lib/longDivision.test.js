@@ -6,14 +6,7 @@ import {
 
 /** ColumnDivision.jsx packs the rows: the spare square per item is the separator. */
 const SPACING = { rowGap: 0, headerGap: 0 }
-import { frameLayout, generateProblem, generateProblems, MAX_QUOTIENT_DIGITS } from './longDivision.js'
-
-const PRESETS = [
-  { dividendDigits: 3, divisorDigits: 1 },
-  { dividendDigits: 4, divisorDigits: 1 },
-  { dividendDigits: 4, divisorDigits: 2 },
-  { dividendDigits: 5, divisorDigits: 2 },
-]
+import { NOTATIONS, PRESETS, frameLayout, generateProblem, generateProblems, sheetShape, MAX_QUOTIENT_DIGITS } from './longDivision.js'
 
 describe('generateProblem', () => {
   for (const { dividendDigits, divisorDigits } of PRESETS) {
@@ -179,5 +172,22 @@ describe('seeded generation', () => {
   it('deals the same problems for the same seed and different ones for another', () => {
     expect(generateProblems(12, 4, 2, true, mulberry32(123))).toEqual(generateProblems(12, 4, 2, true, mulberry32(123)))
     expect(generateProblems(12, 4, 2, true, mulberry32(123))).not.toEqual(generateProblems(12, 4, 2, true, mulberry32(124)))
+  })
+})
+
+describe('long division sheet shape', () => {
+  it('keeps every column count and deals exactly the rows a page holds', () => {
+    const rowsOnPage = { bracket: 2, corner: 3 }
+    for (const notation of NOTATIONS) {
+      for (const { value, dividendDigits, divisorDigits } of PRESETS) {
+        const layout = frameLayout(notation, dividendDigits, divisorDigits)
+        for (const columns of [2, 3, 4]) {
+          const shape = sheetShape({ notation, dividendDigits, divisorDigits, columns })
+          expect(shape.frame, value).toEqual({ rows: layout.rows, cellsWide: layout.cols, layout })
+          expect(shape.columns, value).toBe(columns)
+          expect(shape.count, `${notation} ${value}`).toBe(columns * rowsOnPage[notation])
+        }
+      }
+    }
   })
 })

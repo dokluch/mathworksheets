@@ -1,5 +1,6 @@
-import { fitsPrint, problemsPerPage } from '../hooks/useNotebookGrid'
+import { problemsPerPage } from '../hooks/useNotebookGrid'
 import { asHelpers } from './rng.js'
+import { COLUMN_OPTIONS, TIGHT_SPACING, columnOptionsFor } from './sheet.js'
 
 /**
  * Problem generation and notebook geometry for the Add & Subtract sheet.
@@ -10,9 +11,9 @@ import { asHelpers } from './rng.js'
  */
 
 export const SIXTY_SEVEN_ANSWER = 67
-export const COLUMN_OPTIONS = [2, 3, 4]
+export { COLUMN_OPTIONS, columnOptionsFor }
 /** Problems sit one empty square apart (the next problem's spare row), as on Column Addition. */
-export const SHEET_SPACING = { rowGap: 0, headerGap: 0 }
+export const SHEET_SPACING = TIGHT_SPACING
 
 /** Blank positions: left operand, right operand, result. */
 export const BLANK_A = 0
@@ -136,11 +137,6 @@ export function sheetFrame({ stacked, maxVal, sixtySeven }) {
   const digits = String(largest).length
   if (stacked) return { rows: 3, digits, cellsWide: digits + 1 }
   return { rows: 1, digits, cellsWide: digits + 2 * String(largest - 1).length + 2 }
-}
-
-/** Column counts that print at 1/4in squares without shrinking the grid. */
-export function columnOptionsFor(cellsWide) {
-  return COLUMN_OPTIONS.filter(columns => fitsPrint(columns, cellsWide))
 }
 
 /**

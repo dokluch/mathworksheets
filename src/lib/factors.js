@@ -1,5 +1,5 @@
-import { fitsPrint, problemsPerPage } from '../hooks/useNotebookGrid'
 import { asHelpers } from './rng.js'
+import { COLUMN_OPTIONS, TIGHT_SPACING, columnOptionsFor, dealUnique, dealer, makeSheetShape } from './sheet.js'
 import { gcd } from './fractionMath.js'
 
 /**
@@ -33,10 +33,9 @@ export const DIVIDES_SHARE = 0.15
 /** Share of a primes page that is prime, and share of its composites that are odd and not multiples of 5. */
 export const PRIME_SHARE = 0.5
 export const TRICKY_SHARE = 0.6
-export const COLUMN_OPTIONS = [2, 3, 4]
+export { COLUMN_OPTIONS, columnOptionsFor }
 /** Problems sit one empty square apart, as on the one-line sheets. */
-export const SHEET_SPACING = { rowGap: 0, headerGap: 0 }
-const DEDUPE_TRIES = 12
+export const SHEET_SPACING = TIGHT_SPACING
 
 /** Prime factors, smallest first, repeated as often as they divide. */
 export function primeFactors(n) {
@@ -91,15 +90,6 @@ export const pairPool = () => memoised('pairs', () => {
   return { divides, coprime }
 })
 
-/** Deals without replacement and reshuffles only once the deck is spent. */
-function dealer(pool, r) {
-  let deck = []
-  return () => {
-    if (!deck.length) deck = r.shuffle(pool)
-    return deck.pop()
-  }
-}
-
 const key = p => (p.kind === 'gcdlcm' ? `${Math.min(p.a, p.b)}|${Math.max(p.a, p.b)}` : String(p.n))
 
 export function generateSheet({ practice, range, count }, rng = Math.random) {
@@ -131,13 +121,7 @@ export function generateSheet({ practice, range, count }, rng = Math.random) {
     }
   }
 
-  const seen = new Set()
-  return Array.from({ length: count }, () => {
-    let item = next()
-    for (let tries = 0; tries < DEDUPE_TRIES && seen.has(key(item)); tries++) item = next()
-    seen.add(key(item))
-    return item
-  })
+  return dealUnique(count, next, key)
 }
 
 const digits = n => String(n).length
@@ -172,16 +156,5 @@ export function sheetFrame({ practice, range }) {
   return { rows: 1, cellsWide: digits(range) + 2 }
 }
 
-/** Column counts that print at 1/4in squares without shrinking the grid. */
-export function columnOptionsFor(cellsWide) {
-  return COLUMN_OPTIONS.filter(columns => fitsPrint(columns, cellsWide))
-}
-
-/** Everything that follows from the settings, as in src/lib/division.js. */
-export function sheetShape({ practice, range, columns }) {
-  const frame = sheetFrame({ practice, range })
-  const columnOptions = columnOptionsFor(frame.cellsWide)
-  const active = columnOptions.includes(columns) ? columns : columnOptions[columnOptions.length - 1]
-  const count = problemsPerPage({ columns: active, rows: frame.rows, ...SHEET_SPACING })
-  return { columnOptions, columns: active, frame, count }
-}
+/** Everything that follows from the settings (see makeSheetShape in src/lib/sheet.js). */
+export const sheetShape = makeSheetShape({ sheetFrame, spacing: SHEET_SPACING })

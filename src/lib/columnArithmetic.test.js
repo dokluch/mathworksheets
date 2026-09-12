@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { mulberry32 } from './rng.js'
 import {
   DIGIT_PRESETS, OPS, PROBLEM_ROWS, SHEET_SPACING, REGROUP_SHARE,
-  digitColumns, generateSheet, hasCarry, needsBorrow,
+  digitColumns, generateSheet, hasCarry, needsBorrow, sheetFrame, sheetShape,
 } from './columnArithmetic'
 import { PRINT_SQUARE, PRINT_WIDTH, notebookLayout, problemsPerPage, rowsPerPage } from '../hooks/useNotebookGrid'
 
@@ -148,5 +148,19 @@ describe('seeded generation', () => {
     // in the old order and a shared ?set= link still prints the same page.
     const sheet = generateSheet({ count: 4, digits: 3, preferCarry: true, op: 'add' }, mulberry32(7))
     expect(sheet.map(p => [p.a, p.b])).toEqual([[155, 979], [569, 464], [315, 597], [787, 566]])
+  })
+})
+
+describe('column arithmetic sheet shape', () => {
+  it('offers every column count and fills one page with it', () => {
+    for (const digits of DIGIT_PRESETS) {
+      expect(sheetFrame({ digits })).toEqual({ rows: PROBLEM_ROWS, cellsWide: digitColumns(digits) + 1 })
+      for (const columns of COLUMN_OPTIONS) {
+        const shape = sheetShape({ digits, columns })
+        expect(shape.columnOptions).toEqual(COLUMN_OPTIONS)
+        expect(shape.columns).toBe(columns)
+        expect(shape.count).toBe(columns * rowsPerPage(PROBLEM_ROWS, SHEET_SPACING))
+      }
+    }
   })
 })

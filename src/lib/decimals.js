@@ -1,5 +1,5 @@
-import { fitsPrint, problemsPerPage } from '../hooks/useNotebookGrid'
 import { asHelpers } from './rng.js'
+import { COLUMN_OPTIONS, TIGHT_SPACING, columnOptionsFor, dealUnique, dealer, makeSheetShape } from './sheet.js'
 
 /**
  * Problem generation and notebook geometry for the Decimals sheet.
@@ -28,9 +28,9 @@ export const PLACES = ['one', 'two', 'mixed']
 export const OPS = ['add', 'sub', 'both']
 export const POWERS = [10, 100, 1000]
 export const MARKS = { point: '.', comma: ',' }
-export const COLUMN_OPTIONS = [2, 3, 4]
+export { COLUMN_OPTIONS, columnOptionsFor }
 /** Problems sit one empty square apart, as on the column and one-line sheets. */
-export const SHEET_SPACING = { rowGap: 0, headerGap: 0 }
+export const SHEET_SPACING = TIGHT_SPACING
 /** Largest whole part of an operand; a sum of two can reach 198, hence a carry square. */
 export const INT_MAX = 99
 /** Whole-part squares in a column: two digits and the carry. */
@@ -39,7 +39,6 @@ export const INT_SQUARES = 3
 export const MAX_RESULT_PLACES = 3
 export const OPERAND_SQUARES = 4
 export const ANSWER_SQUARES = 5
-const DEDUPE_TRIES = 12
 
 /** A decimal written out: digits, the mark, and at least one digit before it. */
 export function formatDecimal({ scaled, places }, mark = MARKS.point) {
@@ -94,15 +93,6 @@ function columnProblem(places, op, r) {
   }
 }
 
-/** Deals without replacement and reshuffles only once the deck is spent. */
-function dealer(pool, r) {
-  let deck = []
-  return () => {
-    if (!deck.length) deck = r.shuffle(pool)
-    return deck.pop()
-  }
-}
-
 /**
  * Multiply or divide by a power of ten. The operator and the power are dealt
  * from a deck of every combination, so a page of 26 sees each of the six
@@ -140,13 +130,7 @@ export function generateSheet({ mode, places = 'two', ops = 'both', count }, rng
       : Array.from({ length: count }, () => ops)
     next = i => columnProblem(places, opList[i], r)
   }
-  const seen = new Set()
-  return Array.from({ length: count }, (_, i) => {
-    let item = next(i)
-    for (let tries = 0; tries < DEDUPE_TRIES && seen.has(key(item)); tries++) item = next(i)
-    seen.add(key(item))
-    return item
-  })
+  return dealUnique(count, next, key)
 }
 
 /** Fractional squares a column needs: one place, or two when two or mixed places can appear. */
@@ -166,16 +150,5 @@ export function sheetFrame({ mode, places }) {
   return { rows: 3, cellsWide: 1 + INT_SQUARES + 1 + fracSquares(places) }
 }
 
-/** Column counts that print at 1/4in squares without shrinking the grid. */
-export function columnOptionsFor(cellsWide) {
-  return COLUMN_OPTIONS.filter(columns => fitsPrint(columns, cellsWide))
-}
-
-/** Everything that follows from the settings, as in src/lib/division.js. */
-export function sheetShape({ mode, places, columns }) {
-  const frame = sheetFrame({ mode, places })
-  const columnOptions = columnOptionsFor(frame.cellsWide)
-  const active = columnOptions.includes(columns) ? columns : columnOptions[columnOptions.length - 1]
-  const count = problemsPerPage({ columns: active, rows: frame.rows, ...SHEET_SPACING })
-  return { columnOptions, columns: active, frame, count }
-}
+/** Everything that follows from the settings (see makeSheetShape in src/lib/sheet.js). */
+export const sheetShape = makeSheetShape({ sheetFrame, spacing: SHEET_SPACING })

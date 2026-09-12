@@ -1,5 +1,5 @@
-import { fitsPrint, problemsPerPage } from '../hooks/useNotebookGrid'
 import { asHelpers } from './rng.js'
+import { TIGHT_SPACING, columnOptionsFor as printableColumns, dealer, makeSheetShape } from './sheet.js'
 
 /**
  * Problem generation and notebook geometry for the Solve for x sheet.
@@ -34,7 +34,7 @@ export const BRACKET_ADDEND_MAX = 9
 export const BOTH_CONST_MAX = 20
 export const COLUMN_OPTIONS = [2, 3]
 /** The working rows are the separator; problems need no gap of their own. */
-export const SHEET_SPACING = { rowGap: 0, headerGap: 0 }
+export const SHEET_SPACING = TIGHT_SPACING
 /** The same answer at most this often on a page, so a child cannot copy x down the column. */
 export const SAME_ANSWER_MAX = 2
 const STRICT_TRIES = 40
@@ -274,15 +274,6 @@ function evaluate(tokens, value) {
   return expr()
 }
 
-/** Deals without replacement and reshuffles only once the deck is spent. */
-function dealer(pool, r) {
-  let deck = []
-  return () => {
-    if (!deck.length) deck = r.shuffle(pool)
-    return deck.pop()
-  }
-}
-
 export function generateSheet({ level, range, count }, rng = Math.random) {
   const r = asHelpers(rng)
   // Shapes are dealt like cards, so every shape of the level appears on a page.
@@ -323,14 +314,8 @@ export function sheetFrame({ level, range }) {
 
 /** Column counts that print at 1/4in squares without shrinking the grid. */
 export function columnOptionsFor(cellsWide) {
-  return COLUMN_OPTIONS.filter(columns => fitsPrint(columns, cellsWide))
+  return printableColumns(cellsWide, COLUMN_OPTIONS)
 }
 
-/** Everything that follows from the settings, as in src/lib/division.js. */
-export function sheetShape({ level, range, columns }) {
-  const frame = sheetFrame({ level, range })
-  const columnOptions = columnOptionsFor(frame.cellsWide)
-  const active = columnOptions.includes(columns) ? columns : columnOptions[columnOptions.length - 1]
-  const count = problemsPerPage({ columns: active, rows: frame.rows, ...SHEET_SPACING })
-  return { columnOptions, columns: active, frame, count }
-}
+/** Everything that follows from the settings (see makeSheetShape in src/lib/sheet.js). */
+export const sheetShape = makeSheetShape({ sheetFrame, spacing: SHEET_SPACING, columnOptions: COLUMN_OPTIONS })

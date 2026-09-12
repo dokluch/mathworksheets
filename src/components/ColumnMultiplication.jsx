@@ -1,5 +1,5 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid, problemsPerPage } from '../hooks/useNotebookGrid'
+import { useNotebookGrid } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './ColumnAddition.css'
@@ -7,7 +7,7 @@ import WorksheetHeader from './WorksheetHeader'
 import { useSheetSet } from '../hooks/useSheetSet'
 import SheetCopies from './SheetCopies'
 import AnswerKey from './AnswerKey'
-import { PRESETS, digitColumns, generateSheet, problemRows } from '../lib/columnMultiplication'
+import { PRESETS, SHEET_SPACING, digitColumns, generateSheet, sheetShape } from '../lib/columnMultiplication'
 
 function buildCells(value, width, shift = 0) {
   const text = String(value)
@@ -79,18 +79,19 @@ export default function ColumnMultiplication() {
   // rather than whichever preset happens to sit last in the list.
   const activePreset = PRESETS.find(item => item.value === preset) || PRESETS.find(item => item.value === '4x2')
   const { aDigits, bDigits } = activePreset
-  const rows = problemRows(bDigits)
   // Exactly one printed page.
-  const problemCount = problemsPerPage({ columns, rows })
+  const shape = sheetShape({ aDigits, bDigits, columns })
   const presetLabel = (a, b) => t('colmul.preset', { a, b })
 
   const { sheets, setSet, regenerate } = useSheetSet(
-    rng => generateSheet({ count: problemCount, aDigits, bDigits }, rng),
-    [aDigits, bDigits, problemCount],
+    rng => generateSheet({ count: shape.count, aDigits, bDigits }, rng),
+    [aDigits, bDigits, shape.count],
   )
 
   const width = digitColumns(aDigits, bDigits)
-  const [sheetRef, sheetStyle] = useNotebookGrid({ columns, cellsWide: width + 1, rows })
+  const [sheetRef, sheetStyle] = useNotebookGrid({
+    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
+  })
 
   return (
     <div className="tool-panel">
@@ -103,7 +104,7 @@ export default function ColumnMultiplication() {
           />
         </SettingRow>
         <SettingRow label={t('common.columns')}>
-          <SegmentedControl value={columns} onChange={setColumns} options={[2, 3, 4].map(c => ({ value: c, label: c }))} />
+          <SegmentedControl value={shape.columns} onChange={setColumns} options={shape.columnOptions.map(c => ({ value: c, label: c }))} />
         </SettingRow>
         <SettingRow label={t('common.options')}>
           <CheckboxOption checked={answerKey} onChange={setAnswerKey}>
@@ -116,7 +117,7 @@ export default function ColumnMultiplication() {
         {({ set, data: problems }, primary) => (
           <div
             ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${columns}`}
+            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
             style={sheetStyle}
           >
             <WorksheetHeader

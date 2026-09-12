@@ -1,5 +1,5 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid, problemsPerPage } from '../hooks/useNotebookGrid'
+import { useNotebookGrid } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './ColumnAddition.css'
@@ -8,7 +8,7 @@ import { useSheetSet } from '../hooks/useSheetSet'
 import SheetCopies from './SheetCopies'
 import AnswerKey from './AnswerKey'
 import {
-  DIGIT_PRESETS, OPS, PROBLEM_ROWS, SHEET_SPACING, digitColumns, generateSheet,
+  DIGIT_PRESETS, OPS, SHEET_SPACING, digitColumns, generateSheet, sheetShape,
 } from '../lib/columnArithmetic'
 
 function buildCells(value, width, shift = 0) {
@@ -79,15 +79,16 @@ export default function ColumnAddition() {
   const activeOp = OPS.includes(op) ? op : OPS[0]
   // Rows: two operands and the result. Problems are short, so they sit one
   // blank row apart (the next problem's carry row) and fill one printed page.
-  const rows = PROBLEM_ROWS
-  const problemCount = problemsPerPage({ columns, rows, ...SHEET_SPACING })
+  const shape = sheetShape({ digits, columns })
   const width = digitColumns(digits)
-  const [sheetRef, sheetStyle] = useNotebookGrid({ columns, cellsWide: width + 1, rows, ...SHEET_SPACING })
+  const [sheetRef, sheetStyle] = useNotebookGrid({
+    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
+  })
   const title = t(TITLE_KEY[activeOp])
 
   const { sheets, setSet, regenerate } = useSheetSet(
-    rng => generateSheet({ count: problemCount, digits, preferCarry, op: activeOp }, rng),
-    [digits, problemCount, preferCarry, activeOp],
+    rng => generateSheet({ count: shape.count, digits, preferCarry, op: activeOp }, rng),
+    [digits, shape.count, preferCarry, activeOp],
   )
 
   return (
@@ -112,7 +113,7 @@ export default function ColumnAddition() {
           />
         </SettingRow>
         <SettingRow label={t('common.columns')}>
-          <SegmentedControl value={columns} onChange={setColumns} options={[2, 3, 4].map(c => ({ value: c, label: c }))} />
+          <SegmentedControl value={shape.columns} onChange={setColumns} options={shape.columnOptions.map(c => ({ value: c, label: c }))} />
         </SettingRow>
         <SettingRow label={t('common.options')}>
           <CheckboxOption checked={preferCarry} onChange={setPreferCarry}>
@@ -128,7 +129,7 @@ export default function ColumnAddition() {
         {({ set, data: problems }, primary) => (
           <div
             ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${columns}`}
+            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
             style={sheetStyle}
           >
             <WorksheetHeader

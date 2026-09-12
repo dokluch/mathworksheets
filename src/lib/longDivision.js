@@ -6,6 +6,27 @@
  */
 
 import { asHelpers } from './rng.js'
+import { makeSheetShape } from './sheet.js'
+
+export const PRESETS = [
+  { value: '3x1', dividendDigits: 3, divisorDigits: 1 },
+  { value: '4x1', dividendDigits: 4, divisorDigits: 1 },
+  { value: '4x2', dividendDigits: 4, divisorDigits: 2 },
+  { value: '5x2', dividendDigits: 5, divisorDigits: 2 },
+]
+
+/** The two ways long division is written; see frameLayout. */
+export const NOTATIONS = ['bracket', 'corner']
+
+/**
+ * Frames are tall, so they sit directly under each other; the spare square
+ * each item carries is the only separator. The one square below the header is
+ * not decoration: a division frame grows *upward* into its quotient row
+ * (.coldiv-item is flex-start, unlike the carry-space above a column sum), so
+ * without it the first row's quotient boxes butt against the header rule. It
+ * is free — rowsPerPage returns the same count for every preset and notation.
+ */
+export const SHEET_SPACING = { rowGap: 0, headerGap: 1 }
 
 /**
  * Quotient digits a frame reserves room for.
@@ -128,3 +149,17 @@ export function generateProblems(count, dividendDigits, divisorDigits, allowRema
   }
   return items
 }
+
+/** Squares a frame takes for a setting; `layout` is the frameLayout its problems are painted from. */
+export function sheetFrame({ notation, dividendDigits, divisorDigits }) {
+  const layout = frameLayout(notation, dividendDigits, divisorDigits)
+  return { rows: layout.rows, cellsWide: layout.cols, layout }
+}
+
+/**
+ * Everything that follows from the settings (see makeSheetShape in
+ * src/lib/sheet.js). Nine squares is the widest a frame can be and still print
+ * four to a row; every preset clears that today, and a wider frame would narrow
+ * the choice rather than spill onto a second page.
+ */
+export const sheetShape = makeSheetShape({ sheetFrame, spacing: SHEET_SPACING })

@@ -1,25 +1,14 @@
-import { useMemo } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid, problemsPerPage, fitsPrint } from '../hooks/useNotebookGrid'
+import { useNotebookGrid } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
-import { frameLayout, generateProblems } from '../lib/longDivision'
+import { NOTATIONS, PRESETS, SHEET_SPACING, generateProblems, sheetShape } from '../lib/longDivision'
 import './ColumnAddition.css'
 import './ColumnDivision.css'
 import WorksheetHeader from './WorksheetHeader'
 import { useSheetSet } from '../hooks/useSheetSet'
 import SheetCopies from './SheetCopies'
 import AnswerKey from './AnswerKey'
-
-const PRESETS = [
-  { value: '3x1', dividendDigits: 3, divisorDigits: 1 },
-  { value: '4x1', dividendDigits: 4, divisorDigits: 1 },
-  { value: '4x2', dividendDigits: 4, divisorDigits: 2 },
-  { value: '5x2', dividendDigits: 5, divisorDigits: 2 },
-]
-
-const NOTATIONS = ['bracket', 'corner']
-const COLUMN_OPTIONS = [2, 3, 4]
 
 /** Column of the leftmost digit of a `count`-digit number inside a block. */
 function blockStart(block, count) {
@@ -101,39 +90,19 @@ export default function ColumnDivision() {
   const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[0]
   const { dividendDigits, divisorDigits } = activePreset
   const activeNotation = NOTATIONS.includes(notation) ? notation : NOTATIONS[0]
-  const frame = useMemo(
-    () => frameLayout(activeNotation, dividendDigits, divisorDigits),
-    [activeNotation, dividendDigits, divisorDigits],
-  )
-
-  // Nine squares is the widest a frame can be and still print four to a row.
-  // Every preset clears that today, but derive the options from the print
-  // layout rather than hard-coding them, so a wider frame narrows the choice
-  // instead of silently spilling onto a second page. The stored preference is
-  // kept, so a dropped option comes back when the frame narrows again.
-  const columnOptions = useMemo(() => COLUMN_OPTIONS.filter(c => fitsPrint(c, frame.cols)), [frame.cols])
-  const activeColumns = columnOptions.includes(columns) ? columns : columnOptions[columnOptions.length - 1]
-
-  // Frames are tall, so they sit directly under each other; the spare square
-  // each item carries is the only separator. The one square below the header is
-  // not decoration: a division frame grows *upward* into its quotient row
-  // (.coldiv-item is flex-start, unlike the carry-space above a column sum), so
-  // without it the first row's quotient boxes butt against the header rule. It
-  // is free — rowsPerPage returns the same count for every preset and notation.
-  const spacing = { rowGap: 0, headerGap: 1 }
-  const problemCount = problemsPerPage({ columns: activeColumns, rows: frame.rows, ...spacing })
+  // The stored column count is kept when a frame is too wide for it, so the
+  // option comes back when the frame narrows again.
+  const shape = sheetShape({ notation: activeNotation, dividendDigits, divisorDigits, columns })
+  const frame = shape.frame.layout
   const presetLabel = (a, b) => t('coldiv.preset', { a, b })
 
   const { sheets, setSet, regenerate } = useSheetSet(
-    rng => generateProblems(problemCount, dividendDigits, divisorDigits, allowRemainder, rng),
-    [dividendDigits, divisorDigits, allowRemainder, problemCount],
+    rng => generateProblems(shape.count, dividendDigits, divisorDigits, allowRemainder, rng),
+    [dividendDigits, divisorDigits, allowRemainder, shape.count],
   )
 
   const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: activeColumns,
-    cellsWide: frame.cols,
-    rows: frame.rows,
-    ...spacing,
+    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
   })
 
   return (
@@ -158,9 +127,9 @@ export default function ColumnDivision() {
         </SettingRow>
         <SettingRow label={t('common.columns')}>
           <SegmentedControl
-            value={activeColumns}
+            value={shape.columns}
             onChange={setColumns}
-            options={columnOptions.map(c => ({ value: c, label: c }))}
+            options={shape.columnOptions.map(c => ({ value: c, label: c }))}
           />
         </SettingRow>
         <SettingRow label={t('common.options')}>
@@ -177,7 +146,7 @@ export default function ColumnDivision() {
         {({ set, data: problems }, primary) => (
           <div
             ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook coldiv-notebook print-area cols-${activeColumns}`}
+            className={`worksheet notebook-grid-bg colarith-notebook coldiv-notebook print-area cols-${shape.columns}`}
             style={sheetStyle}
           >
             <WorksheetHeader

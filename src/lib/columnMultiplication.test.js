@@ -1,13 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import { mulberry32 } from './rng.js'
-import { PRESETS, digitColumns, generateSheet, problemRows } from './columnMultiplication'
+import { PRESETS, SHEET_SPACING, digitColumns, generateSheet, problemRows, sheetShape } from './columnMultiplication'
 import {
   PRINT_SQUARE, PRINT_WIDTH, notebookLayout, problemsPerPage, rowsPerPage,
 } from '../hooks/useNotebookGrid'
 
 const COLUMN_OPTIONS = [2, 3, 4]
-/** ColumnMultiplication.jsx uses the default spacing: a gap row between problems. */
-const SPACING = { rowGap: 1, headerGap: 1 }
+const SPACING = SHEET_SPACING
 
 function sheets(fn, runs = 30) {
   for (const { value, aDigits, bDigits } of PRESETS) {
@@ -96,6 +95,19 @@ describe('seeded generation', () => {
       const args = { count: 9, aDigits, bDigits }
       expect(generateSheet(args, mulberry32(123)), value).toEqual(generateSheet(args, mulberry32(123)))
       expect(generateSheet(args, mulberry32(123)), value).not.toEqual(generateSheet(args, mulberry32(124)))
+    }
+  })
+})
+
+describe('column multiplication sheet shape', () => {
+  it('fills one page at every column count, with the operator square beside the digits', () => {
+    for (const { value, aDigits, bDigits } of PRESETS) {
+      for (const columns of COLUMN_OPTIONS) {
+        const shape = sheetShape({ aDigits, bDigits, columns })
+        expect(shape.frame, value).toEqual({ rows: problemRows(bDigits), cellsWide: digitColumns(aDigits, bDigits) + 1 })
+        expect(shape.columns, value).toBe(columns)
+        expect(shape.count, value).toBe(columns * 3)
+      }
     }
   })
 })
