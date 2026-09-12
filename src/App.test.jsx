@@ -12,7 +12,7 @@ import { WORKSHEETS } from './worksheets.js'
 import { gradeNumbers } from './seo/render.js'
 import { PAGES } from './pages.js'
 import { t, localizeWorksheet, localizePage } from './i18n/index.js'
-import { BRAND, CONTACT_EMAIL, SITE_URL } from './seo/site.js'
+import { BRAND } from './seo/site.js'
 import App from './App.jsx'
 
 beforeEach(() => {

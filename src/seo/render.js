@@ -16,7 +16,7 @@ import { AGENT_GUIDANCE } from '../agents.js'
 import { GRADES, GRADE_AGES } from '../lib/grades.js'
 import {
   SITE_URL, BRAND, AUTHOR, GITHUB_URL,
-  LICENSE_URL, LICENSE_NAME, OG_IMAGE_PATH, THEME_COLOR, ACCENT_COLOR, OPERATOR, CONTACT_EMAIL, BRAND_ALT, absoluteUrl,
+  LICENSE_URL, LICENSE_NAME, THEME_COLOR, ACCENT_COLOR, OPERATOR, CONTACT_EMAIL, BRAND_ALT, absoluteUrl,
 } from './site.js'
 import {
   t, interpolate, localizeWorksheet, localizedWorksheets, localizePage, localizedPages,
