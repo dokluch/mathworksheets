@@ -842,3 +842,27 @@ read as a different product, which is why the range is constrained.
 **Contrast.** Every subject ink clears the 3:1 non-text floor on both grounds. The new ones measure
 4.46–7.47:1 on the board and 4.87–8.17:1 on paper; the lowest of the whole palette is still
 `ink-bongard` at 4.34:1 on the board.
+
+## Revision — the decimal point sits on the grid line
+
+**Date:** 2026-09-12
+
+**What changed.** On the Decimals sheet the mark no longer takes a square of its own. It is
+printed where a squared exercise book puts it: on the lower grid line, at the corner the ones
+square shares with the tenths square. A column is one square narrower (five or six squares
+instead of six or seven, fourteen on a powers line instead of fifteen), and a powers answer has a
+box per digit rather than per character.
+
+**Why.** A point alone in a square left a gap in the middle of 12.75, so the number read as two
+numbers side by side, and no exercise book writes a decimal that way: the digits stay in adjacent
+squares and the point or comma goes on the line. The alignment the square was there to teach
+survives, because every row's mark sits on the same vertical grid line.
+
+**How it is drawn.** The mark is a glyph in the digit face, placed from the first fractional
+square's lower-left corner and centred on its left edge, with the dot resting on the line; a
+comma's tail crosses it, as a written one does. On the second operand the dot touches the answer
+rule, which is also what a pencil does. The catalog miniature draws the point as a filled circle
+at the same crossing.
+
+**What stayed.** The generator still bounds operands and answers by characters, so every set
+number deals the same problems as before; only the layout changed.

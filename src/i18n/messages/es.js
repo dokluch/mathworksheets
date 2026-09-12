@@ -633,7 +633,7 @@ export default {
     decimals: {
       label: 'Decimales',
       shortDesc: 'Suma y resta en columna, y × ÷ por 10, 100 y 1000',
-      longDesc: 'Práctica de decimales sobre una cuadrícula de cuaderno, en dos modos. El modo en columna suma y resta decimales con la coma en una casilla propia, para que el niño coloque 3,8 bajo 12,75 alineando la coma y no la última cifra; se elige una cifra decimal, dos o una mezcla. El modo de potencias multiplica y divide por 10, 100 y 1000: la coma se desplaza y cada carácter de la respuesta tiene su casilla. El separador decimal se imprime como coma o como punto, según la costumbre de cada idioma.',
+      longDesc: 'Práctica de decimales sobre una cuadrícula de cuaderno, en dos modos. El modo en columna suma y resta decimales con la coma sobre la línea de la cuadrícula entre las unidades y las décimas, como en un cuaderno, para que el niño coloque 3,8 bajo 12,75 alineando la coma y no la última cifra; se elige una cifra decimal, dos o una mezcla. El modo de potencias multiplica y divide por 10, 100 y 1000: la coma se desplaza: la respuesta tiene una casilla por cifra y el niño coloca la coma. El separador decimal se imprime como coma o como punto, según la costumbre de cada idioma.',
       skills: ['valor posicional de los decimales', 'suma y resta de decimales', 'multiplicar y dividir por 10, 100 y 1000', 'alinear la coma decimal'],
       settings: [
         'Modo: suma y resta en columna, o × y ÷ por 10, 100 y 1000',
@@ -644,9 +644,9 @@ export default {
         'Imprimir la hoja de respuestas',
       ],
       faq: [
-        { q: '¿Por qué se alinean las comas y no las últimas cifras?', a: 'En la suma en columna de números enteros las últimas cifras coinciden porque todas son unidades. Con decimales, la última cifra puede ser décimas en un número y centésimas en el otro, así que es la coma la que marca la columna de las unidades. 12,75 + 3,8 sale mal en cuanto el 8 queda debajo del 5, y la coma en su propia casilla hace difícil ese error.' },
+        { q: '¿Por qué se alinean las comas y no las últimas cifras?', a: 'En la suma en columna de números enteros las últimas cifras coinciden porque todas son unidades. Con decimales, la última cifra puede ser décimas en un número y centésimas en el otro, así que es la coma la que marca la columna de las unidades. 12,75 + 3,8 sale mal en cuanto el 8 queda debajo del 5, y una coma sobre la misma línea de la cuadrícula en cada fila hace difícil ese error.' },
         { q: '¿Por qué una respuesta como 16,0 conserva el cero?', a: 'La respuesta se escribe con tantas cifras decimales como los números de arriba, para que la columna quede completa y el niño revise cada casilla. 12,5 + 3,5 se escribe 16,0 en la ficha y en las soluciones; 16 vale lo mismo, y ambas respuestas son correctas.' },
-        { q: '¿Qué le pasa a la coma al multiplicar por 10?', a: 'Cada cifra se desplaza un lugar a la izquierda, así que la coma parece moverse un lugar a la derecha: 3,45 × 10 = 34,5, y × 100 da 345. Al dividir las cifras se mueven hacia el otro lado, por eso 27 ÷ 1000 necesita ceros delante: 0,027. Las casillas de la respuesta cuentan cada carácter, la coma incluida, de modo que el niño decide dónde va.' },
+        { q: '¿Qué le pasa a la coma al multiplicar por 10?', a: 'Cada cifra se desplaza un lugar a la izquierda, así que la coma parece moverse un lugar a la derecha: 3,45 × 10 = 34,5, y × 100 da 345. Al dividir las cifras se mueven hacia el otro lado, por eso 27 ÷ 1000 necesita ceros delante: 0,027. La respuesta tiene una casilla por cifra y ninguna para la coma, de modo que el niño decide dónde va.' },
         { q: '¿Por qué se puede elegir entre coma y punto?', a: 'En España, Francia, Alemania, Italia y Rusia se escribe 3,5, mientras que en los países de habla inglesa, en China y en varios países hispanohablantes de América se escribe 3.5. La ficha empieza con la costumbre de tu idioma y recuerda tu elección, y se puede cambiar en cualquier sentido.' },
       ],
     },

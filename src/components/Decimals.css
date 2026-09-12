@@ -1,11 +1,25 @@
 /* ── Decimals ──
-   The decimal mark takes a notebook square of its own, so the marks line up
-   down a column. It is ink, like an operator: where the point sits is the
-   lesson, and a grey point is the first thing a cheap inkjet loses. */
+   The decimal mark takes no square. It is written where a squared exercise
+   book puts it: on the lower grid line, at the corner between the ones and the
+   tenths, so the marks of a column all sit on one vertical line. It is ink,
+   like an operator: where the point sits is the lesson, and a grey point is
+   the first thing a cheap inkjet loses. */
 
+.colarith-notebook .decimals-marked {
+  position: relative;
+}
+
+/* Centred on the square's left edge, with the glyph's dot resting on the lower
+   grid line (a comma's tail crosses it, as a written one does). */
 .colarith-notebook .decimals-mark {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  line-height: 1;
+  transform: translate(-50%, var(--decimals-mark-drop, 0.12em));
   font-weight: 700;
   color: var(--color-text);
+  pointer-events: none;
 }
 
 @media print {

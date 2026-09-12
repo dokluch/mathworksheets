@@ -9,70 +9,79 @@ import NotebookSheet from './NotebookSheet'
 import { NOTATIONS, glyph } from '../lib/orderOfOperations'
 import {
   INT_SQUARES, MARKS, MODES, OPS, PLACES,
-  columnCells, formatDecimal, fracSquares, generateSheet, sheetShape,
+  columnCells, decimalDigits, formatDecimal, fracSquares, generateSheet, sheetShape,
 } from '../lib/decimals'
 
 /** U+2212, the minus the rest of the site sets. */
 const SIGNS = { add: '+', sub: '−' }
 const PLACE_KEYS = { one: 'decimals.placesOne', two: 'decimals.placesTwo', mixed: 'decimals.placesMixed' }
 const ARIA_KEYS = { add: 'decimals.addAria', sub: 'decimals.subAria', mul: 'decimals.mulAria', div: 'decimals.divAria' }
-const isMark = char => char === MARKS.point || char === MARKS.comma
 
 /**
- * One square. The mark is printed on every row, the answer row included:
- * where the point sits is the thing the column is teaching, so it is given
- * rather than asked for. Every other answer square is a box.
+ * One square, and the decimal mark when it falls on this square's left edge.
+ * The mark takes no square: it is written where a squared exercise book puts
+ * it, on the lower corner between the ones and the tenths. It is printed on
+ * every row, the answer row included: where the point sits is the thing the
+ * column is teaching, so it is given rather than asked for.
  */
-function Cell({ char, blank = false }) {
-  if (!char) return <span className="colarith-cell colarith-cell-empty" />
-  if (isMark(char)) return <span className="colarith-cell decimals-mark" aria-hidden="true">{char}</span>
-  return <span className="colarith-cell">{blank ? <span className="colarith-blank" /> : char}</span>
+function Cell({ char, blank = false, mark = null }) {
+  const classes = ['colarith-cell', !char && !mark && 'colarith-cell-empty', mark && 'decimals-marked'].filter(Boolean).join(' ')
+  return (
+    <span className={classes}>
+      {char && (blank ? <span className="colarith-blank" /> : char)}
+      {mark && <span className="decimals-mark" aria-hidden="true">{mark}</span>}
+    </span>
+  )
 }
 
-function DigitRow({ cells, blank = false, className = '' }) {
+function DigitRow({ cells, markAt = null, mark, blank = false, className = '' }) {
   return (
     <div className={`colarith-digit-row ${className}`.trim()}>
-      {cells.map((char, idx) => <Cell key={idx} char={char} blank={blank} />)}
+      {cells.map((char, idx) => <Cell key={idx} char={char} blank={blank} mark={idx === markAt ? mark : null} />)}
     </div>
   )
 }
 
 function ColumnProblem({ p, places, mark, label }) {
   const frac = fracSquares(places)
+  // Every row puts its mark on the same grid line: the left edge of the first fractional square.
+  const digits = (dec, props = {}) => (
+    <DigitRow cells={columnCells(dec, INT_SQUARES, frac)} markAt={dec.places ? INT_SQUARES : null} mark={mark} {...props} />
+  )
   return (
     <div className="colarith-problem" aria-label={label}>
       <div className="colarith-row">
         <span className="colarith-op" aria-hidden="true" />
-        <DigitRow cells={columnCells(p.a, INT_SQUARES, frac, mark)} />
+        {digits(p.a)}
       </div>
       <div className="colarith-row">
         <span className="colarith-op" aria-hidden="true">{SIGNS[p.op]}</span>
-        <DigitRow cells={columnCells(p.b, INT_SQUARES, frac, mark)} />
+        {digits(p.b)}
       </div>
       <div className="colarith-line" />
       <div className="colarith-row">
         <span className="colarith-op" aria-hidden="true" />
-        <DigitRow cells={columnCells(p.result, INT_SQUARES, frac, mark)} blank className="colarith-result-row" />
+        {digits(p.result, { blank: true, className: 'colarith-result-row' })}
       </div>
     </div>
   )
 }
 
 /*
- * A powers line, one symbol per square like Division. The answer is one box
- * per character with no mark printed in it: moving the point is the exercise,
- * so where it lands is the child's to write.
+ * A powers line, one symbol per square like Division, with the operand's mark
+ * on a grid line as in a column. The answer is one box per digit and no mark:
+ * moving the point is the exercise, so where it lands is the child's to write.
  */
 function PowersProblem({ p, mark, notation, label }) {
-  const answer = formatDecimal(p.result, mark)
+  const operand = decimalDigits(p.a)
   return (
     <div className="colarith-problem" aria-label={label}>
       <div className="colarith-row">
-        {[...formatDecimal(p.a, mark)].map((char, i) => <Cell key={`a${i}`} char={char} />)}
+        {operand.digits.map((char, i) => <Cell key={`a${i}`} char={char} mark={i === operand.markAt ? mark : null} />)}
         <span className="colarith-op" aria-hidden="true">{glyph(p.op === 'mul' ? '*' : '/', notation)}</span>
         {[...String(p.power)].map((char, i) => <Cell key={`p${i}`} char={char} />)}
         <span className="colarith-op" aria-hidden="true">=</span>
-        {[...answer].map((_, i) => (
+        {decimalDigits(p.result).digits.map((_, i) => (
           <span key={`r${i}`} className="colarith-cell"><span className="colarith-blank" /></span>
         ))}
       </div>

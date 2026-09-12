@@ -9,11 +9,13 @@ import { COLUMN_OPTIONS, TIGHT_SPACING, columnOptionsFor, dealUnique, dealer, ma
  * 0.2 gives 0.3, and the answer key cannot print 0.30000000000000004.
  *
  * Two modes:
- *  - column: vertical addition and subtraction with the decimal mark in a
- *    square of its own, so the marks line up down the page and a child can see
- *    that 3.8 sits under 12.75 by its point, not by its last digit;
+ *  - column: vertical addition and subtraction with the decimal mark on the
+ *    grid line between the ones and the tenths, where a squared exercise book
+ *    puts it, so the marks line up down the page and a child can see that 3.8
+ *    sits under 12.75 by its point, not by its last digit;
  *  - powers: one-line multiplication and division by 10, 100 and 1000, where
- *    the point moves and the answer has one box per character, the mark's too.
+ *    the point moves and the answer has one box per digit: where the point
+ *    lands is the child's to write.
  *
  * Column problems are not steered towards carrying, unlike Column Addition:
  * two random decimals already carry or borrow on most problems, and forcing it
@@ -37,8 +39,15 @@ export const INT_MAX = 99
 export const INT_SQUARES = 3
 /** Powers mode keeps answers to thousandths, and to five characters including the mark. */
 export const MAX_RESULT_PLACES = 3
-export const OPERAND_SQUARES = 4
-export const ANSWER_SQUARES = 5
+/** Longest operand and answer the generator accepts, in characters with the mark. */
+export const OPERAND_CHARS = 4
+export const ANSWER_CHARS = 5
+/**
+ * Squares they take on the grid, where the mark sits on a line and takes none:
+ * an operand is at most three digits (its number is 1–999), an answer five.
+ */
+export const OPERAND_SQUARES = 3
+export const ANSWER_SQUARES = ANSWER_CHARS
 
 /** A decimal written out: digits, the mark, and at least one digit before it. */
 export function formatDecimal({ scaled, places }, mark = MARKS.point) {
@@ -53,19 +62,28 @@ export function alignTo({ scaled, places }, target) {
 }
 
 /**
- * One row of a column problem, one character per square: `intSquares` digits
- * right-aligned before the mark, the mark, then the fractional digits
- * left-aligned after it. Empty squares are ''. A whole number (places 0) still
- * leaves its mark square empty, so a column never shifts.
+ * A decimal's digits without the mark, and the index of the digit the mark
+ * stands before (null for a whole number): 12.75 is 1 2 7 5 with the mark
+ * before index 2, and 0.05 is 0 0 5 with the mark before index 1.
  */
-export function columnCells(dec, intSquares, fracSquares, mark = MARKS.point) {
-  const text = formatDecimal(dec, mark)
-  const whole = dec.places ? text.slice(0, -dec.places - 1) : text
-  const frac = dec.places ? text.slice(-dec.places) : ''
-  const cells = Array(intSquares + 1 + fracSquares).fill('')
-  ;[...whole].forEach((char, i) => { cells[intSquares - whole.length + i] = char })
-  if (dec.places) cells[intSquares] = mark
-  ;[...frac].forEach((char, i) => { cells[intSquares + 1 + i] = char })
+export function decimalDigits({ scaled, places }) {
+  const digits = [...String(scaled).padStart(places + 1, '0')]
+  return { digits, markAt: places ? digits.length - places : null }
+}
+
+/**
+ * One row of a column problem, one digit per square: `intSquares` digits
+ * right-aligned before the mark and the fractional digits left-aligned after
+ * it. Empty squares are ''. The mark takes no square: it is written on the grid
+ * line before square `intSquares`, the same line on every row.
+ */
+export function columnCells(dec, intSquares, fracSquares) {
+  const { digits, markAt } = decimalDigits(dec)
+  const whole = markAt === null ? digits : digits.slice(0, markAt)
+  const frac = markAt === null ? [] : digits.slice(markAt)
+  const cells = Array(intSquares + fracSquares).fill('')
+  whole.forEach((char, i) => { cells[intSquares - whole.length + i] = char })
+  frac.forEach((char, i) => { cells[intSquares + i] = char })
   return cells
 }
 
@@ -106,11 +124,11 @@ function powersProblem([op, power], r) {
     // A trailing zero would print 3.40, which is 3.4 written badly.
     if (m % 10 === 0) m += r.int(1, 9)
     const a = { scaled: m, places }
-    if (formatDecimal(a).length > OPERAND_SQUARES) continue
+    if (formatDecimal(a).length > OPERAND_CHARS) continue
     const result = op === 'mul'
       ? (places >= e ? { scaled: m, places: places - e } : { scaled: m * 10 ** (e - places), places: 0 })
       : { scaled: m, places: places + e }
-    if (result.places > MAX_RESULT_PLACES || formatDecimal(result).length > ANSWER_SQUARES) continue
+    if (result.places > MAX_RESULT_PLACES || formatDecimal(result).length > ANSWER_CHARS) continue
     return { op, power, a, result }
   }
 }
@@ -140,14 +158,14 @@ export function fracSquares(places) {
 
 /**
  * Squares a problem is budgeted. A column is the operator, the whole part with
- * its carry, the mark and the fractional places. A powers line is the operand,
- * the sign, the power, = and the answer boxes.
+ * its carry and the fractional places; the mark sits on a grid line. A powers
+ * line is the operand's digits, the sign, the power, = and a box per answer digit.
  */
 export function sheetFrame({ mode, places }) {
   if (mode === 'powers') {
     return { rows: 1, cellsWide: OPERAND_SQUARES + 1 + String(POWERS[POWERS.length - 1]).length + 1 + ANSWER_SQUARES }
   }
-  return { rows: 3, cellsWide: 1 + INT_SQUARES + 1 + fracSquares(places) }
+  return { rows: 3, cellsWide: 1 + INT_SQUARES + fracSquares(places) }
 }
 
 /** Everything that follows from the settings (see makeSheetShape in src/lib/sheet.js). */

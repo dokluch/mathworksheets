@@ -81,6 +81,9 @@ const blank = (c, r, span = 1) => (
   />
 )
 
+/** A decimal point on vertical grid line `c`, resting just above horizontal line `r`, as it is written in a squared book. */
+const point = (c, r) => <circle key={`pt${c}-${r}`} cx={ln(c)} cy={ln(r) - 1.4} r={0.85} fill="currentColor" />
+
 /** An answer bar, table head, or overbar: always on a grid line. */
 const rule = (c0, c1, r, weight = 1.3) => (
   <line key={`h${c0}-${r}`} x1={ln(c0)} y1={ln(r)} x2={ln(c1)} y2={ln(r)} stroke="currentColor" strokeWidth={weight} />
@@ -287,12 +290,12 @@ const MARKS = {
   // by the point and the answer row's point already printed; a powers line under it.
   decimals: () => (
     <>
-      {digit(5, 2, '1')}{digit(6, 2, '2')}{digit(7, 2, '.')}{digit(8, 2, '7')}{digit(9, 2, '5')}
-      {digit(3, 3, '+')}{digit(6, 3, '3')}{digit(7, 3, '.')}{digit(8, 3, '8')}
-      {rule(3, 10, 4)}
-      {blank(5, 4)}{blank(6, 4)}{digit(7, 4, '.')}{blank(8, 4)}{blank(9, 4)}
-      {digit(3, 6, '3')}{digit(4, 6, '.')}{digit(5, 6, '4')}{digit(6, 6, '×')}{digit(7, 6, '1')}{digit(8, 6, '0')}{digit(9, 6, '=')}
-      {blank(10, 6)}{blank(11, 6)}
+      {digit(6, 2, '1')}{digit(7, 2, '2')}{digit(8, 2, '7')}{digit(9, 2, '5')}{point(8, 3)}
+      {digit(4, 3, '+')}{digit(7, 3, '3')}{digit(8, 3, '8')}{point(8, 4)}
+      {rule(4, 10, 4)}
+      {blank(6, 4)}{blank(7, 4)}{blank(8, 4)}{blank(9, 4)}{point(8, 5)}
+      {digit(3, 6, '3')}{digit(4, 6, '4')}{point(4, 7)}{digit(5, 6, '×')}{digit(6, 6, '1')}{digit(7, 6, '0')}{digit(8, 6, '=')}
+      {blank(9, 6)}{blank(10, 6)}
     </>
   ),
   // A factorization with a box per factor, and two numbers to mark prime or composite.

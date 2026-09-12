@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { mulberry32 } from './rng.js'
 import {
-  ANSWER_SQUARES, INT_MAX, INT_SQUARES, MAX_RESULT_PLACES, MODES, OPERAND_SQUARES, OPS, PLACES, POWERS, SHEET_SPACING,
-  alignTo, columnCells, columnOptionsFor, formatDecimal, fracSquares, generateSheet, sheetFrame, sheetShape,
+  ANSWER_CHARS, ANSWER_SQUARES, INT_MAX, INT_SQUARES, MAX_RESULT_PLACES, MODES, OPERAND_CHARS, OPERAND_SQUARES, OPS, PLACES, POWERS, SHEET_SPACING,
+  alignTo, columnCells, columnOptionsFor, decimalDigits, formatDecimal, fracSquares, generateSheet, sheetFrame, sheetShape,
 } from './decimals'
 import { hasCarry, needsBorrow } from './columnArithmetic'
 import { PRINT_SQUARE, PRINT_WIDTH, notebookLayout, rowsPerPage } from '../hooks/useNotebookGrid'
@@ -44,12 +44,18 @@ describe('writing a decimal', () => {
     expect(alignTo({ scaled: 1275, places: 2 }, 2)).toEqual({ scaled: 1275, places: 2 })
   })
 
-  it('lays a row out on squares with the mark in a column of its own', () => {
-    expect(columnCells({ scaled: 1275, places: 2 }, 3, 2)).toEqual(['', '1', '2', '.', '7', '5'])
-    // 3.8 under 12.75: the 3 under the 2, the point under the point, and an empty hundredths square.
-    expect(columnCells({ scaled: 38, places: 1 }, 3, 2)).toEqual(['', '', '3', '.', '8', ''])
-    expect(columnCells({ scaled: 16, places: 0 }, 3, 2)).toEqual(['', '1', '6', '', '', ''])
-    expect(columnCells({ scaled: 1655, places: 2 }, 3, 2, ',')).toEqual(['', '1', '6', ',', '5', '5'])
+  it('splits a decimal into its digits and the place of its mark', () => {
+    expect(decimalDigits({ scaled: 1275, places: 2 })).toEqual({ digits: ['1', '2', '7', '5'], markAt: 2 })
+    expect(decimalDigits({ scaled: 5, places: 2 })).toEqual({ digits: ['0', '0', '5'], markAt: 1 })
+    expect(decimalDigits({ scaled: 27, places: 3 })).toEqual({ digits: ['0', '0', '2', '7'], markAt: 1 })
+    expect(decimalDigits({ scaled: 345, places: 0 })).toEqual({ digits: ['3', '4', '5'], markAt: null })
+  })
+
+  it('lays a row out one digit per square, the mark on the grid line before the tenths', () => {
+    expect(columnCells({ scaled: 1275, places: 2 }, 3, 2)).toEqual(['', '1', '2', '7', '5'])
+    // 3.8 under 12.75: the 3 under the 2, the 8 under the 7, and an empty hundredths square.
+    expect(columnCells({ scaled: 38, places: 1 }, 3, 2)).toEqual(['', '', '3', '8', ''])
+    expect(columnCells({ scaled: 16, places: 0 }, 3, 2)).toEqual(['', '1', '6', '', ''])
   })
 })
 
@@ -119,7 +125,7 @@ describe('column sheets', () => {
 
   it('fits every row, the carry included, in the squares budgeted for it', () => {
     columnSheets(({ problems, places }) => {
-      const squares = INT_SQUARES + 1 + fracSquares(places)
+      const squares = INT_SQUARES + fracSquares(places)
       for (const p of problems) {
         for (const d of [p.a, p.b, p.result]) {
           expect(String(whole(d)).length).toBeLessThanOrEqual(INT_SQUARES)
@@ -146,11 +152,13 @@ describe('powers of ten sheets', () => {
   it('keeps every operand and answer within its boxes', () => {
     powersSheets(sheet => {
       for (const p of sheet) {
-        expect(formatDecimal(p.a).length).toBeLessThanOrEqual(OPERAND_SQUARES)
-        expect(formatDecimal(p.result).length).toBeLessThanOrEqual(ANSWER_SQUARES)
+        expect(formatDecimal(p.a).length).toBeLessThanOrEqual(OPERAND_CHARS)
+        expect(formatDecimal(p.result).length).toBeLessThanOrEqual(ANSWER_CHARS)
+        expect(decimalDigits(p.a).digits.length).toBeLessThanOrEqual(OPERAND_SQUARES)
+        expect(decimalDigits(p.result).digits.length).toBeLessThanOrEqual(ANSWER_SQUARES)
         expect(p.result.places).toBeLessThanOrEqual(MAX_RESULT_PLACES)
         expect(p.a.scaled % 10).not.toBe(0)
-        const row = formatDecimal(p.a).length + 1 + String(p.power).length + 1 + formatDecimal(p.result).length
+        const row = decimalDigits(p.a).digits.length + 1 + String(p.power).length + 1 + decimalDigits(p.result).digits.length
         expect(row).toBeLessThanOrEqual(sheetFrame({ mode: 'powers' }).cellsWide)
       }
     })
@@ -168,17 +176,17 @@ describe('powers of ten sheets', () => {
 })
 
 describe('decimals sheet geometry', () => {
-  it('budgets a column as operator, whole part with carry, mark and places, and a powers line as fifteen squares', () => {
+  it('budgets a column as operator, whole part with carry and places, and a powers line as fourteen squares', () => {
     expect(PLACES.map(places => sheetFrame({ mode: 'column', places }))).toEqual([
-      { rows: 3, cellsWide: 6 }, { rows: 3, cellsWide: 7 }, { rows: 3, cellsWide: 7 },
+      { rows: 3, cellsWide: 5 }, { rows: 3, cellsWide: 6 }, { rows: 3, cellsWide: 6 },
     ])
-    expect(sheetFrame({ mode: 'powers' })).toEqual({ rows: 1, cellsWide: 15 })
+    expect(sheetFrame({ mode: 'powers' })).toEqual({ rows: 1, cellsWide: 14 })
   })
 
   it('offers four columns for column sums and two for the long powers line', () => {
+    expect(columnOptionsFor(5)).toEqual([2, 3, 4])
     expect(columnOptionsFor(6)).toEqual([2, 3, 4])
-    expect(columnOptionsFor(7)).toEqual([2, 3, 4])
-    expect(columnOptionsFor(15)).toEqual([2])
+    expect(columnOptionsFor(14)).toEqual([2])
     expect(sheetShape({ mode: 'powers', places: 'two', columns: 4 }).columns).toBe(2)
   })
 
