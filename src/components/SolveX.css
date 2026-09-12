@@ -1,16 +1,7 @@
 /* ── Solve for x ──
-   An equation reads left to right with its working under it, so the problem
-   starts at the left of its column instead of ending at the right like a
-   column sum. The rows beneath are bare ruling: the child writes each step on
+   An equation reads left to right (.colarith-problem--lead) with its working
+   under it. The rows beneath are bare ruling: the child writes each step on
    its own line, the way an exercise book asks for it. */
-
-.colarith-notebook .solvex-problem {
-  align-items: flex-start;
-}
-
-.colarith-notebook .solvex-problem .colarith-row {
-  justify-content: flex-start;
-}
 
 /* x is a letter, not a times sign: italic keeps 3x from reading as 3 × on a cheap print. */
 .colarith-notebook .solvex-var {

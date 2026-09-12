@@ -41,7 +41,7 @@ function FactorizeProblem({ p, sign, label }) {
  */
 function PairProblem({ p, separator, gcdMark, lcmMark, label }) {
   return (
-    <div className="colarith-problem factors-pair" aria-label={label}>
+    <div className="colarith-problem colarith-problem--lead" aria-label={label}>
       <div className="colarith-row">
         {cells(p.a, 'a')}
         <span className="colarith-cell colarith-cell-empty" />

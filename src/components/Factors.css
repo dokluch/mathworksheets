@@ -17,15 +17,6 @@
   white-space: nowrap;
 }
 
-/* A pair reads left to right, so its rows start together rather than ending together. */
-.colarith-notebook .factors-pair {
-  align-items: flex-start;
-}
-
-.colarith-notebook .factors-pair .colarith-row {
-  justify-content: flex-start;
-}
-
 @media print {
   .colarith-notebook .factors-label {
     color: #111;

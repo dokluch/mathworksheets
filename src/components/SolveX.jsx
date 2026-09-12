@@ -110,7 +110,7 @@ export default function SolveX() {
       >
         {p => (
           <div
-            className="colarith-problem solvex-problem"
+            className="colarith-problem colarith-problem--lead"
             aria-label={t('solvex.problemAria', { equation: spoken(p.tokens, activeNotation) })}
           >
             <Equation tokens={p.tokens} notation={activeNotation} />
