@@ -4,6 +4,7 @@ import { useNotebookGrid, problemsPerPage, fitsPrint } from '../hooks/useNoteboo
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import { frameLayout, generateProblems } from '../lib/longDivision'
+import './ColumnAddition.css'
 import './ColumnDivision.css'
 import WorksheetHeader from './WorksheetHeader'
 import { useSheetSet } from '../hooks/useSheetSet'
