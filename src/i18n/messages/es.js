@@ -238,6 +238,26 @@ export default {
     subAria: '{a} menos {b}',
   },
 
+  decimals: {
+    title: 'Decimales',
+    mode: 'Modo',
+    column: 'Suma y resta',
+    powers: '× ÷ 10, 100, 1000',
+    places: 'Cifras decimales',
+    placesOne: 'Una',
+    placesTwo: 'Dos',
+    placesMixed: 'Mezcla',
+    mark: 'Separador',
+    // Which decimal mark this language's schools write (as divide.defaultNotation); the setting overrides it once chosen.
+    defaultMark: 'comma',
+    metaColumn: 'cifras decimales: {places}',
+    metaPowers: 'multiplicar y dividir por 10, 100 y 1000',
+    addAria: '{a} más {b}',
+    subAria: '{a} menos {b}',
+    mulAria: '{a} por {b}',
+    divAria: '{a} entre {b}',
+  },
+
   compare: {
     title: 'Comparación',
   },
@@ -576,6 +596,26 @@ export default {
         { q: '¿Por qué hay que igualar los denominadores antes de sumar?', a: 'El denominador dice el tamaño de las partes, y no se pueden contar juntas partes de tamaños distintos. Un tercio y un cuarto se convierten en cuatro doceavos y tres doceavos, y solo entonces los numeradores suman siete doceavos. En el nivel de distinto denominador el común denominador nunca pasa del límite, para que ese paso no se convierta en una búsqueda.' },
         { q: '¿Qué es un número mixto y cuándo se escribe así la respuesta?', a: 'Un número mixto es un entero con una fracción, como 2 3/4. En muchas aulas de España se deja la fracción impropia 11/4, mientras que en otros países se pide el número mixto. El ajuste Respuestas sigue tu idioma por defecto y se puede cambiar en cualquier sentido.' },
         { q: '¿Por qué se pide siempre la forma más simple?', a: 'Simplificar al final comprueba que el niño sigue viendo los factores comunes cuando ya ha hecho la cuenta, y así cada ejercicio tiene una única respuesta correcta con la que corregir. 3/8 + 1/8 son 4/8, que las soluciones escriben como 1/2.' },
+      ],
+    },
+    decimals: {
+      label: 'Decimales',
+      shortDesc: 'Suma y resta en columna, y × ÷ por 10, 100 y 1000',
+      longDesc: 'Práctica de decimales sobre una cuadrícula de cuaderno, en dos modos. El modo en columna suma y resta decimales con la coma en una casilla propia, para que el niño coloque 3,8 bajo 12,75 alineando la coma y no la última cifra; se elige una cifra decimal, dos o una mezcla. El modo de potencias multiplica y divide por 10, 100 y 1000: la coma se desplaza y cada carácter de la respuesta tiene su casilla. El separador decimal se imprime como coma o como punto, según la costumbre de cada idioma.',
+      skills: ['valor posicional de los decimales', 'suma y resta de decimales', 'multiplicar y dividir por 10, 100 y 1000', 'alinear la coma decimal'],
+      settings: [
+        'Modo: suma y resta en columna, o × y ÷ por 10, 100 y 1000',
+        'Operación: suma, resta o ambas',
+        'Cifras decimales: una, dos o una mezcla',
+        'Separador decimal: coma o punto',
+        'Columnas: 2, 3 o 4 (de 12 a 24 ejercicios; 26 en modo de potencias)',
+        'Imprimir la hoja de respuestas',
+      ],
+      faq: [
+        { q: '¿Por qué se alinean las comas y no las últimas cifras?', a: 'En la suma en columna de números enteros las últimas cifras coinciden porque todas son unidades. Con decimales, la última cifra puede ser décimas en un número y centésimas en el otro, así que es la coma la que marca la columna de las unidades. 12,75 + 3,8 sale mal en cuanto el 8 queda debajo del 5, y la coma en su propia casilla hace difícil ese error.' },
+        { q: '¿Por qué una respuesta como 16,0 conserva el cero?', a: 'La respuesta se escribe con tantas cifras decimales como los números de arriba, para que la columna quede completa y el niño revise cada casilla. 12,5 + 3,5 se escribe 16,0 en la ficha y en las soluciones; 16 vale lo mismo, y ambas respuestas son correctas.' },
+        { q: '¿Qué le pasa a la coma al multiplicar por 10?', a: 'Cada cifra se desplaza un lugar a la izquierda, así que la coma parece moverse un lugar a la derecha: 3,45 × 10 = 34,5, y × 100 da 345. Al dividir las cifras se mueven hacia el otro lado, por eso 27 ÷ 1000 necesita ceros delante: 0,027. Las casillas de la respuesta cuentan cada carácter, la coma incluida, de modo que el niño decide dónde va.' },
+        { q: '¿Por qué se puede elegir entre coma y punto?', a: 'En España, Francia, Alemania, Italia y Rusia se escribe 3,5, mientras que en los países de habla inglesa, en China y en varios países hispanohablantes de América se escribe 3.5. La ficha empieza con la costumbre de tu idioma y recuerda tu elección, y se puede cambiar en cualquier sentido.' },
       ],
     },
     eqexplore: {

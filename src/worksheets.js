@@ -330,7 +330,7 @@ export const WORKSHEETS = [
     ],
     examples: ['3/8 + 2/8 = □/□', '2/3 − 1/4 = □/□', '2 3/4 + 1 5/6 = □ □/□', '5 1/3 − 2 5/6 = □ □/□'],
     prerequisites: ['fractions'],
-    nextSteps: [],
+    nextSteps: ['decimals'],
     updated: '2026-09-12',
     faq: [
       { q: 'Why must the denominators match before adding?', a: 'A denominator names the size of the pieces, and pieces of different sizes cannot be counted together. One third and one quarter become four twelfths and three twelfths, and only then do the numerators add to seven twelfths. The unlike level keeps every common denominator within the limit, so that step never turns into a hunt.' },
@@ -338,6 +338,37 @@ export const WORKSHEETS = [
       { q: 'Why is every answer expected in simplest form?', a: 'Simplifying at the end checks that the child can still see common factors after the arithmetic is done, and it gives every problem exactly one correct answer to mark against. 3/8 + 1/8 is 4/8, which the answer key writes as 1/2.' },
     ],
     color: '#685d31',
+    interactive: false,
+  },
+  {
+    id: 'decimals',
+    slug: 'decimals',
+    label: 'Decimals',
+    shortDesc: 'Column addition and subtraction, and × ÷ by 10, 100, 1000',
+    longDesc:
+      'Decimal practice on a notebook grid in two modes. Column mode adds and subtracts decimals with the decimal point in a square of its own, so a child lines up 3.8 under 12.75 by the point rather than by the last digit; choose one place, two places or a mix. ' +
+      'Powers mode multiplies and divides by 10, 100 and 1000, where the point moves and every character of the answer has its own box. The decimal mark prints as a point or a comma, following the convention of each language.',
+    grades: '4–6',
+    skills: ['decimal place value', 'adding and subtracting decimals', 'multiplying and dividing by 10, 100 and 1000', 'lining up the decimal point'],
+    settings: [
+      'Mode: column addition and subtraction, or × and ÷ by 10, 100 and 1000',
+      'Operation: addition, subtraction or both',
+      'Decimal places: one, two or a mix',
+      'Decimal mark: a point or a comma',
+      'Columns: 2, 3 or 4 (12–24 problems; 26 in powers mode)',
+      'Print an answer key',
+    ],
+    examples: ['12.75 + 3.8 = □', '20.4 − 7.35 = □', '3.45 × 100 = □', '27 ÷ 1000 = □'],
+    prerequisites: ['coladd', 'rounding'],
+    nextSteps: [],
+    updated: '2026-09-12',
+    faq: [
+      { q: 'Why line up the decimal points instead of the last digits?', a: 'In column addition of whole numbers the last digits line up because they are all ones. With decimals the last digit can be tenths in one number and hundredths in the other, so the point is what marks the ones column. 12.75 + 3.8 goes wrong the moment the 8 sits under the 5, and the point in a square of its own makes that hard to do.' },
+      { q: 'Why does an answer like 16.0 keep its zero?', a: 'The answer is written to as many places as the numbers above it, so the column stays full and a child checks every square. 12.5 + 3.5 is written 16.0 on the sheet and in the answer key; 16 is the same value, and either should be marked right.' },
+      { q: 'What happens to the decimal point when you multiply by 10?', a: 'Every digit moves one place to the left, so the point appears to move one place right: 3.45 × 10 = 34.5, and × 100 gives 345. Dividing moves the digits the other way, which is why 27 ÷ 1000 needs zeros in front: 0.027. The answer boxes count every character, the point included, so where the point lands is the child’s to write.' },
+      { q: 'Why can I switch between a point and a comma?', a: 'English-speaking and Chinese schools write 3.5, while French, Spanish, German, Italian and Russian schools write 3,5. The sheet starts with the convention of your language and remembers your choice, and several countries and international schools use the other mark, so it can be switched either way.' },
+    ],
+    color: '#93289f',
     interactive: false,
   },
   {

@@ -238,6 +238,26 @@ export default {
     subAria: '{a} minus {b}',
   },
 
+  decimals: {
+    title: 'Dezimalzahlen',
+    mode: 'Modus',
+    column: 'Addieren & Subtrahieren',
+    powers: '· : 10, 100, 1000',
+    places: 'Nachkommastellen',
+    placesOne: 'Eine',
+    placesTwo: 'Zwei',
+    placesMixed: 'Gemischt',
+    mark: 'Trennzeichen',
+    // Which decimal mark this language's schools write (as divide.defaultNotation); the setting overrides it once chosen.
+    defaultMark: 'comma',
+    metaColumn: 'Nachkommastellen: {places}',
+    metaPowers: 'mit 10, 100 und 1000 multiplizieren und dividieren',
+    addAria: '{a} plus {b}',
+    subAria: '{a} minus {b}',
+    mulAria: '{a} mal {b}',
+    divAria: '{a} geteilt durch {b}',
+  },
+
   compare: {
     title: 'Zahlenvergleich',
   },
@@ -576,6 +596,26 @@ export default {
         { q: 'Warum müssen die Nenner vor dem Addieren gleich sein?', a: 'Der Nenner gibt die Größe der Teile an, und Teile verschiedener Größe kann man nicht zusammenzählen. Ein Drittel und ein Viertel werden zu vier Zwölfteln und drei Zwölfteln, und erst dann ergeben die Zähler sieben Zwölftel. Auf der Stufe „ungleichnamig“ bleibt der Hauptnenner immer innerhalb der Grenze, damit dieser Schritt nicht zur Suche wird.' },
         { q: 'Was ist eine gemischte Zahl, und wann schreibt man das Ergebnis so?', a: 'Eine gemischte Zahl besteht aus einer ganzen Zahl und einem Bruch, etwa 2 3/4. In Deutschland wird ein Ergebnis über 1 meist so geschrieben, in Frankreich, Spanien und Italien bleibt oft der unechte Bruch 11/4 stehen. Die Einstellung Ergebnis richtet sich zunächst nach deiner Sprache und lässt sich in beide Richtungen umstellen.' },
         { q: 'Warum soll jedes Ergebnis vollständig gekürzt sein?', a: 'Das Kürzen am Ende prüft, ob das Kind nach dem Rechnen noch gemeinsame Teiler erkennt, und jede Aufgabe hat so genau eine richtige Lösung zum Vergleichen. 3/8 + 1/8 ergibt 4/8, was auf dem Lösungsblatt als 1/2 steht.' },
+      ],
+    },
+    decimals: {
+      label: 'Dezimalzahlen',
+      shortDesc: 'Schriftlich addieren und subtrahieren, · und : mit 10, 100, 1000',
+      longDesc: 'Dezimalzahlen üben auf einem Karogitter, in zwei Modi. Der schriftliche Modus addiert und subtrahiert Dezimalzahlen mit dem Komma in einem eigenen Kästchen, damit ein Kind 3,8 am Komma unter 12,75 ausrichtet und nicht an der letzten Ziffer; wählbar sind eine Nachkommastelle, zwei oder gemischt. Der Stellenwert-Modus multipliziert und dividiert mit 10, 100 und 1000: Das Komma verschiebt sich, und jedes Zeichen des Ergebnisses hat sein eigenes Kästchen. Das Dezimaltrennzeichen wird je nach Sprache als Komma oder Punkt gedruckt.',
+      skills: ['Stellenwert bei Dezimalzahlen', 'Dezimalzahlen addieren und subtrahieren', 'mit 10, 100 und 1000 multiplizieren und dividieren', 'Kommas untereinander schreiben'],
+      settings: [
+        'Modus: schriftlich addieren und subtrahieren, oder · und : mit 10, 100 und 1000',
+        'Rechenart: Addition, Subtraktion oder beides',
+        'Nachkommastellen: eine, zwei oder gemischt',
+        'Dezimaltrennzeichen: Komma oder Punkt',
+        'Spalten: 2, 3 oder 4 (12–24 Aufgaben; 26 im Stellenwert-Modus)',
+        'Lösungsblatt drucken',
+      ],
+      faq: [
+        { q: 'Warum schreibt man die Kommas untereinander und nicht die letzten Ziffern?', a: 'Bei ganzen Zahlen stehen die letzten Ziffern untereinander, weil sie alle Einer sind. Bei Dezimalzahlen kann die letzte Ziffer in der einen Zahl Zehntel und in der anderen Hundertstel sein, also markiert das Komma die Einerspalte. 12,75 + 3,8 geht schief, sobald die 8 unter der 5 steht, und das Komma in einem eigenen Kästchen macht diesen Fehler schwer.' },
+        { q: 'Warum behält ein Ergebnis wie 16,0 seine Null?', a: 'Das Ergebnis wird mit so vielen Nachkommastellen geschrieben wie die Zahlen darüber, damit die Spalte voll bleibt und das Kind jedes Kästchen prüft. 12,5 + 3,5 steht auf dem Blatt und auf dem Lösungsblatt als 16,0; 16 hat denselben Wert, und beides ist richtig.' },
+        { q: 'Was passiert mit dem Komma, wenn man mit 10 multipliziert?', a: 'Jede Ziffer rückt eine Stelle nach links, also scheint das Komma eine Stelle nach rechts zu wandern: 3,45 · 10 = 34,5, und · 100 ergibt 345. Beim Dividieren rücken die Ziffern in die andere Richtung, deshalb braucht 27 : 1000 Nullen davor: 0,027. Die Kästchen des Ergebnisses zählen jedes Zeichen mit, auch das Komma, damit das Kind selbst entscheidet, wohin es kommt.' },
+        { q: 'Warum kann ich zwischen Komma und Punkt wählen?', a: 'In Deutschland, Frankreich, Spanien, Italien und Russland schreibt man 3,5, in englischsprachigen Ländern und in China 3.5. Das Blatt beginnt mit der Schreibweise deiner Sprache und merkt sich deine Wahl, und es lässt sich in beide Richtungen umstellen.' },
       ],
     },
     eqexplore: {

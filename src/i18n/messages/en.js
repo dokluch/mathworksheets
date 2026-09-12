@@ -250,6 +250,26 @@ export default {
     subAria: '{a} minus {b}',
   },
 
+  decimals: {
+    title: 'Decimals',
+    mode: 'Mode',
+    column: 'Add & subtract',
+    powers: '× ÷ 10, 100, 1000',
+    places: 'Decimal places',
+    placesOne: 'One',
+    placesTwo: 'Two',
+    placesMixed: 'Mixed',
+    mark: 'Decimal mark',
+    // Which decimal mark this language's schools write (as divide.defaultNotation); the setting overrides it once chosen.
+    defaultMark: 'point',
+    metaColumn: 'decimal places: {places}',
+    metaPowers: 'multiply and divide by 10, 100 and 1000',
+    addAria: '{a} plus {b}',
+    subAria: '{a} minus {b}',
+    mulAria: '{a} times {b}',
+    divAria: '{a} divided by {b}',
+  },
+
   compare: {
     title: 'Comparison',
   },

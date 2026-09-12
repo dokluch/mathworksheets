@@ -238,6 +238,26 @@ export default {
     subAria: '{a} meno {b}',
   },
 
+  decimals: {
+    title: 'Numeri decimali',
+    mode: 'Modalità',
+    column: 'Addizione e sottrazione',
+    powers: '· : 10, 100, 1000',
+    places: 'Cifre decimali',
+    placesOne: 'Una',
+    placesTwo: 'Due',
+    placesMixed: 'Misto',
+    mark: 'Separatore',
+    // Which decimal mark this language's schools write (as divide.defaultNotation); the setting overrides it once chosen.
+    defaultMark: 'comma',
+    metaColumn: 'cifre decimali: {places}',
+    metaPowers: 'moltiplicare e dividere per 10, 100 e 1000',
+    addAria: '{a} più {b}',
+    subAria: '{a} meno {b}',
+    mulAria: '{a} per {b}',
+    divAria: '{a} diviso {b}',
+  },
+
   compare: {
     title: 'Confronto',
   },
@@ -576,6 +596,26 @@ export default {
         { q: 'Perché i denominatori devono essere uguali prima di sommare?', a: 'Il denominatore dice quanto sono grandi le parti, e parti di grandezza diversa non si possono contare insieme. Un terzo e un quarto diventano quattro dodicesimi e tre dodicesimi, e solo allora i numeratori danno sette dodicesimi. Al livello con denominatori diversi il denominatore comune resta sempre entro il limite, così questo passaggio non diventa una caccia al tesoro.' },
         { q: 'Che cos’è un numero misto e quando si scrive così la risposta?', a: 'Un numero misto è un intero seguito da una frazione, come 2 3/4. Nella scuola italiana si lascia spesso la frazione impropria 11/4, mentre altri paesi chiedono il numero misto. L’impostazione Risposte segue la tua lingua e si può cambiare in entrambe le direzioni.' },
         { q: 'Perché la risposta va sempre ridotta ai minimi termini?', a: 'Semplificare alla fine verifica che il bambino riconosca ancora i divisori comuni dopo il calcolo, e ogni esercizio ha così una sola risposta corretta con cui confrontarsi. 3/8 + 1/8 fa 4/8, che le soluzioni scrivono come 1/2.' },
+      ],
+    },
+    decimals: {
+      label: 'Numeri decimali',
+      shortDesc: 'Addizione e sottrazione in colonna, · e : per 10, 100, 1000',
+      longDesc: 'Esercizi sui numeri decimali su una griglia a quadretti, in due modalità. In colonna si sommano e si sottraggono decimali con la virgola in un quadretto tutto suo, così il bambino allinea 3,8 sotto 12,75 in base alla virgola e non all’ultima cifra; si sceglie una cifra decimale, due o un misto. La modalità potenze moltiplica e divide per 10, 100 e 1000: la virgola si sposta e ogni carattere del risultato ha il suo quadretto. Il separatore decimale si stampa come virgola o come punto, secondo l’uso di ogni lingua.',
+      skills: ['valore posizionale dei decimali', 'addizione e sottrazione di decimali', 'moltiplicare e dividere per 10, 100 e 1000', 'incolonnare le virgole'],
+      settings: [
+        'Modalità: addizione e sottrazione in colonna, oppure · e : per 10, 100 e 1000',
+        'Operazione: addizione, sottrazione o entrambe',
+        'Cifre decimali: una, due o un misto',
+        'Separatore decimale: virgola o punto',
+        'Colonne: 2, 3 o 4 (da 12 a 24 esercizi; 26 in modalità potenze)',
+        'Stampa le soluzioni',
+      ],
+      faq: [
+        { q: 'Perché si incolonnano le virgole e non le ultime cifre?', a: 'Nelle operazioni in colonna con numeri interi le ultime cifre si allineano perché sono tutte unità. Con i decimali l’ultima cifra può essere decimi in un numero e centesimi nell’altro, quindi è la virgola a indicare la colonna delle unità. 12,75 + 3,8 viene sbagliato appena l’8 finisce sotto il 5, e la virgola in un quadretto tutto suo rende difficile quell’errore.' },
+        { q: 'Perché un risultato come 16,0 tiene lo zero?', a: 'Il risultato si scrive con tante cifre decimali quante ne hanno i numeri sopra, così la colonna resta completa e il bambino controlla ogni quadretto. 12,5 + 3,5 si scrive 16,0 sulla scheda e nelle soluzioni; 16 ha lo stesso valore, ed entrambi sono giusti.' },
+        { q: 'Che cosa succede alla virgola quando si moltiplica per 10?', a: 'Ogni cifra si sposta di un posto a sinistra, quindi la virgola sembra spostarsi di un posto a destra: 3,45 · 10 = 34,5, e · 100 dà 345. Dividendo le cifre si spostano dall’altra parte, per questo 27 : 1000 ha bisogno di zeri davanti: 0,027. I quadretti del risultato contano ogni carattere, virgola compresa, così è il bambino a decidere dove va.' },
+        { q: 'Perché posso scegliere tra virgola e punto?', a: 'In Italia, Francia, Spagna, Germania e Russia si scrive 3,5, mentre nei paesi di lingua inglese e in Cina si scrive 3.5. La scheda parte dall’uso della tua lingua e ricorda la tua scelta, e si può cambiare in entrambe le direzioni.' },
       ],
     },
     eqexplore: {

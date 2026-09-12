@@ -39,6 +39,7 @@ colors:
   ink-bongard: "#6b7a1f"
   ink-fractions: "#7d3b3f"
   ink-fracaddsub: "#685d31"
+  ink-decimals: "#93289f"
   ruling-screen: "rgba(148, 163, 184, 0.28)"
   ruling-print: "rgba(107, 114, 128, 0.42)"
 typography:

@@ -283,6 +283,18 @@ const MARKS = {
       {box(7, 5)}{rule(7, 8, 6, 1.1)}{box(7, 6)}
     </>
   ),
+  // A decimal column sum with the point in its own column, 3.8 set under 12.75
+  // by the point and the answer row's point already printed; a powers line under it.
+  decimals: () => (
+    <>
+      {digit(5, 2, '1')}{digit(6, 2, '2')}{digit(7, 2, '.')}{digit(8, 2, '7')}{digit(9, 2, '5')}
+      {digit(3, 3, '+')}{digit(6, 3, '3')}{digit(7, 3, '.')}{digit(8, 3, '8')}
+      {rule(3, 10, 4)}
+      {blank(5, 4)}{blank(6, 4)}{digit(7, 4, '.')}{blank(8, 4)}{blank(9, 4)}
+      {digit(3, 6, '3')}{digit(4, 6, '.')}{digit(5, 6, '4')}{digit(6, 6, '×')}{digit(7, 6, '1')}{digit(8, 6, '0')}{digit(9, 6, '=')}
+      {blank(10, 6)}{blank(11, 6)}
+    </>
+  ),
   // The one screen-only sheet: an equation with a movable term.
   eqexplore: () => (
     <>
