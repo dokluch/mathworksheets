@@ -159,12 +159,16 @@ const MARKS = {
     </>
   ),
   // The long-division frame: the divisor, the upright, and the overbar with the
-  // quotient written above it — the shape frameLayout() actually renders.
+  // quotient boxes above it — the shape frameLayout() actually renders. The
+  // boxes are the sheet's tinted .colarith-blank without its underline, which
+  // sat just above the overbar and read as a second rule. Upright and overbar
+  // are one path, so the corner is a mitred join rather than two butt ends.
   coldiv: () => (
     <>
-      {blank(6, 3)}{blank(7, 3)}{blank(8, 3)}
-      {rule(6, 9, 4, 1.5)}
-      {vrule(6, 4, 5, 1.5)}
+      {[6, 7, 8].map(c => (
+        <rect key={`q${c}`} x={ln(c) + 1.5} y={ln(3) + 1.5} width={SQ - 3} height={SQ - 3} fill="currentColor" opacity="0.12" />
+      ))}
+      <path d={`M ${ln(6)} ${ln(5)} V ${ln(4)} H ${ln(9)}`} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="miter" />
       {digit(4, 4, '8')}
       {digit(6, 4, '4')}{digit(7, 4, '9')}{digit(8, 4, '6')}
     </>
