@@ -2,7 +2,7 @@
 export default {
   site: {
     tagline: 'Schede di matematica da stampare, dalla 1ª primaria alla 1ª media',
-    description: 'Super Awesome Math: schede di matematica gratuite, stampabili e casuali dalla 1ª primaria alla 1ª media. Tabelline, addizioni e sottrazioni, addizione e sottrazione in colonna, moltiplicazione in colonna, divisione, confronto, arrotondamento, sequenze numeriche, ordine delle operazioni e un esploratore di equazioni interattivo.',
+    description: 'Super Awesome Math: schede di matematica gratuite, stampabili e casuali dalla 1ª primaria alla 1ª media. Tabelline, addizioni e sottrazioni, addizione e sottrazione in colonna, moltiplicazione in colonna, divisione, confronto, arrotondamento, sequenze numeriche, ordine delle operazioni, frazioni, numeri decimali, divisori e numeri primi, equazioni e un esploratore di equazioni interattivo.',
     brandAlt: 'Schede di matematica',
   },
 
@@ -36,7 +36,7 @@ export default {
     home: {
       subtitle: 'Schede di esercizi gratuite e casuali, da stampare con un clic.',
       intro1: '{brand} è un generatore gratuito e open source di schede di matematica da stampare per bambini di 6–12 anni (dalla 1ª primaria alla 1ª media). Ogni scheda viene generata a caso ogni volta che la apri o la rigeneri, così i bambini si esercitano su problemi nuovi invece di memorizzare una pagina. Scegli una scheda, regola la difficoltà (intervallo di numeri, cifre, disposizione, colonne) e stampala dal browser; le impostazioni vengono ricordate su questo dispositivo.',
-      intro2: 'Il catalogo comprende tabelline, addizioni e sottrazioni con numeri mancanti, addizione in colonna con riporto, moltiplicazione in colonna, divisioni con e senza resto, confronto di numeri con >, < e =, arrotondamento alla decina, al centinaio e al migliaio, sequenze numeriche ed espressioni a più passaggi in cui l’ordine delle operazioni decide il risultato. L’esploratore di equazioni è un’attività a schermo in cui i bambini spostano i termini attraverso il segno di uguale e verificano la risposta su una linea dei numeri.',
+      intro2: 'Il catalogo comprende tabelline, addizioni e sottrazioni con numeri mancanti, addizione e sottrazione in colonna con riporto e prestito, moltiplicazione in colonna, divisioni con e senza resto, confronto di numeri con >, < e =, arrotondamento alla decina, al centinaio e al migliaio, sequenze numeriche, espressioni a più passaggi in cui l’ordine delle operazioni decide il risultato e, per i più grandi, frazioni, numeri decimali, scomposizione in fattori primi con MCD e mcm ed equazioni da risolvere. L’esploratore di equazioni è un’attività a schermo in cui i bambini spostano i termini attraverso il segno di uguale e verificano la risposta su una linea dei numeri.',
       worksheets: 'Schede',
       howItWorks: 'Come funziona',
       step1: 'Scegli una scheda dall’elenco qui sopra.',
@@ -759,7 +759,7 @@ export default {
         {
           heading: 'Cosa ottieni',
           items: [
-            'Schede da stampare dalla 1ª primaria alla 1ª media: tabelline, addizioni e sottrazioni, addizione e sottrazione in colonna, moltiplicazione in colonna, divisione, confronto di numeri, arrotondamento, sequenze numeriche e ordine delle operazioni.',
+            'Schede da stampare dalla 1ª primaria alla 1ª media: tabelline, addizioni e sottrazioni, addizione e sottrazione in colonna, moltiplicazione in colonna, divisione, confronto di numeri, arrotondamento, sequenze numeriche, ordine delle operazioni, frazioni, numeri decimali, divisori e numeri primi ed equazioni.',
             'Un esploratore di equazioni a schermo per giocare con le equazioni e verificare le risposte su una linea dei numeri.',
             'Difficoltà regolabile: intervalli di numeri, cifre, colonne e disposizione, ricordati sul tuo dispositivo per la prossima volta.',
             'Nessun account, nessuna registrazione, nessuna pubblicità, nessun costo. Nulla viene caricato: le schede vengono generate nel tuo browser.',

@@ -2,7 +2,7 @@
 export default {
   site: {
     tagline: 'Fiches de maths à imprimer, du CP à la 6e',
-    description: 'Super Awesome Math : fiches de mathématiques gratuites, imprimables et aléatoires pour les 6–12 ans (du CP à la 6e). Tables de multiplication, additions et soustractions, addition et soustraction posées, multiplication posée, division, comparaison, arrondi, suites de nombres, ordre des opérations et un explorateur d’équations interactif.',
+    description: 'Super Awesome Math : fiches de mathématiques gratuites, imprimables et aléatoires pour les 6–12 ans (du CP à la 6e). Tables de multiplication, additions et soustractions, addition et soustraction posées, multiplication posée, division, comparaison, arrondi, suites de nombres, ordre des opérations, fractions, nombres décimaux, diviseurs et nombres premiers, équations à résoudre et un explorateur d’équations interactif.',
     brandAlt: 'Fiches de maths',
   },
 
@@ -36,7 +36,7 @@ export default {
     home: {
       subtitle: 'Des fiches d’entraînement gratuites et aléatoires, à imprimer en un clic.',
       intro1: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer pour les 6–12 ans (du CP à la 6e). Chaque fiche est tirée au sort à chaque ouverture ou régénération : les enfants s’entraînent sur de nouveaux exercices au lieu de mémoriser une page. Choisissez une fiche, réglez la difficulté (plage de nombres, chiffres, disposition, colonnes) et imprimez-la depuis votre navigateur ; vos réglages sont mémorisés sur cet appareil.',
-      intro2: 'Le catalogue couvre les tables de multiplication, les additions et soustractions à trous, l’addition posée avec retenue, la multiplication posée, les tables de division avec ou sans reste, la comparaison de nombres avec >, < et =, l’arrondi à la dizaine, à la centaine et au millier, les suites de nombres, ainsi que les expressions à plusieurs étapes où l’ordre des opérations décide de la réponse. L’explorateur d’équations est une activité à l’écran où l’enfant déplace des termes de part et d’autre du signe égal et vérifie sa réponse sur une droite numérique.',
+      intro2: 'Le catalogue couvre les tables de multiplication, les additions et soustractions à trous, l’addition et la soustraction posées avec retenue, la multiplication posée, les tables de division avec ou sans reste, la comparaison de nombres avec >, < et =, l’arrondi à la dizaine, à la centaine et au millier, les suites de nombres, les expressions à plusieurs étapes où l’ordre des opérations décide de la réponse et, du CM1 à la 6e, les fractions, les nombres décimaux, la décomposition en facteurs premiers avec PGCD et PPCM, et les équations à résoudre. L’explorateur d’équations est une activité à l’écran où l’enfant déplace des termes de part et d’autre du signe égal et vérifie sa réponse sur une droite numérique.',
       worksheets: 'Fiches',
       howItWorks: 'Comment ça marche',
       step1: 'Choisissez une fiche dans la liste ci-dessus.',
@@ -759,7 +759,7 @@ export default {
         {
           heading: 'Ce que vous obtenez',
           items: [
-            'Des fiches à imprimer du CP à la 6e : tables de multiplication, additions et soustractions, addition et soustraction posées, multiplication posée, division, comparaison de nombres, arrondi, suites de nombres et ordre des opérations.',
+            'Des fiches à imprimer du CP à la 6e : tables de multiplication, additions et soustractions, addition et soustraction posées, multiplication posée, division, comparaison de nombres, arrondi, suites de nombres, ordre des opérations, fractions, nombres décimaux, diviseurs et nombres premiers, et équations à résoudre.',
             'Un explorateur d’équations à l’écran pour manipuler des équations et vérifier les réponses sur une droite numérique.',
             'Une difficulté réglable : plages de nombres, chiffres, colonnes et disposition, mémorisés sur votre appareil pour la prochaine fois.',
             'Pas de compte, pas d’inscription, pas de publicité, aucun coût. Rien n’est envoyé : les fiches sont générées dans votre navigateur.',

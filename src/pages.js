@@ -69,7 +69,7 @@ export const PAGES = [
       {
         heading: 'What you get',
         items: [
-          'Printable worksheets for grades 1–6: multiplication tables, addition and subtraction, column addition and subtraction, long multiplication, division, comparing numbers, rounding, number patterns and order of operations.',
+          'Printable worksheets for grades 1–6: multiplication tables, addition and subtraction, column addition and subtraction, long multiplication, division, comparing numbers, rounding, number patterns, order of operations, fractions, decimals, factors and primes, and equations to solve for x.',
           'An on-screen Equation Explorer for playing with equations and checking answers on a number line.',
           'Adjustable difficulty: number ranges, digits, columns and layout, remembered on your device for next time.',
           'No account, no sign-up, no ads, no cost. Nothing is uploaded: worksheets are generated in your browser.',

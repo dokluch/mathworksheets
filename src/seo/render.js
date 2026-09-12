@@ -902,7 +902,7 @@ export function renderLlmsTxt() {
     .join('\n')
   return `# ${BRAND}
 
-> ${BRAND} (“${t(DEFAULT_LOCALE, 'site.brandAlt')}”) is a free, open-source web app with printable, randomized math worksheets for grades 1–6: multiplication tables, addition and subtraction, column addition and subtraction, long multiplication, division, comparison, rounding, number patterns, order of operations, plus an interactive equation explorer. Site: ${SITE_URL}/
+> ${BRAND} (“${t(DEFAULT_LOCALE, 'site.brandAlt')}”) is a free, open-source web app with printable, randomized math worksheets for grades 1–6: multiplication tables, addition and subtraction, column addition and subtraction, long multiplication, division, comparison, rounding, number patterns, order of operations, fractions, decimals, factors and primes, and equations to solve for x, plus an interactive equation explorer. Site: ${SITE_URL}/
 
 Worksheets are generated in the browser and printed from the print dialog; there is no account, no server API and no cost (${LICENSE_NAME}). Every HTML page has a Markdown twin: append \`.md\` to the path or request the page with \`Accept: text/markdown\`. Pages are also available in ${otherLocales.map(l => LOCALE_META[l].englishName).join(', ')} under a two-letter path prefix: insert the two-letter code after the origin, for example \`${exampleLocalizedPath()}\`.
 

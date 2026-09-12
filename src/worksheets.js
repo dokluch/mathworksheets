@@ -24,8 +24,8 @@ export const WORKSHEETS = [
     ],
     examples: ['3 × 4 = □', '7 × 8 = □', '4 × 3 = □', '6 × 9 = □'],
     prerequisites: ['addsub'],
-    nextSteps: ['divide', 'colmul'],
-    updated: '2026-09-07',
+    nextSteps: ['divide', 'colmul', 'factors'],
+    updated: '2026-09-12',
     faq: [
       { q: 'What age are times tables worksheets for?', a: 'Most children meet the times tables in grade 2, around age 7, and are expected to recall them fluently by the end of grade 3. Start with a small range such as 1 to 5, and widen it once recall is quick rather than counted.' },
       { q: 'What do the pre-filled cells do?', a: 'Pre-filling the diagonal (1×1, 2×2, 3×3 …) or a percentage of random cells turns a blank grid into a puzzle. The visible answers give a child footholds to reason from, so a half-filled table is a gentler step than an empty one.' },
@@ -81,7 +81,7 @@ export const WORKSHEETS = [
     ],
     examples: ['348 + 275 = □', '503 − 268 = □', '67 + 9 = □', '1204 + 856 = □'],
     prerequisites: ['addsub'],
-    nextSteps: ['colmul'],
+    nextSteps: ['colmul', 'decimals'],
     updated: '2026-09-12',
     faq: [
       { q: 'What grade is column addition for?', a: 'Vertical addition with 2-digit numbers usually starts in grade 2, and 3- and 4-digit numbers follow in grade 3. The skill it depends on is place value: knowing that the 4 in 348 means four tens.' },
@@ -136,7 +136,7 @@ export const WORKSHEETS = [
     ],
     examples: ['12 ÷ 3 = □', '45 ÷ 9 = □', '56 ÷ 7 = □', '20 ÷ 5 = □'],
     prerequisites: ['multiply'],
-    nextSteps: ['coldiv'],
+    nextSteps: ['coldiv', 'fractions', 'factors'],
     updated: '2026-09-12',
     faq: [
       { q: 'When should children start division facts?', a: 'Division facts usually follow the times tables in grades 2 and 3. A child who knows that 3 × 4 = 12 already knows 12 ÷ 3 and 12 ÷ 4, so start once the matching tables are recalled rather than counted, and choose within 20 for the first sheets.' },
@@ -164,7 +164,7 @@ export const WORKSHEETS = [
     ],
     examples: ['864 ÷ 6 = □', '3172 ÷ 4 = □', '4164 ÷ 12 = □', '31752 ÷ 42 = □'],
     prerequisites: ['divide', 'colmul'],
-    nextSteps: ['order'],
+    nextSteps: ['order', 'fractions', 'factors'],
     updated: '2026-09-12',
     faq: [
       { q: 'When do children learn long division?', a: 'Long division normally arrives at the end of grade 3 or in grade 4, after multiplication facts and subtraction are secure. Each step divides, multiplies, subtracts and brings down, so weakness in any of those shows up quickly.' },
@@ -190,8 +190,8 @@ export const WORKSHEETS = [
     ],
     examples: ['43 ? 34', '17 ? 17', '208 ? 280', '99 ? 100'],
     prerequisites: ['addsub'],
-    nextSteps: ['rounding'],
-    updated: '2026-09-07',
+    nextSteps: ['rounding', 'fractions'],
+    updated: '2026-09-12',
     faq: [
       { q: 'How do I help a child remember > and <?', a: 'The open end always faces the larger number, so the symbol widens towards “more”. Reading the whole statement aloud — "forty-three is greater than thirty-four" — fixes it faster than drilling the symbol on its own.' },
       { q: 'Why are the number pairs deliberately awkward?', a: 'Pairs like 43 and 34, or 208 and 280, use the same digits in a different order, and about one pair in seven is equal. A child who compares only the first digit gets those wrong, which is exactly the habit the sheet is meant to break.' },
@@ -216,8 +216,8 @@ export const WORKSHEETS = [
     ],
     examples: ['48 → 50', '350 → 400', '1249 → 1000', '95 → 100'],
     prerequisites: ['compare'],
-    nextSteps: ['order'],
-    updated: '2026-09-07',
+    nextSteps: ['order', 'decimals'],
+    updated: '2026-09-12',
     faq: [
       { q: 'What is the rule for rounding?', a: 'Look at the digit one place to the right of the one you are rounding to. If it is 5 or more, round up; if it is 4 or less, round down. Rounding 48 to the nearest ten gives 50 because the 8 is 5 or more.' },
       { q: 'Why does the sheet keep using numbers ending in 5?', a: 'The 5 boundary is the only case with a convention rather than an obvious answer, and it is where most mistakes happen. The generator deliberately includes those, along with a mix of round-up and round-down cases.' },
@@ -260,7 +260,7 @@ export const WORKSHEETS = [
     longDesc:
       'Multi-step expressions where the answer depends on doing the operations in the right order: multiplication and division before addition and subtraction, and brackets before either. ' +
       'Three levels run from chains of one kind (25 − 14 + 43) through mixed precedence (70 − 7 × 9) to four-term expressions with brackets (38 − (80 − 76) × 7). Every step lands on a whole number between 2 and 100, division is always exact, and the answer boxes show how many digits to expect.',
-    grades: '2–3',
+    grades: '2–4',
     skills: ['order of operations', 'brackets', 'mental arithmetic', 'multi-step problems'],
     settings: [
       'Level: easy, medium or hard',
@@ -271,8 +271,8 @@ export const WORKSHEETS = [
     ],
     examples: ['25 − 14 + 43 = □□', '30 − (17 + 9) = □', '70 − 7 × 9 = □', '28 + 12 ÷ 2 = □□'],
     prerequisites: ['addsub', 'multiply'],
-    nextSteps: ['eqexplore'],
-    updated: '2026-09-07',
+    nextSteps: ['eqexplore', 'solvex'],
+    updated: '2026-09-12',
     faq: [
       { q: 'What is the order of operations?', a: 'Work out anything in brackets first, then all the multiplication and division from left to right, then the addition and subtraction from left to right. It is a convention rather than a discovery: everyone agrees to read 70 − 7 × 9 the same way, so the expression has one answer instead of two.' },
       { q: 'Why does my child get 567 for 70 − 7 × 9?', a: 'Because they worked strictly left to right: 70 − 7 is 63, and 63 × 9 is 567. The correct reading multiplies first, giving 70 − 63 = 7. This is the single most common mistake on these sheets, and the fastest cure is asking a child to underline the multiplication before they write anything.' },
@@ -474,8 +474,8 @@ export const WORKSHEETS = [
     ],
     examples: ['x + 7 = 12', '15 − x = 8', 'x − 6 = 9'],
     prerequisites: ['addsub'],
-    nextSteps: ['patterns'],
-    updated: '2026-09-07',
+    nextSteps: ['patterns', 'solvex'],
+    updated: '2026-09-12',
     faq: [
       { q: 'Can I print the Equation Explorer?', a: 'No. It is the one activity on the site meant for the screen: terms are dragged across the equals sign, the number line animates, and answers are checked as they are typed. Every other worksheet here prints on one page.' },
       { q: 'What does moving a term across the equals sign mean?', a: 'An equation stays true as long as both sides change in the same way. Moving a term across flips its sign, so x + 7 = 12 becomes x = 12 − 7. Seeing the sign flip as it happens makes the rule concrete rather than memorised.' },

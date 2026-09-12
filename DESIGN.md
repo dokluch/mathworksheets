@@ -35,6 +35,7 @@ colors:
   ink-compare: "#9a6212"
   ink-rounding: "#8f3b6e"
   ink-patterns: "#5b4a91"
+  ink-order: "#25457a"
   ink-eqexplore: "#1f7a8c"
   ink-bongard: "#6b7a1f"
   ink-fractions: "#7d3b3f"
@@ -205,7 +206,7 @@ Mode is Operate: a hurried adult picks a worksheet, adjusts it, and prints. Dens
 **Key Characteristics:**
 - One light board field, one warm mark colour, one paper stock, held apart by tone + edge + lift.
 - Paper surfaces sit on the board as square-cut plates with a hairline keyline plus a tight shadow — stapled stock, not floating glass.
-- Nine subject inks, carried as a 4–5px edge tab, as a card head band, and as the tint on the dense-context icons — never as text.
+- Seventeen subject inks, one per worksheet, carried as a 4–5px edge tab, as a card head band, and as the tint on the dense-context icons — never as text.
 - Type is Archivo for cover/display, Inter for UI and prose, JetBrains Mono for every figure.
 - The notebook square (`--sq: 26px`) is the shared module between the sheet and the chrome that configures it.
 - Motion is one authored moment: the set stamp coming down.
@@ -222,8 +223,8 @@ One light ground in three tones, one warm mark, and a small residual control acc
 ### Secondary
 - **Marking Red** (`mark`): the one warm colour. Spent on exactly four things — the Print button, the global focus ring, the set-stamp animation, and text selection. `mark-deep` carries prose links and the primary-button hover.
 
-### Tertiary — the nine subject inks
-Each worksheet carries its own ink (`ink-multiply` … `ink-eqexplore`), assigned in `src/worksheets.js`. They appear as geometry and as icon tint: the 5px band across the head of a catalog card and the stroke colour of the sidebar/chip icon (19px) and the worksheet-title icon (22px). They are never used as text colour, never as a fill, and never as the only signal of which sheet is selected — the active row also inverts to paper and bolds its label.
+### Tertiary — the subject inks
+Each worksheet carries its own ink (`ink-multiply` … `ink-solvex`, one per worksheet), assigned in `src/worksheets.js`. They appear as geometry and as icon tint: the 5px band across the head of a catalog card and the stroke colour of the sidebar/chip icon (19px) and the worksheet-title icon (22px). They are never used as text colour, never as a fill, and never as the only signal of which sheet is selected — the active row also inverts to paper and bolds its label.
 
 ### Neutral
 - **Sheet Paper** (`paper`): every real sheet — worksheet, settings panel, static prose plate, language menu, catalog card, brand label, the active sidebar row.
@@ -428,7 +429,7 @@ Recorded as shipped, not as intended:
 
 Shipped, but deliberately excluded from the system above:
 - *(resolved)* The mobile hero was pinned to 14px by a `≤768px` override left from the old caption-sized tagline — a step *below* body size. The override is gone; `clamp(20px, 2.6vw, 30px)` now yields 20px at 390px and 30px at 1440px.
-- *(resolved)* `ink-compare` was `#c07f1e` at 2.58:1 on the board, under the 3:1 non-text floor. It is now `#9a6212` (3.94:1 board, 4.95:1 paper). All nine subject inks clear 3:1 on both grounds; a new one must too.
+- *(resolved)* `ink-compare` was `#c07f1e` at 2.58:1 on the board, under the 3:1 non-text floor. It is now `#9a6212` (3.94:1 board, 4.95:1 paper). All seventeen subject inks clear 3:1 on both grounds, the lowest being `ink-bongard` at 4.34:1 on the board; a new one must too.
 - *(resolved)* `--shadow-sm` / `--shadow-md` were navy-tinted (`rgba(16,47,77,…)`) from the dark-ground build. Every shadow and keyline is now ink-tinted (`rgba(26,31,36,…)`).
 - *(resolved)* The `.worksheet` keyline is `var(--edge)` and `.catalog-card-sheet`'s wash is ink-tinted. No navy literal remains in the stylesheets.
 
@@ -820,3 +821,24 @@ depend on the band, which centres it, so there is no feedback loop.
 Verified: 495 tests and lint clean. Every notebook sheet in en, de, ru and fr at 390px ends its band
 on a whole square with no problem off the ruling (17 of 28 were off before). At 769px in en, de and
 ru no headline is taller than its band. Print stays at three squares in every language.
+
+## Revision — five inks for grades 4–6
+
+**Date:** 2026-09-12
+
+**What changed.** Five worksheets joined the catalog, each with its own ink: `ink-fractions`
+#7d3b3f, `ink-fracaddsub` #685d31, `ink-decimals` #93289f, `ink-factors` #278227 and `ink-solvex`
+#496831. `ink-order` (#25457a), already carried by Order of Operations, was missing from this file
+and is now listed, so every `color` in `src/worksheets.js` has its token here.
+
+**How they were chosen.** Twelve inks already covered most of the hue wheel, so the new ones were
+picked by distance, not by hue. Candidates were limited to the house range (HSL saturation
+0.36–0.60, lightness 0.30–0.39, 4.4–7.5:1 on the board), and each pick was the one furthest in CIE
+Lab from every ink before it. The closest the palette now comes between a new ink and any other is
+ΔE 19.9, solvex against bongard; the closest pair it already had was ΔE 15.1, coladd against
+eqexplore. A first pass over the whole saturation range picked an electric blue and a magenta that
+read as a different product, which is why the range is constrained.
+
+**Contrast.** Every subject ink clears the 3:1 non-text floor on both grounds. The new ones measure
+4.46–7.47:1 on the board and 4.87–8.17:1 on paper; the lowest of the whole palette is still
+`ink-bongard` at 4.34:1 on the board.

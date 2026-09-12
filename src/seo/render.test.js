@@ -103,6 +103,15 @@ describe('catalog invariants', () => {
     for (const ws of WORKSHEETS) expect(agesForGrades(ws.grades)).toMatch(/^\d+-\d+$/)
   })
 
+  it('offers no grade the catalog cannot answer', () => {
+    // The filter lists every grade in GRADES; a grade with no sheet behind it
+    // is an empty grid and a "0 sheets" count, with nothing to explain it.
+    for (const grade of GRADES) {
+      const matches = WORKSHEETS.filter(ws => gradeNumbers(ws.grades).includes(Number(grade)))
+      expect(matches.length, `grade ${grade}`).toBeGreaterThan(0)
+    }
+  })
+
   it('gradeNumbers expands a band into every grade it covers', () => {
     expect(gradeNumbers('3')).toEqual([3])
     expect(gradeNumbers('1–3')).toEqual([1, 2, 3])

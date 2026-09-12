@@ -2,7 +2,7 @@
 export default {
   site: {
     tagline: 'Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–6',
-    description: 'Super Awesome Math: kostenlose, zufällig erzeugte Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–6. Einmaleins, Addition und Subtraktion, schriftliche Addition und Subtraktion, schriftliche Multiplikation, Division, Zahlenvergleich, Runden, Zahlenfolgen, Rechenreihenfolge und ein interaktiver Gleichungs-Explorer.',
+    description: 'Super Awesome Math: kostenlose, zufällig erzeugte Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–6. Einmaleins, Addition und Subtraktion, schriftliche Addition und Subtraktion, schriftliche Multiplikation, Division, Zahlenvergleich, Runden, Zahlenfolgen, Rechenreihenfolge, Brüche, Dezimalzahlen, Teiler und Primzahlen, Gleichungen und ein interaktiver Gleichungs-Explorer.',
     brandAlt: 'Mathe-Arbeitsblätter',
   },
 
@@ -36,7 +36,7 @@ export default {
     home: {
       subtitle: 'Kostenlose, zufällig erzeugte Übungsblätter, die du mit einem Klick ausdruckst.',
       intro1: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–6 (6–12 Jahre). Jedes Blatt wird bei jedem Öffnen oder Neu-Erzeugen zufällig zusammengestellt, sodass Kinder frische Aufgaben üben, statt eine Seite auswendig zu lernen. Wähle ein Arbeitsblatt, stelle den Schwierigkeitsgrad ein (Zahlenraum, Stellen, Layout, Spalten) und drucke es aus dem Browser; deine Einstellungen werden auf diesem Gerät gespeichert.',
-      intro2: 'Der Katalog umfasst Einmaleins-Tabellen, Additions- und Subtraktionsaufgaben mit Lücken, schriftliche Addition mit Übertrag, schriftliche Multiplikation, Geteiltaufgaben mit und ohne Rest, Zahlenvergleich mit >, < und =, Runden auf Zehner, Hunderter und Tausender Zahlenfolgen sowie mehrschrittige Terme, bei denen die Rechenreihenfolge das Ergebnis entscheidet. Der Gleichungs-Explorer ist eine Bildschirmübung, bei der Kinder Terme über das Gleichheitszeichen schieben und ihre Antwort am Zahlenstrahl überprüfen.',
+      intro2: 'Der Katalog umfasst Einmaleins-Tabellen, Additions- und Subtraktionsaufgaben mit Lücken, schriftliche Addition und Subtraktion mit Übertrag, schriftliche Multiplikation, Geteiltaufgaben mit und ohne Rest, Zahlenvergleich mit >, < und =, Runden auf Zehner, Hunderter und Tausender, Zahlenfolgen, mehrschrittige Terme, bei denen die Rechenreihenfolge das Ergebnis entscheidet, und für die Größeren Brüche, Dezimalzahlen, Primfaktorzerlegung mit ggT und kgV sowie Gleichungen zum Lösen. Der Gleichungs-Explorer ist eine Bildschirmübung, bei der Kinder Terme über das Gleichheitszeichen schieben und ihre Antwort am Zahlenstrahl überprüfen.',
       worksheets: 'Arbeitsblätter',
       howItWorks: 'So funktioniert es',
       step1: 'Wähle ein Arbeitsblatt aus der Liste oben.',
@@ -759,7 +759,7 @@ export default {
         {
           heading: 'Was du bekommst',
           items: [
-            'Arbeitsblätter zum Ausdrucken für die Klassen 1–6: Einmaleins, Addition und Subtraktion, schriftliche Addition und Subtraktion, schriftliche Multiplikation, Division, Zahlenvergleich, Runden, Zahlenfolgen und Rechenreihenfolge.',
+            'Arbeitsblätter zum Ausdrucken für die Klassen 1–6: Einmaleins, Addition und Subtraktion, schriftliche Addition und Subtraktion, schriftliche Multiplikation, Division, Zahlenvergleich, Runden, Zahlenfolgen, Rechenreihenfolge, Brüche, Dezimalzahlen, Teiler und Primzahlen sowie Gleichungen.',
             'Einen Gleichungs-Explorer am Bildschirm, um mit Gleichungen zu spielen und Antworten am Zahlenstrahl zu prüfen.',
             'Einstellbare Schwierigkeit: Zahlenräume, Stellen, Spalten und Layout, auf deinem Gerät für das nächste Mal gespeichert.',
             'Kein Konto, keine Anmeldung, keine Werbung, keine Kosten. Nichts wird hochgeladen: Die Arbeitsblätter entstehen in deinem Browser.',
