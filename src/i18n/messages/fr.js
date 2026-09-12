@@ -278,6 +278,18 @@ export default {
     primesAria: '{n} est-il premier ou composé ?',
   },
 
+  solvex: {
+    title: 'Trouver x',
+    level: 'Niveau',
+    one: 'Une étape',
+    two: 'Deux étapes',
+    both: 'x des deux côtés',
+    answers: 'Solutions',
+    meta: '{level} · solutions jusqu’à {n}',
+    answer: 'x = {x}',
+    problemAria: 'Résoudre {equation}',
+  },
+
   compare: {
     title: 'Comparaison',
   },
@@ -655,6 +667,25 @@ export default {
         { q: 'Comment trouver le PGCD et le PPCM de deux nombres ?', a: 'On décompose les deux. Le PGCD multiplie les facteurs premiers communs, autant de fois qu’ils apparaissent dans les deux ; le PPCM multiplie tous les facteurs présents dans l’un ou l’autre, autant de fois que dans celui qui en a le plus. Pour 12 = 2 × 2 × 3 et 18 = 2 × 3 × 3, cela donne un PGCD de 6 et un PPCM de 36.' },
         { q: 'Pourquoi la fiche propose-t-elle souvent des nombres comme 51 ou 91 ?', a: 'Ce sont des nombres composés qui ont l’air premiers. Un enfant qui teste 2 et 5 puis s’arrête dira que 51 est premier, alors que 51 = 3 × 17 et 91 = 7 × 13. Environ la moitié de chaque fiche est composée, et la plupart de ces nombres sont impairs et ne finissent pas par 5 : il faut continuer à diviser.' },
         { q: 'Par quelle limite commencer ?', a: 'Jusqu’à 100 convient au CM1 et au CM2, où il suffit d’essayer 2, 3, 5 et 7. Jusqu’à 500 demande aussi 11, 13, 17 et 19, et la décomposition peut se terminer par un grand facteur premier : cela convient à la 6e ou à un enfant qui décompose déjà vite.' },
+      ],
+    },
+    solvex: {
+      label: 'Trouver x',
+      shortDesc: 'Équations en une étape, en deux étapes et avec x des deux côtés',
+      longDesc: 'Des équations du premier degré à résoudre sur papier, avec des lignes quadrillées sous chacune pour le calcul. On commence en une étape, comme x + 7 = 15 ou 3x = 21, puis en deux étapes avec parenthèses et division, comme 2x − 5 = 11 ou 3(x + 2) = 18, et enfin avec x des deux côtés. Chaque équation est construite à partir de sa solution, donc chaque étape tombe juste et x est un entier positif jusqu’à 10, 20 ou 100. Les signes × et ÷ s’impriment comme la langue les écrit.',
+      skills: ['résolution d’équations', 'opérations inverses', 'équations en une et deux étapes', 'équilibrer les deux membres'],
+      settings: [
+        'Niveau : une étape, deux étapes ou x des deux côtés',
+        'Solutions : x jusqu’à 10, 20 ou 100',
+        'Signes : × ÷ ou · :',
+        'Colonnes : 2 ou 3',
+        'Imprimer un corrigé',
+      ],
+      faq: [
+        { q: 'Quelle différence entre une équation en une étape et en deux étapes ?', a: 'Une équation en une étape défait une seule opération : pour x + 7 = 15, on retire 7 des deux côtés. Une équation en deux étapes enroule deux opérations autour de x, comme 2x − 5 = 11, et on les défait dans l’ordre inverse : d’abord ajouter 5, puis diviser par 2. Les parenthèses et la division par un nombre sont aussi des formes en deux étapes.' },
+        { q: 'Pourquoi y a-t-il des lignes vides sous chaque équation ?', a: 'Résoudre une équation, c’est enchaîner des étapes, et chaque étape a sa ligne : ce qu’on fait aux deux membres, puis la nouvelle équation. Les lignes quadrillées donnent sa place à ce calcul, et il y en a davantage aux niveaux plus difficiles, où il y a plus d’étapes à écrire.' },
+        { q: 'En quoi est-ce différent de l’explorateur d’équations ?', a: 'L’explorateur d’équations est une activité à l’écran pour voir comment une équation s’équilibre, en déplaçant des termes de part et d’autre du signe égal et en vérifiant la réponse sur une droite graduée. Cette fiche est l’entraînement sur papier qui suit : la même idée, écrite à la main, sans retour avant qu’un adulte ne vérifie avec le corrigé.' },
+        { q: 'Les solutions sont-elles toujours des nombres entiers ?', a: 'Oui. Chaque équation est construite à partir d’une solution entière entre 1 et la limite choisie, si bien qu’aucune étape n’exige de fraction ni de nombre négatif. L’attention reste sur la méthode, défaire les opérations dans le bon ordre, plutôt que sur le calcul.' },
       ],
     },
     eqexplore: {

@@ -278,6 +278,18 @@ export default {
     primesAria: '¿{n} es primo o compuesto?',
   },
 
+  solvex: {
+    title: 'Despeja la x',
+    level: 'Nivel',
+    one: 'Un paso',
+    two: 'Dos pasos',
+    both: 'x en ambos lados',
+    answers: 'Soluciones',
+    meta: '{level} · soluciones hasta {n}',
+    answer: 'x = {x}',
+    problemAria: 'Resuelve {equation}',
+  },
+
   compare: {
     title: 'Comparación',
   },
@@ -655,6 +667,25 @@ export default {
         { q: '¿Cómo se hallan el MCD y el mcm de dos números?', a: 'Se descomponen los dos. El MCD multiplica los factores primos comunes, tantas veces como aparecen en ambos; el mcm multiplica todos los factores que tiene cualquiera de los dos, tantas veces como en el que más los tiene. Para 12 = 2 × 2 × 3 y 18 = 2 × 3 × 3 resulta un MCD de 6 y un mcm de 36.' },
         { q: '¿Por qué aparecen tanto números como 51 y 91?', a: 'Son compuestos que parecen primos. Un niño que prueba con 2 y con 5 y se detiene dirá que 51 es primo, pero 51 = 3 × 17 y 91 = 7 × 13. Cerca de la mitad de cada ficha son compuestos, y la mayoría son impares que no terminan en 5, así que la única forma de acertar es seguir dividiendo.' },
         { q: '¿Con qué rango empiezo?', a: 'Hasta 100 va bien en 5.º de primaria, donde basta con probar 2, 3, 5 y 7. Hasta 500 exige también 11, 13, 17 y 19, y la descomposición puede terminar en un primo grande, así que encaja en 6.º o con un niño que ya descompone con soltura.' },
+      ],
+    },
+    solvex: {
+      label: 'Despeja la x',
+      shortDesc: 'Ecuaciones de un paso, de dos pasos y con x en ambos lados',
+      longDesc: 'Ecuaciones de primer grado para resolver en papel, con renglones cuadriculados debajo de cada una para el desarrollo. Se empieza con un paso, como x + 7 = 15 o 3x = 21, se pasa a dos pasos con paréntesis y división, como 2x − 5 = 11 o 3(x + 2) = 18, y se termina con x en ambos lados. Cada ecuación se construye a partir de su solución, así que cada paso da un número entero y x es un entero positivo hasta 10, 20 o 100. Los signos × y ÷ se imprimen como los escribe cada idioma.',
+      skills: ['resolución de ecuaciones', 'operaciones inversas', 'ecuaciones de uno y dos pasos', 'equilibrar ambos miembros'],
+      settings: [
+        'Nivel: un paso, dos pasos o x en ambos lados',
+        'Soluciones: x hasta 10, 20 o 100',
+        'Signos: × ÷ o · :',
+        'Columnas: 2 o 3',
+        'Imprimir la hoja de respuestas',
+      ],
+      faq: [
+        { q: '¿Qué diferencia hay entre una ecuación de un paso y una de dos pasos?', a: 'Una ecuación de un paso deshace una sola operación: x + 7 = 15 se resuelve restando 7 en los dos lados. Una de dos pasos tiene dos operaciones alrededor de la x, como 2x − 5 = 11, y se deshacen en orden inverso: primero se suma 5 y luego se divide entre 2. Los paréntesis y la división entre un número también son formas de dos pasos.' },
+        { q: '¿Por qué hay renglones vacíos debajo de cada ecuación?', a: 'Resolver una ecuación es una serie de pasos, y cada paso va en su propio renglón: lo que se hace en los dos miembros y la ecuación que queda. Los renglones cuadriculados le dan un lugar a ese desarrollo, y hay más en los niveles difíciles, donde hay más pasos que escribir.' },
+        { q: '¿En qué se diferencia del explorador de ecuaciones?', a: 'El explorador de ecuaciones es una actividad en pantalla para ver cómo se equilibra una ecuación, moviendo términos de un lado del igual al otro y comprobando la respuesta en una recta numérica. Esta ficha es la práctica en papel que viene después: la misma idea, escrita a mano y sin corrección hasta que un adulto la revise con las soluciones.' },
+        { q: '¿Las soluciones son siempre números enteros?', a: 'Sí. Cada ecuación se construye a partir de una solución entera entre 1 y el límite elegido, así que ningún paso necesita fracciones ni números negativos. La atención queda en el método, deshacer las operaciones en el orden correcto, y no en las cuentas.' },
       ],
     },
     eqexplore: {

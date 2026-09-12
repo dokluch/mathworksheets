@@ -304,6 +304,14 @@ const MARKS = {
       {digit(8, 5, '9')}{digit(9, 5, '1')}{blank(11, 5)}
     </>
   ),
+  // An equation with lines of working under it, and a one-step equation below.
+  solvex: () => (
+    <>
+      {digit(3, 2, '2')}{digit(4, 2, 'x')}{digit(5, 2, '−')}{digit(6, 2, '5')}{digit(7, 2, '=')}{digit(8, 2, '1')}{digit(9, 2, '1')}
+      {blank(3, 3, 7)}{blank(3, 4, 5)}
+      {digit(3, 6, 'x')}{digit(4, 6, '+')}{digit(5, 6, '7')}{digit(6, 6, '=')}{digit(7, 6, '1')}{digit(8, 6, '5')}
+    </>
+  ),
   // The one screen-only sheet: an equation with a movable term.
   eqexplore: () => (
     <>

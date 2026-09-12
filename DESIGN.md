@@ -41,6 +41,7 @@ colors:
   ink-fracaddsub: "#685d31"
   ink-decimals: "#93289f"
   ink-factors: "#278227"
+  ink-solvex: "#496831"
   ruling-screen: "rgba(148, 163, 184, 0.28)"
   ruling-print: "rgba(107, 114, 128, 0.42)"
 typography:

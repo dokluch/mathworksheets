@@ -278,6 +278,18 @@ export default {
     primesAria: '{n} è primo o composto?',
   },
 
+  solvex: {
+    title: 'Trova x',
+    level: 'Livello',
+    one: 'Un passaggio',
+    two: 'Due passaggi',
+    both: 'x da entrambe le parti',
+    answers: 'Soluzioni',
+    meta: '{level} · soluzioni fino a {n}',
+    answer: 'x = {x}',
+    problemAria: 'Risolvi {equation}',
+  },
+
   compare: {
     title: 'Confronto',
   },
@@ -655,6 +667,25 @@ export default {
         { q: 'Come si trovano MCD e mcm di due numeri?', a: 'Si scompongono entrambi. Il MCD moltiplica i fattori primi comuni, tante volte quante compaiono in tutti e due; il mcm moltiplica tutti i fattori presenti in almeno uno dei due, tante volte quante nel numero che ne ha di più. Per 12 = 2 · 2 · 3 e 18 = 2 · 3 · 3 si ottengono MCD 6 e mcm 36.' },
         { q: 'Perché la scheda propone spesso numeri come 51 e 91?', a: 'Sono numeri composti che sembrano primi. Un bambino che prova con 2 e con 5 e si ferma dirà che 51 è primo, invece 51 = 3 · 17 e 91 = 7 · 13. Circa metà di ogni scheda è fatta di composti, e quasi tutti sono dispari e non finiscono per 5, quindi l’unico modo è continuare a dividere.' },
         { q: 'Con quale intervallo conviene cominciare?', a: 'Fino a 100 va bene in quinta primaria, dove basta provare 2, 3, 5 e 7. Fino a 500 richiede anche 11, 13, 17 e 19, e la scomposizione può finire con un fattore primo grande: è adatto alla prima media o a chi scompone già con sicurezza.' },
+      ],
+    },
+    solvex: {
+      label: 'Trova x',
+      shortDesc: 'Equazioni in un passaggio, in due passaggi e con x da entrambe le parti',
+      longDesc: 'Equazioni di primo grado da risolvere su carta, con righe a quadretti sotto ciascuna per i passaggi. Si comincia con un passaggio, come x + 7 = 15 o 3x = 21, si passa a due passaggi con parentesi e divisione, come 2x − 5 = 11 o 3(x + 2) = 18, e si arriva alle equazioni con x da entrambe le parti. Ogni equazione è costruita a partire dalla soluzione, così ogni passaggio dà un numero intero e x è un intero positivo fino a 10, 20 o 100. I segni × e ÷ si stampano come li scrive ogni lingua.',
+      skills: ['risolvere equazioni', 'operazioni inverse', 'equazioni in uno e due passaggi', 'bilanciare i due membri'],
+      settings: [
+        'Livello: un passaggio, due passaggi o x da entrambe le parti',
+        'Soluzioni: x fino a 10, 20 o 100',
+        'Segni: × ÷ o · :',
+        'Colonne: 2 o 3',
+        'Stampa le soluzioni',
+      ],
+      faq: [
+        { q: 'Che differenza c’è tra un’equazione in un passaggio e una in due?', a: 'Un’equazione in un passaggio disfa una sola operazione: x + 7 = 15 si risolve togliendo 7 da entrambe le parti. Un’equazione in due passaggi ha due operazioni attorno alla x, come 2x − 5 = 11, e si disfano in ordine inverso: prima si aggiunge 5, poi si divide per 2. Anche le parentesi e la divisione per un numero sono forme in due passaggi.' },
+        { q: 'Perché sotto ogni equazione ci sono righe vuote?', a: 'Risolvere un’equazione è una sequenza di passaggi, e ogni passaggio va su una riga sua: cosa si fa a entrambi i membri, poi la nuova equazione. Le righe a quadretti danno un posto a questi passaggi, e ce ne sono di più ai livelli difficili, dove i passaggi da scrivere sono di più.' },
+        { q: 'In cosa è diverso dall’esploratore di equazioni?', a: 'L’esploratore di equazioni è un’attività a schermo per vedere come un’equazione resta in equilibrio, spostando i termini da una parte all’altra dell’uguale e verificando la risposta su una linea dei numeri. Questa scheda è l’esercizio su carta che viene dopo: la stessa idea, scritta a mano, senza riscontro finché un adulto non controlla con le soluzioni.' },
+        { q: 'Le soluzioni sono sempre numeri interi?', a: 'Sì. Ogni equazione è costruita a partire da una soluzione intera tra 1 e il limite scelto, quindi nessun passaggio richiede frazioni o numeri negativi. L’attenzione resta sul metodo, disfare le operazioni nell’ordine giusto, e non sui calcoli.' },
       ],
     },
     eqexplore: {

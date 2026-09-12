@@ -278,6 +278,18 @@ export default {
     primesAria: 'Ist {n} eine Primzahl?',
   },
 
+  solvex: {
+    title: 'Gleichungen lösen',
+    level: 'Stufe',
+    one: 'Ein Schritt',
+    two: 'Zwei Schritte',
+    both: 'x auf beiden Seiten',
+    answers: 'Lösungen',
+    meta: '{level} · Lösungen bis {n}',
+    answer: 'x = {x}',
+    problemAria: 'Löse {equation}',
+  },
+
   compare: {
     title: 'Zahlenvergleich',
   },
@@ -655,6 +667,25 @@ export default {
         { q: 'Wie findet man ggT und kgV zweier Zahlen?', a: 'Man zerlegt beide. Der ggT multipliziert die gemeinsamen Primfaktoren, so oft sie in beiden vorkommen; das kgV multipliziert alle Primfaktoren, die in einer der Zahlen vorkommen, so oft wie in der Zahl, die sie am häufigsten hat. Für 12 = 2 · 2 · 3 und 18 = 2 · 3 · 3 ergibt das einen ggT von 6 und ein kgV von 36.' },
         { q: 'Warum kommen so oft Zahlen wie 51 und 91 vor?', a: 'Das sind zusammengesetzte Zahlen, die wie Primzahlen aussehen. Ein Kind, das nur 2 und 5 prüft, hält 51 für eine Primzahl, dabei ist 51 = 3 · 17 und 91 = 7 · 13. Etwa die Hälfte jedes Blatts ist zusammengesetzt, und die meisten davon sind ungerade und enden nicht auf 5, also hilft nur weiterteilen.' },
         { q: 'Mit welchem Zahlenraum sollte ich anfangen?', a: 'Bis 100 passt zu Klasse 5, wo es genügt, 2, 3, 5 und 7 zu probieren. Bis 500 verlangt auch 11, 13, 17 und 19, und die Zerlegung kann mit einem großen Primfaktor enden, das passt zu Klasse 6 oder zu Kindern, die schon sicher zerlegen.' },
+      ],
+    },
+    solvex: {
+      label: 'Gleichungen lösen',
+      shortDesc: 'Gleichungen mit einem Schritt, zwei Schritten und x auf beiden Seiten',
+      longDesc: 'Lineare Gleichungen zum Lösen auf Papier, mit Karozeilen unter jeder Gleichung für den Rechenweg. Es beginnt mit einem Schritt, etwa x + 7 = 15 oder 3x = 21, geht weiter mit zwei Schritten, Klammern und Division, etwa 2x − 5 = 11 oder 3(x + 2) = 18, und endet mit x auf beiden Seiten. Jede Gleichung wird von ihrer Lösung aus gebaut, so geht jeder Schritt glatt auf und x ist eine positive ganze Zahl bis 10, 20 oder 100. Mal- und Geteiltzeichen werden so gedruckt, wie die Sprache sie schreibt.',
+      skills: ['Gleichungen lösen', 'Umkehroperationen', 'Gleichungen mit einem und zwei Schritten', 'beide Seiten im Gleichgewicht halten'],
+      settings: [
+        'Stufe: ein Schritt, zwei Schritte oder x auf beiden Seiten',
+        'Lösungen: x bis 10, 20 oder 100',
+        'Zeichen: × ÷ oder · :',
+        'Spalten: 2 oder 3',
+        'Lösungsblatt drucken',
+      ],
+      faq: [
+        { q: 'Was unterscheidet eine Gleichung mit einem Schritt von einer mit zwei?', a: 'Eine Gleichung mit einem Schritt macht eine einzige Rechnung rückgängig: Bei x + 7 = 15 zieht man auf beiden Seiten 7 ab. Bei zwei Schritten stehen zwei Rechnungen um das x, etwa bei 2x − 5 = 11, und man macht sie in umgekehrter Reihenfolge rückgängig: erst 5 addieren, dann durch 2 teilen. Klammern und das Teilen durch eine Zahl sind ebenfalls Formen mit zwei Schritten.' },
+        { q: 'Warum sind unter jeder Gleichung leere Zeilen?', a: 'Eine Gleichung zu lösen ist eine Folge von Schritten, und jeder Schritt gehört in eine eigene Zeile: was mit beiden Seiten gemacht wird, dann die neue Gleichung. Die Karozeilen geben diesem Rechenweg seinen Platz, und auf den schwierigeren Stufen sind es mehr, weil dort mehr Schritte aufzuschreiben sind.' },
+        { q: 'Was ist der Unterschied zum Gleichungs-Explorer?', a: 'Der Gleichungs-Explorer ist eine Bildschirmübung, um zu sehen, wie eine Gleichung im Gleichgewicht bleibt: Terme werden über das Gleichheitszeichen geschoben und das Ergebnis auf einem Zahlenstrahl geprüft. Dieses Blatt ist die Übung auf Papier danach, derselbe Gedanke von Hand aufgeschrieben, ohne Rückmeldung, bis ein Erwachsener mit dem Lösungsblatt kontrolliert.' },
+        { q: 'Sind die Lösungen immer ganze Zahlen?', a: 'Ja. Jede Gleichung wird von einer ganzzahligen Lösung zwischen 1 und der gewählten Grenze aus gebaut, deshalb braucht kein Schritt einen Bruch oder eine negative Zahl. So bleibt die Aufmerksamkeit beim Verfahren, die Rechnungen in der richtigen Reihenfolge rückgängig zu machen, und nicht beim Rechnen selbst.' },
       ],
     },
     eqexplore: {

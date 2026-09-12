@@ -360,7 +360,7 @@ export const WORKSHEETS = [
     ],
     examples: ['12.75 + 3.8 = □', '20.4 − 7.35 = □', '3.45 × 100 = □', '27 ÷ 1000 = □'],
     prerequisites: ['coladd', 'rounding'],
-    nextSteps: [],
+    nextSteps: ['solvex'],
     updated: '2026-09-12',
     faq: [
       { q: 'Why line up the decimal points instead of the last digits?', a: 'In column addition of whole numbers the last digits line up because they are all ones. With decimals the last digit can be tenths in one number and hundredths in the other, so the point is what marks the ones column. 12.75 + 3.8 goes wrong the moment the 8 sits under the 5, and the point in a square of its own makes that hard to do.' },
@@ -399,6 +399,36 @@ export const WORKSHEETS = [
       { q: 'Which range should I start with?', a: 'Within 100 suits grades 4 and 5, where the primes to try are 2, 3, 5 and 7. Within 500 needs 11, 13, 17 and 19 as well, and a factorization there can end with a two- or three-digit prime, so it fits grade 6 or a child who already factorizes quickly.' },
     ],
     color: '#278227',
+    interactive: false,
+  },
+  {
+    id: 'solvex',
+    slug: 'solve-for-x',
+    label: 'Solve for x',
+    shortDesc: 'One-step, two-step and x-on-both-sides equations',
+    longDesc:
+      'Linear equations to solve on paper, each with ruled space underneath for the working. Start with one step, such as x + 7 = 15 or 3x = 21, move to two steps with brackets and division, such as 2x − 5 = 11 or 3(x + 2) = 18, then to equations with x on both sides. ' +
+      'Every equation is built backwards from its answer, so each step is a whole number and x is a positive integer up to 10, 20 or 100. The × and ÷ signs print as the language writes them.',
+    grades: '5–6',
+    skills: ['solving equations', 'inverse operations', 'one-step and two-step equations', 'balancing both sides'],
+    settings: [
+      'Level: one step, two steps, or x on both sides',
+      'Answers: x up to 10, 20 or 100',
+      'Sign: × ÷ or · :',
+      'Columns: 2 or 3',
+      'Print an answer key',
+    ],
+    examples: ['x + 7 = 15', '3x = 21', '2x − 5 = 11', '5x − 3 = 2x + 9'],
+    prerequisites: ['order', 'eqexplore'],
+    nextSteps: [],
+    updated: '2026-09-12',
+    faq: [
+      { q: 'What is the difference between a one-step and a two-step equation?', a: 'A one-step equation undoes a single operation: x + 7 = 15 is solved by taking 7 from both sides. A two-step equation has two operations wrapped around x, such as 2x − 5 = 11, and they are undone in reverse order, first adding 5 and then dividing by 2. Brackets and division by a number are two-step shapes too.' },
+      { q: 'Why is there empty ruling under each equation?', a: 'Solving an equation is a sequence of steps, and each step belongs on its own line: what was done to both sides, then the new equation. The ruled rows give that working a place on the page, and there are more of them at the harder levels, where there are more steps to write.' },
+      { q: 'How is this different from the Equation Explorer?', a: 'The Equation Explorer is an on-screen activity for seeing how an equation balances, moving terms across the equals sign and checking the answer on a number line. This sheet is the paper practice that follows: the same idea, written out by hand with no feedback until a grown-up checks it against the answer key.' },
+      { q: 'Are the answers always whole numbers?', a: 'Yes. Every equation is built backwards from a whole-number answer between 1 and the chosen limit, so no step ever needs a fraction or a negative number. That keeps the attention on the method, undoing operations in the right order, rather than on the arithmetic.' },
+    ],
+    color: '#496831',
     interactive: false,
   },
   {

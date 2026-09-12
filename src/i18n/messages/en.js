@@ -290,6 +290,18 @@ export default {
     primesAria: 'Is {n} prime or composite?',
   },
 
+  solvex: {
+    title: 'Solve for x',
+    level: 'Level',
+    one: 'One step',
+    two: 'Two steps',
+    both: 'x on both sides',
+    answers: 'Answers',
+    meta: '{level} · answers up to {n}',
+    answer: 'x = {x}',
+    problemAria: 'Solve {equation}',
+  },
+
   compare: {
     title: 'Comparison',
   },
