@@ -1,4 +1,3 @@
-import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useNotebookGrid } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
@@ -7,7 +6,8 @@ import './AddSubtract.css'
 import './ColumnAddition.css'
 import './Division.css'
 import WorksheetHeader from './WorksheetHeader'
-import { setStamp } from '../lib/setStamp'
+import { useSheetSet } from '../hooks/useSheetSet'
+import SheetCopies from './SheetCopies'
 import AnswerKey from './AnswerKey'
 import { LIMITS, SHEET_SPACING, generateSheet, sheetShape } from '../lib/division'
 import { NOTATIONS, glyph } from '../lib/orderOfOperations'
@@ -48,7 +48,6 @@ export default function Division() {
   const [columns, setColumns] = usePersistedState('divide', 'columns', 3)
   const [allowRemainder, setAllowRemainder] = usePersistedState('divide', 'allowRemainder', false)
   const [answerKey, setAnswerKey] = usePersistedState('divide', 'answerKey', false)
-  const [seed, setSeed] = useState(0)
 
   const activeLimit = LIMITS.includes(limit) ? limit : LIMITS[LIMITS.length - 1]
   const activeNotation = NOTATIONS.includes(notation) ? notation : NOTATIONS[0]
@@ -58,11 +57,10 @@ export default function Division() {
   })
 
   // Changing the sign only repaints; it never deals a new sheet.
-  const problems = useMemo(() => {
-    void seed // depend on seed for re-randomization
+  const { sheets, setSet, regenerate } = useSheetSet(rng => {
     const { count } = sheetShape({ limit: activeLimit, allowRemainder, columns })
-    return generateSheet({ limit: activeLimit, allowRemainder, count })
-  }, [activeLimit, allowRemainder, columns, seed])
+    return generateSheet({ limit: activeLimit, allowRemainder, count }, rng)
+  }, [activeLimit, allowRemainder, columns])
 
   const sign = glyph('/', activeNotation)
   const mark = t('divide.remainderMark')
@@ -72,7 +70,7 @@ export default function Division() {
 
   return (
     <div className="tool-panel">
-      <SettingsPanel actions={<PanelActions worksheetId="divide" onRegenerate={() => setSeed(s => s + 1)} />}>
+      <SettingsPanel actions={<PanelActions worksheetId="divide" onRegenerate={regenerate} />}>
         <SettingRow label={t('common.limit')}>
           <SegmentedControl
             value={activeLimit}
@@ -103,36 +101,41 @@ export default function Division() {
         </SettingRow>
       </SettingsPanel>
 
-      <div
-        ref={sheetRef}
-        className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
-        style={sheetStyle}
-      >
-        <WorksheetHeader title={t('divide.title')} meta={meta} stamp={setStamp(problems)} />
+      <SheetCopies sheets={sheets}>
+        {({ set, data: problems }, primary) => (
+          <div
+            ref={primary ? sheetRef : undefined}
+            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
+            style={sheetStyle}
+          >
+            <WorksheetHeader title={t('divide.title')} meta={meta} stamp={String(set)} onStampChange={primary ? setSet : undefined} />
 
-        <div className="colarith-grid">
-          {problems.map((p, i) => (
-            <div key={i} className="colarith-item">
-              {renderProblem(p, {
-                sign,
-                mark,
-                allowRemainder,
-                label: t('divide.problemAria', { dividend: p.dividend, divisor: p.divisor }),
-              })}
+            <div className="colarith-grid">
+              {problems.map((p, i) => (
+                <div key={i} className="colarith-item">
+                  {renderProblem(p, {
+                    sign,
+                    mark,
+                    allowRemainder,
+                    label: t('divide.problemAria', { dividend: p.dividend, divisor: p.divisor }),
+                  })}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        )}
+      </SheetCopies>
 
-      {answerKey && (
+      {answerKey && sheets.map(({ set, data: problems }, i) => (
         <AnswerKey
+          key={i}
           title={t('divide.title')}
-          stamp={setStamp(problems)}
+          stamp={String(set)}
           answers={problems.map(p => (
             allowRemainder ? t('divide.answer', { q: p.quotient, r: p.remainder }) : String(p.quotient)
           ))}
         />
-      )}
+      ))}
     </div>
   )
 }

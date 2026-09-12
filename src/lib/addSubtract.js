@@ -1,4 +1,5 @@
 import { fitsPrint, problemsPerPage } from '../hooks/useNotebookGrid'
+import { asHelpers } from './rng.js'
 
 /**
  * Problem generation and notebook geometry for the Add & Subtract sheet.
@@ -18,39 +19,36 @@ export const BLANK_A = 0
 export const BLANK_B = 1
 export const BLANK_RESULT = 2
 
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
-function chooseOp(ops) {
+function chooseOp(ops, r) {
   const opList = []
   if (ops === 'add' || ops === 'both') opList.push('+')
   if (ops === 'sub' || ops === 'both') opList.push('-')
-  return opList[Math.floor(Math.random() * opList.length)]
+  return r.pick(opList)
 }
 
 /** A stacked sum is solved downwards, so only its result is ever the unknown. */
-function chooseBlank(stacked) {
-  return stacked ? BLANK_RESULT : Math.floor(Math.random() * 3)
+function chooseBlank(stacked, r) {
+  return stacked ? BLANK_RESULT : r.int(0, 2)
 }
 
-export function generateProblem(ops, maxVal, stacked = false) {
-  const op = chooseOp(ops)
+export function generateProblem(ops, maxVal, stacked = false, rng) {
+  const r = asHelpers(rng)
+  const op = chooseOp(ops, r)
 
   let a, b, result
   if (op === '+') {
-    result = randInt(2, maxVal)
-    a = randInt(1, result - 1)
+    result = r.int(2, maxVal)
+    a = r.int(1, result - 1)
     b = result - a
   } else {
-    a = randInt(2, maxVal)
-    b = randInt(1, a - 1)
+    a = r.int(2, maxVal)
+    b = r.int(1, a - 1)
     result = a - b
   }
 
-  const blankPos = chooseBlank(stacked)
+  const blankPos = chooseBlank(stacked, r)
   // Inline only: sometimes written result-first (result = a op b).
-  const reversed = Math.random() < 0.3
+  const reversed = r.chance(0.3)
 
   return { a, b, op, result, blankPos, reversed }
 }
@@ -61,10 +59,11 @@ export function getBlankAnswer(problem) {
   return problem.result
 }
 
-export function generateProblemWithAnswer(answer, ops, maxVal, stacked = false) {
-  const op = chooseOp(ops)
-  const blankPos = chooseBlank(stacked)
-  const reversed = Math.random() < 0.3
+export function generateProblemWithAnswer(answer, ops, maxVal, stacked = false, rng) {
+  const r = asHelpers(rng)
+  const op = chooseOp(ops, r)
+  const blankPos = chooseBlank(stacked, r)
+  const reversed = r.chance(0.3)
   const effectiveMax = Math.max(maxVal, answer + 1)
 
   let a, b, result
@@ -72,29 +71,29 @@ export function generateProblemWithAnswer(answer, ops, maxVal, stacked = false) 
   if (op === '+') {
     if (blankPos === BLANK_A) {
       a = answer
-      result = randInt(answer + 1, effectiveMax)
+      result = r.int(answer + 1, effectiveMax)
       b = result - a
     } else if (blankPos === BLANK_B) {
       b = answer
-      result = randInt(answer + 1, effectiveMax)
+      result = r.int(answer + 1, effectiveMax)
       a = result - b
     } else {
       result = answer
-      a = randInt(1, answer - 1)
+      a = r.int(1, answer - 1)
       b = result - a
     }
   } else {
     if (blankPos === BLANK_A) {
       a = answer
-      b = randInt(1, answer - 1)
+      b = r.int(1, answer - 1)
       result = a - b
     } else if (blankPos === BLANK_B) {
       b = answer
-      a = randInt(answer + 1, effectiveMax)
+      a = r.int(answer + 1, effectiveMax)
       result = a - b
     } else {
       result = answer
-      a = randInt(answer + 1, effectiveMax)
+      a = r.int(answer + 1, effectiveMax)
       b = a - result
     }
   }
@@ -102,13 +101,13 @@ export function generateProblemWithAnswer(answer, ops, maxVal, stacked = false) 
   return { a, b, op, result, blankPos, reversed }
 }
 
-function generateProblemAvoidingAnswer(answer, ops, maxVal, stacked) {
+function generateProblemAvoidingAnswer(answer, ops, maxVal, stacked, r) {
   for (let attempt = 0; attempt < 20; attempt++) {
-    const problem = generateProblem(ops, maxVal, stacked)
+    const problem = generateProblem(ops, maxVal, stacked, r)
     if (getBlankAnswer(problem) !== answer) return problem
   }
 
-  return generateProblemWithAnswer(answer === 2 ? 3 : 2, ops, maxVal, stacked)
+  return generateProblemWithAnswer(answer === 2 ? 3 : 2, ops, maxVal, stacked, r)
 }
 
 /** 67 mode hides one 67 per column: a small treasure hunt on 2- and 3-column sheets. */
@@ -160,20 +159,21 @@ export function sheetShape({ stacked, maxVal, columns, sixtySevenMode }) {
   return { columnOptions, columns: active, sixtySeven, frame, count }
 }
 
-export function generateSheet({ ops, maxVal, columns, count, stacked, sixtySeven }) {
+export function generateSheet({ ops, maxVal, columns, count, stacked, sixtySeven }, rng = Math.random) {
+  const r = asHelpers(rng)
   const items = []
   for (let i = 0; i < count; i++) {
     items.push(
       sixtySeven
-        ? generateProblemAvoidingAnswer(SIXTY_SEVEN_ANSWER, ops, maxVal, stacked)
-        : generateProblem(ops, maxVal, stacked)
+        ? generateProblemAvoidingAnswer(SIXTY_SEVEN_ANSWER, ops, maxVal, stacked, r)
+        : generateProblem(ops, maxVal, stacked, r)
     )
   }
   if (sixtySeven) {
     const rows = Math.floor(count / columns)
     for (let column = 0; column < columns; column++) {
-      const row = randInt(0, rows - 1)
-      items[row * columns + column] = generateProblemWithAnswer(SIXTY_SEVEN_ANSWER, ops, maxVal, stacked)
+      const row = r.int(0, rows - 1)
+      items[row * columns + column] = generateProblemWithAnswer(SIXTY_SEVEN_ANSWER, ops, maxVal, stacked, r)
     }
   }
   return items

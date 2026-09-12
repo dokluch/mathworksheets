@@ -7,7 +7,7 @@
  * checker agrees, and assembles a page of distinct problems. A checker that
  * returns null calls a panel too close to call, and it is redrawn for either side.
  */
-import { rngHelpers } from './rng.js'
+import { rngHelpers, asHelpers } from './rng.js'
 import { problems as bp001 } from './problems/bp001-010.js'
 import { problems as bp011 } from './problems/bp011-020.js'
 import { problems as bp021 } from './problems/bp021-030.js'
@@ -41,7 +41,7 @@ export function generatePanel(problem, side, r) {
 }
 
 export function generateProblem(problem, rng = Math.random) {
-  const r = typeof rng === 'function' ? rngHelpers(rng) : rng
+  const r = asHelpers(rng)
   const side = name => Array.from({ length: PANELS_PER_SIDE }, () => generatePanel(problem, name, r).panel)
   return { id: problem.id, number: problem.number, rule: ruleKey(problem), left: side('left'), right: side('right') }
 }

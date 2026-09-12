@@ -92,10 +92,12 @@ export function useRoute(fallbackLocale = DEFAULT_LOCALE) {
   const routeRef = useRef(route)
   routeRef.current = route
 
-  // Reflect a restored sheet/locale (or an unknown path) in the URL without adding a history entry.
+  // Reflect a restored sheet/locale (or an unknown path) in the URL without
+  // adding a history entry. The query survives: it carries the sheet's set
+  // number (useSheetSet), and a shared link must land on the same page.
   useEffect(() => {
     if (normalizePath(window.location.pathname) !== route.path) {
-      window.history.replaceState(window.history.state, '', route.path)
+      window.history.replaceState(window.history.state, '', route.path + window.location.search + window.location.hash)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -112,7 +114,13 @@ export function useRoute(fallbackLocale = DEFAULT_LOCALE) {
   }, [route])
 
   const go = useCallback((next) => {
-    if (normalizePath(window.location.pathname) !== next.path) window.history.pushState({ path: next.path }, '', next.path)
+    // The same worksheet in another language is the same sheet, so its set
+    // number (`?set=`, see useSheetSet) travels with it. Any other page starts
+    // clean: a different worksheet deals its own number.
+    const prev = routeRef.current
+    const sameSheet = next.kind === 'worksheet' && prev.kind === 'worksheet' && next.worksheet.id === prev.worksheet.id
+    const query = sameSheet ? window.location.search : ''
+    if (normalizePath(window.location.pathname) !== next.path) window.history.pushState({ path: next.path }, '', next.path + query)
     setRoute(prev => {
       if (prev.path === next.path) return prev
       // A new page starts at the top: without this, following a link from the

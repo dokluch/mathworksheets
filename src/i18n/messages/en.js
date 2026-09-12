@@ -150,6 +150,9 @@ export default {
     fieldName: 'Name',
     fieldDate: 'Date',
     fieldSet: 'Set',
+    copies: 'Copies',
+    changeSet: 'Change set number',
+    setNumber: 'Set number',
   },
 
   multiply: {

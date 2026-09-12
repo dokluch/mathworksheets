@@ -141,6 +141,9 @@ export default {
     fieldName: 'Nom',
     fieldDate: 'Date',
     fieldSet: 'Série',
+    copies: 'Copies',
+    changeSet: 'Changer le numéro de série',
+    setNumber: 'Numéro de série',
   },
 
   multiply: {

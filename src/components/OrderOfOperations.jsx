@@ -1,4 +1,3 @@
-import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { listRowsPerPage, PRINT_ORDER_ROW } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
@@ -6,7 +5,8 @@ import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActio
 import './OrderOfOperations.css'
 import WorksheetHeader from './WorksheetHeader'
 import AnswerKey from './AnswerKey'
-import { setStamp } from '../lib/setStamp'
+import { useSheetSet } from '../hooks/useSheetSet'
+import SheetCopies from './SheetCopies'
 import { usePreviewScale } from '../hooks/usePreviewScale'
 import { LEVELS, generateSheet, glyph } from '../lib/orderOfOperations'
 
@@ -72,21 +72,20 @@ export default function OrderOfOperations() {
   const [notation, setNotation] = usePersistedState('order', 'notation', t('order.defaultNotation'))
   const [brackets, setBrackets] = usePersistedState('order', 'brackets', true)
   const [answerKey, setAnswerKey] = usePersistedState('order', 'answerKey', false)
-  const [seed, setSeed] = useState(0)
   const [fitRef, fitStyle] = usePreviewScale()
 
   // Derived from the page height rather than a lookup table, because the row
   // holds bordered boxes whose height is the thing that would change the count.
   const problemCount = listRowsPerPage(PRINT_ORDER_ROW, ORDER_HEADER_PX) * columns
 
-  const problems = useMemo(() => {
-    void seed // depend on seed for re-randomization
-    return generateSheet(problemCount, level, brackets)
-  }, [problemCount, level, brackets, seed])
+  const { sheets, setSet, regenerate } = useSheetSet(
+    rng => generateSheet(problemCount, level, brackets, rng),
+    [problemCount, level, brackets],
+  )
 
   return (
     <div className="tool-panel">
-      <SettingsPanel actions={<PanelActions worksheetId="order" onRegenerate={() => setSeed(s => s + 1)} />}>
+      <SettingsPanel actions={<PanelActions worksheetId="order" onRegenerate={regenerate} />}>
         <SettingRow label={t('common.difficulty')}>
           <SegmentedControl
             value={level}
@@ -121,35 +120,41 @@ export default function OrderOfOperations() {
         </SettingRow>
       </SettingsPanel>
 
-      <div className="sheet-fit" ref={fitRef} style={fitStyle}>
-        <div className={`worksheet print-area cols-${columns}`}>
-          <WorksheetHeader
-            title={t('order.title')}
-            meta={t(`order.${level}`)}
-            stamp={setStamp(problems)}
-          />
+      <SheetCopies sheets={sheets}>
+        {({ set, data: problems }, primary) => (
+          <div className="sheet-fit" ref={primary ? fitRef : undefined} style={primary ? fitStyle : undefined}>
+            <div className={`worksheet print-area cols-${columns}`}>
+              <WorksheetHeader
+                title={t('order.title')}
+                meta={t(`order.${level}`)}
+                stamp={String(set)}
+                onStampChange={primary ? setSet : undefined}
+              />
 
-          <div
-            className="order-grid"
-            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-          >
-            {problems.map((p, i) => (
-              <div key={i} className="order-item">
-                <Expression tokens={p.tokens} notation={notation} />
-                <AnswerBoxes answer={p.answer} />
+              <div
+                className="order-grid"
+                style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+              >
+                {problems.map((p, i) => (
+                  <div key={i} className="order-item">
+                    <Expression tokens={p.tokens} notation={notation} />
+                    <AnswerBoxes answer={p.answer} />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </SheetCopies>
 
-      {answerKey && (
+      {answerKey && sheets.map(({ set, data: problems }, i) => (
         <AnswerKey
+          key={i}
           title={t('order.title')}
-          stamp={setStamp(problems)}
+          stamp={String(set)}
           answers={problems.map(p => String(p.answer))}
         />
-      )}
+      ))}
     </div>
   )
 }

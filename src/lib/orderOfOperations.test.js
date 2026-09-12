@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { mulberry32 } from './rng.js'
 import {
   SHAPES, LEVELS, MAX_VALUE, MIN_FACTOR, MAX_FACTOR, NOTATIONS,
   num, op, isLeaf, evaluate, steps, isCanonical, renderTokens, renderKey,
@@ -306,5 +307,14 @@ describe('one printed page', () => {
     // Sheet padding is 0.5in a side; the grid gap between two columns is 24px.
     const column = (PRINT_WIDTH - 96 - 24) / 2
     expect(widest * ORDER_CHAR_PX + 3 * ORDER_BOX_PX + 2 * ORDER_BOX_GAP).toBeLessThan(column)
+  })
+})
+
+describe('seeded generation', () => {
+  it('deals the same expressions for the same seed and different ones for another', () => {
+    for (const level of LEVELS) {
+      expect(generateSheet(20, level, true, mulberry32(123))).toEqual(generateSheet(20, level, true, mulberry32(123)))
+      expect(generateSheet(20, level, true, mulberry32(123))).not.toEqual(generateSheet(20, level, true, mulberry32(124)))
+    }
   })
 })

@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { mulberry32 } from './rng.js'
 import {
   FAMILIES, MIN_LEN, MAX_LEN, MAX_VALUE, RULE_CAP, BLANK_MODES,
   familiesFor, chooseBlanks, generateSheet,
@@ -204,5 +205,14 @@ describe('families', () => {
     expect(familiesFor(1).map(f => f.id)).toEqual(['add', 'subtract'])
     expect(familiesFor(2).length).toBeGreaterThanOrEqual(5)
     expect(familiesFor(3).length).toBeGreaterThanOrEqual(8)
+  })
+})
+
+describe('seeded generation', () => {
+  it('deals the same rows for the same seed and different ones for another', () => {
+    for (const level of LEVELS) {
+      expect(generateSheet(ROWS, level, mulberry32(123))).toEqual(generateSheet(ROWS, level, mulberry32(123)))
+      expect(generateSheet(ROWS, level, mulberry32(123))).not.toEqual(generateSheet(ROWS, level, mulberry32(124)))
+    }
   })
 })

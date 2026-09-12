@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { mulberry32 } from './rng.js'
 import {
   DIVISOR_MAX, DIVISOR_MIN, LIMITS, MARK_SQUARES, QUOTIENT_MAX, SHEET_SPACING,
   columnOptionsFor, factPairs, generateSheet, sheetFrame, sheetShape,
@@ -118,5 +119,13 @@ describe('division sheet geometry', () => {
         }
       }
     }
+  })
+})
+
+describe('seeded generation', () => {
+  it('deals the same sheet for the same seed and a different one for another', () => {
+    const args = { limit: 100, allowRemainder: true, count: 30 }
+    expect(generateSheet(args, mulberry32(123))).toEqual(generateSheet(args, mulberry32(123)))
+    expect(generateSheet(args, mulberry32(123))).not.toEqual(generateSheet(args, mulberry32(124)))
   })
 })

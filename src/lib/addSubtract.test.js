@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { mulberry32 } from './rng.js'
 import {
   BLANK_RESULT, SHEET_SPACING, SIXTY_SEVEN_ANSWER,
   columnOptionsFor, generateSheet, getBlankAnswer, sheetFrame, sixtySevenApplies,
@@ -90,5 +91,13 @@ describe('67 mode', () => {
         }
       })
     }
+  })
+})
+
+describe('seeded generation', () => {
+  it('deals the same sheet for the same seed and a different one for another', () => {
+    const args = { ops: 'both', maxVal: 100, columns: 3, count: 39, stacked: false, sixtySeven: true }
+    expect(generateSheet(args, mulberry32(123))).toEqual(generateSheet(args, mulberry32(123)))
+    expect(generateSheet(args, mulberry32(123))).not.toEqual(generateSheet(args, mulberry32(124)))
   })
 })

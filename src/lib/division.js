@@ -1,4 +1,5 @@
 import { fitsPrint, problemsPerPage } from '../hooks/useNotebookGrid'
+import { asHelpers } from './rng.js'
 
 /**
  * Problem generation and notebook geometry for the Division sheet: division
@@ -24,19 +25,6 @@ export const REMAINDER_SHARE = 0.7
 /** Squares for the remainder mark: "r" sits centred in them, and the longer "ост." or "……" still fit. */
 export const MARK_SQUARES = 2
 
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
-function shuffle(items) {
-  const out = [...items]
-  for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[out[i], out[j]] = [out[j], out[i]]
-  }
-  return out
-}
-
 /**
  * The (divisor, quotient) facts a sheet draws from: every pair whose dividend
  * stays within the limit, leaving room for a remainder of at least 1 when one
@@ -58,22 +46,23 @@ export function factPairs(limit, withRemainder) {
 }
 
 /** Deals without replacement and reshuffles only once the deck is spent, so a page repeats nothing while the facts last. */
-function dealer(pairs) {
+function dealer(pairs, r) {
   let deck = []
   return () => {
-    if (!deck.length) deck = shuffle(pairs)
+    if (!deck.length) deck = r.shuffle(pairs)
     return deck.pop()
   }
 }
 
-export function generateSheet({ limit, allowRemainder, count }) {
-  const exact = dealer(factPairs(limit, false))
-  const leftover = dealer(factPairs(limit, true))
+export function generateSheet({ limit, allowRemainder, count }, rng = Math.random) {
+  const r = asHelpers(rng)
+  const exact = dealer(factPairs(limit, false), r)
+  const leftover = dealer(factPairs(limit, true), r)
   const items = []
   for (let i = 0; i < count; i++) {
-    if (allowRemainder && Math.random() < REMAINDER_SHARE) {
+    if (allowRemainder && r.chance(REMAINDER_SHARE)) {
       const { divisor, quotient } = leftover()
-      const remainder = randInt(1, Math.min(divisor - 1, limit - divisor * quotient))
+      const remainder = r.int(1, Math.min(divisor - 1, limit - divisor * quotient))
       items.push({ dividend: divisor * quotient + remainder, divisor, quotient, remainder })
     } else {
       const { divisor, quotient } = exact()

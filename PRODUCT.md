@@ -12,7 +12,7 @@ web
 
 **The child (6–9) is the recipient, not the operator.** The parent drives the screen; the child is nearby and sees it. The screen must feel warm and unintimidating to a child looking over a shoulder, but it is designed for adult hands — not for a child to navigate alone. **The child's real surface is the printed page.**
 
-**Teachers and tutors are welcome but not the design target.** A teacher preparing a lesson or a tutor needing one more page of practice is a supported, happy accident. Classroom machinery (batch printing, seed locking so 30 copies match) is explicitly out of scope. An answer key is in scope, because it serves the parent checking a sheet as much as a teacher.
+**Teachers and tutors are welcome but not the design target.** A teacher preparing a lesson or a tutor needing one more page of practice is a supported, happy accident. The set number is a seed, so a parent can send a friend the page they printed, and a Copies count prints several *different* sheets (a sibling gets their own). Classroom machinery beyond that — batches of identical copies, class rosters — is explicitly out of scope. An answer key is in scope, because it serves the parent checking a sheet as much as a teacher.
 
 ## Product Purpose
 

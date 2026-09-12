@@ -1507,6 +1507,8 @@ a.back-btn {
 .print-cta {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 16px;
   margin-top: 24px;
 }
 
@@ -1515,9 +1517,39 @@ a.back-btn {
   font-size: 15px;
 }
 
+/* How many different sheets one Print deals (PrintCta.jsx). A quiet label
+   and a short figure field beside the red button, not a second control bar. */
+.copies-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.copies-field .num-input {
+  width: 64px;
+}
+
+/* Phones keep the one row: the count on the left, the button filling the rest,
+   so a thumb still meets one red Print at the foot of the sheet. */
 @media (max-width: 768px) {
+  .print-cta {
+    gap: 12px;
+  }
+  .print-cta .copies-field {
+    flex: none;
+  }
+  .print-cta .copies-field .num-input {
+    width: 64px;
+    min-height: 44px;
+    font-size: 16px; /* stops iOS zooming on focus */
+  }
   .print-cta-button {
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     justify-content: center;
   }
 }
@@ -1544,6 +1576,20 @@ a.back-btn {
 @media print {
   .answer-key.print-only {
     display: block;
+  }
+
+  /* Extra copies of a sheet (see SheetCopies.jsx): each is its own page. */
+  .sheet-copy.print-only {
+    display: block;
+    break-before: page;
+    page-break-before: always;
+  }
+
+  /* A notebook sheet is laid out to fill its page to within 21px; the panel's
+     20px gap fitted once, but one gap per copy would push every copy after
+     the first onto a blank page of its own. Paper needs no gaps. */
+  .tool-panel {
+    gap: 0;
   }
 }
 

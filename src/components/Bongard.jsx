@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './Bongard.css'
 import WorksheetHeader from './WorksheetHeader'
 import AnswerKey from './AnswerKey'
-import { setStamp } from '../lib/setStamp'
+import { useSheetSet } from '../hooks/useSheetSet'
+import SheetCopies from './SheetCopies'
 import { usePreviewScale } from '../hooks/usePreviewScale'
 import { BANDS, PER_PAGE, generateSheet } from '../lib/bongard/index.js'
 import { ProblemFigure } from '../lib/bongard/render.jsx'
@@ -21,19 +21,16 @@ export default function Bongard() {
   const [perPage, setPerPage] = usePersistedState('bongard', 'perPage', 4)
   const [band, setBand] = usePersistedState('bongard', 'band', 'all')
   const [answerKey, setAnswerKey] = usePersistedState('bongard', 'answerKey', false)
-  const [seed, setSeed] = useState(0)
   const [fitRef, fitStyle] = usePreviewScale()
 
-  const problems = useMemo(() => {
-    void seed // depend on seed for re-randomization
-    return generateSheet(perPage, band)
-  }, [perPage, band, seed])
-
-  const stamp = setStamp(problems)
+  const { sheets, setSet, regenerate } = useSheetSet(
+    rng => generateSheet(perPage, band, rng),
+    [perPage, band],
+  )
 
   return (
     <div className="tool-panel">
-      <SettingsPanel actions={<PanelActions worksheetId="bongard" onRegenerate={() => setSeed(s => s + 1)} />}>
+      <SettingsPanel actions={<PanelActions worksheetId="bongard" onRegenerate={regenerate} />}>
         <SettingRow label={t('bongard.perPage')}>
           <SegmentedControl
             value={perPage}
@@ -55,36 +52,42 @@ export default function Bongard() {
         </SettingRow>
       </SettingsPanel>
 
-      <div className="sheet-fit" ref={fitRef} style={fitStyle}>
-        <div className={`worksheet print-area bongard-sheet bongard-per-${perPage}`}>
-          <WorksheetHeader
-            title={t('bongard.title')}
-            meta={band === 'all' ? undefined : t(`bongard.${band}`)}
-            instructions={t('bongard.instructions')}
-            stamp={stamp}
-          />
+      <SheetCopies sheets={sheets}>
+        {({ set, data: problems }, primary) => (
+          <div className="sheet-fit" ref={primary ? fitRef : undefined} style={primary ? fitStyle : undefined}>
+            <div className={`worksheet print-area bongard-sheet bongard-per-${perPage}`}>
+              <WorksheetHeader
+                title={t('bongard.title')}
+                meta={band === 'all' ? undefined : t(`bongard.${band}`)}
+                instructions={t('bongard.instructions')}
+                stamp={String(set)}
+                onStampChange={primary ? setSet : undefined}
+              />
 
-          <div className="bongard-grid">
-            {problems.map((p, i) => (
-              <div key={`${p.id}-${i}`} className="bongard-item">
-                <ProblemFigure
-                  className="bongard-figure"
-                  problem={p}
-                  label={t('bongard.figureLabel', { n: String(i + 1) })}
-                />
+              <div className="bongard-grid">
+                {problems.map((p, i) => (
+                  <div key={`${p.id}-${i}`} className="bongard-item">
+                    <ProblemFigure
+                      className="bongard-figure"
+                      problem={p}
+                      label={t('bongard.figureLabel', { n: String(i + 1) })}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </SheetCopies>
 
-      {answerKey && (
+      {answerKey && sheets.map(({ set, data: problems }, i) => (
         <AnswerKey
+          key={i}
           title={t('bongard.title')}
-          stamp={stamp}
+          stamp={String(set)}
           answers={problems.map(p => t(p.rule))}
         />
-      )}
+      ))}
     </div>
   )
 }

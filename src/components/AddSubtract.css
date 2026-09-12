@@ -107,6 +107,41 @@
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: var(--color-text);
+  /* Three digits is the box's natural width; a one-digit set keeps it. */
+  min-width: 3ch;
+  text-align: center;
+}
+
+/* The stamp is editable on screen (WorksheetHeader.jsx): the button and the
+   field it turns into are unstyled text inside the very same box, so the box
+   — and the notebook header band it sits in — never changes size. */
+.ws-stamp-btn,
+.ws-stamp-input {
+  all: unset;
+  display: inline-block;
+  min-width: 3ch;
+  font: inherit;
+  line-height: inherit;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.ws-stamp-input {
+  width: 5ch;
+  cursor: text;
+  caret-color: var(--mark);
+}
+
+.ws-stamp-btn:focus-visible,
+.ws-stamp-input:focus-visible {
+  outline: 2px solid var(--mark);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.ws-stamp-btn:hover {
+  color: var(--mark);
 }
 
 /*

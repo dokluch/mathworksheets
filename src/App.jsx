@@ -81,7 +81,13 @@ export default function App() {
   // Reset is owned by useReportEmpty's cleanup, which fires when the previous
   // worksheet unmounts on a sheet change.
   const [sheetEmpty, setSheetEmpty] = useState(false)
-  const sheetState = useMemo(() => ({ empty: sheetEmpty, setEmpty: setSheetEmpty }), [sheetEmpty])
+  // How many different sheets one Print deals (the panel's Copies field).
+  // Shell state so it survives switching sheets within a visit; never persisted.
+  const [copies, setCopies] = useState(1)
+  const sheetState = useMemo(
+    () => ({ empty: sheetEmpty, setEmpty: setSheetEmpty, copies, setCopies }),
+    [sheetEmpty, copies],
+  )
 
   // Catalog data lives in src/worksheets.js (shared with SEO/build), translated per locale; icons are UI-only.
   const worksheets = useMemo(
@@ -110,11 +116,11 @@ export default function App() {
   useEffect(() => {
     if (!activeSheet) return undefined
     const onBeforePrint = () => {
-      trackEvent('print_worksheet', { worksheet_id: activeSheet, ...settingsToParams(getPersistedTab(activeSheet)) })
+      trackEvent('print_worksheet', { worksheet_id: activeSheet, copies, ...settingsToParams(getPersistedTab(activeSheet)) })
     }
     window.addEventListener('beforeprint', onBeforePrint)
     return () => window.removeEventListener('beforeprint', onBeforePrint)
-  }, [activeSheet])
+  }, [activeSheet, copies])
 
   const selectSheet = useCallback((id) => {
     trackEvent('select_worksheet', { worksheet_id: id })

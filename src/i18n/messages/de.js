@@ -141,6 +141,9 @@ export default {
     fieldName: 'Name',
     fieldDate: 'Datum',
     fieldSet: 'Satz',
+    copies: 'Kopien',
+    changeSet: 'Satznummer ändern',
+    setNumber: 'Satznummer',
   },
 
   multiply: {

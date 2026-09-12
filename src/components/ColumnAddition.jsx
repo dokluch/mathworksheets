@@ -1,18 +1,15 @@
-import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useNotebookGrid, problemsPerPage } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './ColumnAddition.css'
 import WorksheetHeader from './WorksheetHeader'
-import { setStamp } from '../lib/setStamp'
+import { useSheetSet } from '../hooks/useSheetSet'
+import SheetCopies from './SheetCopies'
 import AnswerKey from './AnswerKey'
+import { asHelpers } from '../lib/rng'
 
 const DIGIT_PRESETS = [2, 3, 4]
-
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
 
 function hasCarry(a, b) {
   let x = a
@@ -25,21 +22,32 @@ function hasCarry(a, b) {
   return false
 }
 
-function generateProblem(digits, preferCarry) {
+function generateProblem(digits, preferCarry, r) {
   const min = 10 ** (digits - 1)
   const max = 10 ** digits - 1
 
   for (let attempt = 0; attempt < 40; attempt++) {
-    const a = randInt(min, max)
-    const b = randInt(min, max)
+    const a = r.int(min, max)
+    const b = r.int(min, max)
     if (!preferCarry || hasCarry(a, b)) {
       return { a, b, sum: a + b }
     }
   }
 
-  const a = randInt(min, max)
-  const b = randInt(min, max)
+  const a = r.int(min, max)
+  const b = r.int(min, max)
   return { a, b, sum: a + b }
+}
+
+/** One page: mostly carry practice, with occasional no-carry problems for variety. */
+function generateSheet(count, digits, preferCarry, rng) {
+  const r = asHelpers(rng)
+  const items = []
+  for (let i = 0; i < count; i++) {
+    const requireCarry = preferCarry && r.int(1, 100) <= 75
+    items.push(generateProblem(digits, requireCarry, r))
+  }
+  return items
 }
 
 function buildCells(value, width, shift = 0) {
@@ -96,7 +104,6 @@ export default function ColumnAddition() {
   const [columns, setColumns] = usePersistedState('coladd', 'columns', 3)
   const [preferCarry, setPreferCarry] = usePersistedState('coladd', 'preferCarry', true)
   const [answerKey, setAnswerKey] = usePersistedState('coladd', 'answerKey', false)
-  const [seed, setSeed] = useState(0)
 
   // Rows: two addends and the sum. Problems are short, so they sit one blank
   // row apart (the next problem's carry row) and fill exactly one printed page.
@@ -106,20 +113,14 @@ export default function ColumnAddition() {
   const width = digits + 1
   const [sheetRef, sheetStyle] = useNotebookGrid({ columns, cellsWide: width + 1, rows, ...spacing })
 
-  const problems = useMemo(() => {
-    void seed
-    const items = []
-    for (let i = 0; i < problemCount; i++) {
-      // Keep mostly carry practice, but include occasional no-carry problems for variety.
-      const requireCarry = preferCarry && randInt(1, 100) <= 75
-      items.push(generateProblem(digits, requireCarry))
-    }
-    return items
-  }, [digits, problemCount, seed, preferCarry])
+  const { sheets, setSet, regenerate } = useSheetSet(
+    rng => generateSheet(problemCount, digits, preferCarry, rng),
+    [digits, problemCount, preferCarry],
+  )
 
   return (
     <div className="tool-panel">
-      <SettingsPanel actions={<PanelActions worksheetId="coladd" onRegenerate={() => setSeed(s => s + 1)} />}>
+      <SettingsPanel actions={<PanelActions worksheetId="coladd" onRegenerate={regenerate} />}>
         <SettingRow label={t('common.numberSize')}>
           <SegmentedControl
             value={digits}
@@ -140,33 +141,39 @@ export default function ColumnAddition() {
         </SettingRow>
       </SettingsPanel>
 
-      <div
-        ref={sheetRef}
-        className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${columns}`}
-        style={sheetStyle}
-      >
-        <WorksheetHeader
-          title={t('coladd.title')}
-          meta={t('coladd.meta', { d: digits })}
-          stamp={setStamp(problems)}
-        />
+      <SheetCopies sheets={sheets}>
+        {({ set, data: problems }, primary) => (
+          <div
+            ref={primary ? sheetRef : undefined}
+            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${columns}`}
+            style={sheetStyle}
+          >
+            <WorksheetHeader
+              title={t('coladd.title')}
+              meta={t('coladd.meta', { d: digits })}
+              stamp={String(set)}
+              onStampChange={primary ? setSet : undefined}
+            />
 
-        <div className="colarith-grid">
-          {problems.map((problem, idx) => (
-            <div key={idx} className="colarith-item">
-              {renderProblem(problem, width)}
+            <div className="colarith-grid">
+              {problems.map((problem, idx) => (
+                <div key={idx} className="colarith-item">
+                  {renderProblem(problem, width)}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        )}
+      </SheetCopies>
 
-      {answerKey && (
+      {answerKey && sheets.map(({ set, data: problems }, i) => (
         <AnswerKey
+          key={i}
           title={t('coladd.title')}
-          stamp={setStamp(problems)}
+          stamp={String(set)}
           answers={problems.map(p => String(p.sum))}
         />
-      )}
+      ))}
     </div>
   )
 }

@@ -264,3 +264,20 @@ describe('locales', () => {
     expect(result.current[0]).toBe('multiply')
   })
 })
+
+describe('set number query', () => {
+  it('survives the remembered-locale rewrite and a language switch on the same sheet, and is dropped for another sheet', () => {
+    setPath('/worksheets/rounding?set=5')
+    const { result } = renderHook(() => useRoute('fr'))
+    expect(window.location.pathname).toBe('/fr/worksheets/rounding')
+    expect(window.location.search).toBe('?set=5')
+
+    act(() => result.current[4]('de'))
+    expect(window.location.pathname).toBe('/de/worksheets/rounding')
+    expect(window.location.search).toBe('?set=5')
+
+    act(() => result.current[1]('compare'))
+    expect(window.location.pathname).toBe('/de/worksheets/comparison')
+    expect(window.location.search).toBe('')
+  })
+})

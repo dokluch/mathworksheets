@@ -5,9 +5,7 @@
  * the file exports components only (react-refresh).
  */
 
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
+import { asHelpers } from './rng.js'
 
 /**
  * Quotient digits a frame reserves room for.
@@ -83,7 +81,8 @@ export function frameLayout(notation, dividendDigits, divisorDigits) {
  * multiple would over-represent the multiples nearest the ends of the range,
  * and rejection-sampling divisibility would waste up to 98 draws per problem.
  */
-export function generateProblem(dividendDigits, divisorDigits, allowRemainder) {
+export function generateProblem(dividendDigits, divisorDigits, allowRemainder, rng) {
+  const r = asHelpers(rng)
   const divisorMin = Math.max(2, 10 ** (divisorDigits - 1))
   const divisorMax = 10 ** divisorDigits - 1
   const dividendMin = 10 ** (dividendDigits - 1)
@@ -91,20 +90,20 @@ export function generateProblem(dividendDigits, divisorDigits, allowRemainder) {
   // The quotient must fit the boxes the frame reserves for it.
   const quotientMax = 10 ** Math.min(dividendDigits - divisorDigits + 1, MAX_QUOTIENT_DIGITS) - 1
 
-  const divisor = randInt(divisorMin, divisorMax)
+  const divisor = r.int(divisorMin, divisorMax)
 
   if (allowRemainder) {
     // Leave a unit of headroom at each end so the dividend keeps its length
     // once the remainder is added.
-    const quotient = randInt(
+    const quotient = r.int(
       Math.ceil((dividendMin + 1) / divisor),
       Math.min(quotientMax, Math.floor((dividendMax - 1) / divisor)),
     )
-    const remainder = randInt(1, Math.min(divisor - 1, dividendMax - quotient * divisor))
+    const remainder = r.int(1, Math.min(divisor - 1, dividendMax - quotient * divisor))
     return { dividend: quotient * divisor + remainder, divisor, quotient, remainder }
   }
 
-  const quotient = randInt(
+  const quotient = r.int(
     Math.ceil(dividendMin / divisor),
     Math.min(quotientMax, Math.floor(dividendMax / divisor)),
   )
@@ -115,10 +114,11 @@ export function generateProblem(dividendDigits, divisorDigits, allowRemainder) {
  * `count` problems for one sheet. With remainders allowed, some divisions are
  * still exact so a remainder has to be checked for rather than assumed.
  */
-export function generateProblems(count, dividendDigits, divisorDigits, allowRemainder) {
+export function generateProblems(count, dividendDigits, divisorDigits, allowRemainder, rng = Math.random) {
+  const r = asHelpers(rng)
   const items = []
   for (let i = 0; i < count; i++) {
-    items.push(generateProblem(dividendDigits, divisorDigits, allowRemainder && randInt(1, 100) <= 70))
+    items.push(generateProblem(dividendDigits, divisorDigits, allowRemainder && r.int(1, 100) <= 70, r))
   }
   return items
 }

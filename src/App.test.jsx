@@ -418,6 +418,89 @@ describe('App', () => {
     window.history.replaceState(null, '', '/worksheets/add-subtract')
     render(<App />)
     window.dispatchEvent(new Event('beforeprint'))
-    expect(trackEvent).toHaveBeenCalledWith('print_worksheet', expect.objectContaining({ worksheet_id: 'addsub', setting_ops: 'add', setting_maxVal: 20 }))
+    expect(trackEvent).toHaveBeenCalledWith('print_worksheet', expect.objectContaining({ worksheet_id: 'addsub', copies: 1, setting_ops: 'add', setting_maxVal: 20 }))
+  })
+})
+
+const PRINTABLE = WORKSHEETS.filter(ws => !ws.interactive)
+const sheetHtml = () => document.querySelector('.print-area').innerHTML
+const stamps = () => [...document.querySelectorAll('.ws-field--stamp dd')].map(dd => dd.textContent)
+
+describe('set numbers', () => {
+  it.each(PRINTABLE.map(ws => [ws.slug]))('%s deals the same sheet for the same set number and another for the next', (slug) => {
+    window.history.replaceState(null, '', `/worksheets/${slug}?set=123`)
+    render(<App />)
+    const first = sheetHtml()
+    expect(stamps()).toEqual(['123'])
+    expect(window.location.search).toBe('?set=123')
+    expect(document.querySelectorAll('.print-area').length).toBe(1)
+
+    cleanup()
+    window.history.replaceState(null, '', `/worksheets/${slug}?set=123`)
+    render(<App />)
+    expect(sheetHtml()).toBe(first)
+
+    cleanup()
+    window.history.replaceState(null, '', `/worksheets/${slug}?set=124`)
+    render(<App />)
+    expect(sheetHtml()).not.toBe(first)
+    expect(stamps()).toEqual(['124'])
+  })
+
+  it('Regenerate and the header stamp both change the set and the URL together', () => {
+    window.history.replaceState(null, '', '/worksheets/rounding?set=200')
+    render(<App />)
+    const before = sheetHtml()
+    fireEvent.click(screen.getByRole('button', { name: /Regenerate/ }))
+    const drawn = stamps()[0]
+    expect(drawn).not.toBe('200')
+    expect(window.location.search).toBe(`?set=${drawn}`)
+    expect(sheetHtml()).not.toBe(before)
+
+    fireEvent.click(screen.getByRole('button', { name: /Change set number/ }))
+    const input = screen.getByRole('textbox', { name: 'Set number' })
+    fireEvent.change(input, { target: { value: '200' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+    expect(stamps()).toEqual(['200'])
+    expect(window.location.search).toBe('?set=200')
+    expect(sheetHtml()).toBe(before)
+  })
+})
+
+describe('copies', () => {
+  it('prints that many different sheets with their own answer keys, keeps the count across sheets and reports it', () => {
+    window.history.replaceState(null, '', '/worksheets/rounding?set=200')
+    render(<App />)
+    const copies = screen.getByLabelText('Copies')
+    expect(copies.value).toBe('1')
+    fireEvent.change(copies, { target: { value: '3' } })
+    expect(document.querySelectorAll('.print-area').length).toBe(3)
+    expect(document.querySelectorAll('.sheet-copy.print-only .print-area').length).toBe(2)
+    const dealt = stamps()
+    expect(dealt[0]).toBe('200')
+    expect(new Set(dealt).size).toBe(3)
+    expect(dealt.slice(1)).not.toEqual(['201', '202'])
+    // Only the sheet on screen has the editable stamp.
+    expect(document.querySelectorAll('.ws-stamp-btn').length).toBe(1)
+    expect(document.querySelectorAll('.sheet-copy[aria-hidden="true"]').length).toBe(2)
+
+    fireEvent.click(screen.getByLabelText('Print an answer key'))
+    const keys = [...document.querySelectorAll('.answer-key')]
+    expect(keys.length).toBe(3)
+    expect(keys.map(k => k.querySelector('.answer-key-stamp').textContent)).toEqual(dealt.map(s => `Set ${s}`))
+    expect(keys.every(k => k.className.includes('print-only'))).toBe(true)
+
+    window.dispatchEvent(new Event('beforeprint'))
+    expect(trackEvent).toHaveBeenCalledWith('print_worksheet', expect.objectContaining({ worksheet_id: 'rounding', copies: 3 }))
+
+    // The count is a print option of the visit, not of one sheet.
+    fireEvent.click(within(document.querySelector('.catalog--sidebar')).getByRole('link', { name: /Comparison/ }))
+    expect(window.location.pathname).toBe('/worksheets/comparison')
+    expect(screen.getByLabelText('Copies').value).toBe('3')
+    expect(document.querySelectorAll('.print-area').length).toBe(3)
+
+    fireEvent.change(screen.getByLabelText('Copies'), { target: { value: '25' } })
+    expect(screen.getByLabelText('Copies').value).toBe('20')
+    expect(document.querySelectorAll('.print-area').length).toBe(20)
   })
 })

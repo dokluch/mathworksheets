@@ -141,6 +141,9 @@ export default {
     fieldName: 'Имя',
     fieldDate: 'Дата',
     fieldSet: 'Набор',
+    copies: 'Копии',
+    changeSet: 'Изменить номер набора',
+    setNumber: 'Номер набора',
   },
 
   multiply: {

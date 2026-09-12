@@ -141,6 +141,9 @@ export default {
     fieldName: '姓名',
     fieldDate: '日期',
     fieldSet: '编号',
+    copies: '份数',
+    changeSet: '修改编号',
+    setNumber: '编号',
   },
 
   multiply: {

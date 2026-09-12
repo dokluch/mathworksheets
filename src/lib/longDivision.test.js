@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { mulberry32 } from './rng.js'
 import {
   rowsPerPage, notebookLayout, HEADER_BAND, PRINT_HEIGHT, PRINT_SQUARE, PRINT_WIDTH,
 } from '../hooks/useNotebookGrid.js'
@@ -150,5 +151,12 @@ describe('one printed page', () => {
         }).overflow, label).toBe(false)
       }
     }
+  })
+})
+
+describe('seeded generation', () => {
+  it('deals the same problems for the same seed and different ones for another', () => {
+    expect(generateProblems(12, 4, 2, true, mulberry32(123))).toEqual(generateProblems(12, 4, 2, true, mulberry32(123)))
+    expect(generateProblems(12, 4, 2, true, mulberry32(123))).not.toEqual(generateProblems(12, 4, 2, true, mulberry32(124)))
   })
 })

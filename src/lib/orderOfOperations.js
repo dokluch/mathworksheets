@@ -18,6 +18,8 @@
  *    child computing left to right meets `a · b`, which the generator never
  *    checked and which can run well past 100.
  */
+import { asHelpers, rngHelpers } from './rng.js'
+
 
 const PREC = { '+': 1, '-': 1, '*': 2, '/': 2 }
 const APPLY = {
@@ -149,19 +151,17 @@ export function isValid(node) {
 
 /* ── Shapes ───────────────────────────────────────────────────────────────── */
 
-const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
-
 /** A times-table fact, chosen before the operands around it so it always fits. */
-const fact = () => {
-  const a = randInt(MIN_FACTOR, MAX_FACTOR)
-  const b = randInt(MIN_FACTOR, MAX_FACTOR)
+const fact = (r = rngHelpers()) => {
+  const a = r.int(MIN_FACTOR, MAX_FACTOR)
+  const b = r.int(MIN_FACTOR, MAX_FACTOR)
   return { a, b, p: a * b }
 }
 
 /** An exact division inside the tables: n : d = q. */
-const divFact = (minQ = MIN_FACTOR) => {
-  const d = randInt(MIN_FACTOR, MAX_FACTOR)
-  const q = randInt(minQ, MAX_FACTOR)
+const divFact = (r = rngHelpers(), minQ = MIN_FACTOR) => {
+  const d = r.int(MIN_FACTOR, MAX_FACTOR)
+  const q = r.int(minQ, MAX_FACTOR)
   return { n: d * q, d, q }
 }
 
@@ -169,8 +169,8 @@ const divFact = (minQ = MIN_FACTOR) => {
  * Every shape the sheet can print, sampled backwards — the fact or the
  * bracket's value is chosen first, then the operands around it from the range
  * that keeps the total in bounds. `isValid` is then a net rather than the
- * mechanism, and a `build` that cannot place a number returns null instead of
- * a bad tree.
+ * mechanism, and a `build(r)` (drawing from the helpers `r`) that cannot place
+ * a number returns null instead of a bad tree.
  *
  * The ramp is structural, not by size: easy is two operations of one
  * precedence class, medium is two operations spanning both, hard is three. A
@@ -179,157 +179,157 @@ const divFact = (minQ = MIN_FACTOR) => {
 export const SHAPES = [
   /* Easy — + and − only. The only bracket that can matter here is one after a
      minus; `(a + b) − c` would print without brackets, so it is not a shape. */
-  { id: 'e_add_add', level: 'easy', brackets: false, build() {
-    const a = randInt(2, 60), b = randInt(2, 60)
+  { id: 'e_add_add', level: 'easy', brackets: false, build(r = rngHelpers()) {
+    const a = r.int(2, 60), b = r.int(2, 60)
     if (a + b > MAX_VALUE - 2) return null
-    return op('+', op('+', num(a), num(b)), num(randInt(2, MAX_VALUE - a - b)))
+    return op('+', op('+', num(a), num(b)), num(r.int(2, MAX_VALUE - a - b)))
   } },
-  { id: 'e_sub_add', level: 'easy', brackets: false, build() {
-    const b = randInt(2, 60), a = randInt(b + 2, MAX_VALUE)
-    return op('+', op('-', num(a), num(b)), num(randInt(2, MAX_VALUE - (a - b))))
+  { id: 'e_sub_add', level: 'easy', brackets: false, build(r = rngHelpers()) {
+    const b = r.int(2, 60), a = r.int(b + 2, MAX_VALUE)
+    return op('+', op('-', num(a), num(b)), num(r.int(2, MAX_VALUE - (a - b))))
   } },
-  { id: 'e_add_sub', level: 'easy', brackets: false, build() {
-    const a = randInt(2, 60), b = randInt(2, MAX_VALUE - a)
-    return op('-', op('+', num(a), num(b)), num(randInt(2, a + b - 2)))
+  { id: 'e_add_sub', level: 'easy', brackets: false, build(r = rngHelpers()) {
+    const a = r.int(2, 60), b = r.int(2, MAX_VALUE - a)
+    return op('-', op('+', num(a), num(b)), num(r.int(2, a + b - 2)))
   } },
-  { id: 'e_sub_sub', level: 'easy', brackets: false, build() {
-    const r = randInt(2, 60), c = randInt(2, 20), b = randInt(2, 20)
-    const a = r + c + b
+  { id: 'e_sub_sub', level: 'easy', brackets: false, build(r = rngHelpers()) {
+    const rest = r.int(2, 60), c = r.int(2, 20), b = r.int(2, 20)
+    const a = rest + c + b
     if (a > MAX_VALUE) return null
     return op('-', op('-', num(a), num(b)), num(c))
   } },
-  { id: 'e_sub_paren_add', level: 'easy', brackets: true, build() {
-    const b = randInt(2, 45), c = randInt(2, 45), s = b + c
+  { id: 'e_sub_paren_add', level: 'easy', brackets: true, build(r = rngHelpers()) {
+    const b = r.int(2, 45), c = r.int(2, 45), s = b + c
     if (s + 2 > MAX_VALUE) return null
-    return op('-', num(randInt(s + 2, MAX_VALUE)), op('+', num(b), num(c)))
+    return op('-', num(r.int(s + 2, MAX_VALUE)), op('+', num(b), num(c)))
   } },
-  { id: 'e_sub_paren_sub', level: 'easy', brackets: true, build() {
-    const c = randInt(2, 30), b = randInt(c + 2, 60), inner = b - c
-    return op('-', num(randInt(inner + 2, MAX_VALUE)), op('-', num(b), num(c)))
+  { id: 'e_sub_paren_sub', level: 'easy', brackets: true, build(r = rngHelpers()) {
+    const c = r.int(2, 30), b = r.int(c + 2, 60), inner = b - c
+    return op('-', num(r.int(inner + 2, MAX_VALUE)), op('-', num(b), num(c)))
   } },
 
   /* Medium — three numbers, both precedence classes, exactly one × or ÷. */
-  { id: 'm_add_mul', level: 'medium', brackets: false, build() {
-    const { a, b, p } = fact()
+  { id: 'm_add_mul', level: 'medium', brackets: false, build(r = rngHelpers()) {
+    const { a, b, p } = fact(r)
     if (p + 2 > MAX_VALUE) return null
-    return op('+', num(randInt(2, MAX_VALUE - p)), op('*', num(a), num(b)))
+    return op('+', num(r.int(2, MAX_VALUE - p)), op('*', num(a), num(b)))
   } },
-  { id: 'm_sub_mul', level: 'medium', brackets: false, build() {
-    const { a, b, p } = fact()
+  { id: 'm_sub_mul', level: 'medium', brackets: false, build(r = rngHelpers()) {
+    const { a, b, p } = fact(r)
     if (p + 2 > MAX_VALUE) return null
-    return op('-', num(randInt(p + 2, MAX_VALUE)), op('*', num(a), num(b)))
+    return op('-', num(r.int(p + 2, MAX_VALUE)), op('*', num(a), num(b)))
   } },
-  { id: 'm_mul_add', level: 'medium', brackets: false, build() {
-    const { a, b, p } = fact()
+  { id: 'm_mul_add', level: 'medium', brackets: false, build(r = rngHelpers()) {
+    const { a, b, p } = fact(r)
     if (p + 2 > MAX_VALUE) return null
-    return op('+', op('*', num(a), num(b)), num(randInt(2, MAX_VALUE - p)))
+    return op('+', op('*', num(a), num(b)), num(r.int(2, MAX_VALUE - p)))
   } },
-  { id: 'm_mul_sub', level: 'medium', brackets: false, build() {
-    const { a, b, p } = fact()
-    return op('-', op('*', num(a), num(b)), num(randInt(2, p - 2)))
+  { id: 'm_mul_sub', level: 'medium', brackets: false, build(r = rngHelpers()) {
+    const { a, b, p } = fact(r)
+    return op('-', op('*', num(a), num(b)), num(r.int(2, p - 2)))
   } },
-  { id: 'm_add_div', level: 'medium', brackets: false, build() {
-    const { n, d, q } = divFact()
-    return op('+', num(randInt(2, MAX_VALUE - q)), op('/', num(n), num(d)))
+  { id: 'm_add_div', level: 'medium', brackets: false, build(r = rngHelpers()) {
+    const { n, d, q } = divFact(r)
+    return op('+', num(r.int(2, MAX_VALUE - q)), op('/', num(n), num(d)))
   } },
-  { id: 'm_sub_div', level: 'medium', brackets: false, build() {
-    const { n, d, q } = divFact()
-    return op('-', num(randInt(q + 2, MAX_VALUE)), op('/', num(n), num(d)))
+  { id: 'm_sub_div', level: 'medium', brackets: false, build(r = rngHelpers()) {
+    const { n, d, q } = divFact(r)
+    return op('-', num(r.int(q + 2, MAX_VALUE)), op('/', num(n), num(d)))
   } },
-  { id: 'm_div_add', level: 'medium', brackets: false, build() {
-    const { n, d, q } = divFact()
-    return op('+', op('/', num(n), num(d)), num(randInt(2, MAX_VALUE - q)))
+  { id: 'm_div_add', level: 'medium', brackets: false, build(r = rngHelpers()) {
+    const { n, d, q } = divFact(r)
+    return op('+', op('/', num(n), num(d)), num(r.int(2, MAX_VALUE - q)))
   } },
-  { id: 'm_div_sub', level: 'medium', brackets: false, build() {
-    const { n, d, q } = divFact(4)
-    return op('-', op('/', num(n), num(d)), num(randInt(2, q - 2)))
+  { id: 'm_div_sub', level: 'medium', brackets: false, build(r = rngHelpers()) {
+    const { n, d, q } = divFact(r, 4)
+    return op('-', op('/', num(n), num(d)), num(r.int(2, q - 2)))
   } },
-  { id: 'm_paren_add_mul', level: 'medium', brackets: true, build() {
+  { id: 'm_paren_add_mul', level: 'medium', brackets: true, build(r = rngHelpers()) {
     // The bracket's value is a factor, so it has to land inside the tables too.
-    const s = randInt(4, MAX_FACTOR), c = randInt(MIN_FACTOR, MAX_FACTOR)
+    const s = r.int(4, MAX_FACTOR), c = r.int(MIN_FACTOR, MAX_FACTOR)
     if (s * c > MAX_VALUE) return null
-    const a = randInt(2, s - 2)
+    const a = r.int(2, s - 2)
     return op('*', op('+', num(a), num(s - a)), num(c))
   } },
-  { id: 'm_paren_sub_mul', level: 'medium', brackets: true, build() {
-    const inner = randInt(MIN_FACTOR, MAX_FACTOR), c = randInt(MIN_FACTOR, MAX_FACTOR)
+  { id: 'm_paren_sub_mul', level: 'medium', brackets: true, build(r = rngHelpers()) {
+    const inner = r.int(MIN_FACTOR, MAX_FACTOR), c = r.int(MIN_FACTOR, MAX_FACTOR)
     if (inner * c > MAX_VALUE) return null
-    const b = randInt(2, MAX_VALUE - inner)
+    const b = r.int(2, MAX_VALUE - inner)
     return op('*', op('-', num(b + inner), num(b)), num(c))
   } },
-  { id: 'm_mul_paren_sub', level: 'medium', brackets: true, build() {
-    const inner = randInt(MIN_FACTOR, MAX_FACTOR), c = randInt(MIN_FACTOR, MAX_FACTOR)
+  { id: 'm_mul_paren_sub', level: 'medium', brackets: true, build(r = rngHelpers()) {
+    const inner = r.int(MIN_FACTOR, MAX_FACTOR), c = r.int(MIN_FACTOR, MAX_FACTOR)
     if (inner * c > MAX_VALUE) return null
-    const b = randInt(2, MAX_VALUE - inner)
+    const b = r.int(2, MAX_VALUE - inner)
     return op('*', num(c), op('-', num(b + inner), num(b)))
   } },
-  { id: 'm_paren_add_div', level: 'medium', brackets: true, build() {
-    const { n, d } = divFact()
-    const a = randInt(2, n - 2)
+  { id: 'm_paren_add_div', level: 'medium', brackets: true, build(r = rngHelpers()) {
+    const { n, d } = divFact(r)
+    const a = r.int(2, n - 2)
     return op('/', op('+', num(a), num(n - a)), num(d))
   } },
-  { id: 'm_div_paren_sub', level: 'medium', brackets: true, build() {
-    const { n, d } = divFact()
-    const c = randInt(2, MAX_VALUE - d)
+  { id: 'm_div_paren_sub', level: 'medium', brackets: true, build(r = rngHelpers()) {
+    const { n, d } = divFact(r)
+    const c = r.int(2, MAX_VALUE - d)
     return op('/', num(n), op('-', num(c + d), num(c)))
   } },
 
   /* Hard — four numbers, three operations. */
-  { id: 'h_mul_add_div', level: 'hard', brackets: false, build() {
-    const { a, b, p } = fact(), { n, d, q } = divFact()
+  { id: 'h_mul_add_div', level: 'hard', brackets: false, build(r = rngHelpers()) {
+    const { a, b, p } = fact(r), { n, d, q } = divFact(r)
     if (p + q > MAX_VALUE) return null
     return op('+', op('*', num(a), num(b)), op('/', num(n), num(d)))
   } },
-  { id: 'h_div_sub_div', level: 'hard', brackets: false, build() {
-    const first = divFact(4)
-    const d2 = randInt(MIN_FACTOR, MAX_FACTOR), q2 = randInt(2, first.q - 2)
+  { id: 'h_div_sub_div', level: 'hard', brackets: false, build(r = rngHelpers()) {
+    const first = divFact(r, 4)
+    const d2 = r.int(MIN_FACTOR, MAX_FACTOR), q2 = r.int(2, first.q - 2)
     return op('-', op('/', num(first.n), num(first.d)), op('/', num(d2 * q2), num(d2)))
   } },
-  { id: 'h_mul_sub_mul', level: 'hard', brackets: false, build() {
-    const f1 = fact(), f2 = fact()
+  { id: 'h_mul_sub_mul', level: 'hard', brackets: false, build(r = rngHelpers()) {
+    const f1 = fact(r), f2 = fact(r)
     if (f1.p - f2.p < 2) return null
     return op('-', op('*', num(f1.a), num(f1.b)), op('*', num(f2.a), num(f2.b)))
   } },
-  { id: 'h_sub_add_div', level: 'hard', brackets: false, build() {
-    const { n, d, q } = divFact()
-    const b = randInt(2, 60), a = randInt(b + 2, MAX_VALUE)
+  { id: 'h_sub_add_div', level: 'hard', brackets: false, build(r = rngHelpers()) {
+    const { n, d, q } = divFact(r)
+    const b = r.int(2, 60), a = r.int(b + 2, MAX_VALUE)
     if (a - b + q > MAX_VALUE) return null
     return op('+', op('-', num(a), num(b)), op('/', num(n), num(d)))
   } },
-  { id: 'h_mul_mul_sub', level: 'hard', brackets: false, build() {
+  { id: 'h_mul_mul_sub', level: 'hard', brackets: false, build(r = rngHelpers()) {
     // The inner product is itself a factor of the outer one, so it has to stay
     // inside the tables as well: 2·5·7 is fine, 6·8·2 is not.
-    const a = randInt(2, 5), b = randInt(2, Math.floor(MAX_FACTOR / a))
+    const a = r.int(2, 5), b = r.int(2, Math.floor(MAX_FACTOR / a))
     if (b < 2) return null
-    const c = randInt(MIN_FACTOR, MAX_FACTOR), p = a * b * c
+    const c = r.int(MIN_FACTOR, MAX_FACTOR), p = a * b * c
     if (p > MAX_VALUE) return null
-    return op('-', op('*', op('*', num(a), num(b)), num(c)), num(randInt(2, p - 2)))
+    return op('-', op('*', op('*', num(a), num(b)), num(c)), num(r.int(2, p - 2)))
   } },
-  { id: 'h_add_mul_paren', level: 'hard', brackets: true, build() {
-    const inner = randInt(MIN_FACTOR, MAX_FACTOR), k = randInt(MIN_FACTOR, MAX_FACTOR)
+  { id: 'h_add_mul_paren', level: 'hard', brackets: true, build(r = rngHelpers()) {
+    const inner = r.int(MIN_FACTOR, MAX_FACTOR), k = r.int(MIN_FACTOR, MAX_FACTOR)
     const p = inner * k
     if (p + 2 > MAX_VALUE) return null
-    const d = randInt(2, MAX_VALUE - inner)
-    return op('+', num(randInt(2, MAX_VALUE - p)), op('*', num(k), op('-', num(d + inner), num(d))))
+    const d = r.int(2, MAX_VALUE - inner)
+    return op('+', num(r.int(2, MAX_VALUE - p)), op('*', num(k), op('-', num(d + inner), num(d))))
   } },
-  { id: 'h_sub_paren_mul', level: 'hard', brackets: true, build() {
-    const inner = randInt(MIN_FACTOR, MAX_FACTOR), k = randInt(MIN_FACTOR, MAX_FACTOR)
+  { id: 'h_sub_paren_mul', level: 'hard', brackets: true, build(r = rngHelpers()) {
+    const inner = r.int(MIN_FACTOR, MAX_FACTOR), k = r.int(MIN_FACTOR, MAX_FACTOR)
     const p = inner * k
     if (p + 2 > MAX_VALUE) return null
-    const c = randInt(2, MAX_VALUE - inner)
-    return op('-', num(randInt(p + 2, MAX_VALUE)), op('*', op('-', num(c + inner), num(c)), num(k)))
+    const c = r.int(2, MAX_VALUE - inner)
+    return op('-', num(r.int(p + 2, MAX_VALUE)), op('*', op('-', num(c + inner), num(c)), num(k)))
   } },
-  { id: 'h_div_paren_mul', level: 'hard', brackets: true, build() {
-    const { n, d, q } = divFact(), k = randInt(MIN_FACTOR, MAX_FACTOR)
+  { id: 'h_div_paren_mul', level: 'hard', brackets: true, build(r = rngHelpers()) {
+    const { n, d, q } = divFact(r), k = r.int(MIN_FACTOR, MAX_FACTOR)
     if (q * k > MAX_VALUE) return null
-    const c = randInt(2, MAX_VALUE - d)
+    const c = r.int(2, MAX_VALUE - d)
     return op('*', op('/', num(n), op('-', num(c + d), num(c))), num(k))
   } },
-  { id: 'h_paren_add_mul_sub', level: 'hard', brackets: true, build() {
-    const s = randInt(4, MAX_FACTOR), c = randInt(MIN_FACTOR, MAX_FACTOR), p = s * c
+  { id: 'h_paren_add_mul_sub', level: 'hard', brackets: true, build(r = rngHelpers()) {
+    const s = r.int(4, MAX_FACTOR), c = r.int(MIN_FACTOR, MAX_FACTOR), p = s * c
     if (p > MAX_VALUE) return null
-    const a = randInt(2, s - 2)
-    return op('-', op('*', op('+', num(a), num(s - a)), num(c)), num(randInt(2, p - 2)))
+    const a = r.int(2, s - 2)
+    return op('-', op('*', op('+', num(a), num(s - a)), num(c)), num(r.int(2, p - 2)))
   } },
 ]
 
@@ -368,14 +368,10 @@ const wrap = (tree, shape) => ({
 export const fallbackExpression = level => wrap((FALLBACKS[level] ?? FALLBACKS.easy)(), 'fallback')
 
 /** The catalogue cycled to `count` and shuffled, so no shape dominates a page. */
-function shuffledBag(shapes, count) {
+function shuffledBag(shapes, count, r) {
   const bag = []
   while (bag.length < count) bag.push(...shapes)
-  for (let i = bag.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[bag[i], bag[j]] = [bag[j], bag[i]]
-  }
-  return bag
+  return r.shuffle(bag)
 }
 
 /**
@@ -390,9 +386,10 @@ function shuffledBag(shapes, count) {
  * appears more than twice. The last is relaxed in the closing attempts so a
  * crowded page degrades into a repeated answer rather than a fallback row.
  */
-export function generateSheet(count, level, useBrackets) {
+export function generateSheet(count, level, useBrackets, rng = Math.random) {
+  const r = asHelpers(rng)
   const shapes = shapesFor(level, useBrackets)
-  const bag = shuffledBag(shapes, count)
+  const bag = shuffledBag(shapes, count, r)
   const seen = new Set()
   const answers = new Map()
   const items = []
@@ -402,7 +399,7 @@ export function generateSheet(count, level, useBrackets) {
     for (let s = 0; s < shapes.length && !picked; s++) {
       const shape = bag[(i + s) % bag.length]
       for (let a = 0; a < ATTEMPTS_PER_SHAPE && !picked; a++) {
-        const tree = shape.build()
+        const tree = shape.build(r)
         if (!isValid(tree)) continue
         const key = renderKey(tree)
         if (seen.has(key)) continue

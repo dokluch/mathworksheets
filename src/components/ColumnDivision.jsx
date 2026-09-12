@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useNotebookGrid, problemsPerPage, fitsPrint } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
@@ -6,7 +6,8 @@ import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActio
 import { frameLayout, generateProblems } from '../lib/longDivision'
 import './ColumnDivision.css'
 import WorksheetHeader from './WorksheetHeader'
-import { setStamp } from '../lib/setStamp'
+import { useSheetSet } from '../hooks/useSheetSet'
+import SheetCopies from './SheetCopies'
 import AnswerKey from './AnswerKey'
 
 const PRESETS = [
@@ -94,7 +95,6 @@ export default function ColumnDivision() {
   const [columns, setColumns] = usePersistedState('coldiv', 'columns', 3)
   const [allowRemainder, setAllowRemainder] = usePersistedState('coldiv', 'allowRemainder', false)
   const [answerKey, setAnswerKey] = usePersistedState('coldiv', 'answerKey', false)
-  const [seed, setSeed] = useState(0)
 
   const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[0]
   const { dividendDigits, divisorDigits } = activePreset
@@ -122,10 +122,10 @@ export default function ColumnDivision() {
   const problemCount = problemsPerPage({ columns: activeColumns, rows: frame.rows, ...spacing })
   const presetLabel = (a, b) => t('coldiv.preset', { a, b })
 
-  const problems = useMemo(() => {
-    void seed
-    return generateProblems(problemCount, dividendDigits, divisorDigits, allowRemainder)
-  }, [dividendDigits, divisorDigits, allowRemainder, problemCount, seed])
+  const { sheets, setSet, regenerate } = useSheetSet(
+    rng => generateProblems(problemCount, dividendDigits, divisorDigits, allowRemainder, rng),
+    [dividendDigits, divisorDigits, allowRemainder, problemCount],
+  )
 
   const [sheetRef, sheetStyle] = useNotebookGrid({
     columns: activeColumns,
@@ -136,7 +136,7 @@ export default function ColumnDivision() {
 
   return (
     <div className="tool-panel">
-      <SettingsPanel actions={<PanelActions worksheetId="coldiv" onRegenerate={() => setSeed(s => s + 1)} />}>
+      <SettingsPanel actions={<PanelActions worksheetId="coldiv" onRegenerate={regenerate} />}>
         <SettingRow label={t('common.numberSize')}>
           <SegmentedControl
             value={activePreset.value}
@@ -171,35 +171,41 @@ export default function ColumnDivision() {
         </SettingRow>
       </SettingsPanel>
 
-      <div
-        ref={sheetRef}
-        className={`worksheet notebook-grid-bg colarith-notebook coldiv-notebook print-area cols-${activeColumns}`}
-        style={sheetStyle}
-      >
-        <WorksheetHeader
-          title={t('coldiv.title')}
-          meta={t('coldiv.meta', { preset: presetLabel(dividendDigits, divisorDigits) })}
-          stamp={setStamp(problems)}
-        />
+      <SheetCopies sheets={sheets}>
+        {({ set, data: problems }, primary) => (
+          <div
+            ref={primary ? sheetRef : undefined}
+            className={`worksheet notebook-grid-bg colarith-notebook coldiv-notebook print-area cols-${activeColumns}`}
+            style={sheetStyle}
+          >
+            <WorksheetHeader
+              title={t('coldiv.title')}
+              meta={t('coldiv.meta', { preset: presetLabel(dividendDigits, divisorDigits) })}
+              stamp={String(set)}
+              onStampChange={primary ? setSet : undefined}
+            />
 
-        <div className="colarith-grid">
-          {problems.map((problem, idx) => (
-            <div key={idx} className="colarith-item coldiv-item">
-              {renderProblem(problem, frame, t)}
+            <div className="colarith-grid">
+              {problems.map((problem, idx) => (
+                <div key={idx} className="colarith-item coldiv-item">
+                  {renderProblem(problem, frame, t)}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        )}
+      </SheetCopies>
 
-      {answerKey && (
+      {answerKey && sheets.map(({ set, data: problems }, i) => (
         <AnswerKey
+          key={i}
           title={t('coldiv.title')}
-          stamp={setStamp(problems)}
+          stamp={String(set)}
           answers={problems.map(p => (
             p.remainder ? `${p.quotient} r${p.remainder}` : String(p.quotient)
           ))}
         />
-      )}
+      ))}
     </div>
   )
 }

@@ -1,12 +1,13 @@
-import { useMemo, useState } from 'react'
 import { usePersistedState } from '../hooks/usePersistedState'
 import { useNotebookGrid, problemsPerPage } from '../hooks/useNotebookGrid'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './ColumnMultiplication.css'
 import WorksheetHeader from './WorksheetHeader'
-import { setStamp } from '../lib/setStamp'
+import { useSheetSet } from '../hooks/useSheetSet'
+import SheetCopies from './SheetCopies'
 import AnswerKey from './AnswerKey'
+import { asHelpers } from '../lib/rng'
 
 const PRESETS = [
   { value: '2x2', aDigits: 2, bDigits: 2 },
@@ -14,25 +15,21 @@ const PRESETS = [
   { value: '4x2', aDigits: 4, bDigits: 2 },
 ]
 
-function randInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
 /** A number whose digits are all 1–9, so every partial product fills a full row. */
-function randNoZeroDigits(digits) {
+function randNoZeroDigits(digits, r) {
   let n = 0
-  for (let i = 0; i < digits; i++) n = n * 10 + randInt(1, 9)
+  for (let i = 0; i < digits; i++) n = n * 10 + r.int(1, 9)
   return n
 }
 
-function generateProblem(aDigits, bDigits) {
+function generateProblem(aDigits, bDigits, r) {
   const aMin = 10 ** (aDigits - 1)
   const aMax = 10 ** aDigits - 1
 
-  const a = randInt(aMin, aMax)
+  const a = r.int(aMin, aMax)
   // A zero digit in the multiplier would give a partial product of "0" with a
   // single placeholder in an otherwise blank row, which reads as a mistake.
-  const b = randNoZeroDigits(bDigits)
+  const b = randNoZeroDigits(bDigits, r)
 
   const bDigitsArr = String(b).split('').reverse().map(Number)
   const partialProducts = bDigitsArr.map((digit, shift) => ({
@@ -46,6 +43,11 @@ function generateProblem(aDigits, bDigits) {
     partialProducts,
     product: a * b,
   }
+}
+
+function generateSheet(count, aDigits, bDigits, rng) {
+  const r = asHelpers(rng)
+  return Array.from({ length: count }, () => generateProblem(aDigits, bDigits, r))
 }
 
 function buildCells(value, width, shift = 0) {
@@ -119,7 +121,6 @@ export default function ColumnMultiplication() {
   const [preset, setPreset] = usePersistedState('colmul', 'preset', '4x2')
   const [columns, setColumns] = usePersistedState('colmul', 'columns', 3)
   const [answerKey, setAnswerKey] = usePersistedState('colmul', 'answerKey', false)
-  const [seed, setSeed] = useState(0)
 
   const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[PRESETS.length - 1]
   const { aDigits, bDigits } = activePreset
@@ -129,21 +130,17 @@ export default function ColumnMultiplication() {
   const problemCount = problemsPerPage({ columns, rows })
   const presetLabel = (a, b) => t('colmul.preset', { a, b })
 
-  const problems = useMemo(() => {
-    void seed
-    const items = []
-    for (let i = 0; i < problemCount; i++) {
-      items.push(generateProblem(aDigits, bDigits))
-    }
-    return items
-  }, [aDigits, bDigits, problemCount, seed])
+  const { sheets, setSet, regenerate } = useSheetSet(
+    rng => generateSheet(problemCount, aDigits, bDigits, rng),
+    [aDigits, bDigits, problemCount],
+  )
 
   const width = digitColumns(aDigits, bDigits)
   const [sheetRef, sheetStyle] = useNotebookGrid({ columns, cellsWide: width + 1, rows })
 
   return (
     <div className="tool-panel">
-      <SettingsPanel actions={<PanelActions worksheetId="colmul" onRegenerate={() => setSeed(s => s + 1)} />}>
+      <SettingsPanel actions={<PanelActions worksheetId="colmul" onRegenerate={regenerate} />}>
         <SettingRow label={t('common.numberSize')}>
           <SegmentedControl
             value={preset}
@@ -161,33 +158,39 @@ export default function ColumnMultiplication() {
         </SettingRow>
       </SettingsPanel>
 
-      <div
-        ref={sheetRef}
-        className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${columns}`}
-        style={sheetStyle}
-      >
-        <WorksheetHeader
-          title={t('colmul.title')}
-          meta={t('colmul.meta', { preset: presetLabel(aDigits, bDigits) })}
-          stamp={setStamp(problems)}
-        />
+      <SheetCopies sheets={sheets}>
+        {({ set, data: problems }, primary) => (
+          <div
+            ref={primary ? sheetRef : undefined}
+            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${columns}`}
+            style={sheetStyle}
+          >
+            <WorksheetHeader
+              title={t('colmul.title')}
+              meta={t('colmul.meta', { preset: presetLabel(aDigits, bDigits) })}
+              stamp={String(set)}
+              onStampChange={primary ? setSet : undefined}
+            />
 
-        <div className="colarith-grid">
-          {problems.map((problem, idx) => (
-            <div key={idx} className="colarith-item">
-              {renderProblem(problem, width, t)}
+            <div className="colarith-grid">
+              {problems.map((problem, idx) => (
+                <div key={idx} className="colarith-item">
+                  {renderProblem(problem, width, t)}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        )}
+      </SheetCopies>
 
-      {answerKey && (
+      {answerKey && sheets.map(({ set, data: problems }, i) => (
         <AnswerKey
+          key={i}
           title={t('colmul.title')}
-          stamp={setStamp(problems)}
+          stamp={String(set)}
           answers={problems.map(p => String(p.product))}
         />
-      )}
+      ))}
     </div>
   )
 }

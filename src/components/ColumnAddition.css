@@ -131,6 +131,14 @@
   print-color-adjust: exact;
 }
 
+/* The band is a flex row so its height can be pinned to whole squares; the
+   headline must still fill it, or Name / Date / Set hug the title instead of
+   sitting against the sheet's right edge. */
+.colarith-notebook .ws-headline {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .colarith-notebook .colarith-grid {
   grid-template-columns: repeat(var(--nb-cols), calc(var(--nb-cell-w) * var(--nb-sq)));
   column-gap: calc(var(--nb-gap) * var(--nb-sq));
