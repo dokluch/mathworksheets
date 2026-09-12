@@ -36,7 +36,7 @@ export default {
     home: {
       subtitle: 'Schede di esercizi gratuite e casuali, da stampare con un clic.',
       intro1: '{brand} è un generatore gratuito e open source di schede di matematica da stampare per bambini di 6–9 anni (classi 1ª–3ª). Ogni scheda viene generata a caso ogni volta che la apri o la rigeneri, così i bambini si esercitano su problemi nuovi invece di memorizzare una pagina. Scegli una scheda, regola la difficoltà (intervallo di numeri, cifre, disposizione, colonne) e stampala dal browser; le impostazioni vengono ricordate su questo dispositivo.',
-      intro2: 'Il catalogo comprende tabelline, addizioni e sottrazioni con numeri mancanti, addizione in colonna con riporto, moltiplicazione in colonna, confronto di numeri con >, < e =, arrotondamento alla decina, al centinaio e al migliaio, sequenze numeriche ed espressioni a più passaggi in cui l’ordine delle operazioni decide il risultato. L’esploratore di equazioni è un’attività a schermo in cui i bambini spostano i termini attraverso il segno di uguale e verificano la risposta su una linea dei numeri.',
+      intro2: 'Il catalogo comprende tabelline, addizioni e sottrazioni con numeri mancanti, addizione in colonna con riporto, moltiplicazione in colonna, divisioni con e senza resto, confronto di numeri con >, < e =, arrotondamento alla decina, al centinaio e al migliaio, sequenze numeriche ed espressioni a più passaggi in cui l’ordine delle operazioni decide il risultato. L’esploratore di equazioni è un’attività a schermo in cui i bambini spostano i termini attraverso il segno di uguale e verificano la risposta su una linea dei numeri.',
       worksheets: 'Schede',
       howItWorks: 'Come funziona',
       step1: 'Scegli una scheda dall’elenco qui sopra.',
@@ -178,6 +178,16 @@ export default {
     problemAria: '{a} per {b}',
   },
 
+  divide: {
+    title: 'Divisione',
+    notation: 'Segno',
+    allowRemainder: 'Consenti i resti',
+    withRemainders: 'con resto',
+    defaultNotation: 'dot',
+    remainderMark: 'r',
+    answer: '{q} r {r}',
+    problemAria: '{dividend} diviso {divisor}',
+  },
   coldiv: {
     preset: '{a} ÷ {b} cifre',
     title: 'Divisione in colonna',
@@ -389,6 +399,23 @@ export default {
         { q: 'Quando un bambino è pronto per la moltiplicazione in colonna?', a: 'In genere in terza, e solo quando le tabelline si ricordano invece di ricostruirle. Una moltiplicazione in colonna è una serie di piccole moltiplicazioni più un’addizione: se le tabelline vacillano, ogni passaggio diventa più lento e difficile da controllare.' },
         { q: 'Che cosa sono i prodotti parziali?', a: 'Moltiplicare 34 per 26 significa moltiplicare 34 per 6 e poi per 20, e sommare i due risultati. Ciascuno di questi risultati è un prodotto parziale e occupa una riga tutta sua sulla scheda.' },
         { q: 'Perché la seconda riga è spostata a sinistra?', a: 'La seconda riga moltiplica per decine e non per unità, quindi il suo risultato è dieci volte più grande e comincia una colonna più a sinistra. Lo spostamento rende visibile il valore posizionale: non è una regola di impaginazione da memorizzare.' },
+      ],
+    },
+    divide: {
+      label: 'Divisione',
+      shortDesc: 'Divisioni semplici, con o senza resto',
+      longDesc: 'Divisioni scritte in riga, come 12 : 3 = □, con dividendi fino a 20, 50 o 100 e divisori da 2 a 10, così ogni risultato è una tabellina letta al contrario. Attivando i resti compaiono problemi come 14 : 4 = 3 r 2, con una casella per il quoziente e una per il resto. Il segno si stampa come due punti o come ÷, secondo l’uso di ogni lingua.',
+      skills: ['divisioni con le tabelline', 'resto', 'divisione come operazione inversa della moltiplicazione'],
+      settings: [
+        'Limite: dividendi fino a 20, 50 o 100',
+        'Segno: : oppure ÷',
+        'Colonne: 2, 3 o 4 (da 26 a 52 problemi)',
+        'Consenti i resti, con una casella per il resto su ogni riga',
+      ],
+      faq: [
+        { q: 'Quando si iniziano le divisioni con le tabelline?', a: 'Le divisioni semplici arrivano dopo le tabelline, di solito in seconda e in terza primaria. Chi sa che 3 × 4 = 12 conosce già 12 : 3 e 12 : 4, quindi comincia quando le tabelline si ricordano senza contare e scegli il limite 20 per le prime schede.' },
+        { q: 'Che differenza c’è con la divisione in colonna?', a: 'Questi problemi si risolvono in un solo passaggio, a memoria o con un rapido calcolo, e si scrivono su una riga. La divisione in colonna scompone un numero grande in più passaggi di questo tipo: sono le divisioni semplici ben consolidate a renderla affrontabile.' },
+        { q: 'Come introdurre il resto?', a: 'Attiva i resti quando le divisioni esatte sono rapide. La maggior parte dei problemi lascia allora un resto, ma alcuni restano esatti e si risolvono con r 0: il bambino deve controllare che il resto sia minore del divisore invece di dare per scontato che ci sia.' },
       ],
     },
     coldiv: {

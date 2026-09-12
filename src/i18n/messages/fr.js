@@ -36,7 +36,7 @@ export default {
     home: {
       subtitle: 'Des fiches d’entraînement gratuites et aléatoires, à imprimer en un clic.',
       intro1: '{brand} est un générateur gratuit et open source de fiches de mathématiques à imprimer pour les 6–9 ans (CP, CE1, CE2). Chaque fiche est tirée au sort à chaque ouverture ou régénération : les enfants s’entraînent sur de nouveaux exercices au lieu de mémoriser une page. Choisissez une fiche, réglez la difficulté (plage de nombres, chiffres, disposition, colonnes) et imprimez-la depuis votre navigateur ; vos réglages sont mémorisés sur cet appareil.',
-      intro2: 'Le catalogue couvre les tables de multiplication, les additions et soustractions à trous, l’addition posée avec retenue, la multiplication posée, la comparaison de nombres avec >, < et =, l’arrondi à la dizaine, à la centaine et au millier, les suites de nombres, ainsi que les expressions à plusieurs étapes où l’ordre des opérations décide de la réponse. L’explorateur d’équations est une activité à l’écran où l’enfant déplace des termes de part et d’autre du signe égal et vérifie sa réponse sur une droite numérique.',
+      intro2: 'Le catalogue couvre les tables de multiplication, les additions et soustractions à trous, l’addition posée avec retenue, la multiplication posée, les tables de division avec ou sans reste, la comparaison de nombres avec >, < et =, l’arrondi à la dizaine, à la centaine et au millier, les suites de nombres, ainsi que les expressions à plusieurs étapes où l’ordre des opérations décide de la réponse. L’explorateur d’équations est une activité à l’écran où l’enfant déplace des termes de part et d’autre du signe égal et vérifie sa réponse sur une droite numérique.',
       worksheets: 'Fiches',
       howItWorks: 'Comment ça marche',
       step1: 'Choisissez une fiche dans la liste ci-dessus.',
@@ -178,6 +178,16 @@ export default {
     problemAria: '{a} fois {b}',
   },
 
+  divide: {
+    title: 'Division',
+    notation: 'Signe',
+    allowRemainder: 'Autoriser les restes',
+    withRemainders: 'avec reste',
+    defaultNotation: 'cross',
+    remainderMark: 'r',
+    answer: '{q} r {r}',
+    problemAria: '{dividend} divisé par {divisor}',
+  },
   coldiv: {
     preset: '{a} ÷ {b} chiffres',
     title: 'Division posée',
@@ -389,6 +399,23 @@ export default {
         { q: 'Quand un enfant est-il prêt pour la multiplication posée ?', a: 'En général au CE2, et seulement lorsque les tables sont sues et non reconstruites. Une multiplication posée est une suite de petites multiplications suivie d’une addition : si les tables hésitent, chaque étape devient plus lente et plus difficile à vérifier.' },
         { q: 'Que sont les produits partiels ?', a: 'Multiplier 34 par 26, c’est multiplier 34 par 6, puis par 20, et additionner les deux résultats. Chacun de ces résultats est un produit partiel et occupe sa propre ligne sur la fiche.' },
         { q: 'Pourquoi la deuxième ligne est-elle décalée vers la gauche ?', a: 'La deuxième ligne multiplie par des dizaines et non par des unités : son résultat est dix fois plus grand et commence donc une colonne plus à gauche. Ce décalage rend la valeur de position visible ; ce n’est pas une règle de présentation à retenir par cœur.' },
+      ],
+    },
+    divide: {
+      label: 'Division',
+      shortDesc: 'Tables de division, avec ou sans reste',
+      longDesc: 'Des divisions écrites en ligne, comme 12 ÷ 3 = □, avec un dividende jusqu’à 20, 50 ou 100 et un diviseur de 2 à 10 : chaque réponse est une table de multiplication lue à l’envers. Avec les restes, des problèmes comme 14 ÷ 4 = 3 r 2 laissent une case pour le quotient et une pour le reste. Le signe s’imprime ÷ ou deux-points, selon l’usage de chaque langue.',
+      skills: ['tables de division', 'restes', 'lien entre multiplication et division'],
+      settings: [
+        'Limite : dividende jusqu’à 20, 50 ou 100',
+        'Signe : ÷ ou :',
+        'Colonnes : 2, 3 ou 4 (26 à 52 problèmes)',
+        'Autoriser les restes, avec une case pour le reste à chaque ligne',
+      ],
+      faq: [
+        { q: 'À quel moment commencer les tables de division ?', a: 'Les divisions simples suivent les tables de multiplication, en général au CE1 et au CE2. Un enfant qui sait que 3 × 4 = 12 connaît déjà 12 ÷ 3 et 12 ÷ 4 : commencez quand les tables sont rappelées sans compter, avec la limite 20 pour les premières fiches.' },
+        { q: 'En quoi est-ce différent de la division posée ?', a: 'Ces problèmes se résolvent en une seule étape, de mémoire ou par un petit calcul, et s’écrivent sur une ligne. La division posée découpe un grand nombre en plusieurs étapes de ce type : ce sont des tables de division solides qui la rendent abordable.' },
+        { q: 'Comment introduire les restes ?', a: 'Activez les restes quand les divisions exactes sont rapides. La plupart des problèmes laissent alors un reste, mais quelques-uns tombent juste et se notent r 0 : l’enfant doit vérifier que le reste est plus petit que le diviseur au lieu de supposer qu’il y en a un.' },
       ],
     },
     coldiv: {

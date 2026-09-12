@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useMemo, useState } from 'react'
-import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator, IconDivide, IconMathSymbols, IconPuzzle } from '@tabler/icons-react'
+import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator, IconDivide, IconMathXDivideY, IconMathSymbols, IconPuzzle } from '@tabler/icons-react'
 import { usePersistedState, getPersistedTab } from './hooks/usePersistedState'
 import { useRoute, sheetIdToPath } from './hooks/useRoute'
 import { worksheetRoute, gradeLevelText, gradeNumbers } from './seo/render'
@@ -27,6 +27,7 @@ import Patterns from './components/Patterns'
 import EquationExplorer from './components/EquationExplorer'
 import ColumnAddition from './components/ColumnAddition'
 import ColumnMultiplication from './components/ColumnMultiplication'
+import Division from './components/Division'
 import ColumnDivision from './components/ColumnDivision'
 import OrderOfOperations from './components/OrderOfOperations'
 import Bongard from './components/Bongard'
@@ -43,6 +44,7 @@ const ICONS = {
   addsub: IconPlusMinus,
   coladd: IconColumns3,
   colmul: IconCalculator,
+  divide: IconMathXDivideY,
   coldiv: IconDivide,
   compare: IconArrowsLeftRight,
   rounding: IconTargetArrow,
@@ -57,6 +59,7 @@ const COMPONENTS = {
   addsub: AddSubtract,
   coladd: ColumnAddition,
   colmul: ColumnMultiplication,
+  divide: Division,
   coldiv: ColumnDivision,
   compare: Comparison,
   rounding: Rounding,

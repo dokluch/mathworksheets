@@ -36,7 +36,7 @@ export default {
     home: {
       subtitle: 'Fichas de práctica gratuitas y aleatorias que imprimes con un clic.',
       intro1: '{brand} es un generador gratuito y de código abierto de fichas de matemáticas para imprimir, para niños de 6 a 9 años (1.º a 3.º de primaria). Cada ficha se genera al azar cada vez que la abres o la regeneras, así los niños practican con ejercicios nuevos en vez de memorizar una página. Elige una ficha, ajusta la dificultad (rango de números, cifras, disposición, columnas) e imprímela desde el navegador; tus ajustes se recuerdan en este dispositivo.',
-      intro2: 'El catálogo incluye tablas de multiplicar, sumas y restas con huecos, suma en columna con llevadas, multiplicación en columna, comparación de números con >, < y =, redondeo a la decena, centena y millar más cercanos, series numéricas y expresiones de varios pasos en las que el orden de las operaciones decide la respuesta. El explorador de ecuaciones es una actividad en pantalla en la que los niños mueven términos a través del signo igual y comprueban su respuesta en una recta numérica.',
+      intro2: 'El catálogo incluye tablas de multiplicar, sumas y restas con huecos, suma en columna con llevadas, multiplicación en columna, divisiones sencillas con y sin resto, comparación de números con >, < y =, redondeo a la decena, centena y millar más cercanos, series numéricas y expresiones de varios pasos en las que el orden de las operaciones decide la respuesta. El explorador de ecuaciones es una actividad en pantalla en la que los niños mueven términos a través del signo igual y comprueban su respuesta en una recta numérica.',
       worksheets: 'Fichas',
       howItWorks: 'Cómo funciona',
       step1: 'Elige una ficha de la lista de arriba.',
@@ -178,6 +178,16 @@ export default {
     problemAria: '{a} por {b}',
   },
 
+  divide: {
+    title: 'División',
+    notation: 'Signo',
+    allowRemainder: 'Permitir restos',
+    withRemainders: 'con resto',
+    defaultNotation: 'cross',
+    remainderMark: 'r',
+    answer: '{q} r {r}',
+    problemAria: '{dividend} dividido entre {divisor}',
+  },
   coldiv: {
     preset: '{a} ÷ {b} cifras',
     title: 'División larga',
@@ -389,6 +399,23 @@ export default {
         { q: '¿Cuándo está listo un niño para la multiplicación en columna?', a: 'Normalmente en 3.º, y solo cuando las tablas se recuerdan en lugar de reconstruirse. Una multiplicación en columna es una serie de multiplicaciones pequeñas más una suma: si las tablas flaquean, cada paso se vuelve más lento y difícil de comprobar.' },
         { q: '¿Qué son los productos parciales?', a: 'Multiplicar 34 por 26 es multiplicar 34 por 6 y luego por 20, y sumar ambos resultados. Cada uno de esos resultados es un producto parcial y ocupa su propia fila en la ficha.' },
         { q: '¿Por qué la segunda fila se desplaza a la izquierda?', a: 'La segunda fila multiplica por decenas, no por unidades, así que su resultado es diez veces mayor y empieza una columna más a la izquierda. El desplazamiento hace visible el valor posicional; no es una norma de formato que haya que memorizar.' },
+      ],
+    },
+    divide: {
+      label: 'División',
+      shortDesc: 'Divisiones sencillas, con o sin resto',
+      longDesc: 'Divisiones escritas en una línea, como 12 ÷ 3 = □, con dividendos hasta 20, 50 o 100 y divisores del 2 al 10, de modo que cada respuesta es una tabla de multiplicar leída al revés. Al permitir restos aparecen problemas como 14 ÷ 4 = 3 r 2, con una casilla para el cociente y otra para lo que sobra. El signo se imprime como ÷ o como dos puntos, según la costumbre de cada idioma.',
+      skills: ['divisiones exactas', 'restos', 'relación entre multiplicación y división'],
+      settings: [
+        'Límite: dividendos hasta 20, 50 o 100',
+        'Signo: ÷ o :',
+        'Columnas: 2, 3 o 4 (de 26 a 52 problemas)',
+        'Permitir restos, con una casilla para el resto en cada línea',
+      ],
+      faq: [
+        { q: '¿Cuándo empezar con las divisiones sencillas?', a: 'Las divisiones sencillas llegan después de las tablas de multiplicar, normalmente en segundo y tercero de primaria. Quien sabe que 3 × 4 = 12 ya sabe 12 ÷ 3 y 12 ÷ 4, así que empieza cuando las tablas se recuerden sin contar y elige el límite 20 para las primeras fichas.' },
+        { q: '¿En qué se diferencia de la división larga?', a: 'Estos problemas se resuelven en un solo paso, de memoria o con un cálculo rápido, y se escriben en una línea. La división larga descompone un número grande en varios pasos como estos, así que dominar las divisiones sencillas es lo que la hace abordable.' },
+        { q: '¿Cómo introducir los restos?', a: 'Activa los restos cuando las divisiones exactas salgan con rapidez. La mayoría de los problemas dejará algo sobrante, pero algunos seguirán siendo exactos y se responden con r 0, así que el niño tiene que comprobar que el resto es menor que el divisor en lugar de dar por hecho que existe.' },
       ],
     },
     coldiv: {
