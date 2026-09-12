@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useCallback, useMemo, useState } from 'react'
 import { IconGrid3x3, IconPlusMinus, IconArrowsLeftRight, IconTargetArrow, IconTrendingUp, IconArrowLeft, IconEqual, IconColumns3, IconCalculator, IconDivide, IconMathXDivideY, IconMathSymbols, IconPuzzle, IconMath1Divide2, IconMathXPlusY, IconDecimal, IconNumbers, IconVariable } from '@tabler/icons-react'
 import { usePersistedState, getPersistedTab } from './hooks/usePersistedState'
 import { useRoute, sheetIdToPath } from './hooks/useRoute'
@@ -25,18 +25,22 @@ import AddSubtract from './components/AddSubtract'
 import Comparison from './components/Comparison'
 import Rounding from './components/Rounding'
 import Patterns from './components/Patterns'
-import EquationExplorer from './components/EquationExplorer'
 import ColumnAddition from './components/ColumnAddition'
 import ColumnMultiplication from './components/ColumnMultiplication'
 import Division from './components/Division'
 import ColumnDivision from './components/ColumnDivision'
 import OrderOfOperations from './components/OrderOfOperations'
-import Bongard from './components/Bongard'
 import Fractions from './components/Fractions'
 import FractionAddSub from './components/FractionAddSub'
 import Decimals from './components/Decimals'
 import Factors from './components/Factors'
 import SolveX from './components/SolveX'
+
+// The two heaviest sheets, each behind a single route: Bongard carries fifty
+// problem definitions and the Equation Explorer its own state machine and
+// stylesheet. They load when opened rather than with every page.
+const EquationExplorer = lazy(() => import('./components/EquationExplorer'))
+const Bongard = lazy(() => import('./components/Bongard'))
 
 /*
  * Icons for the dense contexts — the desktop sidebar and the mobile chip row —
@@ -285,11 +289,14 @@ export default function App() {
             </div>
             <div className="worksheet-content">
               <SheetStateContext.Provider value={sheetState}>
-                <ActiveComponent />
-                {!activeInfo?.interactive && !sheetEmpty && <PrintCta />}
-                {activeInfo?.interactive && (
-                  <p className="eq-print-note print-only">{t('common.screenOnly')}</p>
-                )}
+                {/* The Print button waits with the sheet it prints. */}
+                <Suspense fallback={null}>
+                  <ActiveComponent />
+                  {!activeInfo?.interactive && !sheetEmpty && <PrintCta />}
+                  {activeInfo?.interactive && (
+                    <p className="eq-print-note print-only">{t('common.screenOnly')}</p>
+                  )}
+                </Suspense>
               </SheetStateContext.Provider>
             </div>
             <PrintFooter />

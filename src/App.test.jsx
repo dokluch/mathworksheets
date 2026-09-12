@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { render, screen, fireEvent, cleanup, within } from '@testing-library/react'
+import { render, screen, fireEvent, cleanup, within, waitFor } from '@testing-library/react'
 
 vi.mock('./lib/analytics.js', () => ({
   trackEvent: vi.fn(),
@@ -321,7 +321,7 @@ describe('App', () => {
     expect(JSON.parse(localStorage.getItem('mathsheets')).app.locale).toBe('en')
   })
 
-  it('shows a bottom Print worksheet button on printable sheets only, which prints on click and is never printed', () => {
+  it('shows a bottom Print worksheet button on printable sheets only, which prints on click and is never printed', async () => {
     window.print = vi.fn()
     window.history.replaceState(null, '', '/worksheets/column-addition')
     render(<App />)
@@ -333,19 +333,24 @@ describe('App', () => {
     cleanup()
     window.history.replaceState(null, '', '/worksheets/equation-explorer')
     render(<App />)
+    // Loaded on demand: wait for the sheet before asserting what it lacks.
+    await screen.findByRole('button', { name: /New/ })
     expect(screen.queryByRole('button', { name: /Print worksheet/ })).toBeNull()
   })
 
   // Every worksheet, including the interactive one: its settings used to sit
   // in a bare unlabelled strip floating on the board, so the one surface a
   // child touches was the one that did not look like the rest of the product.
-  it('every worksheet renders the shared settings panel, hidden from print', () => {
+  it('every worksheet renders the shared settings panel, hidden from print', async () => {
     for (const ws of WORKSHEETS) {
       cleanup()
       window.history.replaceState(null, '', `/worksheets/${ws.slug}`)
       render(<App />)
-      const panel = document.querySelector('.settings-panel')
-      expect(panel, ws.slug).toBeTruthy()
+      const panel = await waitFor(() => {
+        const found = document.querySelector('.settings-panel')
+        expect(found, ws.slug).toBeTruthy()
+        return found
+      })
       expect(panel.className).toContain('no-print')
       expect(document.querySelector('.controls'), ws.slug).toBeNull()
       // Every setting is labelled, on every worksheet.
@@ -428,11 +433,14 @@ describe('App', () => {
 const PRINTABLE = WORKSHEETS.filter(ws => !ws.interactive)
 const sheetHtml = () => document.querySelector('.print-area').innerHTML
 const stamps = () => [...document.querySelectorAll('.ws-field--stamp dd')].map(dd => dd.textContent)
+/** Bongard and the Equation Explorer load on demand, so a first render can be empty. */
+const mounted = () => waitFor(() => expect(document.querySelector('.print-area')).toBeTruthy())
 
 describe('set numbers', () => {
-  it.each(PRINTABLE.map(ws => [ws.slug]))('%s deals the same sheet for the same set number and another for the next', (slug) => {
+  it.each(PRINTABLE.map(ws => [ws.slug]))('%s deals the same sheet for the same set number and another for the next', async (slug) => {
     window.history.replaceState(null, '', `/worksheets/${slug}?set=123`)
     render(<App />)
+    await mounted()
     const first = sheetHtml()
     expect(stamps()).toEqual(['123'])
     expect(window.location.search).toBe('?set=123')
@@ -441,11 +449,13 @@ describe('set numbers', () => {
     cleanup()
     window.history.replaceState(null, '', `/worksheets/${slug}?set=123`)
     render(<App />)
+    await mounted()
     expect(sheetHtml()).toBe(first)
 
     cleanup()
     window.history.replaceState(null, '', `/worksheets/${slug}?set=124`)
     render(<App />)
+    await mounted()
     expect(sheetHtml()).not.toBe(first)
     expect(stamps()).toEqual(['124'])
   })
