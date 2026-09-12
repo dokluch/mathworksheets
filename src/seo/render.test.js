@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { WORKSHEETS } from '../worksheets.js'
+import { WORKSHEETS, findWorksheetById } from '../worksheets.js'
 import { PAGES } from '../pages.js'
 import { AGENT_GUIDANCE } from '../agents.js'
 import { SITE_URL, BRAND, BRAND_ALT, OPERATOR, CONTACT_EMAIL, OG_IMAGE_PATH, GITHUB_URL, LICENSE_NAME, TAGLINE } from './site.js'
 import { GRADES, GRADE_BAND } from '../lib/grades.js'
-import { LOCALES, LOCALE_META, localizeWorksheet, localizePage } from '../i18n/index.js'
+import { TOPIC_BY_ID, TOPIC_IDS } from '../lib/topics.js'
+import { LOCALES, LOCALE_META, localizeWorksheet, localizePage, t as translate } from '../i18n/index.js'
 import {
   routes, findRoute, normalizePath, homeRoute, worksheetRoute, pageRoute, sameRouteIn,
   renderHead, renderStaticContent, footerHtml, siteFooterLinks, injectRoute, structuredData, pageTitle,
@@ -184,14 +185,15 @@ describe('renderHead', () => {
   })
 
   it('worksheet pages get LearningResource + BreadcrumbList', () => {
-    const route = worksheetRoute(WORKSHEETS[0])
+    const multiply = findWorksheetById('multiply')
+    const route = worksheetRoute(multiply)
     const head = renderHead(route)
     expect(head).toContain(`<title>${pageTitle(route)}</title>`)
     expect(pageTitle(route)).toBe(`Multiplication Worksheets · ${BRAND}`)
     const sd = structuredData(route)
     const lr = sd['@graph'].find(n => n['@type'] === 'LearningResource')
     expect(lr.learningResourceType).toBe('Worksheet')
-    expect(lr.teaches).toEqual(WORKSHEETS[0].skills)
+    expect(lr.teaches).toEqual(multiply.skills)
     const bc = sd['@graph'].find(n => n['@type'] === 'BreadcrumbList')
     expect(bc.itemListElement.length).toBe(2)
     expect(bc.itemListElement[1].item).toBe(`${SITE_URL}/worksheets/multiplication`)
@@ -232,6 +234,8 @@ describe('renderStaticContent', () => {
     expect(html).toMatch(new RegExp(`<h1 class="catalog-title"><svg [^>]*aria-hidden="true"[^>]*>[\\s\\S]*?</svg>${BRAND} – ${TAGLINE}</h1>`))
     assertSequential(headingLevels(html))
     for (const ws of WORKSHEETS) expect(html).toContain(`href="/worksheets/${ws.slug}"`)
+    // One titled section per topic, in TOPICS order, under the page's h2.
+    expect([...html.matchAll(/<h3 class="catalog-section-title" id="topic-([a-z]+)">/g)].map(m => m[1])).toEqual(TOPIC_IDS)
     // Reader-facing pages no longer carry the agent-links paragraph; agents
     // find llms.txt at its root path and the .md twin via the Link header.
     expect(html).not.toContain('href="/llms.txt"')
@@ -392,7 +396,7 @@ describe('injectRoute', () => {
 
   it('is idempotent (prerender re-runs on the already injected template)', () => {
     const once = injectRoute(TEMPLATE, homeRoute())
-    const twice = injectRoute(once, worksheetRoute(WORKSHEETS[1]))
+    const twice = injectRoute(once, worksheetRoute(findWorksheetById('addsub')))
     expect((twice.match(/<title>/g) || []).length).toBe(1)
     expect(twice).toContain('Add &amp; Subtract Worksheets</h1>')
     expect(twice).not.toContain(`${TAGLINE}</h1>`)
@@ -468,6 +472,8 @@ describe('llms.txt (llmstxt.org format)', () => {
     const preamble = txt.split(/^## /m)[0]
     expect(preamble).toContain('Choosing a worksheet — by grade:')
     expect(preamble).toContain('Choosing a worksheet — by skill:')
+    expect(preamble).toContain('Choosing a worksheet — by topic:')
+    for (const id of TOPIC_IDS) expect(preamble).toContain(`- ${TOPIC_BY_ID[id].label}: `)
     for (const grade of GRADES) expect(preamble).toContain(`- Grade ${grade} (ages `)
     // The query this exists to answer: "2nd grader learning carrying".
     expect(preamble).toContain('carrying / regrouping')
@@ -490,6 +496,7 @@ describe('llms.txt (llmstxt.org format)', () => {
       expect(line).toContain(`(ages ${agesForGrades(ws.grades)})`)
       expect(line).toContain(`teaches ${ws.skills.join(', ')}`)
       expect(line).toContain(`example: ${ws.examples[0]}`)
+      expect(line).toContain(`topic: ${TOPIC_BY_ID[ws.topic].label}`)
     }
   })
 
@@ -549,7 +556,7 @@ describe('sitemap / robots / catalog', () => {
     expect(json.name).toBe(BRAND)
     expect(json.worksheets.length).toBe(WORKSHEETS.length)
     expect(json.generatedAt).toBe('2026-09-04T12:00:00.000Z')
-    const first = json.worksheets[0]
+    const first = json.worksheets.find(w => w.id === 'multiply')
     expect(first).toMatchObject({
       id: 'multiply',
       slug: 'multiplication',
@@ -560,6 +567,9 @@ describe('sitemap / robots / catalog', () => {
     })
     expect(json.worksheets.find(w => w.id === 'eqexplore').printable).toBe(false)
     expect(json.pages).toEqual({ about: `${SITE_URL}/about`, privacy: `${SITE_URL}/privacy`, terms: `${SITE_URL}/terms` })
+    expect(json.topics.map(topic => topic.id)).toEqual(TOPIC_IDS)
+    expect(json.topics.flatMap(topic => topic.worksheets)).toEqual(WORKSHEETS.map(w => w.id))
+    for (const w of json.worksheets) expect(TOPIC_IDS).toContain(w.topic)
   })
 })
 
@@ -674,6 +684,7 @@ describe('i18n routes and surfaces', () => {
       }
       const home = renderStaticContent(homeRoute(locale))
       for (const w of WORKSHEETS) expect(home).toContain(`href="/${locale}/worksheets/${w.slug}"`)
+      for (const id of TOPIC_IDS) expect(home, `${locale} ${id}`).toContain(escapeHtml(translate(locale, `topics.${id}`)))
       expect(home).not.toContain('href="/llms.txt"')
       expect(home).toContain(`href="/${locale}/about"`)
       expect(home).not.toContain(homeRoute().path === '/' ? 'href="/worksheets/' : 'x')
@@ -718,8 +729,9 @@ describe('i18n routes and surfaces', () => {
     expect(xml).toContain(`<xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}/worksheets/rounding" />`)
     const json = JSON.parse(renderCatalogJson({ now: new Date('2026-09-04T12:00:00Z') }))
     expect(json.locales.map(l => l.code)).toEqual(LOCALES)
-    expect(json.worksheets[0].alternates.fr).toBe(`${SITE_URL}/fr/worksheets/multiplication`)
-    expect(json.worksheets[0].alternates.en).toBe(`${SITE_URL}/worksheets/multiplication`)
+    const multiplication = json.worksheets.find(w => w.id === 'multiply')
+    expect(multiplication.alternates.fr).toBe(`${SITE_URL}/fr/worksheets/multiplication`)
+    expect(multiplication.alternates.en).toBe(`${SITE_URL}/worksheets/multiplication`)
   })
 
   it('404 bodies follow the locale of the path', () => {

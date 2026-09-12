@@ -76,7 +76,7 @@ describe('scripts/og-images.mjs', () => {
 
   it('chooses a preview element for every page kind', () => {
     for (const target of ogTargets()) {
-      expect(previewSelector(target.route)).toMatch(/\.(print-area|eq-explorer|catalog-grid|mult-table)/)
+      expect(previewSelector(target.route)).toMatch(/\.(print-area|eq-explorer|catalog-sections|mult-table)/)
     }
   })
 

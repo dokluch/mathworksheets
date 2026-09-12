@@ -7,6 +7,7 @@
  * the template before injecting trusted fragments (links, code) as params.
  */
 import { TAGLINE, DESCRIPTION, BRAND_ALT } from '../../seo/site.js'
+import { TOPICS } from '../../lib/topics.js'
 
 export default {
   site: {
@@ -128,6 +129,8 @@ export default {
     ages: 'Ages {ages}',
     sheetCount: { one: '{n} sheet', other: '{n} sheets' },
   },
+  // The catalog's sections and the sidebar's captions; the English names live in src/lib/topics.js.
+  topics: Object.fromEntries(TOPICS.map(topic => [topic.id, topic.label])),
 
   common: {
     regenerate: 'Regenerate',

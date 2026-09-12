@@ -119,6 +119,13 @@ export default {
     ages: '{ages} 岁',
     sheetCount: { other: '{n} 张练习题' },
   },
+  topics: {
+    arithmetic: '算术',
+    numbers: '数感',
+    fractions: '分数与小数',
+    algebra: '代数',
+    logic: '规律与逻辑',
+  },
 
   common: {
     regenerate: '重新生成',

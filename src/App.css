@@ -419,6 +419,26 @@
   grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
 }
 
+/* The landing catalog in topics: a title per topic over its own grid, in the
+   Title register static pages give their h2, so the cover gains no new size. */
+.catalog-sections {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--sq) * 1.5);
+  width: 100%;
+  max-width: 940px;
+}
+
+.catalog-section-title {
+  margin: 0 0 var(--half-sq);
+  font-family: var(--font-cover);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
 /* Each card is a sheet lying on the cover: paper stock, a square-cut corner,
    and the subject colour in the shadow it casts, the way a coloured page tints
    what is under it. It shows the worksheet it prints, so the choice is made on
@@ -567,6 +587,20 @@
   .catalog-grid--compact .catalog-card-text {
     padding: 0;
   }
+
+  .catalog-grid--compact .catalog-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .catalog-grid--compact .catalog-group + .catalog-group {
+    margin-top: 10px;
+  }
+
+  .catalog-grid--compact .catalog-group-label {
+    padding: 6px 12px 4px;
+  }
 }
 
 /* Dense-context icon: recognisable at a glance where a sheet preview would
@@ -580,6 +614,19 @@
   width: 26px;
   height: 26px;
   color: var(--card-color, var(--color-text));
+}
+
+/* Topic captions in the sidebar and on the rail, in the register of the sheet's
+   field captions (NAME / DATE / SET NO.): a caption naming the rows under it.
+   Not a control, so no 44px floor, no hover, never in the tab order. */
+.catalog-group-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
 /* — Mobile topbar compact (horizontal scroll) — */
@@ -643,6 +690,28 @@
   .catalog-grid--compact .catalog-card--active .catalog-card-label {
     color: var(--color-text);
     font-weight: 700;
+  }
+
+  /* On the rail a topic is its caption followed by its chips, in one run. The
+     caption is never a snap point, so a swipe always lands on a sheet. */
+  .catalog-grid--compact .catalog-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 6px;
+  }
+
+  .catalog-grid--compact .catalog-group + .catalog-group {
+    margin-left: 10px;
+  }
+
+  .catalog-grid--compact .catalog-group-label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 2px 0 4px;
+    scroll-snap-align: none;
   }
 
   /* The selected chip must never be the one clipped at the edge. */
@@ -989,7 +1058,7 @@
     font-size: 13px;
   }
 
-  /* Nine cards in two columns strand the ninth alone; let it take the row. */
+  /* A topic with an odd number of cards would strand the last alone; let it take the row. */
   .catalog-grid:not(.catalog-grid--compact) .catalog-card:last-child:nth-child(odd) {
     grid-column: 1 / -1;
   }
@@ -1237,8 +1306,14 @@ a.back-btn {
   text-align: left;
 }
 
-.static-page > .catalog-grid {
+.static-page > .catalog-sections {
   max-width: 940px;
+}
+
+/* Under the page's "Worksheets" h2 the topic titles are h3s, a step smaller. */
+.static-page .catalog-section-title {
+  margin: var(--sq) 0 0;
+  font-size: 18px;
 }
 
 .static-page .static-intro,

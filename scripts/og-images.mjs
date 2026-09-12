@@ -57,7 +57,7 @@ export const PNGQUANT_ARGS = ['--force', '--skip-if-larger', '--strip', '--speed
 
 /** Selector of the element that shows "what's inside" for a page. */
 export function previewSelector(route) {
-  if (route.kind === 'home') return '.catalog--full .catalog-grid'
+  if (route.kind === 'home') return '.catalog--full .catalog-sections'
   if (route.worksheet?.id === 'multiply') return '.mult-table'
   if (route.worksheet?.interactive) return '.eq-explorer, .print-area'
   return '.print-area'

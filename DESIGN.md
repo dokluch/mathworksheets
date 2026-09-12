@@ -158,6 +158,10 @@ components:
   sidebar-row-active:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
+  catalog-group-caption:
+    textColor: "{colors.graphite}"
+    typography: "{typography.label}"
+    padding: "6px 12px 4px"
   chip-mobile:
     backgroundColor: "{colors.cover-wash}"
     textColor: "{colors.on-cover}"
@@ -259,12 +263,12 @@ Each worksheet carries its own ink (`ink-multiply` … `ink-solvex`, one per wor
 ### Hierarchy
 - **Display** (Archivo 700, `clamp(20px, 2.6vw, 30px)`, 1.15, −0.02em): the catalog hero sentence, balanced and capped at 32ch. Renders at 30px/34.5px at 1440.
 - **Headline** (Archivo 800, 25px/27.5px, −0.02em): the worksheet page `h1`, on the board, with its subject icon.
-- **Title** (Archivo 700, 22px/26.4px, −0.015em): static-page `h2`, with more space above (`calc(var(--sq) * 1.6)`) than below (`--half-sq`).
+- **Title** (Archivo 700, 22px/26.4px, −0.015em): static-page `h2` and the topic titles over the landing catalog, with more space above (`calc(var(--sq) * 1.6)`) than below (`--half-sq`).
 - **Subtitle** (Archivo 700, 16px, −0.01em): catalog card labels; the site brand is Archivo 800 17px/−0.015em (15px on mobile).
 - **Lead** (Inter 400, 19px/28.5px): the opening paragraph of a static page.
 - **Body** (Inter 400, 16px/26.4px): prose, constrained by `--measure: 608px` — an absolute measure, roughly 68 characters, not `ch`, so headings and body share one left edge.
 - **UI** (Inter 500–700, 13–14px, 1.25–1.3): nav links, setting labels, toggles, buttons, card descriptions, sheet title (Inter 700 20px).
-- **Label** (Inter 600, 11px, 0.08em, uppercase): the sheet's ruled field captions (NAME / DATE / SET NO.) — form-field captions on a document, not editorial eyebrows.
+- **Label** (Inter 600, 11px, 0.08em, uppercase): the sheet's ruled field captions (NAME / DATE / SET NO.) — form-field captions on a document, not editorial eyebrows — and the topic captions in the sidebar and on the rail, which do the same job for a group of rows.
 - **Figure** (JetBrains Mono 500, 16px screen / 15px print): every problem, digit, stamp and answer.
 - **Print sizes** (answer key only, in points): title 15pt Archivo 800; answer 12pt mono; meta 11pt; stamp 10pt; item number 9pt; print footer 9pt.
 
@@ -285,7 +289,7 @@ Where it does not: component-internal padding is a conventional 8/10/12/16/20/24
 
 **Responsive.** One breakpoint at 768/769px, plus 380px for the single-column catalog.
 - ≥769px with a sheet active: the app is a fixed-height two-column split — a 220px catalog sidebar (compact rows on the board, separated by a 1px `border` rule) and a scrolling worksheet column. Settings flow two per row (`flex: 1 1 calc(50% - 16px)`), and a control that cannot shrink takes a full row instead.
-- ≤768px: catalog becomes a horizontally scrolling, snap-aligned chip rail under the header; the landing grid becomes two columns at 12px gap (one column ≤380px); settings stack, segmented groups go full width and never wrap, numeric inputs go 16px to stop iOS zoom.
+- ≤768px: catalog becomes a horizontally scrolling, snap-aligned chip rail under the header, each topic's chips led by its caption; the landing grid becomes two columns at 12px gap (one column ≤380px); settings stack, segmented groups go full width and never wrap, numeric inputs go 16px to stop iOS zoom.
 
 **The 44px Rule.** Every interactive element declares `min-height: 44px` — nav links, footer links, brand label, back button, language button and menu items, catalog rows and chips, buttons, checkbox rows, sliders, fold summaries.
 
@@ -328,8 +332,12 @@ Form language: rules and bands, not pills or blobs. Subject identity is a 4–5p
 ### Cards (catalog, landing)
 Paper on the board: sheet stock, 2px corners, `edge` keyline + `--shadow-md`, subject band 5px across the head, a drawn miniature of the real sheet (max 208px, 104:64) above a hairline `paper-edge` rule, then label (Archivo 700 16px) and description (Inter 13px graphite). Hover lifts 3px on `cubic-bezier(0.2,0.8,0.3,1)` over 0.18s and strengthens the keyline.
 
+The landing catalog is read by topic: each topic is a `section` with a Title-register `h2` over its own grid, `1.5sq` between topics, and a chosen grade drops the topics it has nothing in. The prerendered home carries the same sections under its "Worksheets" `h2`, with `h3` titles a step smaller.
+
 ### Sidebar rows and mobile chips (compact catalog)
 Transparent rows on the board, 44px tall, `9px 12px`, with a 19px subject-tinted icon and an ink-on-board label (Inter 600 13px). Hover is `cover-wash`. **Active is the sheet pulled out of the book:** the row fills with paper, takes the `edge` keyline and `--shadow-sm`, and the label goes 700. On mobile the same row becomes a snap-aligned chip that rests on `cover-wash` (a transparent chip has no shape on a light board) and inverts to paper when active.
+
+Rows are grouped by topic under a caption in the Label register (graphite, `6px 12px 4px`, 10px between groups). The caption is a `span` naming a `role="group"`: not a heading (five would stand in front of the worksheet's `h1`), not a link and not a tab stop, so the 44px rule does not reach it. On the rail a topic is its caption followed by its chips in one run, 10px after the previous topic; the caption is 44px tall so it shares the chips' centre line, and it is never a snap point, so a swipe always lands on a sheet.
 
 **The Two-Cue Rule.** In a dense list the icon is the faster cue and the colour is the second one. Colour alone carries nothing for a viewer who cannot separate the hues, so a subject ink never travels without either its icon or its label. The full catalog keeps the drawn sheet miniatures instead: at card size the real sheet is more informative than any icon, and a stock icon there would be the tinted-square register this world refuses.
 
@@ -388,7 +396,7 @@ Sheet paper with the squared ruling painted as two gradients at `--notebook-grid
 - **Don't** use an icon font, emoji, or a raster glyph. Interface icons are inline stroked SVG at 1.7–2.0 stroke; sheet miniatures are drawn SVG at one weight and one grid pitch.
 - **Don't** put an icon in the full catalog in place of the sheet miniature — at card size the real sheet is the argument.
 - **Don't** add a second authored animation. The set stamp is the product's one moment; feedback that rewards a tap is the thing this product argues against.
-- **Don't** add uppercase editorial kickers or eyebrows above titles. The 11px uppercase style belongs to ruled document field captions (NAME / DATE / SET NO.) only.
+- **Don't** add uppercase editorial kickers or eyebrows above titles. The 11px uppercase style belongs to captions that name what sits beside or under them: the sheet's ruled field captions (NAME / DATE / SET NO.) and the catalog's topic captions over their rows.
 - **Don't** clip focus rings: no `overflow: hidden` on control containers.
 - **Don't** force a paper size in `@page`. Orientation only; lay out to the Letter/A4 intersection.
 
@@ -866,3 +874,41 @@ at the same crossing.
 
 **What stayed.** The generator still bounds operands and answers by characters, so every set
 number deals the same problems as before; only the layout changed.
+
+## Revision — the catalog learns its topics
+
+**Date:** 2026-09-12
+
+**What changed.** The seventeen worksheets are grouped into five topics: Arithmetic, Number sense,
+Fractions & decimals, Algebra, and Patterns & logic. The landing catalog titles one section per
+topic, the sidebar captions its rows by topic, and the phone rail leads each topic's chips with its
+caption. The prerendered home, `llms.txt` and `worksheets.json` carry the same grouping.
+
+**Why sections and not another filter.** The grade filter answers a question about the child; the
+topic is a property of the sheet. A second filter would put two controls in front of seventeen
+cards, while titled sections need no state at all and read as a table of contents. Search was
+rejected for the same reason: seventeen sheets fit on one screen once they are grouped.
+
+**Why the caption register.** A caption that names the rows under it is what the sheet's NAME /
+DATE / SET NO. captions already are, so the sidebar borrows that register rather than inventing a
+new one. The Don't that reserved it for the sheet is widened to say so, and it still forbids an
+eyebrow above a title.
+
+**Why the catalog is ordered rather than sorted.** `src/worksheets.js` itself is kept in topic
+order, easiest first within a topic, and a test holds it. The React catalog, the sidebar, the
+sitemap, `llms.txt` and `worksheets.json` all follow the array, so none of them sorts and none can
+disagree. Within Algebra, Solve for x comes last because it lists the other two as prerequisites.
+
+**What was not done.** No collapsible groups: every collapse is a tap, and it could hide the open
+sheet. No topic routes: the pages a crawler needs are the worksheets, and the home already lists
+every one of them.
+
+**Accessibility.** One `nav` per catalog, as before. The sidebar's groups are `role="group"` named
+by their caption through `aria-labelledby`; the landing sections are named by their `h2`, so the
+outline stays sequential. Captions are never in the tab order.
+
+Verified: tests, lint and build clean; the home page and a worksheet at 320, 390, 768, 769 and 1280px
+in English, German, Chinese and Russian show five sections and five groups with no horizontal
+overflow, the open sheet stays in view on the rail, and tabbing through the sidebar never stops on
+a caption; Grade 1 leaves Arithmetic, Number sense and Patterns & logic; print output is unchanged;
+the seven home social cards and the README screenshots are regenerated.

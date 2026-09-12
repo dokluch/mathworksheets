@@ -9,6 +9,7 @@ vi.mock('./lib/analytics.js', () => ({
 }))
 import { trackEvent } from './lib/analytics.js'
 import { WORKSHEETS } from './worksheets.js'
+import { TOPIC_IDS } from './lib/topics.js'
 import { gradeNumbers } from './seo/render.js'
 import { PAGES } from './pages.js'
 import { t, localizeWorksheet, localizePage } from './i18n/index.js'
@@ -129,6 +130,35 @@ describe('App', () => {
     // long-division is grades 3–4: a filtered sidebar would hide the open sheet.
     const sidebar = document.querySelector('.catalog--sidebar')
     expect(sidebar.querySelectorAll('.catalog-card').length).toBe(WORKSHEETS.length)
+  })
+
+  it('groups the sidebar by topic, under captions that are neither links nor stops', () => {
+    window.history.replaceState(null, '', '/worksheets/long-division')
+    render(<App />)
+    const groups = [...document.querySelectorAll('.catalog--sidebar .catalog-group')]
+    expect(groups.map(group => group.getAttribute('aria-labelledby'))).toEqual(TOPIC_IDS.map(id => `catalog-group-${id}`))
+    for (const id of TOPIC_IDS) {
+      const group = screen.getByRole('group', { name: t('en', `topics.${id}`) })
+      const caption = group.querySelector('.catalog-group-label')
+      expect(caption.tagName).toBe('SPAN')
+      expect(caption.closest('a')).toBeNull()
+      expect(caption.hasAttribute('tabindex')).toBe(false)
+      expect([...group.querySelectorAll('a.catalog-card')].map(a => a.getAttribute('href')))
+        .toEqual(WORKSHEETS.filter(ws => ws.topic === id).map(ws => `/worksheets/${ws.slug}`))
+    }
+  })
+
+  it('titles each topic on the landing page and drops the topics a grade has nothing in', () => {
+    render(<App />)
+    const titles = () => [...document.querySelectorAll('.catalog-section-title')].map(h => h.textContent)
+    expect(titles()).toEqual(TOPIC_IDS.map(id => t('en', `topics.${id}`)))
+    expect(document.querySelector('.catalog-section-title').tagName).toBe('H2')
+    fireEvent.click(screen.getByRole('button', { name: /^Grade 1/ }))
+    const withGrade1 = TOPIC_IDS.filter(id => WORKSHEETS.some(ws => ws.topic === id && gradeNumbers(ws.grades).includes(1)))
+    expect(withGrade1.length).toBeLessThan(TOPIC_IDS.length)
+    expect(titles()).toEqual(withGrade1.map(id => t('en', `topics.${id}`)))
+    fireEvent.click(screen.getByRole('button', { name: /^All/ }))
+    expect(titles()).toHaveLength(TOPIC_IDS.length)
   })
 
   it('opens the worksheet named in the URL', () => {

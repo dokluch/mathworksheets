@@ -119,6 +119,13 @@ export default {
     ages: '{ages} años',
     sheetCount: { one: '{n} ficha', other: '{n} fichas' },
   },
+  topics: {
+    arithmetic: 'Aritmética',
+    numbers: 'Sentido numérico',
+    fractions: 'Fracciones y decimales',
+    algebra: 'Álgebra',
+    logic: 'Series y lógica',
+  },
 
   common: {
     regenerate: 'Regenerar',

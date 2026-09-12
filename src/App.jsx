@@ -18,6 +18,7 @@ import StaticPage from './components/StaticPage'
 import SheetThumb from './components/SheetThumb'
 import GradeFilter from './components/GradeFilter'
 import { ALL_GRADES, isGrade } from './lib/grades'
+import { groupByTopic } from './lib/topics'
 import { SheetStateContext } from './components/SheetState'
 import WorksheetDetails from './components/WorksheetDetails'
 import MultiplicationTable from './components/MultiplicationTable'
@@ -131,6 +132,11 @@ export default function App() {
     [worksheets, grade],
   )
 
+  // Both catalogs read by topic. The sidebar keeps every topic; the landing
+  // grid drops the topics the chosen grade has nothing in.
+  const topicGroups = useMemo(() => groupByTopic(worksheets), [worksheets])
+  const shownGroups = useMemo(() => groupByTopic(shownWorksheets), [shownWorksheets])
+
   // One listener catches both the Print button and Cmd/Ctrl+P.
   useEffect(() => {
     if (!activeSheet) return undefined
@@ -218,22 +224,29 @@ export default function App() {
 
             {/* A list of links, described as one. It used to claim
                 role="tablist" without the arrow-key behaviour tabs owe. */}
+            {/* One caption per topic, not a heading: five headings would stand
+                in front of the worksheet's own h1. */}
             <nav className="catalog-grid catalog-grid--compact" aria-label={t('app.worksheetTypes')}>
-              {worksheets.map(ws => (
-                <a
-                  key={ws.id}
-                  aria-current={activeSheet === ws.id ? 'page' : undefined}
-                  className={`catalog-card ${activeSheet === ws.id ? 'catalog-card--active' : ''}`}
-                  style={{ '--card-color': ws.color }}
-                  {...cardLink(ws)}
-                >
-                  <span className="catalog-card-icon" aria-hidden="true">
-                    <ws.Icon size={19} stroke={1.7} />
-                  </span>
-                  <span className="catalog-card-text">
-                    <span className="catalog-card-label">{ws.label}</span>
-                  </span>
-                </a>
+              {topicGroups.map(group => (
+                <div key={group.id} className="catalog-group" role="group" aria-labelledby={`catalog-group-${group.id}`}>
+                  <span className="catalog-group-label" id={`catalog-group-${group.id}`}>{t(`topics.${group.id}`)}</span>
+                  {group.worksheets.map(ws => (
+                    <a
+                      key={ws.id}
+                      aria-current={activeSheet === ws.id ? 'page' : undefined}
+                      className={`catalog-card ${activeSheet === ws.id ? 'catalog-card--active' : ''}`}
+                      style={{ '--card-color': ws.color }}
+                      {...cardLink(ws)}
+                    >
+                      <span className="catalog-card-icon" aria-hidden="true">
+                        <ws.Icon size={19} stroke={1.7} />
+                      </span>
+                      <span className="catalog-card-text">
+                        <span className="catalog-card-label">{ws.label}</span>
+                      </span>
+                    </a>
+                  ))}
+                </div>
               ))}
             </nav>
 
@@ -245,22 +258,29 @@ export default function App() {
 
             <GradeFilter value={grade} onChange={selectGrade} count={shownWorksheets.length} />
 
-            <nav className="catalog-grid" aria-label={t('app.worksheetTypes')}>
-              {shownWorksheets.map(ws => (
-                <a
-                  key={ws.id}
-                  className="catalog-card"
-                  style={{ '--card-color': ws.color }}
-                  {...cardLink(ws)}
-                >
-                  <span className="catalog-card-sheet">
-                    <SheetThumb id={ws.id} />
-                  </span>
-                  <span className="catalog-card-text">
-                    <span className="catalog-card-label">{ws.label}</span>
-                    <span className="catalog-card-desc">{ws.desc}</span>
-                  </span>
-                </a>
+            <nav className="catalog-sections" aria-label={t('app.worksheetTypes')}>
+              {shownGroups.map(group => (
+                <section key={group.id} className="catalog-section" aria-labelledby={`topic-${group.id}`}>
+                  <h2 className="catalog-section-title" id={`topic-${group.id}`}>{t(`topics.${group.id}`)}</h2>
+                  <div className="catalog-grid">
+                    {group.worksheets.map(ws => (
+                      <a
+                        key={ws.id}
+                        className="catalog-card"
+                        style={{ '--card-color': ws.color }}
+                        {...cardLink(ws)}
+                      >
+                        <span className="catalog-card-sheet">
+                          <SheetThumb id={ws.id} />
+                        </span>
+                        <span className="catalog-card-text">
+                          <span className="catalog-card-label">{ws.label}</span>
+                          <span className="catalog-card-desc">{ws.desc}</span>
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </section>
               ))}
             </nav>
 

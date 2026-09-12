@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "verify:live": "node scripts/verify-live.mjs",
     "serve:local": "node scripts/serve-local.mjs",
-    "og": "node scripts/og-images.mjs"
+    "og": "node scripts/og-images.mjs",
+    "screenshots": "node scripts/screenshots.mjs"
   },
   "dependencies": {
     "@tabler/icons-react": "^3.40.0",

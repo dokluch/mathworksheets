@@ -4,36 +4,13 @@
  * Pure data, no JSX or icons, so it can be imported by the React app, the
  * Vite HTML plugin, the post-build prerender script, the Vercel middleware
  * and the tests alike. Icons live in App.jsx (ICONS map keyed by id).
+ *
+ * Grouped by topic in the order of TOPICS (src/lib/topics.js), easiest first
+ * within a topic. This order is the order of the catalog, the sidebar, the
+ * sitemap, llms.txt and worksheets.json; src/lib/topics.test.js holds it.
  */
 
 export const WORKSHEETS = [
-  {
-    id: 'multiply',
-    slug: 'multiplication',
-    label: 'Multiplication',
-    shortDesc: 'Times tables & grid practice',
-    longDesc:
-      'A multiplication table grid for any range of factors, with optional pre-filled cells so children can spot patterns before filling in the rest. ' +
-      'Useful for learning the times tables by heart, checking recall speed and practising the commutative property (3 × 4 = 4 × 3).',
-    grades: '2–3',
-    skills: ['times tables', 'multiplication facts', 'number patterns'],
-    settings: [
-      'Table range: choose the first and last factor',
-      'Pre-fill the diagonal squares (1×1, 2×2, …)',
-      'Percentage of randomly pre-filled cells',
-    ],
-    examples: ['3 × 4 = □', '7 × 8 = □', '4 × 3 = □', '6 × 9 = □'],
-    prerequisites: ['addsub'],
-    nextSteps: ['divide', 'colmul', 'factors'],
-    updated: '2026-09-12',
-    faq: [
-      { q: 'What age are times tables worksheets for?', a: 'Most children meet the times tables in grade 2, around age 7, and are expected to recall them fluently by the end of grade 3. Start with a small range such as 1 to 5, and widen it once recall is quick rather than counted.' },
-      { q: 'What do the pre-filled cells do?', a: 'Pre-filling the diagonal (1×1, 2×2, 3×3 …) or a percentage of random cells turns a blank grid into a puzzle. The visible answers give a child footholds to reason from, so a half-filled table is a gentler step than an empty one.' },
-      { q: 'In what order should the tables be learned?', a: 'A common order is 2, 5 and 10 first, because their patterns are visible, then 3, 4 and 6, and finally 7, 8 and 9. Because 3 × 4 and 4 × 3 give the same answer, learning one table halves the work on another.' },
-    ],
-    color: '#2d6cb5',
-    interactive: false,
-  },
   {
     id: 'addsub',
     slug: 'add-subtract',
@@ -43,6 +20,7 @@ export const WORKSHEETS = [
       'Randomized addition and subtraction problems within 10, 20, 100 or 1000, with the blank placed at a random position (a + □ = c, □ − b = c, a − b = □). ' +
       'Choose inline or stacked layout and 2 to 4 columns; the “67 mode” hides exactly one problem per column whose answer is 67 for a small treasure hunt.',
     grades: '1–3',
+    topic: 'arithmetic',
     skills: ['addition', 'subtraction', 'missing addend', 'mental arithmetic'],
     settings: [
       'Operation: addition, subtraction or both',
@@ -72,6 +50,7 @@ export const WORKSHEETS = [
       'Vertical (column) addition and subtraction of 2-, 3- or 4-digit numbers laid out on a notebook grid, one digit per cell, so children practise aligning place values, carrying and borrowing. ' +
       'Choose addition, subtraction or a mix of both; the regrouping option generates problems that need at least one carry or one borrow. Differences are never negative.',
     grades: '2–3',
+    topic: 'arithmetic',
     skills: ['column addition', 'column subtraction', 'carrying / regrouping', 'borrowing', 'place value'],
     settings: [
       'Operation: addition, subtraction or both',
@@ -93,6 +72,34 @@ export const WORKSHEETS = [
     interactive: false,
   },
   {
+    id: 'multiply',
+    slug: 'multiplication',
+    label: 'Multiplication',
+    shortDesc: 'Times tables & grid practice',
+    longDesc:
+      'A multiplication table grid for any range of factors, with optional pre-filled cells so children can spot patterns before filling in the rest. ' +
+      'Useful for learning the times tables by heart, checking recall speed and practising the commutative property (3 × 4 = 4 × 3).',
+    grades: '2–3',
+    topic: 'arithmetic',
+    skills: ['times tables', 'multiplication facts', 'number patterns'],
+    settings: [
+      'Table range: choose the first and last factor',
+      'Pre-fill the diagonal squares (1×1, 2×2, …)',
+      'Percentage of randomly pre-filled cells',
+    ],
+    examples: ['3 × 4 = □', '7 × 8 = □', '4 × 3 = □', '6 × 9 = □'],
+    prerequisites: ['addsub'],
+    nextSteps: ['divide', 'colmul', 'factors'],
+    updated: '2026-09-12',
+    faq: [
+      { q: 'What age are times tables worksheets for?', a: 'Most children meet the times tables in grade 2, around age 7, and are expected to recall them fluently by the end of grade 3. Start with a small range such as 1 to 5, and widen it once recall is quick rather than counted.' },
+      { q: 'What do the pre-filled cells do?', a: 'Pre-filling the diagonal (1×1, 2×2, 3×3 …) or a percentage of random cells turns a blank grid into a puzzle. The visible answers give a child footholds to reason from, so a half-filled table is a gentler step than an empty one.' },
+      { q: 'In what order should the tables be learned?', a: 'A common order is 2, 5 and 10 first, because their patterns are visible, then 3, 4 and 6, and finally 7, 8 and 9. Because 3 × 4 and 4 × 3 give the same answer, learning one table halves the work on another.' },
+    ],
+    color: '#2d6cb5',
+    interactive: false,
+  },
+  {
     id: 'colmul',
     slug: 'column-multiplication',
     label: 'Column Multiplication',
@@ -101,6 +108,7 @@ export const WORKSHEETS = [
       'Long multiplication (2 × 2, 3 × 2, 3 × 3 or 4 × 2 digits) with room for the partial products and their place-value shifts, printed on a notebook grid. ' +
       'Designed for students in grades 3 and 4 who already know their times tables and are learning the standard written algorithm.',
     grades: '3–4',
+    topic: 'arithmetic',
     skills: ['long multiplication', 'partial products', 'place value'],
     settings: [
       'Preset: 2 × 2, 3 × 2, 3 × 3 or 4 × 2 digits',
@@ -127,6 +135,7 @@ export const WORKSHEETS = [
       'Short division problems written on one line, such as 12 ÷ 3 = □, with dividends within 20, 50 or 100 and divisors from 2 to 10, so every answer is a times-table fact read backwards. ' +
       'Turn on remainders for problems like 14 ÷ 4 = 3 r 2, where each line leaves a box for the quotient and one for what is left over. The sign prints as ÷ or as a colon, following the convention of each language.',
     grades: '2–3',
+    topic: 'arithmetic',
     skills: ['division facts', 'remainders', 'inverse of multiplication'],
     settings: [
       'Limit: dividends within 20, 50 or 100',
@@ -155,6 +164,7 @@ export const WORKSHEETS = [
       'Long division of 3-, 4- and 5-digit numbers by a 1- or 2-digit divisor, printed on a notebook grid with the frame drawn and empty squares for the working. ' +
       'The frame can be written the English way (divisor outside the bracket, quotient above the overbar) or the continental way (divisor top right, quotient beneath it), and problems can divide exactly or leave a remainder.',
     grades: '3–4',
+    topic: 'arithmetic',
     skills: ['long division', 'remainders', 'place value', 'estimation'],
     settings: [
       'Preset: 3 ÷ 1, 4 ÷ 1, 4 ÷ 2 or 5 ÷ 2 digits',
@@ -183,6 +193,7 @@ export const WORKSHEETS = [
       'Pairs of numbers to compare with >, < or =. The generator deliberately picks tricky pairs: swapped digits (43 vs 34), repeated digits, off-by-one neighbours and about 15% equal pairs, ' +
       'so children have to read every digit instead of guessing from the first one.',
     grades: '1–3',
+    topic: 'numbers',
     skills: ['comparing numbers', 'place value', 'inequality symbols'],
     settings: [
       'Limit: within 10, 20, 100 or 1000',
@@ -209,6 +220,7 @@ export const WORKSHEETS = [
       'Rounding practice to the nearest 10, 100 or 1000 with 20–40 randomized numbers per sheet. ' +
       'Numbers are chosen so that both “round up” and “round down” cases appear, including the tricky 5 boundary.',
     grades: '2–3',
+    topic: 'numbers',
     skills: ['rounding', 'estimation', 'place value'],
     settings: [
       'Place: nearest 10, 100 or 1000',
@@ -227,59 +239,34 @@ export const WORKSHEETS = [
     interactive: false,
   },
   {
-    id: 'patterns',
-    slug: 'patterns',
-    label: 'Patterns',
-    shortDesc: 'Number sequences & series',
+    id: 'factors',
+    slug: 'factors-and-primes',
+    label: 'Factors & Primes',
+    shortDesc: 'Prime factorization, GCD and LCM, prime or composite',
     longDesc:
-      'Number sequences with missing terms at three difficulty levels: skip counting up and down (easy); bigger steps, doubling and halving, alternating steps and square numbers (medium); ' +
-      'geometric progressions, growing steps, Fibonacci-style sums, cubes, double-and-add rules and two sequences braided together (hard). ' +
-      'Every page mixes the families of its level and never repeats a sequence. Children find the rule and fill in the blanks, which builds early algebraic thinking.',
-    grades: '1–3',
-    skills: ['number patterns', 'skip counting', 'sequences', 'algebraic thinking'],
+      'Three kinds of practice with factors and multiples on a notebook grid. Write a number as a product of primes, smallest first, with one box per digit of each factor; find the greatest common divisor and the least common multiple of a pair; or mark each number prime or composite. ' +
+      'The primes practice leans on the numbers that fool children, odd composites such as 51, 57 and 91 that pass the checks for 2 and 5. Numbers go up to 100 or 500, and the multiplication sign prints as × or ·, following the convention of each language.',
+    grades: '4–6',
+    topic: 'numbers',
+    skills: ['prime factorization', 'greatest common divisor', 'least common multiple', 'prime and composite numbers', 'divisibility'],
     settings: [
-      'Level: easy, medium or hard',
-    ],
-    examples: ['2, 4, 6, □, 10', '1, 2, 4, 8, □', '1, 1, 2, 3, 5, □', '1, 4, 9, 16, □'],
-    prerequisites: [],
-    nextSteps: ['multiply'],
-    updated: '2026-09-10',
-    faq: [
-      { q: 'What do number patterns teach?', a: 'Finding the rule behind 2, 4, 6, □, 10 is early algebraic thinking: a child looks for a relationship rather than performing a given operation. It also reinforces skip counting, which supports the times tables.' },
-      { q: 'What is the difference between the three levels?', a: 'Easy uses a constant step, such as adding 3 each time, counting up or down. Medium adds bigger steps, doubling and halving, alternating steps and the square numbers. Hard brings in geometric progressions, steps that grow each time, Fibonacci-style sums, cubes, double-and-add rules and two sequences braided together, so a child has to test a guess against several terms before trusting it. From Medium up a gap can also sit at the start or in the middle of the run.' },
-      { q: 'My child is stuck on a sequence. What should I do?', a: 'Ask what changes from one number to the next and write the gaps underneath. Once the gaps are visible the rule usually becomes obvious, and the habit of writing them down transfers to harder sequences.' },
-    ],
-    color: '#5b4a91',
-    interactive: false,
-  },
-  {
-    id: 'order',
-    slug: 'order-of-operations',
-    label: 'Order of Operations',
-    shortDesc: 'Which operation comes first',
-    longDesc:
-      'Multi-step expressions where the answer depends on doing the operations in the right order: multiplication and division before addition and subtraction, and brackets before either. ' +
-      'Three levels run from chains of one kind (25 − 14 + 43) through mixed precedence (70 − 7 × 9) to four-term expressions with brackets (38 − (80 − 76) × 7). Every step lands on a whole number between 2 and 100, division is always exact, and the answer boxes show how many digits to expect.',
-    grades: '2–4',
-    skills: ['order of operations', 'brackets', 'mental arithmetic', 'multi-step problems'],
-    settings: [
-      'Level: easy, medium or hard',
-      'Notation: × ÷ or · : signs',
-      'Columns: 1 or 2 per page',
-      'Use brackets, or leave them out',
+      'Practice: prime factors, GCD and LCM, or prime or composite',
+      'Range: numbers within 100 or within 500',
+      'Sign: × or ·',
+      'Columns: 2, 3 or 4, as many as the practice allows',
       'Print an answer key',
     ],
-    examples: ['25 − 14 + 43 = □□', '30 − (17 + 9) = □', '70 − 7 × 9 = □', '28 + 12 ÷ 2 = □□'],
-    prerequisites: ['addsub', 'multiply'],
-    nextSteps: ['eqexplore', 'solvex'],
+    examples: ['84 = □ × □ × □ × □', '90 = □ × □ × □ × □', '51 → □', '91 → □'],
+    prerequisites: ['multiply', 'divide'],
+    nextSteps: ['fractions'],
     updated: '2026-09-12',
     faq: [
-      { q: 'What is the order of operations?', a: 'Work out anything in brackets first, then all the multiplication and division from left to right, then the addition and subtraction from left to right. It is a convention rather than a discovery: everyone agrees to read 70 − 7 × 9 the same way, so the expression has one answer instead of two.' },
-      { q: 'Why does my child get 567 for 70 − 7 × 9?', a: 'Because they worked strictly left to right: 70 − 7 is 63, and 63 × 9 is 567. The correct reading multiplies first, giving 70 − 63 = 7. This is the single most common mistake on these sheets, and the fastest cure is asking a child to underline the multiplication before they write anything.' },
-      { q: 'What do the brackets change?', a: 'Brackets promote whatever is inside them to the front of the queue. 30 − 17 + 9 is 22, but 30 − (17 + 9) is 4, because the bracket makes the addition happen first. Every bracket on these sheets changes the answer, so none of them can be safely ignored.' },
-      { q: 'Why does each answer have a row of boxes?', a: 'There is one box per digit of the answer, so a child can see whether they are looking for a single digit, a number in the tens, or one in the hundreds. It is a checking aid rather than a hint at the value: an answer that will not fit the boxes is a signal to go back and look at the order again.' },
+      { q: 'What is a prime factorization, and why write the factors in order?', a: 'Every whole number above 1 is a product of primes in exactly one way, apart from the order: 84 is 2 × 2 × 3 × 7. Writing the factors smallest first gives every problem a single answer to check against, and it makes repeated factors easy to count, which is what the GCD and LCM are built from.' },
+      { q: 'How do you find the GCD and LCM of two numbers?', a: 'Factorize both. The greatest common divisor multiplies the primes they share, as many times as both have them; the least common multiple multiplies every prime either one has, as many times as the one with more. For 12 = 2 × 2 × 3 and 18 = 2 × 3 × 3 that gives a GCD of 6 and an LCM of 36.' },
+      { q: 'Why does the sheet keep showing numbers like 51 and 91?', a: 'Those are the composites that look prime. A child who checks for 2 and 5 and stops will call 51 prime, but it is 3 × 17, and 91 is 7 × 13. About half of every primes page is composite, and most of those are odd numbers not ending in 5, so the only way through is to keep dividing.' },
+      { q: 'Which range should I start with?', a: 'Within 100 suits grades 4 and 5, where the primes to try are 2, 3, 5 and 7. Within 500 needs 11, 13, 17 and 19 as well, and a factorization there can end with a two- or three-digit prime, so it fits grade 6 or a child who already factorizes quickly.' },
     ],
-    color: '#25457a',
+    color: '#278227',
     interactive: false,
   },
   {
@@ -291,6 +278,7 @@ export const WORKSHEETS = [
       'Fraction practice written the way it is in a squared exercise book, numerator over denominator with the bar on the grid line: simplify a fraction to lowest terms, complete an equivalent fraction such as 2/3 = □/12, or compare two fractions with >, < or =. ' +
       'Comparisons set the traps children fall into: the same numerator over different denominators, one more on top and bottom, and pairs that look different but are equal. Denominators go up to 10, 12 or 20.',
     grades: '4–5',
+    topic: 'fractions',
     skills: ['simplifying fractions', 'equivalent fractions', 'comparing fractions', 'common factors'],
     settings: [
       'Practice: simplify, equivalent fractions, compare, or a mix of all three',
@@ -319,6 +307,7 @@ export const WORKSHEETS = [
       'Addition and subtraction of fractions written on a notebook grid, numerator over denominator, with a line of working under every problem. ' +
       'Start with like denominators, move to unlike denominators whose common denominator stays within the chosen limit, then to mixed numbers, where half the sums carry past a whole and half the differences borrow one. Answers are never negative and the answer key gives the simplest form, as a mixed number or an improper fraction.',
     grades: '4–6',
+    topic: 'fractions',
     skills: ['adding fractions', 'subtracting fractions', 'common denominators', 'mixed numbers', 'simplest form'],
     settings: [
       'Level: like denominators, unlike denominators or mixed numbers',
@@ -349,6 +338,7 @@ export const WORKSHEETS = [
       'Decimal practice on a notebook grid in two modes. Column mode adds and subtracts decimals with the decimal point on the grid line between the ones and the tenths, as in a squared exercise book, so a child lines up 3.8 under 12.75 by the point rather than by the last digit; choose one place, two places or a mix. ' +
       'Powers mode multiplies and divides by 10, 100 and 1000, where the point moves: the answer has a box for every digit and the child places the point. The decimal mark prints as a point or a comma, following the convention of each language.',
     grades: '4–6',
+    topic: 'fractions',
     skills: ['decimal place value', 'adding and subtracting decimals', 'multiplying and dividing by 10, 100 and 1000', 'lining up the decimal point'],
     settings: [
       'Mode: column addition and subtraction, or × and ÷ by 10, 100 and 1000',
@@ -372,34 +362,62 @@ export const WORKSHEETS = [
     interactive: false,
   },
   {
-    id: 'factors',
-    slug: 'factors-and-primes',
-    label: 'Factors & Primes',
-    shortDesc: 'Prime factorization, GCD and LCM, prime or composite',
+    id: 'order',
+    slug: 'order-of-operations',
+    label: 'Order of Operations',
+    shortDesc: 'Which operation comes first',
     longDesc:
-      'Three kinds of practice with factors and multiples on a notebook grid. Write a number as a product of primes, smallest first, with one box per digit of each factor; find the greatest common divisor and the least common multiple of a pair; or mark each number prime or composite. ' +
-      'The primes practice leans on the numbers that fool children, odd composites such as 51, 57 and 91 that pass the checks for 2 and 5. Numbers go up to 100 or 500, and the multiplication sign prints as × or ·, following the convention of each language.',
-    grades: '4–6',
-    skills: ['prime factorization', 'greatest common divisor', 'least common multiple', 'prime and composite numbers', 'divisibility'],
+      'Multi-step expressions where the answer depends on doing the operations in the right order: multiplication and division before addition and subtraction, and brackets before either. ' +
+      'Three levels run from chains of one kind (25 − 14 + 43) through mixed precedence (70 − 7 × 9) to four-term expressions with brackets (38 − (80 − 76) × 7). Every step lands on a whole number between 2 and 100, division is always exact, and the answer boxes show how many digits to expect.',
+    grades: '2–4',
+    topic: 'algebra',
+    skills: ['order of operations', 'brackets', 'mental arithmetic', 'multi-step problems'],
     settings: [
-      'Practice: prime factors, GCD and LCM, or prime or composite',
-      'Range: numbers within 100 or within 500',
-      'Sign: × or ·',
-      'Columns: 2, 3 or 4, as many as the practice allows',
+      'Level: easy, medium or hard',
+      'Notation: × ÷ or · : signs',
+      'Columns: 1 or 2 per page',
+      'Use brackets, or leave them out',
       'Print an answer key',
     ],
-    examples: ['84 = □ × □ × □ × □', '90 = □ × □ × □ × □', '51 → □', '91 → □'],
-    prerequisites: ['multiply', 'divide'],
-    nextSteps: ['fractions'],
+    examples: ['25 − 14 + 43 = □□', '30 − (17 + 9) = □', '70 − 7 × 9 = □', '28 + 12 ÷ 2 = □□'],
+    prerequisites: ['addsub', 'multiply'],
+    nextSteps: ['eqexplore', 'solvex'],
     updated: '2026-09-12',
     faq: [
-      { q: 'What is a prime factorization, and why write the factors in order?', a: 'Every whole number above 1 is a product of primes in exactly one way, apart from the order: 84 is 2 × 2 × 3 × 7. Writing the factors smallest first gives every problem a single answer to check against, and it makes repeated factors easy to count, which is what the GCD and LCM are built from.' },
-      { q: 'How do you find the GCD and LCM of two numbers?', a: 'Factorize both. The greatest common divisor multiplies the primes they share, as many times as both have them; the least common multiple multiplies every prime either one has, as many times as the one with more. For 12 = 2 × 2 × 3 and 18 = 2 × 3 × 3 that gives a GCD of 6 and an LCM of 36.' },
-      { q: 'Why does the sheet keep showing numbers like 51 and 91?', a: 'Those are the composites that look prime. A child who checks for 2 and 5 and stops will call 51 prime, but it is 3 × 17, and 91 is 7 × 13. About half of every primes page is composite, and most of those are odd numbers not ending in 5, so the only way through is to keep dividing.' },
-      { q: 'Which range should I start with?', a: 'Within 100 suits grades 4 and 5, where the primes to try are 2, 3, 5 and 7. Within 500 needs 11, 13, 17 and 19 as well, and a factorization there can end with a two- or three-digit prime, so it fits grade 6 or a child who already factorizes quickly.' },
+      { q: 'What is the order of operations?', a: 'Work out anything in brackets first, then all the multiplication and division from left to right, then the addition and subtraction from left to right. It is a convention rather than a discovery: everyone agrees to read 70 − 7 × 9 the same way, so the expression has one answer instead of two.' },
+      { q: 'Why does my child get 567 for 70 − 7 × 9?', a: 'Because they worked strictly left to right: 70 − 7 is 63, and 63 × 9 is 567. The correct reading multiplies first, giving 70 − 63 = 7. This is the single most common mistake on these sheets, and the fastest cure is asking a child to underline the multiplication before they write anything.' },
+      { q: 'What do the brackets change?', a: 'Brackets promote whatever is inside them to the front of the queue. 30 − 17 + 9 is 22, but 30 − (17 + 9) is 4, because the bracket makes the addition happen first. Every bracket on these sheets changes the answer, so none of them can be safely ignored.' },
+      { q: 'Why does each answer have a row of boxes?', a: 'There is one box per digit of the answer, so a child can see whether they are looking for a single digit, a number in the tens, or one in the hundreds. It is a checking aid rather than a hint at the value: an answer that will not fit the boxes is a signal to go back and look at the order again.' },
     ],
-    color: '#278227',
+    color: '#25457a',
     interactive: false,
+  },
+  {
+    id: 'eqexplore',
+    slug: 'equation-explorer',
+    label: 'Equation Explorer',
+    shortDesc: 'Solve equations interactively',
+    longDesc:
+      'An on-screen (not printable) equation solver: drag terms across the equals sign and watch the sign flip, follow the jumps on a number line, then type the answer on the built-in keypad. ' +
+      'Correct answers build a streak; wrong ones replay an animated explanation.',
+    grades: '2–3',
+    topic: 'algebra',
+    skills: ['equations', 'inverse operations', 'number line', 'mental arithmetic'],
+    settings: [
+      'Operation: addition, subtraction or both',
+      'Range: size of the numbers used',
+    ],
+    examples: ['x + 7 = 12', '15 − x = 8', 'x − 6 = 9'],
+    prerequisites: ['addsub'],
+    nextSteps: ['patterns', 'solvex'],
+    updated: '2026-09-12',
+    faq: [
+      { q: 'Can I print the Equation Explorer?', a: 'No. It is the one activity on the site meant for the screen: terms are dragged across the equals sign, the number line animates, and answers are checked as they are typed. Every other worksheet here prints on one page.' },
+      { q: 'What does moving a term across the equals sign mean?', a: 'An equation stays true as long as both sides change in the same way. Moving a term across flips its sign, so x + 7 = 12 becomes x = 12 − 7. Seeing the sign flip as it happens makes the rule concrete rather than memorised.' },
+      { q: 'What age is it for?', a: 'Grades 2 and 3, roughly ages 7 to 9, once addition and subtraction within 100 are comfortable. It is usually a child\'s first sight of a letter standing for an unknown number.' },
+    ],
+    color: '#1f7a8c',
+    interactive: true,
   },
   {
     id: 'solvex',
@@ -410,6 +428,7 @@ export const WORKSHEETS = [
       'Linear equations to solve on paper, each with ruled space underneath for the working. Start with one step, such as x + 7 = 15 or 3x = 21, move to two steps with brackets and division, such as 2x − 5 = 11 or 3(x + 2) = 18, then to equations with x on both sides. ' +
       'Every equation is built backwards from its answer, so each step is a whole number and x is a positive integer up to 10, 20 or 100. The × and ÷ signs print as the language writes them.',
     grades: '5–6',
+    topic: 'algebra',
     skills: ['solving equations', 'inverse operations', 'one-step and two-step equations', 'balancing both sides'],
     settings: [
       'Level: one step, two steps, or x on both sides',
@@ -432,6 +451,33 @@ export const WORKSHEETS = [
     interactive: false,
   },
   {
+    id: 'patterns',
+    slug: 'patterns',
+    label: 'Patterns',
+    shortDesc: 'Number sequences & series',
+    longDesc:
+      'Number sequences with missing terms at three difficulty levels: skip counting up and down (easy); bigger steps, doubling and halving, alternating steps and square numbers (medium); ' +
+      'geometric progressions, growing steps, Fibonacci-style sums, cubes, double-and-add rules and two sequences braided together (hard). ' +
+      'Every page mixes the families of its level and never repeats a sequence. Children find the rule and fill in the blanks, which builds early algebraic thinking.',
+    grades: '1–3',
+    topic: 'logic',
+    skills: ['number patterns', 'skip counting', 'sequences', 'algebraic thinking'],
+    settings: [
+      'Level: easy, medium or hard',
+    ],
+    examples: ['2, 4, 6, □, 10', '1, 2, 4, 8, □', '1, 1, 2, 3, 5, □', '1, 4, 9, 16, □'],
+    prerequisites: [],
+    nextSteps: ['multiply'],
+    updated: '2026-09-10',
+    faq: [
+      { q: 'What do number patterns teach?', a: 'Finding the rule behind 2, 4, 6, □, 10 is early algebraic thinking: a child looks for a relationship rather than performing a given operation. It also reinforces skip counting, which supports the times tables.' },
+      { q: 'What is the difference between the three levels?', a: 'Easy uses a constant step, such as adding 3 each time, counting up or down. Medium adds bigger steps, doubling and halving, alternating steps and the square numbers. Hard brings in geometric progressions, steps that grow each time, Fibonacci-style sums, cubes, double-and-add rules and two sequences braided together, so a child has to test a guess against several terms before trusting it. From Medium up a gap can also sit at the start or in the middle of the run.' },
+      { q: 'My child is stuck on a sequence. What should I do?', a: 'Ask what changes from one number to the next and write the gaps underneath. Once the gaps are visible the rule usually becomes obvious, and the habit of writing them down transfers to harder sequences.' },
+    ],
+    color: '#5b4a91',
+    interactive: false,
+  },
+  {
     id: 'bongard',
     slug: 'bongard-problems',
     label: 'Bongard Problems',
@@ -440,6 +486,7 @@ export const WORKSHEETS = [
       'Visual logic puzzles in the style of Mikhail Bongard: six boxes on the left all follow one rule, six on the right all break it, and the child has to say what the rule is. ' +
       'Every problem is redrawn fresh each time, so the rule stays the same while the figures change. Two, four or six problems per page, with the answers on a separate key.',
     grades: '1–3',
+    topic: 'logic',
     skills: ['visual reasoning', 'sorting and classifying', 'shapes', 'explaining a rule'],
     settings: [
       'Problems per page: 2, 4 or 6',
@@ -457,32 +504,6 @@ export const WORKSHEETS = [
     ],
     color: '#6b7a1f',
     interactive: false,
-  },
-  {
-    id: 'eqexplore',
-    slug: 'equation-explorer',
-    label: 'Equation Explorer',
-    shortDesc: 'Solve equations interactively',
-    longDesc:
-      'An on-screen (not printable) equation solver: drag terms across the equals sign and watch the sign flip, follow the jumps on a number line, then type the answer on the built-in keypad. ' +
-      'Correct answers build a streak; wrong ones replay an animated explanation.',
-    grades: '2–3',
-    skills: ['equations', 'inverse operations', 'number line', 'mental arithmetic'],
-    settings: [
-      'Operation: addition, subtraction or both',
-      'Range: size of the numbers used',
-    ],
-    examples: ['x + 7 = 12', '15 − x = 8', 'x − 6 = 9'],
-    prerequisites: ['addsub'],
-    nextSteps: ['patterns', 'solvex'],
-    updated: '2026-09-12',
-    faq: [
-      { q: 'Can I print the Equation Explorer?', a: 'No. It is the one activity on the site meant for the screen: terms are dragged across the equals sign, the number line animates, and answers are checked as they are typed. Every other worksheet here prints on one page.' },
-      { q: 'What does moving a term across the equals sign mean?', a: 'An equation stays true as long as both sides change in the same way. Moving a term across flips its sign, so x + 7 = 12 becomes x = 12 − 7. Seeing the sign flip as it happens makes the rule concrete rather than memorised.' },
-      { q: 'What age is it for?', a: 'Grades 2 and 3, roughly ages 7 to 9, once addition and subtraction within 100 are comfortable. It is usually a child\'s first sight of a letter standing for an unknown number.' },
-    ],
-    color: '#1f7a8c',
-    interactive: true,
   },
 ]
 

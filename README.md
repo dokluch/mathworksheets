@@ -8,14 +8,13 @@ Free, printable, randomized math worksheets for grades 1–6. An open-source web
 
 ## What's Inside
 
-- **Multiplication** — times tables & grid practice
-- **Add & Subtract** — addition and subtraction drills (with the “67 mode” treasure hunt)
-- **Column Addition** — vertical multi-digit addition with carrying
-- **Column Multiplication** — long multiplication (3×2 and 4×2 digits)
-- **Comparison** — greater than, less than, equal
-- **Rounding** — round to nearest 10, 100, 1000
-- **Patterns** — number sequences & series
-- **Equation Explorer** — interactive on-screen equation solving
+Seventeen worksheets in five topics:
+
+- **Arithmetic** — Add & Subtract (with the “67 mode” treasure hunt), Column Addition & Subtraction, Multiplication tables, Column Multiplication, Division facts, Long Division
+- **Number sense** — Comparison, Rounding, Factors & Primes
+- **Fractions & decimals** — Fractions, Add & Subtract Fractions, Decimals
+- **Algebra** — Order of Operations, the interactive on-screen Equation Explorer, Solve for x
+- **Patterns & logic** — Number Patterns, Bongard Problems
 
 Each worksheet is randomized and printable, and has its own URL (`/worksheets/<slug>`). Settings persist between sessions so you can pick up where you left off.
 
@@ -33,6 +32,7 @@ npm run dev      # http://localhost:5176
 npm test         # vitest
 npm run lint
 npm run build    # vite build + scripts/prerender.mjs (static pages, Markdown, sitemap, llms.txt …)
+npm run screenshots  # regenerate the README screenshots in screenshots/ with Playwright
 npm run og       # regenerate public/og/**/*.png social previews (every locale) with Playwright (npx playwright install chromium once; brew install pngquant to shrink them)
 ```
 

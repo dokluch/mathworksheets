@@ -119,6 +119,13 @@ export default {
     ages: '{ages} лет',
     sheetCount: { one: '{n} лист', few: '{n} листа', many: '{n} листов', other: '{n} листа' },
   },
+  topics: {
+    arithmetic: 'Арифметика',
+    numbers: 'Числа',
+    fractions: 'Дроби и десятичные',
+    algebra: 'Алгебра',
+    logic: 'Закономерности и логика',
+  },
 
   common: {
     regenerate: 'Обновить',

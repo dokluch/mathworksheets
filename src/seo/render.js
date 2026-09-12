@@ -14,6 +14,7 @@ import { WORKSHEETS, findWorksheetBySlug, findWorksheetById } from '../worksheet
 import { PAGES, findPageBySlug, findPageById } from '../pages.js'
 import { AGENT_GUIDANCE } from '../agents.js'
 import { GRADES, GRADE_AGES } from '../lib/grades.js'
+import { TOPICS, TOPIC_BY_ID, groupByTopic } from '../lib/topics.js'
 import {
   SITE_URL, BRAND, AUTHOR, GITHUB_URL,
   LICENSE_URL, LICENSE_NAME, THEME_COLOR, ACCENT_COLOR, OPERATOR, CONTACT_EMAIL, BRAND_ALT, absoluteUrl,
@@ -508,7 +509,12 @@ export function footerHtml({ year = new Date().getFullYear(), locale = DEFAULT_L
 function homeContent(route) {
   const { locale } = route
   const h = (key, params) => html(locale, key, params)
-  const cards = localizedWorksheets(locale).map(ws => worksheetCard(ws, locale)).join('\n        ')
+  const sections = groupByTopic(localizedWorksheets(locale)).map(group => `<section class="catalog-section" aria-labelledby="topic-${group.id}">
+          <h3 class="catalog-section-title" id="topic-${group.id}">${escapeHtml(t(locale, `topics.${group.id}`))}</h3>
+          <div class="catalog-grid">
+            ${group.worksheets.map(ws => worksheetCard(ws, locale)).join('\n            ')}
+          </div>
+        </section>`).join('\n        ')
   return `<main class="catalog catalog--full static-page">
       <header class="catalog-header">
         <div class="catalog-brand">
@@ -521,8 +527,8 @@ function homeContent(route) {
         <p>${h('static.home.intro2')}</p>
       </section>
       <h2>${h('static.home.worksheets')}</h2>
-      <nav class="catalog-grid" aria-label="${attr(t(locale, 'static.worksheetTypes'))}">
-        ${cards}
+      <nav class="catalog-sections" aria-label="${attr(t(locale, 'static.worksheetTypes'))}">
+        ${sections}
       </nav>
       <h2>${h('static.home.howItWorks')}</h2>
       <ol>
@@ -837,12 +843,19 @@ function choosingBlock() {
     const matches = WORKSHEETS.filter(w => gradeNumbers(w.grades).includes(g))
     return `- Grade ${g} (ages ${GRADE_AGES[String(g)]}): ${matches.map(w => w.label).join(', ')}`
   }).join('\n')
+  const byTopic = groupByTopic(WORKSHEETS)
+    .map(group => `- ${group.label}: ${group.worksheets.map(w => w.label).join(', ')}`)
+    .join('\n')
   const bySkill = WORKSHEETS
     .map(w => `- ${w.label} (${absoluteUrl(worksheetRoute(w).path)}) teaches: ${w.skills.join(', ')}`)
     .join('\n')
   return `Choosing a worksheet — by grade:
 
 ${byGrade}
+
+Choosing a worksheet — by topic:
+
+${byTopic}
 
 Choosing a worksheet — by skill:
 
@@ -887,6 +900,7 @@ export function renderLlmsTxt() {
     const after = w.nextSteps.map(id => findWorksheetById(id).label)
     const facts = [
       w.shortDesc,
+      `topic: ${TOPIC_BY_ID[w.topic].label}`,
       `${w.grades.includes('–') ? 'grades' : 'grade'} ${w.grades} (ages ${agesForGrades(w.grades)})`,
       w.interactive ? 'interactive on-screen activity, not printable' : 'printable, one A4/Letter page',
       `teaches ${w.skills.join(', ')}`,
@@ -1104,12 +1118,14 @@ export function catalogJson({ now = new Date() } = {}) {
     },
     pages: Object.fromEntries(PAGES.map(p => [p.id, absoluteUrl(pageRoute(p).path)])),
     locales: LOCALES.map(l => ({ code: l, lang: LOCALE_META[l].lang, name: LOCALE_META[l].englishName, url: absoluteUrl(homeRoute(l).path) })),
+    topics: TOPICS.map(topic => ({ id: topic.id, label: topic.label, worksheets: WORKSHEETS.filter(w => w.topic === topic.id).map(w => w.id) })),
     worksheets: WORKSHEETS.map(w => {
       const r = worksheetRoute(w)
       return {
         id: w.id,
         slug: w.slug,
         label: w.label,
+        topic: w.topic,
         url: absoluteUrl(r.path),
         markdownUrl: absoluteUrl(r.md),
         alternates: Object.fromEntries(LOCALES.map(l => [l, absoluteUrl(worksheetRoute(w, l).path)])),
