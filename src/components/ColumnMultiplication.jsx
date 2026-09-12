@@ -7,48 +7,7 @@ import WorksheetHeader from './WorksheetHeader'
 import { useSheetSet } from '../hooks/useSheetSet'
 import SheetCopies from './SheetCopies'
 import AnswerKey from './AnswerKey'
-import { asHelpers } from '../lib/rng'
-
-const PRESETS = [
-  { value: '2x2', aDigits: 2, bDigits: 2 },
-  { value: '3x2', aDigits: 3, bDigits: 2 },
-  { value: '4x2', aDigits: 4, bDigits: 2 },
-]
-
-/** A number whose digits are all 1–9, so every partial product fills a full row. */
-function randNoZeroDigits(digits, r) {
-  let n = 0
-  for (let i = 0; i < digits; i++) n = n * 10 + r.int(1, 9)
-  return n
-}
-
-function generateProblem(aDigits, bDigits, r) {
-  const aMin = 10 ** (aDigits - 1)
-  const aMax = 10 ** aDigits - 1
-
-  const a = r.int(aMin, aMax)
-  // A zero digit in the multiplier would give a partial product of "0" with a
-  // single placeholder in an otherwise blank row, which reads as a mistake.
-  const b = randNoZeroDigits(bDigits, r)
-
-  const bDigitsArr = String(b).split('').reverse().map(Number)
-  const partialProducts = bDigitsArr.map((digit, shift) => ({
-    value: a * digit,
-    shift,
-  }))
-
-  return {
-    a,
-    b,
-    partialProducts,
-    product: a * b,
-  }
-}
-
-function generateSheet(count, aDigits, bDigits, rng) {
-  const r = asHelpers(rng)
-  return Array.from({ length: count }, () => generateProblem(aDigits, bDigits, r))
-}
+import { PRESETS, digitColumns, generateSheet, problemRows } from '../lib/columnMultiplication'
 
 function buildCells(value, width, shift = 0) {
   const text = String(value)
@@ -75,13 +34,6 @@ function renderDigitRow({ value, width, shift = 0, blank = false, className = ''
       ))}
     </div>
   )
-}
-
-// Every problem of a preset is laid out on the same number of digit columns
-// (a product of an m-digit by an n-digit number has at most m + n digits, and
-// so does the widest shifted partial product), so columns line up on the grid.
-function digitColumns(aDigits, bDigits) {
-  return aDigits + bDigits
 }
 
 function renderProblem(problem, width, t) {
@@ -122,16 +74,18 @@ export default function ColumnMultiplication() {
   const [columns, setColumns] = usePersistedState('colmul', 'columns', 3)
   const [answerKey, setAnswerKey] = usePersistedState('colmul', 'answerKey', false)
 
-  const activePreset = PRESETS.find(item => item.value === preset) || PRESETS[PRESETS.length - 1]
+  // 4 × 2 is the default and the fallback: a stored value from an older build,
+  // or one we have since dropped, opens the sheet the catalog copy describes
+  // rather than whichever preset happens to sit last in the list.
+  const activePreset = PRESETS.find(item => item.value === preset) || PRESETS.find(item => item.value === '4x2')
   const { aDigits, bDigits } = activePreset
-  // Rows: multiplicand, multiplier, one partial product per multiplier digit, product.
-  const rows = 3 + bDigits
+  const rows = problemRows(bDigits)
   // Exactly one printed page.
   const problemCount = problemsPerPage({ columns, rows })
   const presetLabel = (a, b) => t('colmul.preset', { a, b })
 
   const { sheets, setSet, regenerate } = useSheetSet(
-    rng => generateSheet(problemCount, aDigits, bDigits, rng),
+    rng => generateSheet({ count: problemCount, aDigits, bDigits }, rng),
     [aDigits, bDigits, problemCount],
   )
 

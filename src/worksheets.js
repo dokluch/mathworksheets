@@ -66,25 +66,27 @@ export const WORKSHEETS = [
   {
     id: 'coladd',
     slug: 'column-addition',
-    label: 'Column Addition',
-    shortDesc: 'Vertical multi-digit addition',
+    label: 'Column Addition & Subtraction',
+    shortDesc: 'Vertical multi-digit addition and subtraction',
     longDesc:
-      'Vertical (column) addition of 2-, 3- or 4-digit numbers laid out on a notebook grid, one digit per cell, so children practise aligning place values and carrying. ' +
-      'The “prefer carrying” option generates problems that need at least one carry.',
+      'Vertical (column) addition and subtraction of 2-, 3- or 4-digit numbers laid out on a notebook grid, one digit per cell, so children practise aligning place values, carrying and borrowing. ' +
+      'Choose addition, subtraction or a mix of both; the regrouping option generates problems that need at least one carry or one borrow. Differences are never negative.',
     grades: '2–3',
-    skills: ['column addition', 'carrying / regrouping', 'place value'],
+    skills: ['column addition', 'column subtraction', 'carrying / regrouping', 'borrowing', 'place value'],
     settings: [
+      'Operation: addition, subtraction or both',
       'Digits: 2-digit, 3-digit or 4-digit numbers',
       'Columns: number of problem columns per page',
-      'Prefer problems that require carrying',
+      'Prefer problems that require carrying or borrowing',
     ],
-    examples: ['348 + 275 = □', '67 + 9 = □', '1204 + 856 = □'],
+    examples: ['348 + 275 = □', '503 − 268 = □', '67 + 9 = □', '1204 + 856 = □'],
     prerequisites: ['addsub'],
     nextSteps: ['colmul'],
-    updated: '2026-09-07',
+    updated: '2026-09-12',
     faq: [
       { q: 'What grade is column addition for?', a: 'Vertical addition with 2-digit numbers usually starts in grade 2, and 3- and 4-digit numbers follow in grade 3. The skill it depends on is place value: knowing that the 4 in 348 means four tens.' },
-      { q: 'What is carrying, or regrouping?', a: 'When a column adds to more than 9, the tens part moves into the next column to the left. 8 + 6 is 14, so the 4 is written and the 1 is carried. Turning on “prefer carrying” makes sure most problems need this step.' },
+      { q: 'What is carrying, or regrouping?', a: 'When a column adds to more than 9, the tens part moves into the next column to the left. 8 + 6 is 14, so the 4 is written and the 1 is carried. Turning on the regrouping option makes sure most problems need this step.' },
+      { q: 'What is borrowing?', a: 'When the digit on top is smaller than the one below it, a ten is taken from the column to the left and added to it: in 503 − 268 the ones column borrows, and so does the tens. It is the same idea as carrying, run backwards, and it is where most subtraction mistakes happen.' },
       { q: 'Why print on a notebook grid?', a: 'One digit per square keeps the ones under the ones and the tens under the tens. Most early column-addition mistakes are misalignment rather than arithmetic, and the grid removes that source of error.' },
     ],
     color: '#17706b',
@@ -96,18 +98,18 @@ export const WORKSHEETS = [
     label: 'Column Multiplication',
     shortDesc: 'Long multiplication practice',
     longDesc:
-      'Long multiplication (2 × 2, 3 × 2 or 4 × 2 digits) with room for the partial products and their place-value shifts, printed on a notebook grid. ' +
-      'Designed for grade 3 students who already know their times tables and are learning the standard written algorithm.',
-    grades: '3',
+      'Long multiplication (2 × 2, 3 × 2, 3 × 3 or 4 × 2 digits) with room for the partial products and their place-value shifts, printed on a notebook grid. ' +
+      'Designed for students in grades 3 and 4 who already know their times tables and are learning the standard written algorithm.',
+    grades: '3–4',
     skills: ['long multiplication', 'partial products', 'place value'],
     settings: [
-      'Preset: 2 × 2, 3 × 2 or 4 × 2 digits',
+      'Preset: 2 × 2, 3 × 2, 3 × 3 or 4 × 2 digits',
       'Columns: number of problem columns per page',
     ],
-    examples: ['34 × 26 = □', '218 × 47 = □', '1305 × 62 = □'],
+    examples: ['34 × 26 = □', '218 × 47 = □', '472 × 386 = □', '1305 × 62 = □'],
     prerequisites: ['multiply'],
     nextSteps: ['coldiv'],
-    updated: '2026-09-07',
+    updated: '2026-09-12',
     faq: [
       { q: 'When is a child ready for long multiplication?', a: 'Usually grade 3, and only once the times tables are recalled rather than worked out. Long multiplication is several small multiplications plus an addition, so shaky recall makes every step slower and harder to check.' },
       { q: 'What are partial products?', a: 'Multiplying 34 by 26 means multiplying 34 by 6 and then by 20, and adding the two results. Each of those results is a partial product, and each gets its own row on the sheet.' },
@@ -150,20 +152,20 @@ export const WORKSHEETS = [
     label: 'Long Division',
     shortDesc: 'Long division practice',
     longDesc:
-      'Long division of 3- and 4-digit numbers by a 1- or 2-digit divisor, printed on a notebook grid with the frame drawn and empty squares for the working. ' +
+      'Long division of 3-, 4- and 5-digit numbers by a 1- or 2-digit divisor, printed on a notebook grid with the frame drawn and empty squares for the working. ' +
       'The frame can be written the English way (divisor outside the bracket, quotient above the overbar) or the continental way (divisor top right, quotient beneath it), and problems can divide exactly or leave a remainder.',
-    grades: '3',
+    grades: '3–4',
     skills: ['long division', 'remainders', 'place value', 'estimation'],
     settings: [
-      'Preset: 3 ÷ 1, 4 ÷ 1 or 4 ÷ 2 digits',
+      'Preset: 3 ÷ 1, 4 ÷ 1, 4 ÷ 2 or 5 ÷ 2 digits',
       'Notation: bracket or corner frame',
       'Columns: number of problem columns per page',
       'Allow remainders instead of exact division',
     ],
-    examples: ['864 ÷ 6 = □', '3172 ÷ 4 = □', '4164 ÷ 12 = □'],
+    examples: ['864 ÷ 6 = □', '3172 ÷ 4 = □', '4164 ÷ 12 = □', '31752 ÷ 42 = □'],
     prerequisites: ['divide', 'colmul'],
     nextSteps: ['order'],
-    updated: '2026-09-07',
+    updated: '2026-09-12',
     faq: [
       { q: 'When do children learn long division?', a: 'Long division normally arrives at the end of grade 3 or in grade 4, after multiplication facts and subtraction are secure. Each step divides, multiplies, subtracts and brings down, so weakness in any of those shows up quickly.' },
       { q: 'What is the difference between the two notations?', a: 'The bracket form puts the divisor to the left of the dividend with the quotient on an overbar above; the corner form puts the divisor to the top right with the quotient beneath it. They are the same method written differently, and which one a child sees depends on the country they are taught in.' },

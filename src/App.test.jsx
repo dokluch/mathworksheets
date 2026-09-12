@@ -154,7 +154,7 @@ describe('App', () => {
 
     const h1s = screen.getAllByRole('heading', { level: 1 })
     expect(h1s.length).toBe(1)
-    expect(h1s[0].textContent).toBe('Column Addition Worksheets')
+    expect(h1s[0].textContent).toBe('Column Addition & Subtraction Worksheets')
 
     const details = document.querySelector('.worksheet-details')
     expect(details).toBeTruthy()

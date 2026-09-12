@@ -169,8 +169,10 @@ export default {
 
   coladd: {
     digitPreset: '{d} cifre',
-    preferCarry: 'Preferisci i riporti',
+    preferCarry: 'Preferisci riporti e prestiti',
     title: 'Addizione in colonna',
+    titleSubtract: 'Sottrazione in colonna',
+    titleMixed: 'Addizione e sottrazione in colonna',
     meta: 'numeri di {d} cifre',
   },
 
@@ -374,28 +376,30 @@ export default {
       ],
     },
     coladd: {
-      label: 'Addizione in colonna',
-      shortDesc: 'Addizione verticale a più cifre',
-      longDesc: 'Addizione in colonna di numeri a 2, 3 o 4 cifre su una griglia a quadretti, una cifra per casella, perché i bambini si esercitino ad allineare i valori posizionali e a gestire i riporti. L’opzione «preferisci i riporti» genera problemi che richiedono almeno un riporto.',
-      skills: ['addizione in colonna', 'riporto', 'valore posizionale'],
+      label: 'Addizione e sottrazione in colonna',
+      shortDesc: 'Addizione e sottrazione verticali a più cifre',
+      longDesc: 'Addizione e sottrazione in colonna di numeri a 2, 3 o 4 cifre su una griglia da quaderno, una cifra per quadretto, per esercitarsi ad allineare il valore posizionale, a riportare e a prendere in prestito. Scegli addizione, sottrazione o un misto delle due; l’opzione di riporto genera operazioni che richiedono almeno un riporto o un prestito. Le differenze non sono mai negative.',
+      skills: ['addizione in colonna', 'sottrazione in colonna', 'riporto', 'prestito', 'valore posizionale'],
       settings: [
+        'Operazione: addizione, sottrazione o entrambe',
         'Cifre: numeri a 2, 3 o 4 cifre',
         'Colonne: numero di colonne di problemi per pagina',
-        'Preferisci i problemi che richiedono il riporto',
+        'Preferisci problemi che richiedono un riporto o un prestito',
       ],
       faq: [
-        { q: 'Per quale classe è l’addizione in colonna?', a: 'L’addizione in colonna con numeri a 2 cifre inizia di solito in seconda, quelle a 3 e 4 cifre arrivano in terza. La competenza su cui si appoggia è il valore posizionale: sapere che il 4 di 348 vale quattro decine.' },
-        { q: 'Che cos’è il riporto?', a: 'Quando una colonna supera 9, la parte delle decine passa alla colonna a sinistra. 8 + 6 fa 14: si scrive 4 e si riporta 1. L’opzione «preferire il riporto» fa sì che la maggior parte degli esercizi richieda questo passaggio.' },
-        { q: 'Perché stampare su quadretti?', a: 'Una cifra per quadretto tiene le unità sotto le unità e le decine sotto le decine. Gran parte degli errori iniziali nasce da un allineamento sbagliato più che dal calcolo, e la quadrettatura elimina questa fonte di errore.' },
+        { q: 'Per quale classe è l’addizione in colonna?', a: 'L’addizione verticale con numeri a 2 cifre comincia di solito in seconda, mentre i numeri a 3 e 4 cifre arrivano in terza. L’abilità da cui dipende è il valore posizionale: sapere che il 4 di 348 vale quattro decine.' },
+        { q: 'Che cos’è il riporto?', a: 'Quando una colonna supera 9, la parte delle decine passa alla colonna a sinistra. 8 + 6 fa 14, quindi si scrive 4 e si riporta 1. L’opzione di riporto fa sì che la maggior parte delle operazioni richieda questo passaggio.' },
+        { q: 'Che cos’è il prestito?', a: 'Quando la cifra in alto è più piccola di quella in basso, si prende una decina dalla colonna a sinistra e la si aggiunge: in 503 − 268 prendono in prestito le unità e poi anche le decine. È il riporto al contrario, ed è lì che nascono quasi tutti gli errori di sottrazione.' },
+        { q: 'Perché stampare su una griglia?', a: 'Una cifra per quadretto tiene le unità sotto le unità e le decine sotto le decine. La maggior parte degli errori iniziali è di allineamento e non di calcolo, e la griglia elimina questa fonte di errore.' },
       ],
     },
     colmul: {
       label: 'Moltiplicazione in colonna',
       shortDesc: 'Esercizi di moltiplicazione in colonna',
-      longDesc: 'Moltiplicazione in colonna (2 × 2, 3 × 2 o 4 × 2 cifre) con spazio per i prodotti parziali e i loro spostamenti di posizione, stampata su una griglia a quadretti. Pensata per i bambini di terza che conoscono già le tabelline e stanno imparando l’algoritmo scritto standard.',
+      longDesc: 'Moltiplicazione in colonna (2 × 2, 3 × 2, 3 × 3 o 4 × 2 cifre) con spazio per i prodotti parziali e i loro spostamenti di posizione, stampata su una griglia a quadretti. Pensata per i bambini di terza e quarta che conoscono già le tabelline e stanno imparando l’algoritmo scritto standard.',
       skills: ['moltiplicazione in colonna', 'prodotti parziali', 'valore posizionale'],
       settings: [
-        'Preimpostazione: 2 × 2, 3 × 2 o 4 × 2 cifre',
+        'Preimpostazione: 2 × 2, 3 × 2, 3 × 3 o 4 × 2 cifre',
         'Colonne: numero di colonne di problemi per pagina',
       ],
       faq: [
@@ -424,10 +428,10 @@ export default {
     coldiv: {
       label: 'Divisione in colonna',
       shortDesc: 'Esercizi di divisione in colonna',
-      longDesc: 'Divisione in colonna di numeri di 3 e 4 cifre per un divisore di 1 o 2 cifre, stampata su una griglia a quadretti con la struttura già tracciata e quadretti vuoti per svolgere i calcoli. La disposizione può seguire l’uso inglese (divisore a sinistra della parentesi e quoziente sopra la linea) o quello continentale (divisore in alto a destra e quoziente sotto), e le divisioni possono essere esatte o lasciare un resto.',
+      longDesc: 'Divisione in colonna di numeri di 3, 4 e 5 cifre per un divisore di 1 o 2 cifre, stampata su una griglia a quadretti con la struttura già tracciata e quadretti vuoti per svolgere i calcoli. La disposizione può seguire l’uso inglese (divisore a sinistra della parentesi e quoziente sopra la linea) o quello continentale (divisore in alto a destra e quoziente sotto), e le divisioni possono essere esatte o lasciare un resto.',
       skills: ['divisione in colonna', 'resti', 'valore posizionale', 'stima'],
       settings: [
-        'Preimpostazione: 3 ÷ 1, 4 ÷ 1 o 4 ÷ 2 cifre',
+        'Preimpostazione: 3 ÷ 1, 4 ÷ 1, 4 ÷ 2 o 5 ÷ 2 cifre',
         'Notazione: parentesi o angolo',
         'Colonne: numero di colonne di problemi per pagina',
         'Consentire i resti invece della divisione esatta',

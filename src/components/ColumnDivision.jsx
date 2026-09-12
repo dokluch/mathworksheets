@@ -14,6 +14,7 @@ const PRESETS = [
   { value: '3x1', dividendDigits: 3, divisorDigits: 1 },
   { value: '4x1', dividendDigits: 4, divisorDigits: 1 },
   { value: '4x2', dividendDigits: 4, divisorDigits: 2 },
+  { value: '5x2', dividendDigits: 5, divisorDigits: 2 },
 ]
 
 const NOTATIONS = ['bracket', 'corner']

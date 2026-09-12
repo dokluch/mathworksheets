@@ -12,6 +12,7 @@ const PRESETS = [
   { dividendDigits: 3, divisorDigits: 1 },
   { dividendDigits: 4, divisorDigits: 1 },
   { dividendDigits: 4, divisorDigits: 2 },
+  { dividendDigits: 5, divisorDigits: 2 },
 ]
 
 describe('generateProblem', () => {
@@ -50,6 +51,24 @@ describe('generateProblem', () => {
     for (let i = 0; i < 500; i++) seen.add(generateProblem(3, 1, false).divisor)
     expect([...seen].sort((a, b) => a - b)).toEqual([2, 3, 4, 5, 6, 7, 8, 9])
   })
+
+  it('skips the divisors whose quotient would not fit the frame', () => {
+    // A 5-digit dividend over 10 asks for a 4-digit quotient, and the frame
+    // draws three boxes. Dividing by 10 is not long division anyway.
+    for (const allowRemainder of [false, true]) {
+      const seen = new Set()
+      for (let i = 0; i < 3000; i++) seen.add(generateProblem(5, 2, allowRemainder).divisor)
+      expect(Math.min(...seen)).toBe(11)
+      expect(Math.max(...seen)).toBe(99)
+    }
+
+    // The bound is derived, so the presets that came before it are untouched.
+    for (const [dividendDigits, divisorDigits, lowest] of [[3, 1, 2], [4, 1, 2], [4, 2, 10]]) {
+      const seen = new Set()
+      for (let i = 0; i < 2000; i++) seen.add(generateProblem(dividendDigits, divisorDigits, false).divisor)
+      expect(Math.min(...seen), `${dividendDigits}/${divisorDigits}`).toBe(lowest)
+    }
+  })
 })
 
 describe('frameLayout', () => {
@@ -59,9 +78,11 @@ describe('frameLayout', () => {
     ['bracket', 3, 1, 5, 8],
     ['bracket', 4, 1, 6, 8],
     ['bracket', 4, 2, 7, 8],
+    ['bracket', 5, 2, 8, 8],
     ['corner', 3, 1, 7, 7],
     ['corner', 4, 1, 8, 7],
     ['corner', 4, 2, 8, 7],
+    ['corner', 5, 2, 9, 7],
   ]
 
   for (const [notation, dividendDigits, divisorDigits, cols, rows] of EXPECTED) {
@@ -133,7 +154,7 @@ describe('one printed page', () => {
 
   it('fits its rows on the shorter of the two supported papers', () => {
     for (const notation of ['bracket', 'corner']) {
-      for (const [dividendDigits, divisorDigits] of [[3, 1], [4, 1], [4, 2]]) {
+      for (const [dividendDigits, divisorDigits] of [[3, 1], [4, 1], [4, 2], [5, 2]]) {
         const frame = frameLayout(notation, dividendDigits, divisorDigits)
         const label = `${notation} ${dividendDigits}/${divisorDigits}`
         const rows = rowsPerPage(frame.rows, SPACING)

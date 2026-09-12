@@ -171,6 +171,8 @@ export default {
     digitPreset: '{d} cifras',
     preferCarry: 'Priorizar las llevadas',
     title: 'Suma en columna',
+    titleSubtract: 'Resta en columna',
+    titleMixed: 'Suma y resta en columna',
     meta: 'números de {d} cifras',
   },
 
@@ -374,28 +376,30 @@ export default {
       ],
     },
     coladd: {
-      label: 'Suma en columna',
-      shortDesc: 'Suma vertical de varias cifras',
-      longDesc: 'Suma vertical (en columna) de números de 2, 3 o 4 cifras sobre una cuadrícula de cuaderno, una cifra por celda, para practicar la alineación de los valores posicionales y las llevadas. La opción «priorizar las llevadas» genera problemas que necesitan al menos una llevada.',
-      skills: ['suma en columna', 'llevadas', 'valor posicional'],
+      label: 'Suma y resta en columna',
+      shortDesc: 'Suma y resta verticales de varias cifras',
+      longDesc: 'Suma y resta en columna de números de 2, 3 o 4 cifras sobre una cuadrícula de cuaderno, una cifra por casilla, para practicar la alineación del valor posicional, las llevadas y los préstamos. Elige suma, resta o una mezcla de ambas; la opción de reagrupación genera operaciones que requieren al menos una llevada o un préstamo. Las diferencias nunca son negativas.',
+      skills: ['suma en columna', 'resta en columna', 'llevadas', 'préstamo', 'valor posicional'],
       settings: [
+        'Operación: suma, resta o ambas',
         'Cifras: números de 2, 3 o 4 cifras',
         'Columnas: número de columnas de problemas por página',
-        'Priorizar los problemas que requieren llevadas',
+        'Priorizar problemas que requieran llevada o préstamo',
       ],
       faq: [
-        { q: '¿Para qué curso es la suma en columna?', a: 'La suma vertical con números de 2 cifras suele empezar en 2.º, y las de 3 y 4 cifras llegan en 3.º. La destreza de la que depende es el valor posicional: saber que el 4 de 348 vale cuatro decenas.' },
-        { q: '¿Qué es llevar, o reagrupar?', a: 'Cuando una columna suma más de 9, la parte de las decenas pasa a la columna de la izquierda. 8 + 6 son 14: se escribe el 4 y se lleva 1. La opción «preferir ejercicios con llevada» hace que la mayoría de los ejercicios requieran ese paso.' },
-        { q: '¿Por qué imprimir sobre cuadrícula?', a: 'Una cifra por casilla mantiene las unidades bajo las unidades y las decenas bajo las decenas. La mayoría de los errores iniciales son de alineación y no de cálculo, y la cuadrícula elimina esa fuente de error.' },
+        { q: '¿Para qué curso es la suma en columna?', a: 'La suma vertical con números de 2 cifras suele empezar en 2.º, y los números de 3 y 4 cifras llegan en 3.º. La destreza de la que depende es el valor posicional: saber que el 4 de 348 significa cuatro decenas.' },
+        { q: '¿Qué es llevar, o reagrupar?', a: 'Cuando una columna suma más de 9, la parte de las decenas pasa a la columna de la izquierda. 8 + 6 son 14, así que se escribe el 4 y se lleva 1. La opción de reagrupación asegura que la mayoría de las operaciones necesiten este paso.' },
+        { q: '¿Qué es pedir prestado en una resta?', a: 'Cuando la cifra de arriba es menor que la de abajo, se toma una decena de la columna de la izquierda y se le suma: en 503 − 268 piden prestado las unidades y también las decenas. Es la llevada al revés, y ahí se producen la mayoría de los errores de resta.' },
+        { q: '¿Por qué imprimir sobre una cuadrícula?', a: 'Una cifra por casilla mantiene las unidades bajo las unidades y las decenas bajo las decenas. La mayoría de los errores iniciales son de alineación y no de cálculo, y la cuadrícula elimina esa fuente de error.' },
       ],
     },
     colmul: {
       label: 'Multiplicación en columna',
       shortDesc: 'Práctica de multiplicación en columna',
-      longDesc: 'Multiplicación en columna (2 × 2, 3 × 2 o 4 × 2 cifras) con espacio para los productos parciales y sus desplazamientos posicionales, impresa sobre una cuadrícula de cuaderno. Pensada para alumnos de 3.º que ya saben las tablas y están aprendiendo el algoritmo escrito estándar.',
+      longDesc: 'Multiplicación en columna (2 × 2, 3 × 2, 3 × 3 o 4 × 2 cifras) con espacio para los productos parciales y sus desplazamientos posicionales, impresa sobre una cuadrícula de cuaderno. Pensada para alumnos de 3.º y 4.º que ya saben las tablas y están aprendiendo el algoritmo escrito estándar.',
       skills: ['multiplicación en columna', 'productos parciales', 'valor posicional'],
       settings: [
-        'Preajuste: 2 × 2, 3 × 2 o 4 × 2 cifras',
+        'Preajuste: 2 × 2, 3 × 2, 3 × 3 o 4 × 2 cifras',
         'Columnas: número de columnas de problemas por página',
       ],
       faq: [
@@ -424,10 +428,10 @@ export default {
     coldiv: {
       label: 'División larga',
       shortDesc: 'Práctica de división larga',
-      longDesc: 'División larga de números de 3 y 4 cifras entre un divisor de 1 o 2 cifras, impresa sobre una cuadrícula de cuaderno con la caja ya dibujada y casillas vacías para hacer la operación. El marco puede escribirse a la manera inglesa (divisor a la izquierda del corchete y cociente sobre la raya) o a la continental (divisor arriba a la derecha y cociente debajo), y las divisiones pueden ser exactas o dejar resto.',
+      longDesc: 'División larga de números de 3, 4 y 5 cifras entre un divisor de 1 o 2 cifras, impresa sobre una cuadrícula de cuaderno con la caja ya dibujada y casillas vacías para hacer la operación. El marco puede escribirse a la manera inglesa (divisor a la izquierda del corchete y cociente sobre la raya) o a la continental (divisor arriba a la derecha y cociente debajo), y las divisiones pueden ser exactas o dejar resto.',
       skills: ['división larga', 'restos', 'valor posicional', 'estimación'],
       settings: [
-        'Preajuste: 3 ÷ 1, 4 ÷ 1 o 4 ÷ 2 cifras',
+        'Preajuste: 3 ÷ 1, 4 ÷ 1, 4 ÷ 2 o 5 ÷ 2 cifras',
         'Notación: corchete o caja',
         'Columnas: número de columnas de problemas por página',
         'Permitir restos en lugar de división exacta',

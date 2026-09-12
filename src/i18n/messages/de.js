@@ -169,8 +169,10 @@ export default {
 
   coladd: {
     digitPreset: '{d}-stellig',
-    preferCarry: 'Übertrag bevorzugen',
+    preferCarry: 'Übertrag und Entbündeln bevorzugen',
     title: 'Schriftliche Addition',
+    titleSubtract: 'Schriftliche Subtraktion',
+    titleMixed: 'Schriftliche Addition & Subtraktion',
     meta: '{d}-stellige Zahlen',
   },
 
@@ -374,28 +376,30 @@ export default {
       ],
     },
     coladd: {
-      label: 'Schriftliche Addition',
-      shortDesc: 'Mehrstellige Zahlen untereinander addieren',
-      longDesc: 'Schriftliche Addition von 2-, 3- oder 4-stelligen Zahlen auf einem Rechenkaro-Raster, eine Ziffer pro Kästchen, damit Kinder das Ausrichten der Stellenwerte und den Übertrag üben. Die Option „Übertrag bevorzugen“ erzeugt Aufgaben, die mindestens einen Übertrag brauchen.',
-      skills: ['schriftliche Addition', 'Übertrag', 'Stellenwert'],
+      label: 'Schriftliche Addition & Subtraktion',
+      shortDesc: 'Schriftliche Addition und Subtraktion mehrstelliger Zahlen',
+      longDesc: 'Schriftliche Addition und Subtraktion von 2-, 3- oder 4-stelligen Zahlen auf einem Karogitter, eine Ziffer pro Kästchen, damit Kinder das Ausrichten der Stellenwerte, den Übertrag und das Entbündeln üben. Wähle Addition, Subtraktion oder beides; die Übertragsoption erzeugt Aufgaben, die mindestens einen Übertrag oder eine Entbündelung brauchen. Differenzen werden nie negativ.',
+      skills: ['schriftliche Addition', 'schriftliche Subtraktion', 'Übertrag', 'Entbündeln', 'Stellenwert'],
       settings: [
+        'Rechenart: Addition, Subtraktion oder beides',
         'Stellen: 2-, 3- oder 4-stellige Zahlen',
         'Spalten: Anzahl der Aufgabenspalten pro Seite',
-        'Aufgaben mit Übertrag bevorzugen',
+        'Aufgaben mit Übertrag oder Entbündeln bevorzugen',
       ],
       faq: [
-        { q: 'Für welche Klasse ist die schriftliche Addition?', a: 'Die schriftliche Addition mit zweistelligen Zahlen beginnt meist in der 2. Klasse, drei- und vierstellige folgen in der 3. Die Grundlage dafür ist das Stellenwertverständnis: zu wissen, dass die 4 in 348 vier Zehner bedeutet.' },
-        { q: 'Was ist der Übertrag?', a: 'Ergibt eine Spalte mehr als 9, wandert der Zehnerteil in die Spalte links daneben. 8 + 6 ist 14, also wird die 4 geschrieben und die 1 übertragen. Mit „Aufgaben mit Übertrag bevorzugen“ brauchen die meisten Aufgaben diesen Schritt.' },
-        { q: 'Warum auf kariertem Papier?', a: 'Eine Ziffer pro Kästchen hält die Einer unter den Einern und die Zehner unter den Zehnern. Die meisten Fehler am Anfang entstehen durch falsches Untereinanderschreiben und nicht durch Rechnen, und das Karo beseitigt diese Fehlerquelle.' },
+        { q: 'Für welche Klasse ist die schriftliche Addition?', a: 'Die schriftliche Addition mit 2-stelligen Zahlen beginnt meist in Klasse 2, 3- und 4-stellige Zahlen folgen in Klasse 3. Die Voraussetzung ist der Stellenwert: zu wissen, dass die 4 in 348 vier Zehner bedeutet.' },
+        { q: 'Was ist der Übertrag?', a: 'Wenn eine Spalte mehr als 9 ergibt, wandert der Zehnerteil in die Spalte links daneben. 8 + 6 ist 14, also wird die 4 geschrieben und die 1 übertragen. Die Übertragsoption sorgt dafür, dass die meisten Aufgaben diesen Schritt brauchen.' },
+        { q: 'Was bedeutet Entbündeln?', a: 'Wenn die obere Ziffer kleiner ist als die untere, wird ein Zehner aus der Spalte links geholt und dazugegeben: bei 503 − 268 entbündeln die Einer und danach auch die Zehner. Es ist derselbe Gedanke wie beim Übertrag, nur rückwärts, und dort passieren die meisten Fehler beim Subtrahieren.' },
+        { q: 'Warum auf Karopapier drucken?', a: 'Eine Ziffer pro Kästchen hält die Einer unter den Einern und die Zehner unter den Zehnern. Die meisten Anfangsfehler sind Ausrichtungsfehler und keine Rechenfehler, und das Gitter nimmt diese Fehlerquelle weg.' },
       ],
     },
     colmul: {
       label: 'Schriftliche Multiplikation',
       shortDesc: 'Schriftliches Multiplizieren üben',
-      longDesc: 'Schriftliche Multiplikation (2 × 2, 3 × 2 oder 4 × 2 Stellen) mit Platz für die Teilprodukte und ihre Stellenverschiebung, gedruckt auf einem Rechenkaro-Raster. Gedacht für Kinder der 3. Klasse, die das Einmaleins bereits beherrschen und das schriftliche Verfahren lernen.',
+      longDesc: 'Schriftliche Multiplikation (2 × 2, 3 × 2, 3 × 3 oder 4 × 2 Stellen) mit Platz für die Teilprodukte und ihre Stellenverschiebung, gedruckt auf einem Rechenkaro-Raster. Gedacht für Kinder der 3. und 4. Klasse, die das Einmaleins bereits beherrschen und das schriftliche Verfahren lernen.',
       skills: ['schriftliche Multiplikation', 'Teilprodukte', 'Stellenwert'],
       settings: [
-        'Voreinstellung: 2 × 2, 3 × 2 oder 4 × 2 Stellen',
+        'Voreinstellung: 2 × 2, 3 × 2, 3 × 3 oder 4 × 2 Stellen',
         'Spalten: Anzahl der Aufgabenspalten pro Seite',
       ],
       faq: [
@@ -424,10 +428,10 @@ export default {
     coldiv: {
       label: 'Schriftliche Division',
       shortDesc: 'Schriftliches Dividieren üben',
-      longDesc: 'Schriftliche Division von 3- und 4-stelligen Zahlen durch einen ein- oder zweistelligen Divisor, gedruckt auf einem Rechenkaro-Raster mit fertig gezeichnetem Rahmen und leeren Kästchen für den Rechenweg. Der Rahmen lässt sich in der englischen Schreibweise (Divisor links der Klammer, Ergebnis über dem Strich) oder in der kontinentalen (Divisor rechts oben, Ergebnis darunter) setzen, und die Aufgaben gehen wahlweise glatt auf oder lassen einen Rest.',
+      longDesc: 'Schriftliche Division von 3-, 4- und 5-stelligen Zahlen durch einen ein- oder zweistelligen Divisor, gedruckt auf einem Rechenkaro-Raster mit fertig gezeichnetem Rahmen und leeren Kästchen für den Rechenweg. Der Rahmen lässt sich in der englischen Schreibweise (Divisor links der Klammer, Ergebnis über dem Strich) oder in der kontinentalen (Divisor rechts oben, Ergebnis darunter) setzen, und die Aufgaben gehen wahlweise glatt auf oder lassen einen Rest.',
       skills: ['schriftliche Division', 'Reste', 'Stellenwert', 'Überschlag'],
       settings: [
-        'Voreinstellung: 3 ÷ 1, 4 ÷ 1 oder 4 ÷ 2 Stellen',
+        'Voreinstellung: 3 ÷ 1, 4 ÷ 1, 4 ÷ 2 oder 5 ÷ 2 Stellen',
         'Schreibweise: Klammer oder Winkel',
         'Spalten: Anzahl der Aufgabenspalten pro Seite',
         'Reste statt glatt aufgehender Division zulassen',

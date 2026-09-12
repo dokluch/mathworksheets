@@ -171,6 +171,8 @@ export default {
     digitPreset: '{d} chiffres',
     preferCarry: 'Privilégier les retenues',
     title: 'Addition posée',
+    titleSubtract: 'Soustraction posée',
+    titleMixed: 'Addition et soustraction posées',
     meta: 'nombres à {d} chiffres',
   },
 
@@ -374,28 +376,30 @@ export default {
       ],
     },
     coladd: {
-      label: 'Addition posée',
-      shortDesc: 'Addition verticale à plusieurs chiffres',
-      longDesc: 'Addition posée (en colonnes) de nombres à 2, 3 ou 4 chiffres sur un quadrillage de cahier, un chiffre par case, pour s’entraîner à aligner les valeurs de position et à gérer les retenues. L’option « privilégier les retenues » génère des problèmes qui demandent au moins une retenue.',
-      skills: ['addition posée', 'retenue', 'valeur de position'],
+      label: 'Addition et soustraction posées',
+      shortDesc: 'Addition et soustraction verticales à plusieurs chiffres',
+      longDesc: 'Addition et soustraction posées (en colonnes) de nombres à 2, 3 ou 4 chiffres sur un quadrillage de cahier, un chiffre par case, pour s’entraîner à aligner les valeurs de position et à gérer les retenues et les emprunts. Choisissez l’addition, la soustraction ou un mélange des deux ; l’option de retenue génère des calculs qui demandent au moins une retenue ou un emprunt. Les différences ne sont jamais négatives.',
+      skills: ['addition posée', 'soustraction posée', 'retenue', 'emprunt', 'valeur de position'],
       settings: [
+        'Opération : addition, soustraction ou les deux',
         'Chiffres : nombres à 2, 3 ou 4 chiffres',
         'Colonnes : nombre de colonnes de problèmes par page',
-        'Privilégier les problèmes qui demandent une retenue',
+        'Privilégier les problèmes qui demandent une retenue ou un emprunt',
       ],
       faq: [
         { q: 'À quel niveau aborde-t-on l’addition posée ?', a: 'L’addition verticale à 2 chiffres commence en général au CE1, les nombres à 3 et 4 chiffres suivant au CE2. La compétence dont elle dépend est la valeur de position : savoir que le 4 de 348 vaut quatre dizaines.' },
-        { q: 'Qu’est-ce que la retenue ?', a: 'Quand une colonne dépasse 9, la partie dizaines passe dans la colonne de gauche. 8 + 6 font 14 : on écrit 4 et on retient 1. L’option « privilégier les retenues » garantit que la plupart des calculs demandent cette étape.' },
+        { q: 'Qu’est-ce que la retenue ?', a: 'Quand une colonne dépasse 9, la partie dizaines passe dans la colonne de gauche. 8 + 6 font 14 : on écrit 4 et on retient 1. L’option de retenue garantit que la plupart des calculs demandent cette étape.' },
+        { q: 'Qu’est-ce qu’un emprunt ?', a: 'Quand le chiffre du haut est plus petit que celui du bas, on prend une dizaine à la colonne de gauche et on l’ajoute : dans 503 − 268, la colonne des unités emprunte, puis celle des dizaines aussi. C’est la retenue à l’envers, et c’est là que se produisent la plupart des erreurs de soustraction.' },
         { q: 'Pourquoi imprimer sur un quadrillage ?', a: 'Un chiffre par case maintient les unités sous les unités et les dizaines sous les dizaines. La plupart des erreurs en début d’apprentissage viennent d’un mauvais alignement plutôt que du calcul, et le quadrillage supprime cette source d’erreur.' },
       ],
     },
     colmul: {
       label: 'Multiplication posée',
       shortDesc: 'Entraînement à la multiplication posée',
-      longDesc: 'Multiplication posée (2 × 2, 3 × 2 ou 4 × 2 chiffres) avec de la place pour les produits partiels et leurs décalages de position, imprimée sur un quadrillage de cahier. Conçue pour les élèves de CE2 qui connaissent déjà leurs tables et apprennent l’algorithme écrit classique.',
+      longDesc: 'Multiplication posée (2 × 2, 3 × 2, 3 × 3 ou 4 × 2 chiffres) avec de la place pour les produits partiels et leurs décalages de position, imprimée sur un quadrillage de cahier. Conçue pour les élèves de CE2 et de CM1 qui connaissent déjà leurs tables et apprennent l’algorithme écrit classique.',
       skills: ['multiplication posée', 'produits partiels', 'valeur de position'],
       settings: [
-        'Préréglage : 2 × 2, 3 × 2 ou 4 × 2 chiffres',
+        'Préréglage : 2 × 2, 3 × 2, 3 × 3 ou 4 × 2 chiffres',
         'Colonnes : nombre de colonnes de problèmes par page',
       ],
       faq: [
@@ -424,10 +428,10 @@ export default {
     coldiv: {
       label: 'Division posée',
       shortDesc: 'Entraînement à la division posée',
-      longDesc: 'Division posée de nombres à 3 ou 4 chiffres par un diviseur à 1 ou 2 chiffres, imprimée sur un quadrillage de cahier avec la potence déjà tracée et des cases vides pour poser l’opération. La disposition peut suivre l’usage anglais (diviseur à gauche du crochet, quotient au-dessus du trait) ou l’usage continental (diviseur en haut à droite, quotient en dessous), et les divisions peuvent tomber juste ou laisser un reste.',
+      longDesc: 'Division posée de nombres à 3, 4 ou 5 chiffres par un diviseur à 1 ou 2 chiffres, imprimée sur un quadrillage de cahier avec la potence déjà tracée et des cases vides pour poser l’opération. La disposition peut suivre l’usage anglais (diviseur à gauche du crochet, quotient au-dessus du trait) ou l’usage continental (diviseur en haut à droite, quotient en dessous), et les divisions peuvent tomber juste ou laisser un reste.',
       skills: ['division posée', 'restes', 'valeur de position', 'estimation'],
       settings: [
-        'Préréglage : 3 ÷ 1, 4 ÷ 1 ou 4 ÷ 2 chiffres',
+        'Préréglage : 3 ÷ 1, 4 ÷ 1, 4 ÷ 2 ou 5 ÷ 2 chiffres',
         'Notation : crochet ou potence',
         'Colonnes : nombre de colonnes de problèmes par page',
         'Autoriser les restes au lieu d’une division exacte',

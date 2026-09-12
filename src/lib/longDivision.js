@@ -83,12 +83,18 @@ export function frameLayout(notation, dividendDigits, divisorDigits) {
  */
 export function generateProblem(dividendDigits, divisorDigits, allowRemainder, rng) {
   const r = asHelpers(rng)
-  const divisorMin = Math.max(2, 10 ** (divisorDigits - 1))
   const divisorMax = 10 ** divisorDigits - 1
   const dividendMin = 10 ** (dividendDigits - 1)
   const dividendMax = 10 ** dividendDigits - 1
   // The quotient must fit the boxes the frame reserves for it.
   const quotientMax = 10 ** Math.min(dividendDigits - divisorDigits + 1, MAX_QUOTIENT_DIGITS) - 1
+  // A divisor small enough to push the quotient past those boxes is not a
+  // problem this frame can hold: 10000 ÷ 10 wants four quotient digits where
+  // three are drawn. The smallest divisor is therefore the one whose quotient
+  // still fits, not simply the smallest number of the right length. The extra
+  // unit is the remainder's headroom. Every preset before 5 ÷ 2 lands back on
+  // 2, 2 and 10, so the sheets they deal are unchanged.
+  const divisorMin = Math.max(2, 10 ** (divisorDigits - 1), Math.ceil((dividendMin + 1) / quotientMax))
 
   const divisor = r.int(divisorMin, divisorMax)
 

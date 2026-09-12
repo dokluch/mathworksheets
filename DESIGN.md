@@ -340,7 +340,7 @@ Site header on `cover-deep` with a 2px `cover-line` bottom rule. The wordmark is
 Paper chip parked at `translateY(calc(-100% - 20px))`, top-left, 44px tall, z-index 100; slides to 0 on `:focus-visible` over 0.16s.
 
 ### Grade filter
-The landing catalog's segmented toggle in its stacked variant: All / Grade 1 … Grade 6, each label (Inter 500 14px) over its age band (JetBrains Mono 11.5px graphite, tabular). Active fills `control-ink`, the label goes 600 and the figure line to 72% white — fill and weight carry the state, never the colour alone. Both layouts are a grid of equal cells the width of the catalog grid: seven across ≥769px, and ≤768px All over its whole band on the top row with the six grades under it in two rows of three. No plate, no keyline, no eyebrow: it is a control for the grid, so it sits with the grid.
+The landing catalog's segmented toggle in its stacked variant: All / Grade 1 … Grade 6, each label (Inter 500 14px) over its age band (JetBrains Mono 11.5px graphite, tabular). Active fills `control-ink`, the label goes 600 and the figure line to 72% white — fill and weight carry the state, never the colour alone. ≥769px it is a centred bar of seven equal cells, sized by the widest age line; ≤768px All takes the top row over its whole band and the six grades sit under it in two rows of three across the full board. No plate, no keyline, no eyebrow: it is a control for the grid, so it sits with the grid.
 
 ### Empty state
 Board-side, max 46ch, dashed `cover-line-strong` border on `cover-wash`, ink 15px/1.55. It says what went wrong and how to fix it, where the sheet would have been.
@@ -740,6 +740,29 @@ under a single `h1` and carries no filter markup (it is client-only, added on hy
 15 route × viewport combinations (1280, 390 and 320 wide × en/fr/de/ru/zh) with zero horizontal
 overflow from the control and no clipped segment at any width; focus ring captured on the first
 and an interior segment; print output untouched — the catalog is `no-print`.
+
+## Revision — the catalog reaches grade 6
+
+**Date:** 2026-09-12
+
+**What changed.** The grade filter grew from four cells to seven: All / Grade 1 … Grade 6, with
+All carrying "Ages 6–12". Column multiplication and long division now cover grades 3–4, and the
+column addition sheet gained subtraction with borrowing.
+
+**Why the filter became a grid.** Seven intrinsic 112px cells are 784px wide, which overflows
+between 769px and roughly 825px, and seven cells across a phone leave 45px each — too narrow for
+"Ages 10–11". Both layouts are now CSS grids of equal cells. On a wide screen that is one centred
+row, so the pill's `:first-child`/`:last-child` border collapsing still holds. On a narrow one All
+spans the top row and the grades wrap into two rows of three; wrapping defeats that collapsing, so
+each cell carries its own border, the rows overlap by a pixel, and the filled segment raises its
+`z-index` so its edge wins over its neighbours'.
+
+**Why All stays on top rather than joining the grades.** A 4 + 3 split leaves an empty slot that
+reads as a missing grade, and All is the one cell that is not a grade at all.
+
+Verified: tests, lint and build clean; the filter at 320, 390, 769, 830 and 1280px in en, de and zh
+with no overflow from the control. At 320px the page still overflows by about 50px, from the site
+header's language button, which predates this revision.
 
 ## Revision — the catalog stops remembering
 

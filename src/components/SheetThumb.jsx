@@ -51,7 +51,8 @@ function Ruling({ id }) {
  */
 const digit = (c, r, text, opts = {}) => (
   <text
-    key={`d${c}-${r}`}
+    // A glyph placed by an `x` override shares its cell with its siblings, so the offset keys it.
+    key={`d${opts.x ?? c}-${r}`}
     x={opts.x ?? cx(c)}
     y={cy(r)}
     fontFamily="'JetBrains Mono', ui-monospace, monospace"
@@ -105,28 +106,34 @@ const box = (c, r) => (
 )
 
 /* Which products the times table prints and which it leaves to the child:
-   roughly the half-filled scatter the prefill slider defaults to. */
-const MULT_FILLED = new Set(['0-0', '0-1', '0-3', '1-1', '1-2', '2-0', '2-3'])
+   roughly the half-filled scatter the prefill slider defaults to. With a digit
+   to a square, a product right after a filled neighbour in its row runs into
+   it (9 then 12 read as 912), so no row fills two adjacent cells. */
+const MULT_FILLED = new Set(['0-0', '0-1', '0-3', '1-0', '1-2', '2-0', '2-3'])
 
 /* Each mark set mirrors the arrangement of the sheet it stands for. */
 const MARKS = {
   // A times table. Its cells are two squares wide, because the real sheet's are
   // wider than a notebook square too — a two-digit product has to fit one cell.
+  // A number still takes one square per digit, right-aligned in its cell, so the
+  // units line up down a column and no digit is centred across a grid line.
   multiply: () => {
     const factors = [2, 3, 4, 5]
     const multipliers = [2, 3, 4]
-    const col = i => span(3 + i * 2, 5 + i * 2)
+    const num = (i, r, n, opacity) => {
+      const text = String(n)
+      const start = 5 + i * 2 - text.length
+      return text.split('').map((char, k) => digit(start + k, r, char, { opacity }))
+    }
     return (
       <>
         {digit(2, 2, '×', { opacity: 0.7 })}
         {rule(2, 11, 3, 1)}
         {vrule(3, 2, 6, 1)}
-        {factors.map((n, i) => digit(0, 2, String(n), { x: col(i), opacity: 0.8 }))}
+        {factors.flatMap((n, i) => num(i, 2, n, 0.8))}
         {multipliers.map((n, i) => digit(2, 3 + i, String(n), { opacity: 0.8 }))}
-        {multipliers.flatMap((m, r) => factors.map((f, c) => (
-          MULT_FILLED.has(`${r}-${c}`)
-            ? digit(c, 3 + r, String(m * f), { x: col(c), opacity: 0.5 })
-            : null
+        {multipliers.flatMap((m, r) => factors.flatMap((f, c) => (
+          MULT_FILLED.has(`${r}-${c}`) ? num(c, 3 + r, m * f, 0.5) : []
         )))}
       </>
     )

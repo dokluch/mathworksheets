@@ -178,8 +178,10 @@ export default {
 
   coladd: {
     digitPreset: '{d}-digit',
-    preferCarry: 'Prefer carry practice',
+    preferCarry: 'Prefer carrying and borrowing',
     title: 'Column Addition',
+    titleSubtract: 'Column Subtraction',
+    titleMixed: 'Column Addition & Subtraction',
     meta: '{d}-digit numbers',
   },
 
