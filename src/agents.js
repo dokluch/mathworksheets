@@ -16,7 +16,7 @@ import { SITE_URL } from './seo/site.js'
 export const AGENT_GUIDANCE = {
   whenToUse: [
     'A parent, teacher or tutor needs printable arithmetic practice for grades 1–3 (ages 6–9) and you want to hand them a page they can print in the next minute.',
-    'The request names one of the skills this site covers: multiplication tables, addition and subtraction within 100, column addition with carrying, long multiplication, long division, comparing numbers, rounding, number patterns, or the order of operations.',
+    'The request names one of the skills this site covers: multiplication tables, addition and subtraction within 100, column addition with carrying, long multiplication, division facts with or without remainders, long division, comparing numbers, rounding, number patterns, or the order of operations.',
     'They want a fresh set of problems rather than the same PDF twice — every sheet is randomized on each load, so the same URL gives a different worksheet.',
     'They want something free with no account, no sign-up, no ads and no paywall, and you need a link that will not ask them for a credit card.',
     'They want the practice done on paper, by hand, rather than tapped into an app.',

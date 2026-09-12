@@ -45,7 +45,7 @@ export default {
     home: {
       subtitle: 'Free, randomized practice sheets you can print in one click.',
       intro1: '{brand} is a free, open-source generator of printable math worksheets for grades 1–3 (ages 6–9). Each sheet is randomized every time you open or regenerate it, so children get fresh practice instead of memorising one page. Pick a worksheet, adjust the difficulty (number range, digits, layout, columns) and print it from your browser; your settings are remembered on this device for next time.',
-      intro2: 'The catalog covers multiplication tables, addition and subtraction drills with missing numbers, vertical column addition with carrying, long multiplication, long division, comparing numbers with >, < and =, rounding to the nearest 10, 100 and 1000, number patterns, and multi-step expressions where the order of operations decides the answer. The Equation Explorer is an on-screen activity where children move terms across the equals sign and check their answer on a number line.',
+      intro2: 'The catalog covers multiplication tables, addition and subtraction drills with missing numbers, vertical column addition with carrying, long multiplication, division facts with and without remainders, long division, comparing numbers with >, < and =, rounding to the nearest 10, 100 and 1000, number patterns, and multi-step expressions where the order of operations decides the answer. The Equation Explorer is an on-screen activity where children move terms across the equals sign and check their answer on a number line.',
       worksheets: 'Worksheets',
       howItWorks: 'How it works',
       step1: 'Choose a worksheet from the list above.',
@@ -187,6 +187,18 @@ export default {
     problemAria: '{a} times {b}',
   },
 
+  divide: {
+    title: 'Division',
+    notation: 'Sign',
+    allowRemainder: 'Allow remainders',
+    withRemainders: 'with remainders',
+    // Which division sign this language's schools print (as order.defaultNotation); the setting overrides it once chosen.
+    defaultNotation: 'cross',
+    // Printed between the quotient box and the remainder box, in two squares.
+    remainderMark: 'r',
+    answer: '{q} r {r}',
+    problemAria: '{dividend} divided by {divisor}',
+  },
   coldiv: {
     preset: '{a} ÷ {b} digits',
     title: 'Long Division',

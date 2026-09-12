@@ -24,7 +24,7 @@ export const WORKSHEETS = [
     ],
     examples: ['3 × 4 = □', '7 × 8 = □', '4 × 3 = □', '6 × 9 = □'],
     prerequisites: ['addsub'],
-    nextSteps: ['colmul'],
+    nextSteps: ['divide', 'colmul'],
     updated: '2026-09-07',
     faq: [
       { q: 'What age are times tables worksheets for?', a: 'Most children meet the times tables in grade 2, around age 7, and are expected to recall them fluently by the end of grade 3. Start with a small range such as 1 to 5, and widen it once recall is quick rather than counted.' },
@@ -117,6 +117,34 @@ export const WORKSHEETS = [
     interactive: false,
   },
   {
+    id: 'divide',
+    slug: 'division',
+    label: 'Division',
+    shortDesc: 'Division facts, with or without remainders',
+    longDesc:
+      'Short division problems written on one line, such as 12 ÷ 3 = □, with dividends within 20, 50 or 100 and divisors from 2 to 10, so every answer is a times-table fact read backwards. ' +
+      'Turn on remainders for problems like 14 ÷ 4 = 3 r 2, where each line leaves a box for the quotient and one for what is left over. The sign prints as ÷ or as a colon, following the convention of each language.',
+    grades: '2–3',
+    skills: ['division facts', 'remainders', 'inverse of multiplication'],
+    settings: [
+      'Limit: dividends within 20, 50 or 100',
+      'Sign: ÷ or :',
+      'Columns: 2, 3 or 4 (26–52 problems)',
+      'Allow remainders, with a remainder box on every line',
+    ],
+    examples: ['12 ÷ 3 = □', '45 ÷ 9 = □', '56 ÷ 7 = □', '20 ÷ 5 = □'],
+    prerequisites: ['multiply'],
+    nextSteps: ['coldiv'],
+    updated: '2026-09-12',
+    faq: [
+      { q: 'When should children start division facts?', a: 'Division facts usually follow the times tables in grades 2 and 3. A child who knows that 3 × 4 = 12 already knows 12 ÷ 3 and 12 ÷ 4, so start once the matching tables are recalled rather than counted, and choose within 20 for the first sheets.' },
+      { q: 'How is this different from long division?', a: 'These problems take one step, from memory or a quick count, and are written on a single line. Long division breaks a large number into several steps like these, so fluent division facts are what make the long division sheet manageable.' },
+      { q: 'How should remainders be introduced?', a: 'Turn remainders on once exact division is quick. Most problems then leave something over, but a few still divide exactly and are answered with r 0, so a child has to check that the remainder is smaller than the divisor instead of assuming there is one.' },
+    ],
+    color: '#a63d2f',
+    interactive: false,
+  },
+  {
     id: 'coldiv',
     slug: 'long-division',
     label: 'Long Division',
@@ -133,7 +161,7 @@ export const WORKSHEETS = [
       'Allow remainders instead of exact division',
     ],
     examples: ['864 ÷ 6 = □', '3172 ÷ 4 = □', '4164 ÷ 12 = □'],
-    prerequisites: ['colmul'],
+    prerequisites: ['divide', 'colmul'],
     nextSteps: ['order'],
     updated: '2026-09-07',
     faq: [

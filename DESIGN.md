@@ -30,6 +30,7 @@ colors:
   ink-addsub: "#2e7d5b"
   ink-coladd: "#17706b"
   ink-colmul: "#8a4b2a"
+  ink-divide: "#a63d2f"
   ink-coldiv: "#a83a5b"
   ink-compare: "#9a6212"
   ink-rounding: "#8f3b6e"

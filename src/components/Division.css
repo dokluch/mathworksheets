@@ -1,0 +1,12 @@
+/* The remainder mark spans two squares (MARK_SQUARES in lib/division.js), so a
+   single "r" sits centred with air on both sides and the longer marks other
+   schools write, "ост." or "……", still fit inside the ruling.
+
+   Three classes, not two: ColumnDivision.css @imports ColumnAddition.css, so
+   `.colarith-notebook .colarith-op` (one square wide) is emitted again after
+   this file and would win a tie on specificity. */
+.colarith-notebook .colarith-op.divide-mark {
+  width: calc(2 * var(--nb-sq));
+  font-size: calc(var(--nb-sq) * 0.7);
+  white-space: nowrap;
+}

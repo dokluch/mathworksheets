@@ -158,6 +158,15 @@ const MARKS = {
       {[4, 5, 6, 7, 8].map(c => blank(c, 5))}
     </>
   ),
+  // Division facts on one line: an exact one, then one ending in the remainder
+  // mark and its box, the mark two squares wide as on the sheet.
+  divide: () => (
+    <>
+      {digit(2, 2, '1')}{digit(3, 2, '2')}{digit(4, 2, '÷')}{digit(5, 2, '3')}{digit(6, 2, '=')}{blank(7, 2)}
+      {digit(2, 5, '1')}{digit(3, 5, '4')}{digit(4, 5, '÷')}{digit(5, 5, '4')}{digit(6, 5, '=')}{blank(7, 5)}
+      {digit(8, 5, 'r', { x: span(8, 10), opacity: 0.7 })}{blank(10, 5)}
+    </>
+  ),
   // The long-division frame: the divisor, the upright, and the overbar with the
   // quotient boxes above it — the shape frameLayout() actually renders. The
   // boxes are the sheet's tinted .colarith-blank without its underline, which

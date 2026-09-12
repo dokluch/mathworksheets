@@ -36,7 +36,7 @@ export default {
     home: {
       subtitle: 'Kostenlose, zufällig erzeugte Übungsblätter, die du mit einem Klick ausdruckst.',
       intro1: '{brand} ist ein kostenloser Open-Source-Generator für Mathe-Arbeitsblätter zum Ausdrucken für die Klassen 1–3 (6–9 Jahre). Jedes Blatt wird bei jedem Öffnen oder Neu-Erzeugen zufällig zusammengestellt, sodass Kinder frische Aufgaben üben, statt eine Seite auswendig zu lernen. Wähle ein Arbeitsblatt, stelle den Schwierigkeitsgrad ein (Zahlenraum, Stellen, Layout, Spalten) und drucke es aus dem Browser; deine Einstellungen werden auf diesem Gerät gespeichert.',
-      intro2: 'Der Katalog umfasst Einmaleins-Tabellen, Additions- und Subtraktionsaufgaben mit Lücken, schriftliche Addition mit Übertrag, schriftliche Multiplikation, Zahlenvergleich mit >, < und =, Runden auf Zehner, Hunderter und Tausender Zahlenfolgen sowie mehrschrittige Terme, bei denen die Rechenreihenfolge das Ergebnis entscheidet. Der Gleichungs-Explorer ist eine Bildschirmübung, bei der Kinder Terme über das Gleichheitszeichen schieben und ihre Antwort am Zahlenstrahl überprüfen.',
+      intro2: 'Der Katalog umfasst Einmaleins-Tabellen, Additions- und Subtraktionsaufgaben mit Lücken, schriftliche Addition mit Übertrag, schriftliche Multiplikation, Geteiltaufgaben mit und ohne Rest, Zahlenvergleich mit >, < und =, Runden auf Zehner, Hunderter und Tausender Zahlenfolgen sowie mehrschrittige Terme, bei denen die Rechenreihenfolge das Ergebnis entscheidet. Der Gleichungs-Explorer ist eine Bildschirmübung, bei der Kinder Terme über das Gleichheitszeichen schieben und ihre Antwort am Zahlenstrahl überprüfen.',
       worksheets: 'Arbeitsblätter',
       howItWorks: 'So funktioniert es',
       step1: 'Wähle ein Arbeitsblatt aus der Liste oben.',
@@ -178,6 +178,16 @@ export default {
     problemAria: '{a} mal {b}',
   },
 
+  divide: {
+    title: 'Geteiltrechnen',
+    notation: 'Zeichen',
+    allowRemainder: 'Reste zulassen',
+    withRemainders: 'mit Rest',
+    defaultNotation: 'dot',
+    remainderMark: 'R',
+    answer: '{q} R {r}',
+    problemAria: '{dividend} geteilt durch {divisor}',
+  },
   coldiv: {
     preset: '{a} ÷ {b} Stellen',
     title: 'Schriftliche Division',
@@ -389,6 +399,23 @@ export default {
         { q: 'Wann ist ein Kind bereit für die schriftliche Multiplikation?', a: 'Meist in der 3. Klasse und erst dann, wenn das Einmaleins abgerufen und nicht hergeleitet wird. Eine schriftliche Multiplikation besteht aus mehreren kleinen Multiplikationen plus einer Addition — bei unsicherem Einmaleins wird jeder Schritt langsamer und schwerer zu prüfen.' },
         { q: 'Was sind Teilprodukte?', a: '34 mal 26 heißt: 34 mal 6 und dann 34 mal 20, und beide Ergebnisse addieren. Jedes dieser Ergebnisse ist ein Teilprodukt und bekommt auf dem Blatt eine eigene Zeile.' },
         { q: 'Warum ist die zweite Zeile nach links versetzt?', a: 'Die zweite Zeile multipliziert mit Zehnern statt mit Einern, ihr Ergebnis ist also zehnmal so groß und beginnt eine Spalte weiter links. Der Versatz macht den Stellenwert sichtbar; er ist keine Formregel zum Auswendiglernen.' },
+      ],
+    },
+    divide: {
+      label: 'Geteiltrechnen',
+      shortDesc: 'Geteiltaufgaben mit und ohne Rest',
+      longDesc: 'Geteiltaufgaben in einer Zeile, etwa 12 : 3 = □, im Zahlenraum bis 20, 50 oder 100 und mit Teilern von 2 bis 10, sodass jedes Ergebnis eine rückwärts gelesene Einmaleinsaufgabe ist. Mit Resten entstehen Aufgaben wie 14 : 4 = 3 R 2, mit einem Kästchen für das Ergebnis und einem für den Rest. Das Zeichen wird je nach Sprache als Doppelpunkt oder als ÷ gedruckt.',
+      skills: ['Geteiltaufgaben', 'Division mit Rest', 'Umkehraufgaben zum Einmaleins'],
+      settings: [
+        'Zahlenraum: bis 20, 50 oder 100',
+        'Zeichen: : oder ÷',
+        'Spalten: 2, 3 oder 4 (26 bis 52 Aufgaben)',
+        'Reste zulassen, mit einem Kästchen für den Rest in jeder Zeile',
+      ],
+      faq: [
+        { q: 'Wann sind Geteiltaufgaben dran?', a: 'Geteiltaufgaben folgen auf das Einmaleins, meist in der 2. und 3. Klasse. Wer weiß, dass 3 · 4 = 12 ist, kennt schon 12 : 3 und 12 : 4. Beginne also, sobald das Einmaleins abgerufen und nicht mehr abgezählt wird, und nimm für die ersten Blätter den Zahlenraum bis 20.' },
+        { q: 'Was ist der Unterschied zur schriftlichen Division?', a: 'Diese Aufgaben werden in einem Schritt gelöst, aus dem Kopf oder mit kurzem Überlegen, und in eine Zeile geschrieben. Die schriftliche Division zerlegt eine große Zahl in mehrere solcher Schritte, deshalb machen sichere Geteiltaufgaben sie erst machbar.' },
+        { q: 'Wie führe ich Reste ein?', a: 'Schalte Reste dazu, sobald die glatt aufgehenden Aufgaben schnell gehen. Die meisten Aufgaben lassen dann einen Rest, einige gehen aber weiterhin auf und werden mit R 0 beantwortet: So muss das Kind prüfen, ob der Rest kleiner als der Teiler ist, statt einfach einen anzunehmen.' },
       ],
     },
     coldiv: {
