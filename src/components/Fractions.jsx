@@ -1,15 +1,12 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookSheet } from '../hooks/useNotebookSheet'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
 import './ColumnAddition.css'
-import WorksheetHeader from './WorksheetHeader'
-import { useSheetSet } from '../hooks/useSheetSet'
-import SheetCopies from './SheetCopies'
-import AnswerKey from './AnswerKey'
+import NotebookSheet from './NotebookSheet'
 import { FracRow, FracSign, Fraction } from './Fraction'
-import { LIMITS, PRACTICES, SHEET_SPACING, generateSheet, sheetShape } from '../lib/fractions'
+import { LIMITS, PRACTICES, generateSheet, sheetShape } from '../lib/fractions'
 
 const written = f => `${f.n}/${f.d}`
 
@@ -70,14 +67,11 @@ export default function Fractions() {
   const activePractice = PRACTICES.includes(practice) ? practice : PRACTICES[0]
   const activeLimit = LIMITS.includes(limit) ? limit : LIMITS[1]
   const shape = sheetShape({ limit: activeLimit, columns })
-  const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
+  const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
+    shape,
+    generate: (rng, { count }) => generateSheet({ practice: activePractice, limit: activeLimit, count }, rng),
+    deps: [activePractice, activeLimit],
   })
-
-  const { sheets, setSet, regenerate } = useSheetSet(rng => {
-    const { count } = sheetShape({ limit: activeLimit, columns })
-    return generateSheet({ practice: activePractice, limit: activeLimit, count }, rng)
-  }, [activePractice, activeLimit, columns])
 
   const title = t('fractions.title')
   const meta = t('fractions.meta', { practice: t(`fractions.${activePractice}`), n: activeLimit })
@@ -109,29 +103,17 @@ export default function Fractions() {
         </SettingRow>
       </SettingsPanel>
 
-      <SheetCopies sheets={sheets}>
-        {({ set, data: problems }, primary) => (
-          <div
-            ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
-            style={sheetStyle}
-          >
-            <WorksheetHeader title={title} meta={meta} stamp={String(set)} onStampChange={primary ? setSet : undefined} />
-
-            <div className="colarith-grid">
-              {problems.map((p, i) => (
-                <div key={i} className="colarith-item">
-                  <FracRow label={problemLabel(p, t)}>{renderProblem(p)}</FracRow>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </SheetCopies>
-
-      {answerKey && sheets.map(({ set, data: problems }, i) => (
-        <AnswerKey key={i} title={title} stamp={String(set)} answers={problems.map(answerText)} />
-      ))}
+      <NotebookSheet
+        sheets={sheets}
+        sheetProps={sheetProps}
+        setSet={setSet}
+        title={title}
+        meta={meta}
+        answerKey={answerKey}
+        answer={answerText}
+      >
+        {p => <FracRow label={problemLabel(p, t)}>{renderProblem(p)}</FracRow>}
+      </NotebookSheet>
     </div>
   )
 }

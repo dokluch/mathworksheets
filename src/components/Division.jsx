@@ -1,15 +1,12 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookSheet } from '../hooks/useNotebookSheet'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
 import './ColumnAddition.css'
 import './Division.css'
-import WorksheetHeader from './WorksheetHeader'
-import { useSheetSet } from '../hooks/useSheetSet'
-import SheetCopies from './SheetCopies'
-import AnswerKey from './AnswerKey'
-import { LIMITS, SHEET_SPACING, generateSheet, sheetShape } from '../lib/division'
+import NotebookSheet from './NotebookSheet'
+import { LIMITS, generateSheet, sheetShape } from '../lib/division'
 import { NOTATIONS, glyph } from '../lib/orderOfOperations'
 
 const Blank = () => <span className="colarith-blank" />
@@ -52,15 +49,12 @@ export default function Division() {
   const activeLimit = LIMITS.includes(limit) ? limit : LIMITS[LIMITS.length - 1]
   const activeNotation = NOTATIONS.includes(notation) ? notation : NOTATIONS[0]
   const shape = sheetShape({ limit: activeLimit, allowRemainder, columns })
-  const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
-  })
-
   // Changing the sign only repaints; it never deals a new sheet.
-  const { sheets, setSet, regenerate } = useSheetSet(rng => {
-    const { count } = sheetShape({ limit: activeLimit, allowRemainder, columns })
-    return generateSheet({ limit: activeLimit, allowRemainder, count }, rng)
-  }, [activeLimit, allowRemainder, columns])
+  const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
+    shape,
+    generate: (rng, { count }) => generateSheet({ limit: activeLimit, allowRemainder, count }, rng),
+    deps: [activeLimit, allowRemainder],
+  })
 
   const sign = glyph('/', activeNotation)
   const mark = t('divide.remainderMark')
@@ -101,41 +95,22 @@ export default function Division() {
         </SettingRow>
       </SettingsPanel>
 
-      <SheetCopies sheets={sheets}>
-        {({ set, data: problems }, primary) => (
-          <div
-            ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
-            style={sheetStyle}
-          >
-            <WorksheetHeader title={t('divide.title')} meta={meta} stamp={String(set)} onStampChange={primary ? setSet : undefined} />
-
-            <div className="colarith-grid">
-              {problems.map((p, i) => (
-                <div key={i} className="colarith-item">
-                  {renderProblem(p, {
-                    sign,
-                    mark,
-                    allowRemainder,
-                    label: t('divide.problemAria', { dividend: p.dividend, divisor: p.divisor }),
-                  })}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </SheetCopies>
-
-      {answerKey && sheets.map(({ set, data: problems }, i) => (
-        <AnswerKey
-          key={i}
-          title={t('divide.title')}
-          stamp={String(set)}
-          answers={problems.map(p => (
-            allowRemainder ? t('divide.answer', { q: p.quotient, r: p.remainder }) : String(p.quotient)
-          ))}
-        />
-      ))}
+      <NotebookSheet
+        sheets={sheets}
+        sheetProps={sheetProps}
+        setSet={setSet}
+        title={t('divide.title')}
+        meta={meta}
+        answerKey={answerKey}
+        answer={p => (allowRemainder ? t('divide.answer', { q: p.quotient, r: p.remainder }) : String(p.quotient))}
+      >
+        {p => renderProblem(p, {
+          sign,
+          mark,
+          allowRemainder,
+          label: t('divide.problemAria', { dividend: p.dividend, divisor: p.divisor }),
+        })}
+      </NotebookSheet>
     </div>
   )
 }

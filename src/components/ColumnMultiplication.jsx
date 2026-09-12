@@ -1,13 +1,10 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookSheet } from '../hooks/useNotebookSheet'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './ColumnAddition.css'
-import WorksheetHeader from './WorksheetHeader'
-import { useSheetSet } from '../hooks/useSheetSet'
-import SheetCopies from './SheetCopies'
-import AnswerKey from './AnswerKey'
-import { PRESETS, SHEET_SPACING, digitColumns, generateSheet, sheetShape } from '../lib/columnMultiplication'
+import NotebookSheet from './NotebookSheet'
+import { PRESETS, digitColumns, generateSheet, sheetShape } from '../lib/columnMultiplication'
 
 function buildCells(value, width, shift = 0) {
   const text = String(value)
@@ -82,15 +79,12 @@ export default function ColumnMultiplication() {
   // Exactly one printed page.
   const shape = sheetShape({ aDigits, bDigits, columns })
   const presetLabel = (a, b) => t('colmul.preset', { a, b })
-
-  const { sheets, setSet, regenerate } = useSheetSet(
-    rng => generateSheet({ count: shape.count, aDigits, bDigits }, rng),
-    [aDigits, bDigits, shape.count],
-  )
-
   const width = digitColumns(aDigits, bDigits)
-  const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
+
+  const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
+    shape,
+    generate: (rng, { count }) => generateSheet({ count, aDigits, bDigits }, rng),
+    deps: [aDigits, bDigits],
   })
 
   return (
@@ -113,39 +107,17 @@ export default function ColumnMultiplication() {
         </SettingRow>
       </SettingsPanel>
 
-      <SheetCopies sheets={sheets}>
-        {({ set, data: problems }, primary) => (
-          <div
-            ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
-            style={sheetStyle}
-          >
-            <WorksheetHeader
-              title={t('colmul.title')}
-              meta={t('colmul.meta', { preset: presetLabel(aDigits, bDigits) })}
-              stamp={String(set)}
-              onStampChange={primary ? setSet : undefined}
-            />
-
-            <div className="colarith-grid">
-              {problems.map((problem, idx) => (
-                <div key={idx} className="colarith-item">
-                  {renderProblem(problem, width, t)}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </SheetCopies>
-
-      {answerKey && sheets.map(({ set, data: problems }, i) => (
-        <AnswerKey
-          key={i}
-          title={t('colmul.title')}
-          stamp={String(set)}
-          answers={problems.map(p => String(p.product))}
-        />
-      ))}
+      <NotebookSheet
+        sheets={sheets}
+        sheetProps={sheetProps}
+        setSet={setSet}
+        title={t('colmul.title')}
+        meta={t('colmul.meta', { preset: presetLabel(aDigits, bDigits) })}
+        answerKey={answerKey}
+        answer={p => String(p.product)}
+      >
+        {problem => renderProblem(problem, width, t)}
+      </NotebookSheet>
     </div>
   )
 }

@@ -1,16 +1,13 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookSheet } from '../hooks/useNotebookSheet'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
 import './ColumnAddition.css'
-import WorksheetHeader from './WorksheetHeader'
-import { useSheetSet } from '../hooks/useSheetSet'
-import SheetCopies from './SheetCopies'
-import AnswerKey from './AnswerKey'
+import NotebookSheet from './NotebookSheet'
 import { FracRow, FracSign, Fraction, MixedNumber } from './Fraction'
 import {
-  ANSWER_FORMS, LEVELS, LIMITS, OPS, SHEET_SPACING, answerOf, generateSheet, sheetShape,
+  ANSWER_FORMS, LEVELS, LIMITS, OPS, answerOf, generateSheet, sheetShape,
 } from '../lib/fracAddSub'
 
 /** U+2212, the minus the rest of the site sets. */
@@ -54,16 +51,13 @@ export default function FractionAddSub() {
   const activeLimit = LIMITS.includes(limit) ? limit : LIMITS[1]
   const activeForm = ANSWER_FORMS.includes(answerForm) ? answerForm : ANSWER_FORMS[0]
   const shape = sheetShape({ level: activeLevel, limit: activeLimit, answerForm: activeForm, columns })
-  const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
-  })
-
   // The answer form only repaints the boxes; it deals a new sheet only when it
-  // changes how many columns fit, which shape.columns carries.
-  const { sheets, setSet, regenerate } = useSheetSet(rng => {
-    const { count } = sheetShape({ level: activeLevel, limit: activeLimit, answerForm: activeForm, columns })
-    return generateSheet({ level: activeLevel, op: activeOp, limit: activeLimit, count }, rng)
-  }, [activeLevel, activeOp, activeLimit, shape.columns])
+  // changes how many columns fit, which the shape carries.
+  const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
+    shape,
+    generate: (rng, { count }) => generateSheet({ level: activeLevel, op: activeOp, limit: activeLimit, count }, rng),
+    deps: [activeLevel, activeOp, activeLimit],
+  })
 
   const title = t('fracaddsub.title')
   const meta = t('fracaddsub.meta', { level: t(`fracaddsub.${activeLevel}`), n: activeLimit })
@@ -116,29 +110,17 @@ export default function FractionAddSub() {
         </SettingRow>
       </SettingsPanel>
 
-      <SheetCopies sheets={sheets}>
-        {({ set, data: problems }, primary) => (
-          <div
-            ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
-            style={sheetStyle}
-          >
-            <WorksheetHeader title={title} meta={meta} stamp={String(set)} onStampChange={primary ? setSet : undefined} />
-
-            <div className="colarith-grid">
-              {problems.map((p, i) => (
-                <div key={i} className="colarith-item">
-                  <FracRow label={label(p)}>{renderProblem(p, activeForm)}</FracRow>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </SheetCopies>
-
-      {answerKey && sheets.map(({ set, data: problems }, i) => (
-        <AnswerKey key={i} title={title} stamp={String(set)} answers={problems.map(p => written(answerOf(p, activeForm)))} />
-      ))}
+      <NotebookSheet
+        sheets={sheets}
+        sheetProps={sheetProps}
+        setSet={setSet}
+        title={title}
+        meta={meta}
+        answerKey={answerKey}
+        answer={p => written(answerOf(p, activeForm))}
+      >
+        {p => <FracRow label={label(p)}>{renderProblem(p, activeForm)}</FracRow>}
+      </NotebookSheet>
     </div>
   )
 }

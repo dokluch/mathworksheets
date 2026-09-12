@@ -1,17 +1,14 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookSheet } from '../hooks/useNotebookSheet'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
 import './ColumnAddition.css'
 import './Decimals.css'
-import WorksheetHeader from './WorksheetHeader'
-import { useSheetSet } from '../hooks/useSheetSet'
-import SheetCopies from './SheetCopies'
-import AnswerKey from './AnswerKey'
+import NotebookSheet from './NotebookSheet'
 import { NOTATIONS, glyph } from '../lib/orderOfOperations'
 import {
-  INT_SQUARES, MARKS, MODES, OPS, PLACES, SHEET_SPACING,
+  INT_SQUARES, MARKS, MODES, OPS, PLACES,
   columnCells, formatDecimal, fracSquares, generateSheet, sheetShape,
 } from '../lib/decimals'
 
@@ -103,15 +100,12 @@ export default function Decimals() {
   const notation = NOTATIONS.includes(defaultNotation) ? defaultNotation : NOTATIONS[0]
 
   const shape = sheetShape({ mode: activeMode, places: activePlaces, columns })
-  const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
-  })
-
   // The mark only repaints; it never deals a new sheet.
-  const { sheets, setSet, regenerate } = useSheetSet(rng => {
-    const { count } = sheetShape({ mode: activeMode, places: activePlaces, columns })
-    return generateSheet({ mode: activeMode, places: activePlaces, ops: activeOps, count }, rng)
-  }, [activeMode, activePlaces, activeOps, shape.columns])
+  const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
+    shape,
+    generate: (rng, { count }) => generateSheet({ mode: activeMode, places: activePlaces, ops: activeOps, count }, rng),
+    deps: [activeMode, activePlaces, activeOps],
+  })
 
   const title = t('decimals.title')
   const meta = activeMode === 'powers'
@@ -177,31 +171,19 @@ export default function Decimals() {
         </SettingRow>
       </SettingsPanel>
 
-      <SheetCopies sheets={sheets}>
-        {({ set, data: problems }, primary) => (
-          <div
-            ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
-            style={sheetStyle}
-          >
-            <WorksheetHeader title={title} meta={meta} stamp={String(set)} onStampChange={primary ? setSet : undefined} />
-
-            <div className="colarith-grid">
-              {problems.map((p, i) => (
-                <div key={i} className="colarith-item">
-                  {activeMode === 'powers'
-                    ? <PowersProblem p={p} mark={markChar} notation={notation} label={label(p)} />
-                    : <ColumnProblem p={p} places={activePlaces} mark={markChar} label={label(p)} />}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </SheetCopies>
-
-      {answerKey && sheets.map(({ set, data: problems }, i) => (
-        <AnswerKey key={i} title={title} stamp={String(set)} answers={problems.map(p => formatDecimal(p.result, markChar))} />
-      ))}
+      <NotebookSheet
+        sheets={sheets}
+        sheetProps={sheetProps}
+        setSet={setSet}
+        title={title}
+        meta={meta}
+        answerKey={answerKey}
+        answer={p => formatDecimal(p.result, markChar)}
+      >
+        {p => (activeMode === 'powers'
+          ? <PowersProblem p={p} mark={markChar} notation={notation} label={label(p)} />
+          : <ColumnProblem p={p} places={activePlaces} mark={markChar} label={label(p)} />)}
+      </NotebookSheet>
     </div>
   )
 }

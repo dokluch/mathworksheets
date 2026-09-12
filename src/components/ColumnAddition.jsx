@@ -1,14 +1,11 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookSheet } from '../hooks/useNotebookSheet'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './ColumnAddition.css'
-import WorksheetHeader from './WorksheetHeader'
-import { useSheetSet } from '../hooks/useSheetSet'
-import SheetCopies from './SheetCopies'
-import AnswerKey from './AnswerKey'
+import NotebookSheet from './NotebookSheet'
 import {
-  DIGIT_PRESETS, OPS, SHEET_SPACING, digitColumns, generateSheet, sheetShape,
+  DIGIT_PRESETS, OPS, digitColumns, generateSheet, sheetShape,
 } from '../lib/columnArithmetic'
 
 function buildCells(value, width, shift = 0) {
@@ -81,15 +78,13 @@ export default function ColumnAddition() {
   // blank row apart (the next problem's carry row) and fill one printed page.
   const shape = sheetShape({ digits, columns })
   const width = digitColumns(digits)
-  const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
-  })
   const title = t(TITLE_KEY[activeOp])
 
-  const { sheets, setSet, regenerate } = useSheetSet(
-    rng => generateSheet({ count: shape.count, digits, preferCarry, op: activeOp }, rng),
-    [digits, shape.count, preferCarry, activeOp],
-  )
+  const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
+    shape,
+    generate: (rng, { count }) => generateSheet({ count, digits, preferCarry, op: activeOp }, rng),
+    deps: [digits, preferCarry, activeOp],
+  })
 
   return (
     <div className="tool-panel">
@@ -125,39 +120,17 @@ export default function ColumnAddition() {
         </SettingRow>
       </SettingsPanel>
 
-      <SheetCopies sheets={sheets}>
-        {({ set, data: problems }, primary) => (
-          <div
-            ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
-            style={sheetStyle}
-          >
-            <WorksheetHeader
-              title={title}
-              meta={t('coladd.meta', { d: digits })}
-              stamp={String(set)}
-              onStampChange={primary ? setSet : undefined}
-            />
-
-            <div className="colarith-grid">
-              {problems.map((problem, idx) => (
-                <div key={idx} className="colarith-item">
-                  {renderProblem(problem, width)}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </SheetCopies>
-
-      {answerKey && sheets.map(({ set, data: problems }, i) => (
-        <AnswerKey
-          key={i}
-          title={title}
-          stamp={String(set)}
-          answers={problems.map(p => String(p.result))}
-        />
-      ))}
+      <NotebookSheet
+        sheets={sheets}
+        sheetProps={sheetProps}
+        setSet={setSet}
+        title={title}
+        meta={t('coladd.meta', { d: digits })}
+        answerKey={answerKey}
+        answer={p => String(p.result)}
+      >
+        {problem => renderProblem(problem, width)}
+      </NotebookSheet>
     </div>
   )
 }

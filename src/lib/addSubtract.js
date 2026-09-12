@@ -152,7 +152,7 @@ export function sheetShape({ stacked, maxVal, columns, sixtySevenMode }) {
   const sixtySeven = sixtySevenApplies(sixtySevenMode, active)
   const frame = sheetFrame({ stacked, maxVal, sixtySeven })
   const count = problemsPerPage({ columns: active, rows: frame.rows, ...SHEET_SPACING })
-  return { columnOptions, columns: active, sixtySeven, frame, count }
+  return { columnOptions, columns: active, sixtySeven, frame, count, spacing: SHEET_SPACING }
 }
 
 export function generateSheet({ ops, maxVal, columns, count, stacked, sixtySeven }, rng = Math.random) {

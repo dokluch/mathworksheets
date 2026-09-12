@@ -1,16 +1,13 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookSheet } from '../hooks/useNotebookSheet'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
 import './ColumnAddition.css'
 import './SolveX.css'
-import WorksheetHeader from './WorksheetHeader'
-import { useSheetSet } from '../hooks/useSheetSet'
-import SheetCopies from './SheetCopies'
-import AnswerKey from './AnswerKey'
+import NotebookSheet from './NotebookSheet'
 import { NOTATIONS, glyph } from '../lib/orderOfOperations'
-import { LEVELS, RANGES, SHEET_SPACING, WORK_ROWS, generateSheet, sheetShape } from '../lib/solveX'
+import { LEVELS, RANGES, WORK_ROWS, generateSheet, sheetShape } from '../lib/solveX'
 
 /** An equation as text, with the language's own signs, for screen readers. */
 function spoken(tokens, notation) {
@@ -60,15 +57,12 @@ export default function SolveX() {
   const activeNotation = NOTATIONS.includes(notation) ? notation : NOTATIONS[0]
 
   const shape = sheetShape({ level: activeLevel, range: activeRange, columns })
-  const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
-  })
-
   // The signs only repaint; they never deal a new sheet.
-  const { sheets, setSet, regenerate } = useSheetSet(rng => {
-    const { count } = sheetShape({ level: activeLevel, range: activeRange, columns })
-    return generateSheet({ level: activeLevel, range: activeRange, count }, rng)
-  }, [activeLevel, activeRange, shape.columns])
+  const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
+    shape,
+    generate: (rng, { count }) => generateSheet({ level: activeLevel, range: activeRange, count }, rng),
+    deps: [activeLevel, activeRange],
+  })
 
   const title = t('solvex.title')
   const meta = t('solvex.meta', { level: t(`solvex.${activeLevel}`), n: activeRange })
@@ -107,36 +101,26 @@ export default function SolveX() {
         </SettingRow>
       </SettingsPanel>
 
-      <SheetCopies sheets={sheets}>
-        {({ set, data: problems }, primary) => (
+      <NotebookSheet
+        sheets={sheets}
+        sheetProps={sheetProps}
+        setSet={setSet}
+        title={title}
+        meta={meta}
+        answerKey={answerKey}
+        answer={p => t('solvex.answer', { x: p.x })}
+      >
+        {p => (
           <div
-            ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
-            style={sheetStyle}
+            className="colarith-problem solvex-problem"
+            aria-label={t('solvex.problemAria', { equation: spoken(p.tokens, activeNotation) })}
           >
-            <WorksheetHeader title={title} meta={meta} stamp={String(set)} onStampChange={primary ? setSet : undefined} />
-
-            <div className="colarith-grid">
-              {problems.map((p, i) => (
-                <div key={i} className="colarith-item">
-                  <div
-                    className="colarith-problem solvex-problem"
-                    aria-label={t('solvex.problemAria', { equation: spoken(p.tokens, activeNotation) })}
-                  >
-                    <Equation tokens={p.tokens} notation={activeNotation} />
-                    {/* Bare ruling for the working: more rows as the level rises. */}
-                    <div className="solvex-work" style={{ '--solvex-rows': WORK_ROWS[activeLevel] }} aria-hidden="true" />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <Equation tokens={p.tokens} notation={activeNotation} />
+            {/* Bare ruling for the working: more rows as the level rises. */}
+            <div className="solvex-work" style={{ '--solvex-rows': WORK_ROWS[activeLevel] }} aria-hidden="true" />
           </div>
         )}
-      </SheetCopies>
-
-      {answerKey && sheets.map(({ set, data: problems }, i) => (
-        <AnswerKey key={i} title={title} stamp={String(set)} answers={problems.map(p => t('solvex.answer', { x: p.x }))} />
-      ))}
+      </NotebookSheet>
     </div>
   )
 }

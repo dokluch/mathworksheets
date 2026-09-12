@@ -1,15 +1,12 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookSheet } from '../hooks/useNotebookSheet'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
 import './ColumnAddition.css'
-import WorksheetHeader from './WorksheetHeader'
-import { useSheetSet } from '../hooks/useSheetSet'
-import SheetCopies from './SheetCopies'
-import AnswerKey from './AnswerKey'
+import NotebookSheet from './NotebookSheet'
 import {
-  BLANK_A, BLANK_B, BLANK_RESULT, SHEET_SPACING, generateSheet, getBlankAnswer, sheetShape,
+  BLANK_A, BLANK_B, BLANK_RESULT, generateSheet, getBlankAnswer, sheetShape,
 } from '../lib/addSubtract'
 
 const PRESETS = [10, 20, 100, 1000]
@@ -96,16 +93,12 @@ export default function AddSubtract() {
 
   const stacked = layout === 'stacked'
   const shape = sheetShape({ stacked, maxVal, columns, sixtySevenMode })
-  const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
+  const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
+    shape,
+    generate: (rng, { columns: cols, count, sixtySeven }) => generateSheet({ ops, maxVal, columns: cols, count, stacked, sixtySeven }, rng),
+    // Whether a 67 is hidden changes which problems are dealt, not how many.
+    deps: [ops, maxVal, stacked, shape.sixtySeven],
   })
-
-  const { sheets, setSet, regenerate } = useSheetSet(rng => {
-    // Re-derived from plain state so the memo depends on the settings alone.
-    const isStacked = layout === 'stacked'
-    const { columns: cols, count, sixtySeven } = sheetShape({ stacked: isStacked, maxVal, columns, sixtySevenMode })
-    return generateSheet({ ops, maxVal, columns: cols, count, stacked: isStacked, sixtySeven }, rng)
-  }, [ops, maxVal, columns, layout, sixtySevenMode])
 
   return (
     <div className="tool-panel">
@@ -151,39 +144,17 @@ export default function AddSubtract() {
         </SettingRow>
       </SettingsPanel>
 
-      <SheetCopies sheets={sheets}>
-        {({ set, data: problems }, primary) => (
-          <div
-            ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
-            style={sheetStyle}
-          >
-            <WorksheetHeader
-              title={t('addsub.title')}
-              meta={`${ops === 'add' ? '(+)' : ops === 'sub' ? '(−)' : '(+ / −)'} · ${t('common.withinMeta', { n: maxVal })}`}
-              stamp={String(set)}
-              onStampChange={primary ? setSet : undefined}
-            />
-
-            <div className="colarith-grid">
-              {problems.map((p, i) => (
-                <div key={i} className="colarith-item">
-                  {stacked ? renderStackedProblem(p, shape.frame.digits) : renderInlineProblem(p)}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </SheetCopies>
-
-      {answerKey && sheets.map(({ set, data: problems }, i) => (
-        <AnswerKey
-          key={i}
-          title={t('addsub.title')}
-          stamp={String(set)}
-          answers={problems.map(p => String(getBlankAnswer(p)))}
-        />
-      ))}
+      <NotebookSheet
+        sheets={sheets}
+        sheetProps={sheetProps}
+        setSet={setSet}
+        title={t('addsub.title')}
+        meta={`${ops === 'add' ? '(+)' : ops === 'sub' ? '(−)' : '(+ / −)'} · ${t('common.withinMeta', { n: maxVal })}`}
+        answerKey={answerKey}
+        answer={p => String(getBlankAnswer(p))}
+      >
+        {p => (stacked ? renderStackedProblem(p, shape.frame.digits) : renderInlineProblem(p))}
+      </NotebookSheet>
     </div>
   )
 }

@@ -1,16 +1,13 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookSheet } from '../hooks/useNotebookSheet'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
 import './AddSubtract.css'
 import './ColumnAddition.css'
 import './Factors.css'
-import WorksheetHeader from './WorksheetHeader'
-import { useSheetSet } from '../hooks/useSheetSet'
-import SheetCopies from './SheetCopies'
-import AnswerKey from './AnswerKey'
+import NotebookSheet from './NotebookSheet'
 import { NOTATIONS, glyph } from '../lib/orderOfOperations'
-import { PRACTICES, RANGES, SHEET_SPACING, generateSheet, sheetShape } from '../lib/factors'
+import { PRACTICES, RANGES, generateSheet, sheetShape } from '../lib/factors'
 
 /** One square per digit; an answer is a box per digit, as on every other sheet. */
 function cells(value, key, blank = false) {
@@ -96,15 +93,12 @@ export default function Factors() {
   const compositeMark = t('factors.compositeMark')
 
   const shape = sheetShape({ practice: activePractice, range: activeRange, columns })
-  const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
-  })
-
   // The sign only repaints; it never deals a new sheet.
-  const { sheets, setSet, regenerate } = useSheetSet(rng => {
-    const { count } = sheetShape({ practice: activePractice, range: activeRange, columns })
-    return generateSheet({ practice: activePractice, range: activeRange, count }, rng)
-  }, [activePractice, activeRange, shape.columns])
+  const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
+    shape,
+    generate: (rng, { count }) => generateSheet({ practice: activePractice, range: activeRange, count }, rng),
+    deps: [activePractice, activeRange],
+  })
 
   const title = t('factors.title')
   const within = t('common.withinMeta', { n: activeRange + 1 })
@@ -177,27 +171,17 @@ export default function Factors() {
         </SettingRow>
       </SettingsPanel>
 
-      <SheetCopies sheets={sheets}>
-        {({ set, data: problems }, primary) => (
-          <div
-            ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook print-area cols-${shape.columns}`}
-            style={sheetStyle}
-          >
-            <WorksheetHeader title={title} meta={meta} stamp={String(set)} onStampChange={primary ? setSet : undefined} />
-
-            <div className="colarith-grid">
-              {problems.map((p, i) => (
-                <div key={i} className="colarith-item">{renderProblem(p)}</div>
-              ))}
-            </div>
-          </div>
-        )}
-      </SheetCopies>
-
-      {answerKey && sheets.map(({ set, data: problems }, i) => (
-        <AnswerKey key={i} title={title} stamp={String(set)} answers={problems.map(answer)} />
-      ))}
+      <NotebookSheet
+        sheets={sheets}
+        sheetProps={sheetProps}
+        setSet={setSet}
+        title={title}
+        meta={meta}
+        answerKey={answerKey}
+        answer={answer}
+      >
+        {renderProblem}
+      </NotebookSheet>
     </div>
   )
 }

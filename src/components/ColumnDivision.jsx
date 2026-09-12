@@ -1,14 +1,11 @@
 import { usePersistedState } from '../hooks/usePersistedState'
-import { useNotebookGrid } from '../hooks/useNotebookGrid'
+import { useNotebookSheet } from '../hooks/useNotebookSheet'
 import { useT } from '../i18n/context'
 import { SettingsPanel, SettingRow, SegmentedControl, CheckboxOption, PanelActions } from './controls/SettingsPanel'
-import { NOTATIONS, PRESETS, SHEET_SPACING, generateProblems, sheetShape } from '../lib/longDivision'
+import { NOTATIONS, PRESETS, generateProblems, sheetShape } from '../lib/longDivision'
 import './ColumnAddition.css'
 import './ColumnDivision.css'
-import WorksheetHeader from './WorksheetHeader'
-import { useSheetSet } from '../hooks/useSheetSet'
-import SheetCopies from './SheetCopies'
-import AnswerKey from './AnswerKey'
+import NotebookSheet from './NotebookSheet'
 
 /** Column of the leftmost digit of a `count`-digit number inside a block. */
 function blockStart(block, count) {
@@ -96,13 +93,11 @@ export default function ColumnDivision() {
   const frame = shape.frame.layout
   const presetLabel = (a, b) => t('coldiv.preset', { a, b })
 
-  const { sheets, setSet, regenerate } = useSheetSet(
-    rng => generateProblems(shape.count, dividendDigits, divisorDigits, allowRemainder, rng),
-    [dividendDigits, divisorDigits, allowRemainder, shape.count],
-  )
-
-  const [sheetRef, sheetStyle] = useNotebookGrid({
-    columns: shape.columns, cellsWide: shape.frame.cellsWide, rows: shape.frame.rows, ...SHEET_SPACING,
+  const { sheets, setSet, regenerate, sheetProps } = useNotebookSheet({
+    shape,
+    className: 'coldiv-notebook',
+    generate: (rng, { count }) => generateProblems(count, dividendDigits, divisorDigits, allowRemainder, rng),
+    deps: [dividendDigits, divisorDigits, allowRemainder],
   })
 
   return (
@@ -142,41 +137,18 @@ export default function ColumnDivision() {
         </SettingRow>
       </SettingsPanel>
 
-      <SheetCopies sheets={sheets}>
-        {({ set, data: problems }, primary) => (
-          <div
-            ref={primary ? sheetRef : undefined}
-            className={`worksheet notebook-grid-bg colarith-notebook coldiv-notebook print-area cols-${shape.columns}`}
-            style={sheetStyle}
-          >
-            <WorksheetHeader
-              title={t('coldiv.title')}
-              meta={t('coldiv.meta', { preset: presetLabel(dividendDigits, divisorDigits) })}
-              stamp={String(set)}
-              onStampChange={primary ? setSet : undefined}
-            />
-
-            <div className="colarith-grid">
-              {problems.map((problem, idx) => (
-                <div key={idx} className="colarith-item coldiv-item">
-                  {renderProblem(problem, frame, t)}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </SheetCopies>
-
-      {answerKey && sheets.map(({ set, data: problems }, i) => (
-        <AnswerKey
-          key={i}
-          title={t('coldiv.title')}
-          stamp={String(set)}
-          answers={problems.map(p => (
-            p.remainder ? `${p.quotient} r${p.remainder}` : String(p.quotient)
-          ))}
-        />
-      ))}
+      <NotebookSheet
+        sheets={sheets}
+        sheetProps={sheetProps}
+        setSet={setSet}
+        title={t('coldiv.title')}
+        meta={t('coldiv.meta', { preset: presetLabel(dividendDigits, divisorDigits) })}
+        itemClassName="colarith-item coldiv-item"
+        answerKey={answerKey}
+        answer={p => (p.remainder ? `${p.quotient} r${p.remainder}` : String(p.quotient))}
+      >
+        {problem => renderProblem(problem, frame, t)}
+      </NotebookSheet>
     </div>
   )
 }
